@@ -1,0 +1,66 @@
+\doxysection{Material Class Reference}
+\hypertarget{class_material}{}\label{class_material}\index{Material@{Material}}
+
+
+Represents the material properties of a 3D object, including color, shininess, and optional textures.  
+
+
+
+
+{\ttfamily \#include $<$Material.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_material_a8d4edf9a76f6f92230b68fdf652bac4a}\label{class_material_a8d4edf9a76f6f92230b68fdf652bac4a} 
+{\bfseries Material} (const glm\+::vec3 \&color, float shininess)
+\item 
+\Hypertarget{class_material_aab8fd35ae9d69c0e88976a8210576a72}\label{class_material_aab8fd35ae9d69c0e88976a8210576a72} 
+void {\bfseries apply} () const
+\begin{DoxyCompactList}\small\item\em Send material data to shader. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_material_aeee8a41d4ccd2454f356749d73f02ca4}{set\+Diffuse\+Texture}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_texture}{Texture}} $>$ \&texture)
+\begin{DoxyCompactList}\small\item\em Set Materual Diffuse\+Texture. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_texture}{Texture}} $>$ \mbox{\hyperlink{class_material_aa4d0cea4bb2610d6a3b60859c98255e7}{get\+Diffuse\+Texture}} () const
+\begin{DoxyCompactList}\small\item\em Get current materual texture. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents the material properties of a 3D object, including color, shininess, and optional textures. 
+
+The {\ttfamily \doxylink{class_material}{Material}} class encapsulates visual properties used in rendering, such as color, shininess for specular highlights, and an optional diffuse texture. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_material_aa4d0cea4bb2610d6a3b60859c98255e7}\index{Material@{Material}!getDiffuseTexture@{getDiffuseTexture}}
+\index{getDiffuseTexture@{getDiffuseTexture}!Material@{Material}}
+\doxysubsubsection{\texorpdfstring{getDiffuseTexture()}{getDiffuseTexture()}}
+{\footnotesize\ttfamily \label{class_material_aa4d0cea4bb2610d6a3b60859c98255e7} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_texture}{Texture}} $>$ Material\+::get\+Diffuse\+Texture (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get current materual texture. 
+
+\begin{DoxyReturn}{Returns}
+texture shared ptr 
+\end{DoxyReturn}
+\Hypertarget{class_material_aeee8a41d4ccd2454f356749d73f02ca4}\index{Material@{Material}!setDiffuseTexture@{setDiffuseTexture}}
+\index{setDiffuseTexture@{setDiffuseTexture}!Material@{Material}}
+\doxysubsubsection{\texorpdfstring{setDiffuseTexture()}{setDiffuseTexture()}}
+{\footnotesize\ttfamily \label{class_material_aeee8a41d4ccd2454f356749d73f02ca4} 
+void Material\+::set\+Diffuse\+Texture (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_texture}{Texture}} $>$ \&}]{texture}{}\end{DoxyParamCaption})}
+
+
+
+Set Materual Diffuse\+Texture. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em texture} & shared\+\_\+ptr \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Material.\+h\item 
+Material.\+cpp\end{DoxyCompactItemize}

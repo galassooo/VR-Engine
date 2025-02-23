@@ -1,0 +1,18 @@
+\doxysection{Directional\+Light.\+h}
+\hypertarget{_directional_light_8h_source}{}\label{_directional_light_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Light.h"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_directional_light}{DirectionalLight}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_light}{Light}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{class_directional_light_a01dd908ba8f77806ae1ef23f96d79ac8}{DirectionalLight}}(\textcolor{keyword}{const}\ glm::vec3\&\ color,\ \textcolor{keywordtype}{float}\ intensity,\ \textcolor{keyword}{const}\ glm::vec3\&\ direction);}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_directional_light_a249c6001576b37ca22af078a44a01c29}{applyLighting}}()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00017\ \ \ \ \ glm::vec3\ \mbox{\hyperlink{class_directional_light_a429267972f6e3255e5bd7d1e070a3aa3}{getDirection}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00020\ \ \ \ \ glm::vec3\ direction;}
+\DoxyCodeLine{00021\ \};}
+
+\end{DoxyCode}

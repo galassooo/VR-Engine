@@ -1,0 +1,14 @@
+\doxysection{Camera.\+h}
+\hypertarget{_camera_8h_source}{}\label{_camera_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}Node.h"{}}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_camera}{Camera}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_node}{Node}}\ \{}
+\DoxyCodeLine{00009\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{virtual}\ glm::mat4\ getProjectionMatrix()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00011\ \ \ \ \ glm::mat4\ \mbox{\hyperlink{class_camera_a2f90e661a78172675ca06ea69667b531}{getViewMatrix}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00012\ \ \ \ \ glm::mat4\ \mbox{\hyperlink{class_camera_a9313f512a82790068f4721a1cbba8e81}{lookAt}}(\textcolor{keyword}{const}\ glm::vec3\&\ target,\ \textcolor{keyword}{const}\ glm::vec3\&\ customUp\ =\ glm::vec3(0,\ 1,\ 0))\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00013\ \};}
+
+\end{DoxyCode}

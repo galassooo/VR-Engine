@@ -1,0 +1,114 @@
+\doxysection{engine.\+h}
+\hypertarget{engine_8h_source}{}\label{engine_8h_source}\mbox{\hyperlink{engine_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ \#INCLUDE\ //}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}Node.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}Camera.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}List.h"{}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \textcolor{comment}{//\ C/C++:}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#ifdef\ \_WINDOWS}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}glm/glm.hpp"{}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\ \ \ \ \#include\ <glm/gtc/type\_ptr.hpp>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#elif\ defined(\_\_APPLE\_\_)}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../dependencies/glm/include/glm/glm.hpp"{}}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\ \ \ \ \#include\ <OpenGL/gl.h>}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \#include\ <OpenGL/glu.h>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#include\ <OpenGL/glext.h>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \#include\ <GLUT/glut.h>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#else\ \ }\textcolor{comment}{//\ Linux}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../dependencies/glm/include/glm/glm.hpp"{}}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\ \ \ \ \#include\ <GL/gl.h>}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\ \ \ \ \#include\ <GL/glu.h>}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\ \ \ \ \#include\ <GL/glext.h>}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\ \ \ \ \#include\ <GL/glut.h>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{//\ VERSION\ //}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \textcolor{comment}{//\ Generic\ info:}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#ifdef\ \_DEBUG}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\ \ \ \#define\ LIB\_NAME\ \ \ \ \ \ "{}My\ Graphics\ Engine\ v0.1a\ (debug)"{}\ \ \ }}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\ \ \ \#define\ LIB\_NAME\ \ \ \ \ \ "{}My\ Graphics\ Engine\ v0.1a"{}\ \ \ }}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\ \ \ \#define\ LIB\_VERSION\ \ \ 10\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \textcolor{comment}{//\ Export\ API:}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#ifdef\ \_WINDOWS}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\ \ \ \#ifdef\ ENGINE\_EXPORTS}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\ \ \ \ \ \ \#define\ ENG\_API\ \_\_declspec(dllexport)}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\ \ \ \#else}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\ \ \ \ \ \ \#define\ ENG\_API\ \_\_declspec(dllimport)}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\ \ \ \#endif}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\ \ \ \#pragma\ warning(disable\ :\ 4251)}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\ \ \ \#define\ ENG\_API}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00064\ \textcolor{comment}{//\ NAMESPACE\ //}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{keyword}{namespace\ }Eng\ \{}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00070\ \textcolor{comment}{//\ MAIN\ ENGINE\ CLASS\ //}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00076\ \textcolor{keyword}{class\ }ENG\_API\ \mbox{\hyperlink{class_eng_1_1_base}{Base}}\ final}
+\DoxyCodeLine{00077\ \{}
+\DoxyCodeLine{00079\ \textcolor{keyword}{public}:\ \textcolor{comment}{//}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \textcolor{comment}{//\ Singleton\ control:}}
+\DoxyCodeLine{00083\ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_eng_1_1_base}{Base}}\ \&getInstance();}
+\DoxyCodeLine{00084\ \ \ \ \mbox{\hyperlink{class_eng_1_1_base}{Base}}(\mbox{\hyperlink{class_eng_1_1_base}{Base}}\ \textcolor{keyword}{const}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00085\ \ \ \ \textcolor{keywordtype}{void}\ operator=(\mbox{\hyperlink{class_eng_1_1_base}{Base}}\ \textcolor{keyword}{const}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \textcolor{comment}{//\ Init/free:}}
+\DoxyCodeLine{00089\ \ \ \ \textcolor{keywordtype}{bool}\ init();}
+\DoxyCodeLine{00090\ \ \ \ \textcolor{keywordtype}{bool}\ free();}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \textcolor{comment}{//\ Scene\ management}}
+\DoxyCodeLine{00093\ \ \ \ \textcolor{keywordtype}{void}\ renderScene();}
+\DoxyCodeLine{00094\ \ \ \ \textcolor{keywordtype}{void}\ SetActiveCamera(std::shared\_ptr<Camera>\ camera);}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \textcolor{comment}{//\ Scene\ Graph}}
+\DoxyCodeLine{00097\ \ \ \ \textcolor{keywordtype}{void}\ addRootNode(std::shared\_ptr<Node>\ node);}
+\DoxyCodeLine{00098\ \ \ \ \textcolor{keywordtype}{void}\ removeRootNode(std::shared\_ptr<Node>\ node);}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00101\ \textcolor{keyword}{private}:\ \textcolor{comment}{//}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \textcolor{comment}{//\ Reserved:}}
+\DoxyCodeLine{00105\ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_eng_1_1_base_1_1_reserved}{Reserved}};}
+\DoxyCodeLine{00106\ \ \ \ std::unique\_ptr<Reserved>\ reserved;}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \textcolor{comment}{//\ Const/dest:}}
+\DoxyCodeLine{00109\ \ \ \ \mbox{\hyperlink{class_eng_1_1_base}{Base}}();}
+\DoxyCodeLine{00110\ \ \ \ \mbox{\hyperlink{class_eng_1_1_base}{\string~Base}}();}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \textcolor{comment}{//\ Helper\ functions\ for\ OpenGL\ context\ management}}
+\DoxyCodeLine{00113\ \ \ \ \textcolor{keywordtype}{bool}\ initOpenGL();}
+\DoxyCodeLine{00114\ \ \ \ \textcolor{keywordtype}{void}\ freeOpenGL();}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \textcolor{comment}{//\ Root\ nodes}}
+\DoxyCodeLine{00117\ \ \ \ std::vector<std::shared\_ptr<Node>>\ rootNodes;}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \textcolor{comment}{//\ Traverse\ Root\ nodes}}
+\DoxyCodeLine{00120\ \ \ \ \textcolor{keywordtype}{void}\ traverseAndAddToRenderList(\textcolor{keyword}{const}\ std::shared\_ptr<Node>\&\ node);}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \textcolor{comment}{//\ Currently\ active\ camera}}
+\DoxyCodeLine{00123\ \ \ \ std::shared\_ptr<Camera>\ activeCamera;}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \textcolor{comment}{//RenderList}}
+\DoxyCodeLine{00126\ \ \ \ \mbox{\hyperlink{class_list}{List}}\ renderList;}
+\DoxyCodeLine{00127\ \};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \};\ \textcolor{comment}{//\ end\ of\ namespace\ Eng::}}
+
+\end{DoxyCode}

@@ -1,0 +1,17 @@
+\doxysection{Perspective\+Camera.\+h}
+\hypertarget{_perspective_camera_8h_source}{}\label{_perspective_camera_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Camera.h"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_perspective_camera}{PerspectiveCamera}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_camera}{Camera}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{class_perspective_camera_aa15a4507083f41ed52a53604c37e4d1d}{PerspectiveCamera}}(\textcolor{keywordtype}{float}\ fov,\ \textcolor{keywordtype}{float}\ aspect,\ \textcolor{keywordtype}{float}\ nearClip,\ \textcolor{keywordtype}{float}\ farClip);}
+\DoxyCodeLine{00016\ \ \ \ \ glm::mat4\ \mbox{\hyperlink{class_perspective_camera_a3cd21c08c2f28cd67e69af62e0cebdb9}{getProjectionMatrix}}()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{float}\ fov,\ aspect,\ nearClip,\ farClip;}
+\DoxyCodeLine{00020\ \};}
+
+\end{DoxyCode}

@@ -1,0 +1,70 @@
+variables:
+# `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
+
+stages:
+  - structure
+  - engine
+  - client
+  - package
+
+image: gitlab-edu.supsi.ch:5050/dti-isin/labingsw/common:ubuntu2404-cg
+
+structure:
+  stage: structure
+  script:
+    - '[ -d engine ] || exit 1'
+    - '[ -d client ] || exit 1'
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+
+engine:
+  stage: engine
+  before_script:
+    - cd engine
+    - apt-get update && apt-get install -y xvfb
+    - export DISPLAY=:99
+    - Xvfb :99 -screen 0 1024x768x24 &
+  script:
+    - 'make clean'      # Clean the build environment
+    - 'make all'        # Build both debug and release configurations
+    - 'make test'       # Run all tests (debug and release)
+  after_script:
+    - 'cd ..'
+  artifacts:
+    paths:
+      - engine/bin/Debug/tests
+      - engine/bin/Release/tests
+      - engine/bin/Release/libengine.so
+      - engine/bin/Debug/libengine.so
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+
+client:
+  stage: client
+  before_script:
+    - 'cd client'
+  script:
+    - 'make clean'
+    - 'make'
+  after_script:
+    - 'cd ..'
+  artifacts:
+    paths:
+      - client/bin/Release/*
+      - client/bin/Debug/*
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+
+package:
+  stage: package
+  dependencies:
+    - engine
+    - client
+  script:
+    - make package
+    - make test_package
+  artifacts:
+    paths:
+      - graphics_engine_*.tar.gz
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"

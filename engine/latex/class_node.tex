@@ -1,0 +1,185 @@
+\doxysection{Node Class Reference}
+\hypertarget{class_node}{}\label{class_node}\index{Node@{Node}}
+
+
+Represents a node in the scene graph with hierarchical transformations.  
+
+
+
+
+{\ttfamily \#include $<$Node.\+h$>$}
+
+Inheritance diagram for Node\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.223022cm]{class_node}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_node_ad7a34779cad45d997bfd6d3d8043c75f}\label{class_node_ad7a34779cad45d997bfd6d3d8043c75f} 
+{\bfseries Node} ()
+\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{class_node}{Node} Class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_node_a0bc6344f1418f4b780025ca6839d0acc}{set\+Parent}} (\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*}p)
+\begin{DoxyCompactList}\small\item\em Set parent of the \doxylink{class_node}{Node}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_node_a36ab59d094fe2dd2b2d8087c7fe3c955}{add\+Child}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ child)
+\begin{DoxyCompactList}\small\item\em Add child to the list of current \doxylink{class_node}{Node}\textquotesingle{}s children. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_node_a3cad655320d50751c43c5cec9356dcf3}{get\+Parent}} () const
+\begin{DoxyCompactList}\small\item\em Get current \doxylink{class_node}{Node}\textquotesingle{}s parent. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_node_a89f137ff4d4853bdc509397063bdfbec}{get\+Final\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Get final Matrix of current \doxylink{class_node}{Node} based on the position in the Scene Graph. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_node_a15ee91cac4a2f0700cd080e0377a6843}{set\+Local\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Set current \doxylink{class_node}{Node}\textquotesingle{}s Local Matrix. \end{DoxyCompactList}\item 
+const glm\+::mat4 \& \mbox{\hyperlink{class_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}{get\+Local\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Get current \doxylink{class_node}{Node}\textquotesingle{}s Local Matrix. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_node_ab93a6f41e02422a21c44227c0355382a}{render}} ()
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ $>$ \mbox{\hyperlink{class_node_adf8763eeea4302a3680aa71af3085727}{get\+Children}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_object}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Object} ()
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_object_af3558f9e2b46d677f0ac4d6d3c97b118}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Returns the unique ID of the \doxylink{class_object}{Object} Class. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_object_acb9b466607cb80beaaa30ece2f7f570a}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Returns the name of the current \doxylink{class_object}{Object}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_node_ad8184598cdea70e4bbdfd76f2b0f9e85}\label{class_node_ad8184598cdea70e4bbdfd76f2b0f9e85} 
+\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries parent}
+\item 
+\Hypertarget{class_node_a44f29c4de616705e4f8405e80d869825}\label{class_node_a44f29c4de616705e4f8405e80d869825} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ $>$ {\bfseries children}
+\item 
+\Hypertarget{class_node_aa0bcc0bb9bee4fcdef445ed445652a20}\label{class_node_aa0bcc0bb9bee4fcdef445ed445652a20} 
+glm\+::mat4 {\bfseries local\+Matrix}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_object}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int {\bfseries id}
+\item 
+std\+::string {\bfseries name}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a node in the scene graph with hierarchical transformations. 
+
+The \doxylink{class_node}{Node} class can have a parent and children, enabling hirarchical transformations within the scene graph 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_node_a36ab59d094fe2dd2b2d8087c7fe3c955}\index{Node@{Node}!addChild@{addChild}}
+\index{addChild@{addChild}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{addChild()}{addChild()}}
+{\footnotesize\ttfamily \label{class_node_a36ab59d094fe2dd2b2d8087c7fe3c955} 
+void Node\+::add\+Child (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$}]{child}{}\end{DoxyParamCaption})}
+
+
+
+Add child to the list of current \doxylink{class_node}{Node}\textquotesingle{}s children. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Shared} & ptr of the new child \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_node_adf8763eeea4302a3680aa71af3085727}\index{Node@{Node}!getChildren@{getChildren}}
+\index{getChildren@{getChildren}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{getChildren()}{getChildren()}}
+{\footnotesize\ttfamily \label{class_node_adf8763eeea4302a3680aa71af3085727} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ $>$ Node\+::get\+Children (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Get current \doxylink{class_node}{Node}\textquotesingle{}s children @retrun vector$<$shared\+\_\+ptr$<$\+Node$>$$>$ of children \Hypertarget{class_node_a89f137ff4d4853bdc509397063bdfbec}\index{Node@{Node}!getFinalMatrix@{getFinalMatrix}}
+\index{getFinalMatrix@{getFinalMatrix}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{getFinalMatrix()}{getFinalMatrix()}}
+{\footnotesize\ttfamily \label{class_node_a89f137ff4d4853bdc509397063bdfbec} 
+glm\+::mat4 Node\+::get\+Final\+Matrix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get final Matrix of current \doxylink{class_node}{Node} based on the position in the Scene Graph. 
+
+\begin{DoxyReturn}{Returns}
+glm\+::mat4 matrix with all transformations applied 
+\end{DoxyReturn}
+\Hypertarget{class_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}\index{Node@{Node}!getLocalMatrix@{getLocalMatrix}}
+\index{getLocalMatrix@{getLocalMatrix}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{getLocalMatrix()}{getLocalMatrix()}}
+{\footnotesize\ttfamily \label{class_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2} 
+const glm\+::mat4 \& Node\+::get\+Local\+Matrix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get current \doxylink{class_node}{Node}\textquotesingle{}s Local Matrix. 
+
+\begin{DoxyReturn}{Returns}
+glm\+::mat4 local matrix 
+\end{DoxyReturn}
+\Hypertarget{class_node_a3cad655320d50751c43c5cec9356dcf3}\index{Node@{Node}!getParent@{getParent}}
+\index{getParent@{getParent}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{getParent()}{getParent()}}
+{\footnotesize\ttfamily \label{class_node_a3cad655320d50751c43c5cec9356dcf3} 
+\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*} Node\+::get\+Parent (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get current \doxylink{class_node}{Node}\textquotesingle{}s parent. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to current \doxylink{class_node}{Node}\textquotesingle{}s parent 
+\end{DoxyReturn}
+\Hypertarget{class_node_ab93a6f41e02422a21c44227c0355382a}\index{Node@{Node}!render@{render}}
+\index{render@{render}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_node_ab93a6f41e02422a21c44227c0355382a} 
+void Node\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Rendering of the \doxylink{class_node}{Node} propaged to all children 
+
+Implements \mbox{\hyperlink{class_object}{Object}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{class_mesh_a0e4c32b72cf08edd59bba250135352f2}{Mesh}}.
+
+\Hypertarget{class_node_a15ee91cac4a2f0700cd080e0377a6843}\index{Node@{Node}!setLocalMatrix@{setLocalMatrix}}
+\index{setLocalMatrix@{setLocalMatrix}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{setLocalMatrix()}{setLocalMatrix()}}
+{\footnotesize\ttfamily \label{class_node_a15ee91cac4a2f0700cd080e0377a6843} 
+void Node\+::set\+Local\+Matrix (\begin{DoxyParamCaption}\item[{const glm\+::mat4 \&}]{matrix}{}\end{DoxyParamCaption})}
+
+
+
+Set current \doxylink{class_node}{Node}\textquotesingle{}s Local Matrix. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em glm\+::mat4} & new Local Matrix \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_node_a0bc6344f1418f4b780025ca6839d0acc}\index{Node@{Node}!setParent@{setParent}}
+\index{setParent@{setParent}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{setParent()}{setParent()}}
+{\footnotesize\ttfamily \label{class_node_a0bc6344f1418f4b780025ca6839d0acc} 
+void Node\+::set\+Parent (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*}}]{p}{}\end{DoxyParamCaption})}
+
+
+
+Set parent of the \doxylink{class_node}{Node}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Pointer} & to the parent node \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Node.\+h\item 
+Node.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,20 @@
+\doxysection{Spot\+Light.\+h}
+\hypertarget{_spot_light_8h_source}{}\label{_spot_light_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Light.h"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_spot_light}{SpotLight}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_light}{Light}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{class_spot_light_aba7dc8ab530129a6d1092fcf55caf929}{SpotLight}}(\textcolor{keyword}{const}\ glm::vec3\&\ color,\ \textcolor{keywordtype}{float}\ intensity,\ \textcolor{keyword}{const}\ glm::vec3\&\ direction,\ \textcolor{keywordtype}{float}\ cutoffAngle,\ \textcolor{keywordtype}{float}\ fallOff);}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_spot_light_ac963a5e5d900ea886acccb2cd19837fc}{applyLighting}}()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00017\ \ \ \ \ glm::vec3\ \mbox{\hyperlink{class_spot_light_a7728903c155eda1e0304be6de04609d7}{getDirection}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00020\ \ \ \ \ glm::vec3\ direction;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{float}\ cutoffAngle;}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{float}\ falloff;}
+\DoxyCodeLine{00023\ \};}
+
+\end{DoxyCode}

@@ -1,0 +1,115 @@
+\doxysection{Eng\+::Base Class Reference}
+\hypertarget{class_eng_1_1_base}{}\label{class_eng_1_1_base}\index{Eng::Base@{Eng::Base}}
+
+
+\doxylink{class_eng_1_1_base}{Base} engine main class. This class is a singleton.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_eng_1_1_base_1_1_reserved}{Reserved}}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_eng_1_1_base}{Base} class reserved structure (using PIMPL/\+Bridge design pattern \href{https://en.wikipedia.org/wiki/Opaque_pointer}{\texttt{ https\+://en.\+wikipedia.\+org/wiki/\+Opaque\+\_\+pointer}}). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_eng_1_1_base_ac9bc36f2293d517cc6f1b2ab348d4f69}\label{class_eng_1_1_base_ac9bc36f2293d517cc6f1b2ab348d4f69} 
+{\bfseries Base} (\mbox{\hyperlink{class_eng_1_1_base}{Base}} const \&)=delete
+\item 
+\Hypertarget{class_eng_1_1_base_ac4eb1f66179273abba59260a6b4c5cbd}\label{class_eng_1_1_base_ac4eb1f66179273abba59260a6b4c5cbd} 
+void {\bfseries operator=} (\mbox{\hyperlink{class_eng_1_1_base}{Base}} const \&)=delete
+\item 
+bool \mbox{\hyperlink{class_eng_1_1_base_a90edbcc7768cba11d81687bdcf7c10f5}{init}} ()
+\item 
+bool \mbox{\hyperlink{class_eng_1_1_base_afd7e1923deb411907695c0b27114f62a}{free}} ()
+\item 
+void \mbox{\hyperlink{class_eng_1_1_base_a4684cbf08ccc9f08cd073977697b4103}{render\+Scene}} ()
+\item 
+void \mbox{\hyperlink{class_eng_1_1_base_aa8c86687b7d3aa69d7170b1441c0ef0f}{Set\+Active\+Camera}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_camera}{Camera}} $>$ camera)
+\item 
+void \mbox{\hyperlink{class_eng_1_1_base_a7beb0ec5e2b8b2c892277fe8b968253f}{add\+Root\+Node}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ node)
+\item 
+void \mbox{\hyperlink{class_eng_1_1_base_a8b69c304794769870e607875faf8c5fd}{remove\+Root\+Node}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ node)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_eng_1_1_base}{Base}} \& \mbox{\hyperlink{class_eng_1_1_base_a3c21bcd7bace09d5913ced6de5b15518}{get\+Instance}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{class_eng_1_1_base}{Base} engine main class. This class is a singleton. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_base_a7beb0ec5e2b8b2c892277fe8b968253f}\index{Eng::Base@{Eng::Base}!addRootNode@{addRootNode}}
+\index{addRootNode@{addRootNode}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{addRootNode()}{addRootNode()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a7beb0ec5e2b8b2c892277fe8b968253f} 
+void ENG\+\_\+\+API Eng\+::\+Base\+::add\+Root\+Node (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$}]{node}{}\end{DoxyParamCaption})}
+
+Add a root node 
+\begin{DoxyParams}{Parameters}
+{\em a} & share\+\_\+ptr$<$\+Node$>$ pointing to a root node \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_base_afd7e1923deb411907695c0b27114f62a}\index{Eng::Base@{Eng::Base}!free@{free}}
+\index{free@{free}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{free()}{free()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_afd7e1923deb411907695c0b27114f62a} 
+bool ENG\+\_\+\+API Eng\+::\+Base\+::free (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Free internal components. \begin{DoxyReturn}{Returns}
+TF 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_a3c21bcd7bace09d5913ced6de5b15518}\index{Eng::Base@{Eng::Base}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a3c21bcd7bace09d5913ced6de5b15518} 
+\mbox{\hyperlink{class_eng_1_1_base}{Eng\+::\+Base}} ENG\+\_\+\+API \& Eng\+::\+Base\+::get\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Gets a reference to the (unique) singleton instance. \begin{DoxyReturn}{Returns}
+reference to singleton instance 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_a90edbcc7768cba11d81687bdcf7c10f5}\index{Eng::Base@{Eng::Base}!init@{init}}
+\index{init@{init}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a90edbcc7768cba11d81687bdcf7c10f5} 
+bool ENG\+\_\+\+API Eng\+::\+Base\+::init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Init internal components. \begin{DoxyReturn}{Returns}
+TF 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_a8b69c304794769870e607875faf8c5fd}\index{Eng::Base@{Eng::Base}!removeRootNode@{removeRootNode}}
+\index{removeRootNode@{removeRootNode}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{removeRootNode()}{removeRootNode()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a8b69c304794769870e607875faf8c5fd} 
+void ENG\+\_\+\+API Eng\+::\+Base\+::remove\+Root\+Node (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$}]{node}{}\end{DoxyParamCaption})}
+
+Remove root node 
+\begin{DoxyParams}{Parameters}
+{\em shared\+\_\+ptr$<$\+Node$>$} & to the root node \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_base_a4684cbf08ccc9f08cd073977697b4103}\index{Eng::Base@{Eng::Base}!renderScene@{renderScene}}
+\index{renderScene@{renderScene}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{renderScene()}{renderScene()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a4684cbf08ccc9f08cd073977697b4103} 
+void ENG\+\_\+\+API Eng\+::\+Base\+::render\+Scene (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Render scene \Hypertarget{class_eng_1_1_base_aa8c86687b7d3aa69d7170b1441c0ef0f}\index{Eng::Base@{Eng::Base}!SetActiveCamera@{SetActiveCamera}}
+\index{SetActiveCamera@{SetActiveCamera}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{SetActiveCamera()}{SetActiveCamera()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_aa8c86687b7d3aa69d7170b1441c0ef0f} 
+void ENG\+\_\+\+API Eng\+::\+Base\+::\+Set\+Active\+Camera (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_camera}{Camera}} $>$}]{camera}{}\end{DoxyParamCaption})}
+
+Set active camera @parram shared\+\_\+ptr$<$\+Camera$>$ current camera 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+\mbox{\hyperlink{engine_8cpp}{engine.\+cpp}}\end{DoxyCompactItemize}

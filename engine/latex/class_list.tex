@@ -1,0 +1,90 @@
+\doxysection{List Class Reference}
+\hypertarget{class_list}{}\label{class_list}\index{List@{List}}
+
+
+A render list that extends \doxylink{class_object}{Object} to integrate with the scene graph.  
+
+
+
+
+{\ttfamily \#include $<$List.\+h$>$}
+
+Inheritance diagram for List\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_list}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_list_a64d878a92d11f7c63c70cbe4e7dd4176}\label{class_list_a64d878a92d11f7c63c70cbe4e7dd4176} 
+{\bfseries List} ()
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_list_a24a3265d516e8f44e3e79926bdee881b}{add\+Node}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_object}{Object}} $>$ \&node)
+\begin{DoxyCompactList}\small\item\em Add a node to the list based on its type. Lights are added to the front, while other nodes are added to the back. \end{DoxyCompactList}\item 
+\Hypertarget{class_list_a3fad6292bd5126eeb437317383338cea}\label{class_list_a3fad6292bd5126eeb437317383338cea} 
+void {\bfseries clear} ()
+\begin{DoxyCompactList}\small\item\em Clear the list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_list_a819f0efb82263b15326e610b13623174}{render}} () override
+\begin{DoxyCompactList}\small\item\em Render all nodes in the list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_object}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Object} ()
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_object_af3558f9e2b46d677f0ac4d6d3c97b118}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Returns the unique ID of the \doxylink{class_object}{Object} Class. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_object_acb9b466607cb80beaaa30ece2f7f570a}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Returns the name of the current \doxylink{class_object}{Object}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_object}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int {\bfseries id}
+\item 
+std\+::string {\bfseries name}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A render list that extends \doxylink{class_object}{Object} to integrate with the scene graph. 
+
+The \doxylink{class_list}{List} class stores a collection of nodes in the correct rendering order\+: lights are pushed to the front, and other nodes are pushed to the back. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_list_a24a3265d516e8f44e3e79926bdee881b}\index{List@{List}!addNode@{addNode}}
+\index{addNode@{addNode}!List@{List}}
+\doxysubsubsection{\texorpdfstring{addNode()}{addNode()}}
+{\footnotesize\ttfamily \label{class_list_a24a3265d516e8f44e3e79926bdee881b} 
+void List\+::add\+Node (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_object}{Object}} $>$ \&}]{node}{}\end{DoxyParamCaption})}
+
+
+
+Add a node to the list based on its type. Lights are added to the front, while other nodes are added to the back. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & A shared pointer to the node. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_list_a819f0efb82263b15326e610b13623174}\index{List@{List}!render@{render}}
+\index{render@{render}!List@{List}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_list_a819f0efb82263b15326e610b13623174} 
+void List\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Render all nodes in the list. 
+
+
+
+Implements \mbox{\hyperlink{class_object}{Object}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+List.\+h\item 
+List.\+cpp\end{DoxyCompactItemize}

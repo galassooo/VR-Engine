@@ -1,0 +1,29 @@
+\doxysection{Mesh.\+h}
+\hypertarget{_mesh_8h_source}{}\label{_mesh_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Node.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Material.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}Texture.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_mesh}{Mesh}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_node}{Node}}\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{class_mesh_a2af137f1571af89172b9c102302c416b}{Mesh}}();}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_mesh_a5efe4da1a4c0971cfb037bd70304c303}{\string~Mesh}}();}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_af2b8eaba6c487e084d0cc662e2be8574}{setVertices}}(\textcolor{keyword}{const}\ std::vector<glm::vec3>\&\ vertices);}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_a3c8a507c933246c63e3b555a77769ca6}{setIndices}}(\textcolor{keyword}{const}\ std::vector<unsigned\ int>\&\ indices);}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_a0e4c32b72cf08edd59bba250135352f2}{render}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_aa6451d5335058257ced6226eedf10a74}{setMaterial}}(\textcolor{keyword}{const}\ std::shared\_ptr<Material>\&\ material);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00025\ \ \ \ \ std::vector<glm::vec3>\ vertices;\ \ \ \ \textcolor{comment}{//-\/>\ Vector\ of\ vertex\ positions.}}
+\DoxyCodeLine{00026\ \ \ \ \ std::vector<unsigned\ int>\ indices;\ \ \textcolor{comment}{//-\/>\ Vector\ of\ indices\ defining\ the\ mesh\ faces.}}
+\DoxyCodeLine{00027\ \ \ \ \ std::shared\_ptr<Material>\ material;\ \textcolor{comment}{//-\/>\ The\ material\ applied\ to\ the\ mesh.}}
+\DoxyCodeLine{00028\ \};}
+
+\end{DoxyCode}

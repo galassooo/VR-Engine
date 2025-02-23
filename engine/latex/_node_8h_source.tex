@@ -1,0 +1,32 @@
+\doxysection{Node.\+h}
+\hypertarget{_node_8h_source}{}\label{_node_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Object.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_node}{Node}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_object}{Object}}\{}
+\DoxyCodeLine{00015\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{class_node_ad7a34779cad45d997bfd6d3d8043c75f}{Node}}();}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_node_a0bc6344f1418f4b780025ca6839d0acc}{setParent}}(\mbox{\hyperlink{class_node}{Node}}*\ p);}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_node_a36ab59d094fe2dd2b2d8087c7fe3c955}{addChild}}(std::shared\_ptr<Node>\ child);}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{class_node}{Node}}*\ \mbox{\hyperlink{class_node_a3cad655320d50751c43c5cec9356dcf3}{getParent}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00020\ \ \ \ \ }
+\DoxyCodeLine{00021\ \ \ \ \ glm::mat4\ \mbox{\hyperlink{class_node_a89f137ff4d4853bdc509397063bdfbec}{getFinalMatrix}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_node_a15ee91cac4a2f0700cd080e0377a6843}{setLocalMatrix}}(\textcolor{keyword}{const}\ glm::mat4\&\ matrix);}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{const}\ glm::mat4\&\ \mbox{\hyperlink{class_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}{getLocalMatrix}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_node_ab93a6f41e02422a21c44227c0355382a}{render}}();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ std::vector<std::shared\_ptr<Node>>\ \mbox{\hyperlink{class_node_adf8763eeea4302a3680aa71af3085727}{getChildren}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{class_node}{Node}}*\ parent;}
+\DoxyCodeLine{00031\ \ \ \ \ std::vector<std::shared\_ptr<Node>>\ children;}
+\DoxyCodeLine{00032\ \ \ \ \ glm::mat4\ localMatrix;}
+\DoxyCodeLine{00033\ \};}
+
+\end{DoxyCode}

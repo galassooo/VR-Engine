@@ -1,0 +1,65 @@
+\doxysection{Texture Class Reference}
+\hypertarget{class_texture}{}\label{class_texture}\index{Texture@{Texture}}
+
+
+Represents a texture used in rendering, loaded from an image file and applied to a 3D object.  
+
+
+
+
+{\ttfamily \#include $<$Texture.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_texture_a25ab3a58fa60ccafe3e3883727bc63fc}{Texture}} (const std\+::string \&file\+Path)
+\begin{DoxyCompactList}\small\item\em \doxylink{class_texture}{Texture} Constructor, takes file\+Path and loads the texture. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_texture_a8207bb63fc9dc1663bf53e2c19591ba7}{bind}} (unsigned int unit) const
+\begin{DoxyCompactList}\small\item\em Binding the texture to a specified texture unit in Open\+GL. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a texture used in rendering, loaded from an image file and applied to a 3D object. 
+
+The {\ttfamily \doxylink{class_texture}{Texture}} class provides functionality for loading a texture from a file, binding it to a specific texture unit, and managing its Open\+GL texture ID. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_texture_a25ab3a58fa60ccafe3e3883727bc63fc}\index{Texture@{Texture}!Texture@{Texture}}
+\index{Texture@{Texture}!Texture@{Texture}}
+\doxysubsubsection{\texorpdfstring{Texture()}{Texture()}}
+{\footnotesize\ttfamily \label{class_texture_a25ab3a58fa60ccafe3e3883727bc63fc} 
+Texture\+::\+Texture (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{file\+Path}{}\end{DoxyParamCaption})}
+
+
+
+\doxylink{class_texture}{Texture} Constructor, takes file\+Path and loads the texture. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Texture\textquotesingle{}s} & file\+Path \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_texture_a8207bb63fc9dc1663bf53e2c19591ba7}\index{Texture@{Texture}!bind@{bind}}
+\index{bind@{bind}!Texture@{Texture}}
+\doxysubsubsection{\texorpdfstring{bind()}{bind()}}
+{\footnotesize\ttfamily \label{class_texture_a8207bb63fc9dc1663bf53e2c19591ba7} 
+void Texture\+::bind (\begin{DoxyParamCaption}\item[{unsigned int}]{unit}{}\end{DoxyParamCaption}) const}
+
+
+
+Binding the texture to a specified texture unit in Open\+GL. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ussigned} & int for the unit in Open\+GL \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Texture.\+h\item 
+Texture.\+cpp\end{DoxyCompactItemize}

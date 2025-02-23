@@ -1,0 +1,49 @@
+#include "engine.h"
+#include <GL/freeglut.h>
+
+/**
+ * @brief Constructor for DirectionalLight.
+ *
+ * @param color The base color of the light (affects ambient, diffuse, and specular).
+ * @param direction The direction of the light rays.
+ */
+
+Eng::DirectionalLight::DirectionalLight(const glm::vec3 &color, const glm::vec3 &direction) : Light{color},
+   direction{glm::normalize(direction)} {
+}
+
+/**
+ * @brief Renders the directional light in OpenGL.
+ *
+ * Configures the light's direction and calls the base class to set shared properties.
+ *
+ * @param index The index of the light (0-7, corresponding to GL_LIGHT0 to GL_LIGHT7).
+ */
+
+void Eng::DirectionalLight::configureLight(const int &lightId) {
+   // Note that we first negate the light.direction vector.
+   // The lighting calculations we used so far expect the light direction to be
+   // a direction from the fragment towards the light source, but people generally prefer to
+   // specify a directional light as a global direction pointing from the light source.
+   // Therefore we have to negate the global light direction vector to switch its direction;
+   // it's now a direction vector pointing towards the light source. Also,
+   // be sure to normalize the vector since it is unwise to assume the input
+   // vector to be a unit vector.
+
+   // REF: https://learnopengl.com/Lighting/Light-casters
+   // ALTRA REF: SLIDE LIGHTS DEL CORSO -> IL VETTORE L VA DAL PUNTO ILLUMINATO ALLA LUCEEEEEEE
+
+   glm::vec3 direction = -this->direction; //MENOOOOOOOOOOO //normalizzato nel costruttore
+   GLfloat lightDir[] = {direction.x, direction.y, direction.z, 0.0f}; // w=0 for directional
+   glLightfv(lightId, GL_POSITION, lightDir);
+}
+
+/**
+ * @brief Gets the current direction of the directional light.
+ *
+ * @return glm::vec3 The normalized direction of the light rays.
+ */
+
+glm::vec3 Eng::DirectionalLight::getDirection() const {
+   return direction;
+}

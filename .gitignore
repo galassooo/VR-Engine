@@ -1,0 +1,32 @@
+# Visual Studio specific
+.vscode/
+.vs/
+**/Debug/
+**/Release/
+**/x64/
+**/x86/
+*.exe
+*.ilk
+*.pdb
+*.idb
+*.obj
+*.tlog
+
+# CLion specific
+.idea/
+cmake-build-*/
+
+# Temporary and log files
+*.log
+*.tmp
+*.bak
+
+# Explicitly include the dependencies folder and its contents
+!dependencies/
+!dependencies/freeglut/
+!dependencies/freeglut/lib/
+!dependencies/freeglut/lib/**
+!dependencies/freeimage/lib
+!dependencies/freeimage/lib/**
+!demo/
+!demo/**
