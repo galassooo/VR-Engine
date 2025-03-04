@@ -505,308 +505,244 @@ void ENG_API Eng::OvoReader::parseMaterial(unsigned int &position, const char *d
   * @param children Reference to store the number of child nodes.
   * @return Shared pointer to the created mesh node.
   */
-std::shared_ptr<Eng::Node> ENG_API Eng::OvoReader::parseMesh(unsigned int &position, unsigned int chunkId, char *data,
-                                                             unsigned int &children) {
-   using namespace std;
-   auto mesh = std::make_shared<Eng::Mesh>();
+std::shared_ptr<Eng::Node> Eng::OvoReader::parseMesh(
+    unsigned int& position, unsigned int chunkId, char* data, unsigned int& children)
+{
+    using namespace std;
 
-   // Both standard and skinned meshes are handled through this case:
-   bool isSkinned = false;
-   if (static_cast<OvObject::Type>(chunkId) == OvObject::Type::SKINNED) {
-      isSkinned = true;
-      cout << "skinned mesh]" << endl;
-   } else
-      cout << "mesh]" << endl;
+    // Extract mesh name.
+    char meshName[FILENAME_MAX];
+    strcpy(meshName, data + position);
+    position += static_cast<unsigned int>(strlen(meshName)) + 1;
+    cout << "   Name  . . . . :  " << meshName << endl;
 
-   // Mesh name:
-   char meshName[FILENAME_MAX];
-   strcpy(meshName, data + position);
-   position += static_cast<unsigned int>(strlen(meshName)) + 1;
-   cout << "   Name  . . . . :  " << meshName << endl;
+    // Extract mesh transformation matrix.
+    glm::mat4 matrix;
+    memcpy(&matrix, data + position, sizeof(glm::mat4));
+    position += sizeof(glm::mat4);
+    cout << "MATRIX: " << glm::to_string(matrix) << endl;
 
-   mesh->setName(meshName);
+    // Number of children nodes.
+    memcpy(&children, data + position, sizeof(unsigned int));
+    cout << "   Nr. children:  " << children << endl;
+    position += sizeof(unsigned int);
 
-   // Mesh matrix:
-   glm::mat4 matrix;
-   memcpy(&matrix, data + position, sizeof(glm::mat4));
-   position += sizeof(glm::mat4);
+    // Parse target node.
+    char targetName[FILENAME_MAX];
+    strcpy(targetName, data + position);
+    cout << "   Target node . :  " << targetName << endl;
+    position += static_cast<unsigned int>(strlen(targetName)) + 1;
 
-   cout << "MATRIX: " << glm::to_string(matrix) << endl;
+    // Parse mesh subtype.
+    unsigned char subtype;
+    memcpy(&subtype, data + position, sizeof(unsigned char));
+    char subtypeName[FILENAME_MAX];
+    switch (static_cast<OvMesh::Subtype>(subtype)) {
+    case OvMesh::Subtype::DEFAULT: strcpy(subtypeName, "standard"); break;
+    case OvMesh::Subtype::NORMALMAPPED: strcpy(subtypeName, "normal-mapped"); break;
+    case OvMesh::Subtype::TESSELLATED: strcpy(subtypeName, "tessellated"); break;
+    default: strcpy(subtypeName, "UNDEFINED");
+    }
+    cout << "   Subtype . . . :  " << static_cast<int>(subtype)
+        << " (" << subtypeName << ")" << endl;
+    position += sizeof(unsigned char);
 
-   mesh->setLocalMatrix(matrix);
+    // Parse material name.
+    char materialName[FILENAME_MAX];
+    strcpy(materialName, data + position);
+    cout << "   Material  . . :  " << materialName << endl;
+    position += static_cast<unsigned int>(strlen(materialName)) + 1;
 
-   // Mesh nr. of children nodes:
-   memcpy(&children, data + position, sizeof(unsigned int));
-   cout << "   Nr. children:  " << children << endl;
-   position += sizeof(unsigned int);
+    // Parse bounding sphere radius.
+    float radius;
+    memcpy(&radius, data + position, sizeof(float));
+    cout << "   Radius  . . . :  " << radius << endl;
+    position += sizeof(float);
 
+    // Parse bounding box.
+    glm::vec3 bBoxMin;
+    memcpy(&bBoxMin, data + position, sizeof(glm::vec3));
+    cout << "   BBox minimum  :  " << bBoxMin.x << ", " << bBoxMin.y << ", " << bBoxMin.z << endl;
+    position += sizeof(glm::vec3);
+    glm::vec3 bBoxMax;
+    memcpy(&bBoxMax, data + position, sizeof(glm::vec3));
+    cout << "   BBox maximum  :  " << bBoxMax.x << ", " << bBoxMax.y << ", " << bBoxMax.z << endl;
+    position += sizeof(glm::vec3);
 
-   // Optional target node, or [none] if not used:
-   char targetName[FILENAME_MAX];
-   strcpy(targetName, data + position);
-   cout << "   Target node . :  " << targetName << endl;
-   position += static_cast<unsigned int>(strlen(targetName)) + 1;
+    // Parse physics flag and properties if present.
+    unsigned char hasPhysics;
+    memcpy(&hasPhysics, data + position, sizeof(unsigned char));
+    cout << "   Physics . . . :  " << static_cast<int>(hasPhysics) << endl;
+    position += sizeof(unsigned char);
+    if (hasPhysics) {
+        struct PhysProps {
+            unsigned char type;
+            unsigned char contCollisionDetection;
+            unsigned char collideWithRBodies;
+            unsigned char hullType;
+            glm::vec3 massCenter;
+            float mass;
+            float staticFriction;
+            float dynamicFriction;
+            float bounciness;
+            float linearDamping;
+            float angularDamping;
+            unsigned int nrOfHulls;
+            unsigned int _pad;
+            void* physObj;
+            void* hull;
+        };
+        PhysProps mp{};
+        memcpy(&mp, data + position, sizeof(PhysProps));
+        position += sizeof(PhysProps);
+        cout << "      Type . . . :  " << static_cast<int>(mp.type) << endl;
+        cout << "      Hull type  :  " << static_cast<int>(mp.hullType) << endl;
+        cout << "      Cont. coll.:  " << static_cast<int>(mp.contCollisionDetection) << endl;
+        cout << "      Col. bodies:  " << static_cast<int>(mp.collideWithRBodies) << endl;
+        cout << "      Center . . :  " << mp.massCenter.x << ", " << mp.massCenter.y << ", " << mp.massCenter.z << endl;
+        cout << "      Mass . . . :  " << mp.mass << endl;
+        cout << "      Static . . :  " << mp.staticFriction << endl;
+        cout << "      Dynamic  . :  " << mp.dynamicFriction << endl;
+        cout << "      Bounciness :  " << mp.bounciness << endl;
+        cout << "      Linear . . :  " << mp.linearDamping << endl;
+        cout << "      Angular  . :  " << mp.angularDamping << endl;
+        cout << "      Nr. hulls  :  " << mp.nrOfHulls << endl;
+        if (mp.nrOfHulls) {
+            for (unsigned int c = 0; c < mp.nrOfHulls; c++) {
+                unsigned int nrOfVertices;
+                memcpy(&nrOfVertices, data + position, sizeof(unsigned int));
+                position += sizeof(unsigned int);
+                unsigned int nrOfFaces;
+                memcpy(&nrOfFaces, data + position, sizeof(unsigned int));
+                position += sizeof(unsigned int);
+                glm::vec3 centroid;
+                memcpy(&centroid, data + position, sizeof(glm::vec3));
+                position += sizeof(glm::vec3);
+                for (unsigned int c = 0; c < nrOfVertices; c++) {
+                    glm::vec3 vertex;
+                    memcpy(&vertex, data + position, sizeof(glm::vec3));
+                    position += sizeof(glm::vec3);
+                }
+                for (unsigned int c = 0; c < nrOfFaces; c++) {
+                    unsigned int face[3];
+                    memcpy(face, data + position, sizeof(unsigned int) * 3);
+                    position += sizeof(unsigned int) * 3;
+                }
+            }
+        }
+    }
 
-   // Mesh subtype (see OvMesh SUBTYPE enum):
-   unsigned char subtype;
-   memcpy(&subtype, data + position, sizeof(unsigned char));
-   char subtypeName[FILENAME_MAX];
-   switch (static_cast<OvMesh::Subtype>(subtype)) {
-      case OvMesh::Subtype::DEFAULT: strcpy(subtypeName, "standard");
-         break;
-      case OvMesh::Subtype::NORMALMAPPED: strcpy(subtypeName, "normal-mapped");
-         break;
-      case OvMesh::Subtype::TESSELLATED: strcpy(subtypeName, "tessellated");
-         break;
-      default: strcpy(subtypeName, "UNDEFINED");
-   }
-   cout << "   Subtype . . . :  " << static_cast<int>(subtype) << " (" << subtypeName << ")" << endl;
-   position += sizeof(unsigned char);
+    // Parse LOD count.
+    unsigned int LODs;
+    memcpy(&LODs, data + position, sizeof(unsigned int));
+    cout << "   Nr. of LODs   :  " << LODs << endl;
+    position += sizeof(unsigned int);
 
-   // Material name, or [none] if not used:
-   char materialName[FILENAME_MAX];
-   strcpy(materialName, data + position);
-   cout << "   Material  . . :  " << materialName << endl;
-   position += static_cast<unsigned int>(strlen(materialName)) + 1;
+    vector<unsigned int> verticesPerLOD(LODs);
+    std::vector<Vertex> finalVerts;
+    std::vector<unsigned int> finalIndices;
+    for (unsigned int l = 0; l < LODs; l++) {
+        cout << "   Current LOD . :  " << l + 1 << "/" << LODs << endl;
 
-   //map material
-   if (const auto it = materials.find(materialName); it != materials.end()) {
-      mesh->setMaterial(it->second);
-   }
+        unsigned int vertexCount;
+        memcpy(&vertexCount, data + position, sizeof(unsigned int));
+        cout << "   Nr. vertices  :  " << vertexCount << endl;
+        position += sizeof(unsigned int);
+        verticesPerLOD[l] = vertexCount;
 
-   // Mesh bounding sphere radius:
-   float radius;
-   memcpy(&radius, data + position, sizeof(float));
-   cout << "   Radius  . . . :  " << radius << endl;
-   position += sizeof(float);
+        unsigned int faceCount;
+        memcpy(&faceCount, data + position, sizeof(unsigned int));
+        cout << "   Nr. faces . . :  " << faceCount << endl;
+        position += sizeof(unsigned int);
 
-   // Mesh bounding box minimum corner:
-   glm::vec3 bBoxMin;
-   memcpy(&bBoxMin, data + position, sizeof(glm::vec3));
-   cout << "   BBox minimum  :  " << bBoxMin.x << ", " << bBoxMin.y << ", " << bBoxMin.z << endl;
-   position += sizeof(glm::vec3);
-
-   // Mesh bounding box maximum corner:
-   glm::vec3 bBoxMax;
-   memcpy(&bBoxMax, data + position, sizeof(glm::vec3));
-   cout << "   BBox maximum  :  " << bBoxMax.x << ", " << bBoxMax.y << ", " << bBoxMax.z << endl;
-   position += sizeof(glm::vec3);
-
-   // Optional physics properties:
-   unsigned char hasPhysics;
-   memcpy(&hasPhysics, data + position, sizeof(unsigned char));
-   cout << "   Physics . . . :  " << (int) hasPhysics << endl;
-   position += sizeof(unsigned char);
-   if (hasPhysics) {
-      /**
-       * Mesh physics properties.
-       */
-      struct PhysProps {
-         // Pay attention to 16 byte alignement (use padding):
-         unsigned char type;
-         unsigned char contCollisionDetection;
-         unsigned char collideWithRBodies;
-         unsigned char hullType;
-
-         // Vector data:
-         glm::vec3 massCenter;
-
-         // Mesh properties:
-         float mass;
-         float staticFriction;
-         float dynamicFriction;
-         float bounciness;
-         float linearDamping;
-         float angularDamping;
-         unsigned int nrOfHulls;
-         unsigned int _pad;
-
-         // Pointers:
-         void *physObj;
-         void *hull;
-      };
-
-      PhysProps mp{};
-      memcpy(&mp, data + position, sizeof(PhysProps));
-      position += sizeof(PhysProps);
-      cout << "      Type . . . :  " << static_cast<int>(mp.type) << endl;
-      cout << "      Hull type  :  " << static_cast<int>(mp.hullType) << endl;
-      cout << "      Cont. coll.:  " << static_cast<int>(mp.contCollisionDetection) << endl;
-      cout << "      Col. bodies:  " << static_cast<int>(mp.collideWithRBodies) << endl;
-      cout << "      Center . . :  " << mp.massCenter.x << ", " << mp.massCenter.y << ", " << mp.massCenter.z << endl;
-      cout << "      Mass . . . :  " << mp.mass << endl;
-      cout << "      Static . . :  " << mp.staticFriction << endl;
-      cout << "      Dynamic  . :  " << mp.dynamicFriction << endl;
-      cout << "      Bounciness :  " << mp.bounciness << endl;
-      cout << "      Linear . . :  " << mp.linearDamping << endl;
-      cout << "      Angular  . :  " << mp.angularDamping << endl;
-      cout << "      Nr. hulls  :  " << mp.nrOfHulls << endl;
-
-      // Custom hull(s) used?
-      if (mp.nrOfHulls) {
-         for (unsigned int c = 0; c < mp.nrOfHulls; c++) {
-            // Hull number of vertices:
-            unsigned int nrOfVertices;
-            memcpy(&nrOfVertices, data + position, sizeof(unsigned int));
-            position += sizeof(unsigned int);
-
-            // Hull number of faces:
-            unsigned int nrOfFaces;
-            memcpy(&nrOfFaces, data + position, sizeof(unsigned int));
-            position += sizeof(unsigned int);
-
-            // Hull centroid:
-            glm::vec3 centroid;
-            memcpy(&centroid, data + position, sizeof(glm::vec3));
+        std::vector<Vertex> verts;
+        for (unsigned int c = 0; c < vertexCount; c++) {
+            Vertex newVertex;
+            glm::vec3 pos;
+            memcpy(&pos, data + position, sizeof(glm::vec3));
             position += sizeof(glm::vec3);
+            newVertex.setPosition(pos);
 
-            // Iterate through hull vertices:
-            for (unsigned int c = 0; c < nrOfVertices; c++) {
-               // Vertex coords:
-               glm::vec3 vertex;
-               memcpy(&vertex, data + position, sizeof(glm::vec3));
-               position += sizeof(glm::vec3);
+            unsigned int normalData;
+            memcpy(&normalData, data + position, sizeof(unsigned int));
+            position += sizeof(unsigned int);
+            newVertex.setNormal(decompressNormal(normalData));
+
+            unsigned int textureData;
+            memcpy(&textureData, data + position, sizeof(unsigned int));
+            position += sizeof(unsigned int);
+            newVertex.setTexCoords(decompressTexCoords(textureData));
+
+            unsigned int tangentData;
+            memcpy(&tangentData, data + position, sizeof(unsigned int));
+            position += sizeof(unsigned int);
+
+            if (l == 0) {
+                verts.push_back(newVertex);
             }
+        }
 
-            // Iterate through hull faces:
-            for (unsigned int c = 0; c < nrOfFaces; c++) {
-               unsigned int face[3];
-               memcpy(face, data + position, sizeof(unsigned int) * 3);
-               position += sizeof(unsigned int) * 3;
+        std::vector<unsigned int> meshIndices;
+        if (l == 0)
+            meshIndices.reserve(faceCount * 3);
+        for (unsigned int c = 0; c < faceCount; c++) {
+            unsigned int face[3];
+            memcpy(face, data + position, sizeof(unsigned int) * 3);
+            if (l == 0) {
+                meshIndices.push_back(face[0]);
+                meshIndices.push_back(face[1]);
+                meshIndices.push_back(face[2]);
             }
-         }
-      }
-   }
+            position += sizeof(unsigned int) * 3;
+        }
+        if (l == 0) {
+            finalVerts = verts;
+            finalIndices = meshIndices;
+        }
+    }
 
-   // Nr. of LODs:
-   unsigned int LODs;
-   memcpy(&LODs, data + position, sizeof(unsigned int));
-   cout << "   Nr. of LODs   :  " << LODs << endl;
-   position += sizeof(unsigned int);
+    auto& builder = Eng::Builder::getInstance();
+    builder.addVertices(finalVerts);
+    builder.addIndices(finalIndices);
+    if (const auto it = materials.find(materialName); it != materials.end()) {
+        builder.setMaterial(it->second);
+    }
+    std::shared_ptr<Eng::Mesh> finalMesh = builder.build();
+    finalMesh->setName(meshName);
+    finalMesh->setLocalMatrix(matrix);
 
-   // For each LOD...:
-   vector<unsigned int> verticesPerLOD(LODs); // Let's store this information for the skinned part, in case
-   for (unsigned int l = 0; l < LODs; l++) {
-      cout << "   Current LOD . :  " << l + 1 << "/" << LODs << endl;
-
-      // Nr. of vertices:
-      unsigned int vertices, faces;
-      memcpy(&vertices, data + position, sizeof(unsigned int));
-      cout << "   Nr. vertices  :  " << vertices << endl;
-      position += sizeof(unsigned int);
-      verticesPerLOD[l] = vertices;
-
-      // ...and faces:
-      memcpy(&faces, data + position, sizeof(unsigned int));
-      cout << "   Nr. faces . . :  " << faces << endl;
-      position += sizeof(unsigned int);
-
-      // Interleaved and compressed vertex/normal/UV/tangent data:
-
-      std::vector<Vertex> verts;
-      for (unsigned int c = 0; c < vertices; c++) {
-         Vertex newVertex;
-         // Vertex coords:
-         glm::vec3 vertex;
-         memcpy(&vertex, data + position, sizeof(glm::vec3));
-         position += sizeof(glm::vec3);
-
-         newVertex.setPosition(vertex);
-
-         // Vertex normal:
-         unsigned int normalData;
-         memcpy(&normalData, data + position, sizeof(unsigned int));
-         position += sizeof(unsigned int);
-
-         newVertex.setNormal(decompressNormal(normalData));
-
-         // Texture coordinates:
-         unsigned int textureData;
-         memcpy(&textureData, data + position, sizeof(unsigned int));
-         position += sizeof(unsigned int);
-
-         newVertex.setTexCoords(decompressTexCoords(textureData));
-
-         // Tangent vector:
-         unsigned int tangentData;
-         memcpy(&tangentData, data + position, sizeof(unsigned int));
-         position += sizeof(unsigned int);
-
-         if (l == 0) {
-            verts.push_back(newVertex);
-         }
-      }
-      //push vertex infos
-      if (l == 0)
-         mesh->setVertices(verts);
-
-      std::vector<unsigned int> meshIndices;
-      if (l == 0)
-         meshIndices.reserve(faces * 3);
-      // Faces:
-      for (unsigned int c = 0; c < faces; c++) {
-         // Face indexes:
-         unsigned int face[3];
-         memcpy(face, data + position, sizeof(unsigned int) * 3);
-         if (l == 0) {
-            meshIndices.push_back(face[0]);
-            meshIndices.push_back(face[1]);
-            meshIndices.push_back(face[2]);
-         }
-
-         position += sizeof(unsigned int) * 3;
-      }
-      if (l == 0)
-         mesh->setIndices(meshIndices);
-   }
-
-   // Extra information for skinned meshes:
-   if (isSkinned) {
-      // Initial mesh pose matrix:
-      glm::mat4 poseMatrix;
-      memcpy(&poseMatrix, data + position, sizeof(glm::mat4));
-      position += sizeof(glm::vec4);
-
-      // Bone list:
-      unsigned int nrOfBones;
-      memcpy(&nrOfBones, data + position, sizeof(unsigned int));
-      cout << "   Nr. bones . . :  " << nrOfBones << endl;
-      position += sizeof(unsigned int);
-
-      // For each bone...:
-      for (unsigned int c = 0; c < nrOfBones; c++) {
-         // Bone name:
-         char boneName[FILENAME_MAX];
-         strcpy(boneName, data + position);
-         cout << "      Bone name  :  " << boneName << " (" << c << ")" << endl;
-         position += static_cast<unsigned int>(strlen(boneName)) + 1;
-
-         // Initial bone pose matrix (already inverted):
-         glm::mat4 boneMatrix;
-         memcpy(&boneMatrix, data + position, sizeof(glm::mat4));
-         position += sizeof(glm::mat4);
-      }
-
-      // For each LOD...:
-      for (unsigned int l = 0; l < LODs; l++) {
-         cout << "   Current LOD . :  " << l + 1 << "/" << LODs << endl;
-
-         // Per vertex bone weights and indexes:
-         for (unsigned int c = 0; c < verticesPerLOD[l]; c++) {
-            // Bone indexes:
-            unsigned int boneIndex[4];
-            memcpy(boneIndex, data + position, sizeof(unsigned int) * 4);
-            position += sizeof(unsigned int) * 4;
-
-            // Bone weights:
-            unsigned short boneWeightData[4];
-            memcpy(boneWeightData, data + position, sizeof(unsigned short) * 4);
-            position += sizeof(unsigned short) * 4;
-         }
-      }
-   }
-   return std::static_pointer_cast<Eng::Node>(mesh);
+    if (chunkId == static_cast<unsigned int>(OvObject::Type::SKINNED)) {
+        glm::mat4 poseMatrix;
+        memcpy(&poseMatrix, data + position, sizeof(glm::mat4));
+        position += sizeof(glm::vec4);
+        unsigned int nrOfBones;
+        memcpy(&nrOfBones, data + position, sizeof(unsigned int));
+        cout << "   Nr. bones . . :  " << nrOfBones << endl;
+        position += sizeof(unsigned int);
+        for (unsigned int c = 0; c < nrOfBones; c++) {
+            char boneName[FILENAME_MAX];
+            strcpy(boneName, data + position);
+            cout << "      Bone name  :  " << boneName << " (" << c << ")" << endl;
+            position += static_cast<unsigned int>(strlen(boneName)) + 1;
+            glm::mat4 boneMatrix;
+            memcpy(&boneMatrix, data + position, sizeof(glm::mat4));
+            position += sizeof(glm::mat4);
+        }
+        for (unsigned int l = 0; l < LODs; l++) {
+            cout << "   Current LOD . :  " << l + 1 << "/" << LODs << endl;
+            for (unsigned int c = 0; c < verticesPerLOD[l]; c++) {
+                unsigned int boneIndex[4];
+                memcpy(boneIndex, data + position, sizeof(unsigned int) * 4);
+                position += sizeof(unsigned int) * 4;
+                unsigned short boneWeightData[4];
+                memcpy(boneWeightData, data + position, sizeof(unsigned short) * 4);
+                position += sizeof(unsigned short) * 4;
+            }
+        }
+    }
+    return std::static_pointer_cast<Eng::Node>(finalMesh);
 }
+
 
 /**
  * @brief Decompresses a packed normal vector.
