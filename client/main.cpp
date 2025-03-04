@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
    if (!eng.init()) {
       return -1;
    }
-   eng.loadScene("C:\\Users\\kevin\\Desktop\\SemesterProject\\addons\\bin\\output.ovo");
+   eng.loadScene("..\\resources\\Scene.ovo");
 
    setupMirrorEffect(eng);
    setUpCameras(eng);
