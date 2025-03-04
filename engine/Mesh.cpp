@@ -1,5 +1,6 @@
 #include "engine.h"
 
+#include <GL/glew.h>
 #include <GL/freeglut.h>
 
 #ifdef _WINDOWS
@@ -66,6 +67,68 @@ std::shared_ptr<Eng::Material> Eng::Mesh::getMaterial() const {
    return material;
 }
 
+void Eng::Mesh::initBuffers() {
+    if (buffersInitialized)
+        return;
+
+    // Extract separate arrays for positions, normals and texture coordinates.
+    std::vector<float> positions;
+    std::vector<float> normals;
+    std::vector<float> texCoords;
+    positions.reserve(vertices.size() * 3);
+    normals.reserve(vertices.size() * 3);
+    texCoords.reserve(vertices.size() * 2);
+
+    for (const auto& v : vertices) {
+        // Position (vec3)
+        positions.push_back(v.getPosition().x);
+        positions.push_back(v.getPosition().y);
+        positions.push_back(v.getPosition().z);
+        // Normal (vec3)
+        normals.push_back(v.getNormal().x);
+        normals.push_back(v.getNormal().y);
+        normals.push_back(v.getNormal().z);
+        // Texture coordinates (vec2)
+        texCoords.push_back(v.getTexCoords().x);
+        texCoords.push_back(v.getTexCoords().y);
+    }
+
+    // Generate and bind VAO
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    // --- VBO for positions ---
+    glGenBuffers(1, &posVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, posVBO);
+    glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(float), positions.data(), GL_STATIC_DRAW);
+    // Use the fixed-function pipeline call as in the slides:
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
+
+    // --- VBO for normals ---
+    glGenBuffers(1, &normVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, normVBO);
+    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), normals.data(), GL_STATIC_DRAW);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glNormalPointer(GL_FLOAT, 0, 0);
+
+    // --- VBO for texture coordinates ---
+    glGenBuffers(1, &texVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, texVBO);
+    glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(float), texCoords.data(), GL_STATIC_DRAW);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+
+    // Unbind the VAO.
+    glBindVertexArray(0);
+
+    buffersInitialized = true;
+    std::cout << "Mesh buffers initialized. VAO: " << vao
+        << ", posVBO: " << posVBO
+        << ", normVBO: " << normVBO
+        << ", texVBO: " << texVBO << std::endl;
+}
+
 /**
  * @brief Renders the mesh using the provided model-view matrix.
  *
@@ -83,24 +146,18 @@ void Eng::Mesh::render() {
    // Apply material settings
    material->render();
 
-   if  (Eng::Base::engIsEnabled(ENG_RENDER_NORMAL)) {
-      renderNormals();
-   }
-   // Load the transformations matrix into OpenGL
-   glBegin(GL_TRIANGLES);
-   for (size_t i = 0; i < indices.size(); i += 3) {
-      // Reverse the order of vertices for each triangle
-      for (int j = 0; j < 3; ++j) {
-         const Vertex &vertex = vertices[indices[i + j]];
-         // Set normal
-         glNormal3fv(glm::value_ptr(vertex.getNormal()));
-         // Set texture coordinates
-         glTexCoord2fv(glm::value_ptr(vertex.getTexCoords()));
-         // Set vertex position
-         glVertex3fv(glm::value_ptr(vertex.getPosition()));
-      }
-   }
-   glEnd();
+   // Ensure buffers are initialized
+   if (!buffersInitialized)
+       initBuffers();
+
+   // Bind the VAO and render
+   glBindVertexArray(vao);
+   glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+   glBindVertexArray(0);
+
+   // Render normals if enabled.
+   if (Eng::Base::engIsEnabled(ENG_RENDER_NORMAL))
+       renderNormals();
 }
 
 /**

@@ -21,6 +21,9 @@ public:
 
    void render() override;
 
+   // method to initialize GPU buffers
+   void initBuffers();
+
 private:
    void renderNormals() const;
    ///> Vector of vertex positions.
@@ -29,4 +32,11 @@ private:
    std::vector<unsigned int> indices;
    ///> The material applied to the mesh.
    std::shared_ptr<Eng::Material> material;
+
+   // Hold GPU resource IDs
+   unsigned int vao = 0;
+   unsigned int posVBO = 0;
+   unsigned int normVBO = 0;
+   unsigned int texVBO = 0;
+   bool buffersInitialized = false;
 };

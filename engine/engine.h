@@ -86,6 +86,7 @@ namespace Eng {
 #include "List.h"
 #include "OvoReader.h"
 #include "CallbackManager.h"
+#include "Builder.h"
 
     ///////////////
     //// Tests ///

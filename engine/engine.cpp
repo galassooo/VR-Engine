@@ -5,13 +5,16 @@
  * @author	Kevin Alexander Quarenghi Escobar, Martina Galasso
  */
 
-// Main include:
+// Main include: f
 #include "engine.h"
 #include <algorithm>
 // C/C++:
 #include <iostream>
 #include <source_location>
 #include <utility>
+
+// GLEW
+#include <GL/glew.h>
 
 // FreeGlut
 #include <GL/freeglut.h>
@@ -161,6 +164,16 @@ bool ENG_API Eng::Base::initOpenGL() {
    if (!glutGetWindow()) {
       std::cerr << "ERROR: Failed to create OpenGL context" << std::endl;
       return false;
+   }
+
+   GLenum err = glewInit();
+   if (err != GLEW_OK)
+   {
+       // Error loading GLEW
+   }
+   if (!glewIsSupported("GL_VERSION_2_1"))
+   {
+       std::cerr << "ERROR: Failed to create Glew context" << std::endl;
    }
 
    glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
