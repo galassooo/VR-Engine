@@ -32,24 +32,39 @@ Eng::Builder& Eng::Builder::setMaterial(const std::shared_ptr<Eng::Material>& ma
 	return *this;
 }
 
+Eng::Builder& Eng::Builder::setName(const std::string& name) {
+	meshName = name;
+	return *this;
+}
+
+Eng::Builder& Eng::Builder::setLocalMatrix(const glm::mat4& matrix) {
+	localMatrix = matrix;
+	return *this;
+}
+
 std::shared_ptr<Eng::Mesh> Eng::Builder::build() {
 	// Create a new Mesh instance and assign accumulated data.
 	auto mesh = std::make_shared<Eng::Mesh>();
 	mesh->setVertices(vertices);
 	mesh->setIndices(indices);
 	mesh->setMaterial(material);
+	mesh->setName(std::move(meshName));
+	mesh->setLocalMatrix(localMatrix);
 
-	// Initialize GPU buffers
+	// Initialize GPU buffers.
 	mesh->initBuffers();
 
-	// Clear the Builder's internal state for reuse
+	// Clear the Builder's internal state for reuse.
 	free();
 
 	return mesh;
 }
 
+
 void Eng::Builder::free() {
 	vertices.clear();
 	indices.clear();
 	material.reset();
+	meshName.clear();
+	localMatrix = glm::mat4(1.0f);
 }

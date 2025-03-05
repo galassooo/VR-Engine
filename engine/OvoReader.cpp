@@ -505,24 +505,24 @@ void ENG_API Eng::OvoReader::parseMaterial(unsigned int &position, const char *d
   * @param children Reference to store the number of child nodes.
   * @return Shared pointer to the created mesh node.
   */
-std::shared_ptr<Eng::Node> Eng::OvoReader::parseMesh(
+std::shared_ptr<Eng::Node> ENG_API Eng::OvoReader::parseMesh(
     unsigned int& position, unsigned int chunkId, char* data, unsigned int& children)
 {
     using namespace std;
 
-    // Extract mesh name.
+    // Parse mesh name.
     char meshName[FILENAME_MAX];
     strcpy(meshName, data + position);
     position += static_cast<unsigned int>(strlen(meshName)) + 1;
     cout << "   Name  . . . . :  " << meshName << endl;
 
-    // Extract mesh transformation matrix.
+    // Parse transformation matrix.
     glm::mat4 matrix;
     memcpy(&matrix, data + position, sizeof(glm::mat4));
     position += sizeof(glm::mat4);
     cout << "MATRIX: " << glm::to_string(matrix) << endl;
 
-    // Number of children nodes.
+    // Parse number of children.
     memcpy(&children, data + position, sizeof(unsigned int));
     cout << "   Nr. children:  " << children << endl;
     position += sizeof(unsigned int);
@@ -536,6 +536,7 @@ std::shared_ptr<Eng::Node> Eng::OvoReader::parseMesh(
     // Parse mesh subtype.
     unsigned char subtype;
     memcpy(&subtype, data + position, sizeof(unsigned char));
+    position += sizeof(unsigned char);
     char subtypeName[FILENAME_MAX];
     switch (static_cast<OvMesh::Subtype>(subtype)) {
     case OvMesh::Subtype::DEFAULT: strcpy(subtypeName, "standard"); break;
@@ -543,9 +544,7 @@ std::shared_ptr<Eng::Node> Eng::OvoReader::parseMesh(
     case OvMesh::Subtype::TESSELLATED: strcpy(subtypeName, "tessellated"); break;
     default: strcpy(subtypeName, "UNDEFINED");
     }
-    cout << "   Subtype . . . :  " << static_cast<int>(subtype)
-        << " (" << subtypeName << ")" << endl;
-    position += sizeof(unsigned char);
+    cout << "   Subtype . . . :  " << (int)subtype << " (" << subtypeName << ")" << endl;
 
     // Parse material name.
     char materialName[FILENAME_MAX];
@@ -560,20 +559,19 @@ std::shared_ptr<Eng::Node> Eng::OvoReader::parseMesh(
     position += sizeof(float);
 
     // Parse bounding box.
-    glm::vec3 bBoxMin;
+    glm::vec3 bBoxMin, bBoxMax;
     memcpy(&bBoxMin, data + position, sizeof(glm::vec3));
+    position += sizeof(glm::vec3);
     cout << "   BBox minimum  :  " << bBoxMin.x << ", " << bBoxMin.y << ", " << bBoxMin.z << endl;
-    position += sizeof(glm::vec3);
-    glm::vec3 bBoxMax;
     memcpy(&bBoxMax, data + position, sizeof(glm::vec3));
-    cout << "   BBox maximum  :  " << bBoxMax.x << ", " << bBoxMax.y << ", " << bBoxMax.z << endl;
     position += sizeof(glm::vec3);
+    cout << "   BBox maximum  :  " << bBoxMax.x << ", " << bBoxMax.y << ", " << bBoxMax.z << endl;
 
-    // Parse physics flag and properties if present.
+    // Parse physics properties if present.
     unsigned char hasPhysics;
     memcpy(&hasPhysics, data + position, sizeof(unsigned char));
-    cout << "   Physics . . . :  " << static_cast<int>(hasPhysics) << endl;
     position += sizeof(unsigned char);
+    cout << "   Physics . . . :  " << (int)hasPhysics << endl;
     if (hasPhysics) {
         struct PhysProps {
             unsigned char type;
@@ -591,14 +589,13 @@ std::shared_ptr<Eng::Node> Eng::OvoReader::parseMesh(
             unsigned int _pad;
             void* physObj;
             void* hull;
-        };
-        PhysProps mp{};
+        } mp;
         memcpy(&mp, data + position, sizeof(PhysProps));
         position += sizeof(PhysProps);
-        cout << "      Type . . . :  " << static_cast<int>(mp.type) << endl;
-        cout << "      Hull type  :  " << static_cast<int>(mp.hullType) << endl;
-        cout << "      Cont. coll.:  " << static_cast<int>(mp.contCollisionDetection) << endl;
-        cout << "      Col. bodies:  " << static_cast<int>(mp.collideWithRBodies) << endl;
+        cout << "      Type . . . :  " << (int)mp.type << endl;
+        cout << "      Hull type  :  " << (int)mp.hullType << endl;
+        cout << "      Cont. coll.:  " << (int)mp.contCollisionDetection << endl;
+        cout << "      Col. bodies:  " << (int)mp.collideWithRBodies << endl;
         cout << "      Center . . :  " << mp.massCenter.x << ", " << mp.massCenter.y << ", " << mp.massCenter.z << endl;
         cout << "      Mass . . . :  " << mp.mass << endl;
         cout << "      Static . . :  " << mp.staticFriction << endl;
@@ -618,12 +615,12 @@ std::shared_ptr<Eng::Node> Eng::OvoReader::parseMesh(
                 glm::vec3 centroid;
                 memcpy(&centroid, data + position, sizeof(glm::vec3));
                 position += sizeof(glm::vec3);
-                for (unsigned int c = 0; c < nrOfVertices; c++) {
+                for (unsigned int v = 0; v < nrOfVertices; v++) {
                     glm::vec3 vertex;
                     memcpy(&vertex, data + position, sizeof(glm::vec3));
                     position += sizeof(glm::vec3);
                 }
-                for (unsigned int c = 0; c < nrOfFaces; c++) {
+                for (unsigned int f = 0; f < nrOfFaces; f++) {
                     unsigned int face[3];
                     memcpy(face, data + position, sizeof(unsigned int) * 3);
                     position += sizeof(unsigned int) * 3;
@@ -635,81 +632,67 @@ std::shared_ptr<Eng::Node> Eng::OvoReader::parseMesh(
     // Parse LOD count.
     unsigned int LODs;
     memcpy(&LODs, data + position, sizeof(unsigned int));
-    cout << "   Nr. of LODs   :  " << LODs << endl;
     position += sizeof(unsigned int);
+    cout << "   Nr. of LODs   :  " << LODs << endl;
 
     vector<unsigned int> verticesPerLOD(LODs);
-    std::vector<Vertex> finalVerts;
+    std::vector<Eng::Vertex> finalVerts;
     std::vector<unsigned int> finalIndices;
     for (unsigned int l = 0; l < LODs; l++) {
         cout << "   Current LOD . :  " << l + 1 << "/" << LODs << endl;
-
-        unsigned int vertexCount;
+        unsigned int vertexCount, faceCount;
         memcpy(&vertexCount, data + position, sizeof(unsigned int));
+        position += sizeof(unsigned int);
         cout << "   Nr. vertices  :  " << vertexCount << endl;
-        position += sizeof(unsigned int);
         verticesPerLOD[l] = vertexCount;
-
-        unsigned int faceCount;
         memcpy(&faceCount, data + position, sizeof(unsigned int));
-        cout << "   Nr. faces . . :  " << faceCount << endl;
         position += sizeof(unsigned int);
+        cout << "   Nr. faces . . :  " << faceCount << endl;
 
-        std::vector<Vertex> verts;
+        std::vector<Eng::Vertex> verts;
         for (unsigned int c = 0; c < vertexCount; c++) {
-            Vertex newVertex;
+            Eng::Vertex newVertex;
             glm::vec3 pos;
             memcpy(&pos, data + position, sizeof(glm::vec3));
             position += sizeof(glm::vec3);
             newVertex.setPosition(pos);
-
             unsigned int normalData;
             memcpy(&normalData, data + position, sizeof(unsigned int));
             position += sizeof(unsigned int);
             newVertex.setNormal(decompressNormal(normalData));
-
             unsigned int textureData;
             memcpy(&textureData, data + position, sizeof(unsigned int));
             position += sizeof(unsigned int);
             newVertex.setTexCoords(decompressTexCoords(textureData));
-
             unsigned int tangentData;
             memcpy(&tangentData, data + position, sizeof(unsigned int));
             position += sizeof(unsigned int);
-
             if (l == 0) {
                 verts.push_back(newVertex);
             }
         }
 
         std::vector<unsigned int> meshIndices;
-        if (l == 0)
+        if (l == 0) {
             meshIndices.reserve(faceCount * 3);
+        }
         for (unsigned int c = 0; c < faceCount; c++) {
             unsigned int face[3];
             memcpy(face, data + position, sizeof(unsigned int) * 3);
+            position += sizeof(unsigned int) * 3;
             if (l == 0) {
                 meshIndices.push_back(face[0]);
                 meshIndices.push_back(face[1]);
                 meshIndices.push_back(face[2]);
             }
-            position += sizeof(unsigned int) * 3;
         }
         if (l == 0) {
+            // Store LOD 0 data.
+            // (finalVerts and finalIndices hold the geometry we want to use)
             finalVerts = verts;
             finalIndices = meshIndices;
         }
     }
-
-    auto& builder = Eng::Builder::getInstance();
-    builder.addVertices(finalVerts);
-    builder.addIndices(finalIndices);
-    if (const auto it = materials.find(materialName); it != materials.end()) {
-        builder.setMaterial(it->second);
-    }
-    std::shared_ptr<Eng::Mesh> finalMesh = builder.build();
-    finalMesh->setName(meshName);
-    finalMesh->setLocalMatrix(matrix);
 
     if (chunkId == static_cast<unsigned int>(OvObject::Type::SKINNED)) {
         glm::mat4 poseMatrix;
@@ -717,13 +700,13 @@ std::shared_ptr<Eng::Node> Eng::OvoReader::parseMesh(
         position += sizeof(glm::vec4);
         unsigned int nrOfBones;
         memcpy(&nrOfBones, data + position, sizeof(unsigned int));
-        cout << "   Nr. bones . . :  " << nrOfBones << endl;
         position += sizeof(unsigned int);
+        cout << "   Nr. bones . . :  " << nrOfBones << endl;
         for (unsigned int c = 0; c < nrOfBones; c++) {
             char boneName[FILENAME_MAX];
             strcpy(boneName, data + position);
-            cout << "      Bone name  :  " << boneName << " (" << c << ")" << endl;
             position += static_cast<unsigned int>(strlen(boneName)) + 1;
+            cout << "      Bone name  :  " << boneName << " (" << c << ")" << endl;
             glm::mat4 boneMatrix;
             memcpy(&boneMatrix, data + position, sizeof(glm::mat4));
             position += sizeof(glm::mat4);
@@ -740,9 +723,19 @@ std::shared_ptr<Eng::Node> Eng::OvoReader::parseMesh(
             }
         }
     }
+
+    // Use Builder chaining to create the final mesh.
+    auto& builder = Eng::Builder::getInstance();
+    std::shared_ptr<Eng::Mesh> finalMesh =
+        builder.setName(std::move(std::string(meshName)))
+        .setLocalMatrix(matrix)
+        .addVertices(finalVerts)
+        .addIndices(finalIndices)
+        .setMaterial(materials.find(materialName) != materials.end() ? materials.at(materialName) : nullptr)
+        .build();
+
     return std::static_pointer_cast<Eng::Node>(finalMesh);
 }
-
 
 /**
  * @brief Decompresses a packed normal vector.

@@ -49,6 +49,6 @@ std::string ENG_API Eng::Object::getName() const {
  *
  * @param newName The new name of the object.
  */
-void ENG_API Eng::Object::setName(std::string &&newName) {
+void ENG_API Eng::Object::setName(std::string&& newName) {
    name = newName;
 }
