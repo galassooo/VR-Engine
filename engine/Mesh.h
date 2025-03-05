@@ -38,5 +38,7 @@ private:
    unsigned int posVBO = 0;
    unsigned int normVBO = 0;
    unsigned int texVBO = 0;
+   unsigned int ebo = 0;
+
    bool buffersInitialized = false;
 };

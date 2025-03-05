@@ -71,7 +71,7 @@ void Eng::Mesh::initBuffers() {
     if (buffersInitialized)
         return;
 
-    // Extract separate arrays for positions, normals and texture coordinates.
+    // Extract separate arrays for positions, normals, and texture coordinates.
     std::vector<float> positions;
     std::vector<float> normals;
     std::vector<float> texCoords;
@@ -93,40 +93,41 @@ void Eng::Mesh::initBuffers() {
         texCoords.push_back(v.getTexCoords().y);
     }
 
-    // Generate and bind VAO
+    // Generate and bind the VAO.
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    // --- VBO for positions ---
+    // VBO for positions.
     glGenBuffers(1, &posVBO);
     glBindBuffer(GL_ARRAY_BUFFER, posVBO);
     glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(float), positions.data(), GL_STATIC_DRAW);
-    // Use the fixed-function pipeline call as in the slides:
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, 0);
 
-    // --- VBO for normals ---
+    // VBO for normals.
     glGenBuffers(1, &normVBO);
     glBindBuffer(GL_ARRAY_BUFFER, normVBO);
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), normals.data(), GL_STATIC_DRAW);
     glEnableClientState(GL_NORMAL_ARRAY);
     glNormalPointer(GL_FLOAT, 0, 0);
 
-    // --- VBO for texture coordinates ---
+    // VBO for texture coordinates.
     glGenBuffers(1, &texVBO);
     glBindBuffer(GL_ARRAY_BUFFER, texVBO);
     glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(float), texCoords.data(), GL_STATIC_DRAW);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, 0);
 
-    // Unbind the VAO.
+    // EBO for indices.
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+
+    // Unbind VAO (the EBO remains bound to the VAO).
     glBindVertexArray(0);
 
     buffersInitialized = true;
-    std::cout << "Mesh buffers initialized. VAO: " << vao
-        << ", posVBO: " << posVBO
-        << ", normVBO: " << normVBO
-        << ", texVBO: " << texVBO << std::endl;
+    std::cout << "Mesh buffers initialized. VAO: " << vao << std::endl;
 }
 
 /**
@@ -139,25 +140,22 @@ void Eng::Mesh::initBuffers() {
  * @param index The index of the mesh in the render list.
  */
 void Eng::Mesh::render() {
-   if (!material) {
-      std::cerr << "ERROR: Material is not set for the mesh: " << getName() << " ID: " << getId() << std::endl;
-      return;
-   }
-   // Apply material settings
-   material->render();
+    if (!material) {
+        std::cerr << "ERROR: Material is not set for the mesh: " << getName() << " ID: " << getId() << std::endl;
+        return;
+    }
+    material->render();
 
-   // Ensure buffers are initialized
-   if (!buffersInitialized)
-       initBuffers();
+    if (!buffersInitialized)
+        initBuffers();
 
-   // Bind the VAO and render
-   glBindVertexArray(vao);
-   glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-   glBindVertexArray(0);
+    glBindVertexArray(vao);
+    // Use glDrawElements with the index array.
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+    glBindVertexArray(0);
 
-   // Render normals if enabled.
-   if (Eng::Base::engIsEnabled(ENG_RENDER_NORMAL))
-       renderNormals();
+    if (Eng::Base::engIsEnabled(ENG_RENDER_NORMAL))
+        renderNormals();
 }
 
 /**
