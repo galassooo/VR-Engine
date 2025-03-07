@@ -167,11 +167,7 @@ bool ENG_API Eng::Base::initOpenGL() {
    }
 
    GLenum err = glewInit();
-   if (err != GLEW_OK)
-   {
-       // Error loading GLEW
-   }
-   if (!glewIsSupported("GL_VERSION_2_1"))
+   if (err != GLEW_OK || !glewIsSupported("GL_VERSION_2_1"))
    {
        std::cerr << "ERROR: Failed to create Glew context" << std::endl;
    }
