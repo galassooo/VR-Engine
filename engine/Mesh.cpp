@@ -123,7 +123,7 @@ void Eng::Mesh::initBuffers() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-    // Unbind VAO (the EBO remains bound to the VAO).
+    // Unbind VAO.
     glBindVertexArray(0);
 
     buffersInitialized = true;
