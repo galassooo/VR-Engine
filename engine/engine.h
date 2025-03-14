@@ -33,7 +33,8 @@
 #include "../dependencies/glm/include/glm/gtc/matrix_transform.hpp"
 #include "../dependencies/glm/include/glm/gtx/string_cast.hpp"
 #endif
-
+// GLEW
+#include <GL/glew.h>
 
 // Generic info:
 #ifdef _DEBUG
@@ -87,6 +88,12 @@ namespace Eng {
 #include "OvoReader.h"
 #include "CallbackManager.h"
 #include "Builder.h"
+#include "Shader.h"
+#include "VertexShader.h"
+#include "FragmentShader.h"
+#include "Program.h"
+#include "ShaderManager.h"
+
 
     ///////////////
     //// Tests ///

@@ -29,11 +29,13 @@ void Eng::Material::render() {
    const GLfloat diffuse[] = {albedo.r * 0.6f, albedo.g * 0.6f, albedo.b * 0.6f, albedo.a};
    const GLfloat specular[] = {albedo.r * 0.4f, albedo.g * 0.4f, albedo.b * 0.4f, 1.0f};
    const GLfloat shininess[] = {(1.0f - std::sqrt(this->shininess)) * 128.0f};
-
+   
+   /*   Unsupported 4.4
    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
    glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
    glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+   
 
    if (diffuseTexture) {
       glEnable(GL_TEXTURE_2D);
@@ -41,6 +43,7 @@ void Eng::Material::render() {
    } else {
       glDisable(GL_TEXTURE_2D);
    }
+   */
    if(getAlpha() >= 1.0f) {
       glDisable(GL_BLEND);
    }

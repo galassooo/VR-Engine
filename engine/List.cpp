@@ -53,7 +53,8 @@ void Eng::List:: render() {
       // Generate modelView matrix
       glm::mat4 modelViewMatrix = viewMatrix * elements[i]->getWorldCoordinates();
 
-      glLoadMatrixf(glm::value_ptr(modelViewMatrix));
+      // glLoadMatrixf(glm::value_ptr(modelViewMatrix));    unsupported 4.4
+      ShaderManager::getInstance().setModelViewMatrix(modelViewMatrix);
 
       elements[i]->getNode()->render();
    }

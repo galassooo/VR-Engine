@@ -92,6 +92,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="FragmentShader.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="ListElement.cpp" />
@@ -106,6 +107,9 @@
     <ClCompile Include="OvoReader.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Tests\Test_CallManager.cpp" />
     <ClCompile Include="Tests\Test_Camera.cpp" />
@@ -116,6 +120,7 @@
     <ClCompile Include="Tests\Test_Node.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Builder.h" />
@@ -123,6 +128,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="FragmentShader.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="ListElement.h" />
@@ -134,7 +140,10 @@
     <ClInclude Include="OvoReader.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="Program.h" />
     <ClInclude Include="RenderLayer.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Tests\Test_CallManager.h" />
     <ClInclude Include="Tests\Test_Camera.h" />
@@ -144,6 +153,7 @@
     <ClInclude Include="Tests\Test_Node.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="VertexShader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
