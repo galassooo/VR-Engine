@@ -22,6 +22,17 @@
 // Freeimage
 #include <FreeImage.h>
 
+#ifndef _WIN32
+#define __stdcall // Just defined as an empty macro under Linux
+#endif
+/**
+ * Debug message callback for OpenGL. See https://www.opengl.org/wiki/Debug_Output
+ */
+void __stdcall DebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, GLvoid* userParam)
+{
+    std::cout << "OpenGL says: \"" << std::string(message) << "\"" << std::endl;
+}
+
 
 /**
  * @brief Base class reserved structure (using PIMPL/Bridge design pattern https://en.wikipedia.org/wiki/Opaque_pointer).
@@ -100,6 +111,10 @@ bool ENG_API Eng::Base::init() {
    if (callbackManager.initialize())
     std::cout << "   CallbackManager initialized successfully!" << std::endl;
 
+   auto &shaderManager = ShaderManager::getInstance();
+   if (shaderManager.initialize())
+       std::cout << "   ShaderManager initialized successfully!" << std::endl;
+
    // Init freeimage
    FreeImage_Initialise();
    std::cout << "   FreeImage initialized successfully!" << std::endl;
@@ -159,6 +174,13 @@ bool ENG_API Eng::Base::initOpenGL() {
    //Glut init
    glutInit(&argc, argv);
    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+   // 4.4 context flags
+   glutInitContextVersion(4, 4);
+   glutInitContextProfile(GLUT_CORE_PROFILE);
+#ifdef _DEBUG
+   glutInitContextFlags(GLUT_DEBUG); // <-- Debug flag required by the OpenGL debug callback
+#endif
+
    windowId = glutCreateWindow("Graphics Engine");
 
    if (!glutGetWindow()) {
@@ -167,23 +189,38 @@ bool ENG_API Eng::Base::initOpenGL() {
    }
 
    GLenum err = glewInit();
-   if (err != GLEW_OK || !glewIsSupported("GL_VERSION_2_1"))
+   if (err != GLEW_OK)
    {
-       std::cerr << "ERROR: Failed to create Glew context" << std::endl;
+       std::cerr << "[ERROR] " << glewGetErrorString(err) << std::endl;
+       return false;
    }
+   else
+       if (GLEW_VERSION_4_4)
+           std::cout << "Driver supports OpenGL 4.4\n" << std::endl;
+       else
+       {
+           std::cout << "[ERROR] OpenGL 4.4 not supported\n" << std::endl;
+           return false;
+       }
 
-   glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
+   // Register OpenGL debug callback:
+#ifdef _DEBUG
+   glDebugMessageCallback((GLDEBUGPROC)DebugCallback, nullptr);
+   glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // enable debug notifications
+#endif
+
+   //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);      // 4.4 unsupported
    glm::vec4 ambient = glm::vec4(.6f, .6f, .6f, 1.0f);
-   glLightModelfv(GL_LIGHT_MODEL_AMBIENT, glm::value_ptr(ambient));
+   //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, glm::value_ptr(ambient));   // 4.4 unsupported
    glEnable(GL_DEPTH_TEST);     // Enable depth testing
-   glEnable(GL_LIGHTING);       // Enable lighting
-   glEnable(GL_NORMALIZE);      // Enable normal normalization
+   //glEnable(GL_LIGHTING);       // Enable lighting        // 4.4 unsupported
+   //glEnable(GL_NORMALIZE);      // Enable normal normalization        // 4.4 unsupported - unnecessary with shaders
 
    // Enable smooth shading
    glShadeModel(GL_SMOOTH);
 
    // Set the background color for the rendering context
-   glClearColor(.0f, .0f, 0.f, 1.0f); // Dark background
+   glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Light background
 
    // Add back-face culling
    glEnable(GL_CULL_FACE);  // Enable face culling
@@ -197,6 +234,33 @@ bool ENG_API Eng::Base::initOpenGL() {
    std::cout << "   version  . . : " << glGetString(GL_VERSION) << std::endl;
    std::cout << "   vendor . . . : " << glGetString(GL_VENDOR) << std::endl;
    std::cout << "   renderer . . : " << glGetString(GL_RENDERER) << std::endl;
+
+   int oglVersion[2];
+   glGetIntegerv(GL_MAJOR_VERSION, &oglVersion[0]);
+   glGetIntegerv(GL_MINOR_VERSION, &oglVersion[1]);
+   std::cout << "   Version  . . :  " << glGetString(GL_VERSION) << " [" << oglVersion[0] << "." << oglVersion[1] << "]" << std::endl;
+
+   int oglContextProfile;
+   glGetIntegerv(GL_CONTEXT_PROFILE_MASK, &oglContextProfile);
+   if (oglContextProfile & GL_CONTEXT_CORE_PROFILE_BIT)
+       std::cout << "                :  " << "Core profile" << std::endl;
+   if (oglContextProfile & GL_CONTEXT_COMPATIBILITY_PROFILE_BIT)
+       std::cout << "                :  " << "Compatibility profile" << std::endl;
+
+   int oglContextFlags;
+   glGetIntegerv(GL_CONTEXT_FLAGS, &oglContextFlags);
+   if (oglContextFlags & GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT)
+       std::cout << "                :  " << "Forward compatible" << std::endl;
+   if (oglContextFlags & GL_CONTEXT_FLAG_DEBUG_BIT)
+       std::cout << "                :  " << "Debug flag" << std::endl;
+   if (oglContextFlags & GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT)
+       std::cout << "                :  " << "Robust access flag" << std::endl;
+   if (oglContextFlags & GL_CONTEXT_FLAG_NO_ERROR_BIT)
+       std::cout << "                :  " << "No error flag" << std::endl;
+
+   std::cout << "   GLSL . . . . :  " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+   std::cout << std::endl;
+
    return true;
 }
 
@@ -256,9 +320,12 @@ void ENG_API Eng::Base::renderScene() {
    glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 
    // Continue with normal rendering
+   /* Unsupported 4.4
    glMatrixMode(GL_PROJECTION);
    glLoadMatrixf(glm::value_ptr(projectionMatrix));
    glMatrixMode(GL_MODELVIEW);
+   */
+   ShaderManager::getInstance().setProjectionMatrix(projectionMatrix);
 
    // Clear list
    renderList.clear();

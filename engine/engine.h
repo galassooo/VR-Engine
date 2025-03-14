@@ -34,7 +34,6 @@
 #include "../dependencies/glm/include/glm/gtx/string_cast.hpp"
 #endif
 
-
 // Generic info:
 #ifdef _DEBUG
    #define LIB_NAME      "Kevin Quarenghi & Martina Galasso's Graphics Engine v1.0"   ///< Library credits
@@ -87,6 +86,12 @@ namespace Eng {
 #include "OvoReader.h"
 #include "CallbackManager.h"
 #include "Builder.h"
+#include "Shader.h"
+#include "VertexShader.h"
+#include "FragmentShader.h"
+#include "Program.h"
+#include "ShaderManager.h"
+
 
     ///////////////
     //// Tests ///

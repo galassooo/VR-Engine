@@ -62,12 +62,13 @@ int main(int argc, char *argv[]) {
    if (!eng.init()) {
       return -1;
    }
-   eng.loadScene("..\\resources\\Scene.ovo");
+   eng.loadScene("..\\resources\\scimmia.ovo");
+   //eng.loadScene("..\\resources\\Scene.ovo");
 
-   setupMirrorEffect(eng);
+   //setupMirrorEffect(eng);
    setUpCameras(eng);
-   setupLightControls(eng);
-   setupChessMovement(eng);
+   //setupLightControls(eng);
+   //setupChessMovement(eng);
 
    eng.run();
    eng.free();

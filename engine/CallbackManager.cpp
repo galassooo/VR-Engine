@@ -47,9 +47,12 @@ void Eng::CallbackManager::setDefaultCallbacks() {
             perspectiveCamera->setAspect(static_cast<float>(width) / height);
          }
          glm::mat4 projection = activeCamera->getProjectionMatrix();
+         /* unsupported 4.4
          glMatrixMode(GL_PROJECTION);
          glLoadMatrixf(glm::value_ptr(projection));
          glMatrixMode(GL_MODELVIEW);
+         */
+         ShaderManager::getInstance().setProjectionMatrix(projection);
       }
    };
 
@@ -267,6 +270,7 @@ void Eng::CallbackManager::setCloseCallback(CloseFunc func) {
  */
 
 void ENG_API Eng::CallbackManager::renderCoordinateAxes() {
+    /* Unsupported 4.4
    glPushAttrib(GL_ALL_ATTRIB_BITS);
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
@@ -353,6 +357,7 @@ void ENG_API Eng::CallbackManager::renderCoordinateAxes() {
    glMatrixMode(GL_MODELVIEW);
    glPopMatrix();
    glPopAttrib();
+   */
 }
 
 
@@ -386,6 +391,7 @@ void ENG_API Eng::CallbackManager::calculateFPS() {
    }
 
    //show fps counter
+   /* Unsupported 4.4
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
    glLoadIdentity();
@@ -413,6 +419,7 @@ void ENG_API Eng::CallbackManager::calculateFPS() {
    glPopMatrix();
    glMatrixMode(GL_MODELVIEW);
    glPopMatrix();
+   */
 }
 
 /**
@@ -439,7 +446,7 @@ void ENG_API Eng::CallbackManager::calculateFPS() {
 
 void Eng::CallbackManager::renderHelpMenu() {
    if (!showHelpMenu) return;
-
+   /* Unsupported 4.4
    // Save OpenGL state
    glPushAttrib(GL_ALL_ATTRIB_BITS);
    glMatrixMode(GL_PROJECTION);
@@ -506,6 +513,7 @@ void Eng::CallbackManager::renderHelpMenu() {
    glMatrixMode(GL_MODELVIEW);
    glPopMatrix();
    glPopAttrib();
+   */
 }
 
 /**
@@ -519,6 +527,7 @@ void Eng::CallbackManager::renderHelpMenu() {
  *
  */
 void Eng::CallbackManager::renderInfoBar() {
+    /* Unsupported 4.4
    glPushAttrib(GL_ALL_ATTRIB_BITS);
    glMatrixMode(GL_PROJECTION);
    glPushMatrix();
@@ -575,4 +584,5 @@ void Eng::CallbackManager::renderInfoBar() {
    glDisable(GL_CULL_FACE);
    glPopMatrix();
    glPopAttrib();
+   */
 }
