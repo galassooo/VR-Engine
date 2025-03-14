@@ -1,12 +1,14 @@
 #include "engine.h"
+// GLEW
+#include <GL/glew.h>
 
-ENG_API Eng::Program::Program() : glId(0)
+ENG_API Eng::Program::Program() : id(0)
 {
 }
 
 ENG_API Eng::Program::~Program()
 {
-	glDeleteProgram(glId);
+	glDeleteProgram(id);
 }
 
 ENG_API Eng::Program& Eng::Program::addShader(const std::shared_ptr<Eng::Shader>& shader)
@@ -18,23 +20,23 @@ ENG_API Eng::Program& Eng::Program::addShader(const std::shared_ptr<Eng::Shader>
 bool ENG_API Eng::Program::build()
 {
 	// Delete if already used:
-	if (glId)
-		glDeleteProgram(glId);
+	if (id)
+		glDeleteProgram(id);
 
 	// Create program:
-	glId = glCreateProgram();
-	if (glId == 0)
+	id = glCreateProgram();
+	if (id == 0)
 	{
 		std::cout << "[ERROR] Unable to create program" << std::endl;
 		return false;
 	}
 
 	for (auto& shader : shaders) {
-		glAttachShader(glId, shader->getGlId());
+		glAttachShader(id, shader->getGlId());
 	}
 
 	// Link program:
-	glLinkProgram(glId);
+	glLinkProgram(id);
 
 	// Verify program:
 	int status;
@@ -42,15 +44,15 @@ bool ENG_API Eng::Program::build()
 	int length = 0;
 	memset(buffer, 0, MAX_LOGSIZE);
 
-	glGetProgramiv(glId, GL_LINK_STATUS, &status);
-	glGetProgramInfoLog(glId, MAX_LOGSIZE, &length, buffer);
+	glGetProgramiv(id, GL_LINK_STATUS, &status);
+	glGetProgramInfoLog(id, MAX_LOGSIZE, &length, buffer);
 	if (status == false)
 	{
 		std::cout << "[ERROR] Program link error: " << buffer << std::endl;
 		return false;
 	}
-	glValidateProgram(glId);
-	glGetProgramiv(glId, GL_VALIDATE_STATUS, &status);
+	glValidateProgram(id);
+	glGetProgramiv(id, GL_VALIDATE_STATUS, &status);
 	if (status == GL_FALSE)
 	{
 		std::cout << "[ERROR] Unable to validate program" << std::endl;
@@ -64,8 +66,8 @@ bool ENG_API Eng::Program::build()
 void ENG_API Eng::Program::render()
 {
 	// Activate program:
-	if (glId)
-		glUseProgram(glId);
+	if (id)
+		glUseProgram(id);
 	else
 	{
 		std::cerr << "[ERROR] Invalid program for render" << std::endl;
@@ -86,8 +88,42 @@ int ENG_API Eng::Program::getParamLocation(const char* name)
 	}
 
 	// Return location:
-	int r = glGetUniformLocation(glId, name);
+	int r = glGetUniformLocation(id, name);
 	if (r == -1)
 		std::cout << "[ERROR] Param '" << name << "' not found" << std::endl;
 	return r;
+}
+
+void ENG_API Eng::Program::setMatrix(int param, const glm::mat4& mat)
+{
+	glUniformMatrix4fv(param, 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+void ENG_API Eng::Program::setFloat(int param, float value)
+{
+	glUniform1f(param, value);
+}
+
+void ENG_API Eng::Program::setInt(int param, int value)
+{
+	glUniform1i(param, value);
+}
+
+void ENG_API Eng::Program::setVec3(int param, const glm::vec3& vect)
+{
+	glUniform3fv(param, 1, glm::value_ptr(vect));
+}
+
+void ENG_API Eng::Program::setVec4(int param, const glm::vec4& vect)
+{
+	glUniform4fv(param, 1, glm::value_ptr(vect));
+}
+
+void ENG_API Eng::Program::bind(int location, const char* attribName)
+{
+	glBindAttribLocation(id, location, attribName);
+}
+
+unsigned int ENG_API Eng::Program::getGlId() {
+	return id;
 }

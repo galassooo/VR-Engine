@@ -1,6 +1,8 @@
 #include "Engine.h"
+// GLEW
+#include <GL/glew.h>
 
-GLuint ENG_API Eng::VertexShader::create()
+unsigned int ENG_API Eng::VertexShader::create()
 {
 	return glCreateShader(GL_VERTEX_SHADER);
 }

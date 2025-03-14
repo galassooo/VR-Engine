@@ -4,7 +4,7 @@
  * @class Shader
  * @brief An abstract class to represent any possible Shader
  *
- * Complete
+ * To Complete
  * 
  */
 class ENG_API Shader : public Eng::Object {
@@ -16,10 +16,10 @@ public:
 	bool load(const char* data);
 	void render() override;
 	
-	GLuint getGlId();
+	unsigned int getGlId();
 protected:
-	virtual GLuint create() = 0;
+	virtual unsigned int create() = 0;
 private:
 	// OGL id:
-	GLuint glId;
+	unsigned int id;
 };

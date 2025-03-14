@@ -9,5 +9,5 @@
  */
 class ENG_API FragmentShader : public Eng::Shader {
 protected:
-	GLuint create() override;
+	unsigned int create() override;
 };

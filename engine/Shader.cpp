@@ -1,13 +1,15 @@
 #include "engine.h"
+// GLEW
+#include <GL/glew.h>
 
-ENG_API Eng::Shader::Shader() : glId(0)
+ENG_API Eng::Shader::Shader() : id(0)
 { }
 ENG_API Eng::Shader::~Shader() {
-	glDeleteShader(glId);
+	glDeleteShader(id);
 }
 
-GLuint ENG_API Eng::Shader::getGlId() {
-	return glId;
+unsigned int ENG_API Eng::Shader::getGlId() {
+	return id;
 }
 
 /**
@@ -23,18 +25,18 @@ bool ENG_API Eng::Shader::load(const char* data) {
 	}
 
 	// Destroy if already loaded:
-	if (glId)
-		glDeleteShader(glId);
+	if (id)
+		glDeleteShader(id);
 
 	// Load program:
-	glId = create();
-	if (glId == 0)
+	id = create();
+	if (id == 0)
 	{
 		std::cout << "[ERROR] Unable to create shader object" << std::endl;
 		return false;
 	}
-	glShaderSource(glId, 1, (const char**)&data, NULL);
-	glCompileShader(glId);
+	glShaderSource(id, 1, (const char**)&data, NULL);
+	glCompileShader(id);
 
 	// Verify shader:
 	int status;
@@ -42,8 +44,8 @@ bool ENG_API Eng::Shader::load(const char* data) {
 	int length = 0;
 	memset(buffer, 0, MAX_LOGSIZE);
 
-	glGetShaderiv(glId, GL_COMPILE_STATUS, &status);
-	glGetShaderInfoLog(glId, MAX_LOGSIZE, &length, buffer);
+	glGetShaderiv(id, GL_COMPILE_STATUS, &status);
+	glGetShaderInfoLog(id, MAX_LOGSIZE, &length, buffer);
 	if (status == false)
 	{
 		std::cout << "[ERROR] Shader not compiled: " << buffer << std::endl;

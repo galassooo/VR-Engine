@@ -1,4 +1,6 @@
 #include "engine.h"
+// GLEW
+#include <GL/glew.h>
 
 ENG_API Eng::ShaderManager& Eng::ShaderManager::getInstance()
 {
@@ -14,6 +16,8 @@ bool ENG_API Eng::ShaderManager::initialize() {
 
 	if (!setDefaultShaders())
 		return false;
+
+	glUseProgram(program.getGlId());
 
 	initialized = true;
 	return true;
@@ -79,7 +83,7 @@ bool ENG_API Eng::ShaderManager::setDefaultShaders() {
 	if (!program.addShader(fragmentShader).addShader(vertexShader).build())
 		return false;
 	program.bind(0, "in_Position");
-	program.bind(1, "in_Color");
+	//program.bind(1, "in_Color");
 
 	projectionLocation = program.getParamLocation("projection");
 	modelViewLocation = program.getParamLocation("modelview");

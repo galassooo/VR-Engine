@@ -17,35 +17,24 @@ public:
 	bool build();
 	void render() override;
 
-	inline void bind(int location, const char* attribName)
-	{
-		glBindAttribLocation(glId, location, attribName);
-	}
+	unsigned int getGlId();
+
+	void bind(int location, const char* attribName);
 
 	// Get/set:
 	int getParamLocation(const char* name);
-	inline void setMatrix(int param, const glm::mat4& mat)
-	{
-		glUniformMatrix4fv(param, 1, GL_FALSE, glm::value_ptr(mat));
-	}
-	inline void setFloat(int param, float value)
-	{
-		glUniform1f(param, value);
-	}
-	inline void setInt(int param, int value)
-	{
-		glUniform1i(param, value);
-	}
-	inline void setVec3(int param, const glm::vec3& vect)
-	{
-		glUniform3fv(param, 1, glm::value_ptr(vect));
-	}
-	inline void setVec4(int param, const glm::vec4& vect)
-	{
-		glUniform4fv(param, 1, glm::value_ptr(vect));
-	}
+	void setMatrix(int param, const glm::mat4& mat);
+
+	void setFloat(int param, float value);
+
+	void setInt(int param, int value);
+
+	void setVec3(int param, const glm::vec3& vect);
+
+	void setVec4(int param, const glm::vec4& vect);
+
 private:
 	// OGL id:
-	GLuint glId;
+	unsigned int id;
 	std::vector<std::shared_ptr<Eng::Shader>> shaders;
 };
