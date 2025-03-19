@@ -30,19 +30,26 @@ Eng::Light::~Light() {
 * @param index The index of the light (0-7, corresponding to GL_LIGHT0 to GL_LIGHT7).
 */
 void Eng::Light::render() {
-   if (currentLightId < 0 || currentLightId > GL_LIGHT7)
-      return;
+   //if (currentLightId < 0 || currentLightId > GL_LIGHT7)
+   //   return;
 
-   // Dynamically compute the macro for the light
-   GLenum lightId = GL_LIGHT0 + currentLightId;
+   //// Dynamically compute the macro for the light
+   //GLenum lightId = GL_LIGHT0 + currentLightId;
 
-   // Enable light
-   glEnable(GL_LIGHTING);
-   glEnable(lightId);
+   //// Enable light
+   //glEnable(GL_LIGHTING);
+   //glEnable(lightId);
 
-   // Call the base setup
-   setupLightBase(lightId);
-   configureLight(lightId);
+   //// Call the base setup
+   //setupLightBase(lightId);
+
+   auto& sm = ShaderManager::getInstance();
+
+   sm.setLightAmbient(color * 0.2f);
+   sm.setLightDiffuse(color);
+   sm.setLightSpecular(color);
+
+   configureLight(Eng::Base::getInstance().getActiveCamera()->getFinalMatrix());
 }
 
 /**

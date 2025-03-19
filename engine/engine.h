@@ -27,11 +27,13 @@
     #include <glm/gtc/type_ptr.hpp>
     #include <glm/gtc/matrix_transform.hpp>
     #include <glm/gtx/string_cast.hpp>
+    #include <glm/gtc/matrix_inverse.hpp>
 #else  // sia Mac che Linux
 #include "../dependencies/glm/include/glm/glm.hpp"
 #include "../dependencies/glm/include/glm/gtc/type_ptr.hpp"
 #include "../dependencies/glm/include/glm/gtc/matrix_transform.hpp"
 #include "../dependencies/glm/include/glm/gtx/string_cast.hpp"
+#include "../dependencies/glm/include/glm/gtc/matrix_inverse.hpp"
 #endif
 
 // Generic info:

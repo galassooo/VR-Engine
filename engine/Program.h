@@ -23,7 +23,11 @@ public:
 
 	// Get/set:
 	int getParamLocation(const char* name);
+
 	void setMatrix(int param, const glm::mat4& mat);
+
+	// Helper function for 3x3 matrices for the per-pixel lighting
+	void setMatrix(int param, const glm::mat3& mat);
 
 	void setFloat(int param, float value);
 

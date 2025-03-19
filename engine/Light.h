@@ -24,7 +24,7 @@ protected:
 
    Light();
    ~Light();
-   virtual void configureLight(const int &lightId) = 0;
+   virtual void configureLight(const glm::mat4 &viewMatrix) = 0;
 
    ///> RGB color of the light source, affects ambient, diffuse, and specular components
    glm::vec3 color;

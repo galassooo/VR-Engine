@@ -54,7 +54,13 @@ void Eng::List:: render() {
       glm::mat4 modelViewMatrix = viewMatrix * elements[i]->getWorldCoordinates();
 
       // glLoadMatrixf(glm::value_ptr(modelViewMatrix));    unsupported 4.4
+
+      // Send 4x4 modelview matrix
       ShaderManager::getInstance().setModelViewMatrix(modelViewMatrix);
+
+      // Send 3x3 inverse-transpose for normals
+      glm::mat3 normalMat = glm::inverseTranspose(glm::mat3(modelViewMatrix));
+      ShaderManager::getInstance().setNormalMatrix(normalMat);
 
       elements[i]->getNode()->render();
    }

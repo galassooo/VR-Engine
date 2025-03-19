@@ -15,7 +15,7 @@ public:
 	glm::vec3 getPosition() const;
 
 private:
-	void configureLight(const int& lightId) override;
+	void configureLight(const glm::mat4& viewMatrix) override;
 	///> Direction vector of the spotlight's beam
 	glm::vec3 direction;
 	///> The angle in degrees that defines the spotlight's cone

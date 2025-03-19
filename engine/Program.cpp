@@ -99,6 +99,10 @@ void ENG_API Eng::Program::setMatrix(int param, const glm::mat4& mat)
 	glUniformMatrix4fv(param, 1, GL_FALSE, glm::value_ptr(mat));
 }
 
+void ENG_API Eng::Program::setMatrix(int param, const glm::mat3& mat) {
+	glUniformMatrix3fv(param, 1, GL_FALSE, glm::value_ptr(mat));
+}
+
 void ENG_API Eng::Program::setFloat(int param, float value)
 {
 	glUniform1f(param, value);

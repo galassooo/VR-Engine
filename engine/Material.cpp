@@ -24,6 +24,8 @@ void Eng::Material::render() {
    if(getAlpha() < 1.0f) {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   } else {
+       glDisable(GL_BLEND);
    }
    const GLfloat ambient[] = {albedo.r * 0.2f, albedo.g * 0.2f, albedo.b * 0.2f, 1.0f};
    const GLfloat diffuse[] = {albedo.r * 0.6f, albedo.g * 0.6f, albedo.b * 0.6f, albedo.a};
@@ -44,9 +46,20 @@ void Eng::Material::render() {
       glDisable(GL_TEXTURE_2D);
    }
    */
-   if(getAlpha() >= 1.0f) {
-      glDisable(GL_BLEND);
-   }
+
+   ShaderManager& sm = ShaderManager::getInstance();
+
+   glm::vec3 amb(ambient[0], ambient[1], ambient[2]);
+   glm::vec3 dif(diffuse[0], diffuse[1], diffuse[2]);
+   glm::vec3 spe(specular[0], specular[1], specular[2]);
+
+   float shin = shininess[0];
+
+   sm.setMaterialEmission(glm::vec3(0.0f));
+   sm.setMaterialAmbient(amb);
+   sm.setMaterialDiffuse(dif);
+   sm.setMaterialSpecular(spe);
+   sm.setMaterialShininess(shin);
 }
 
 /**

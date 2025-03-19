@@ -14,7 +14,7 @@ public:
 	glm::vec3 getDirection() const;
 
 private:
-	void configureLight(const int& lightId) override;
+	void configureLight(const glm::mat4& viewMatrix) override;
 	///< Normalized vector indicating the global direction of light rays
 	glm::vec3 direction;
 };

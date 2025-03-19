@@ -20,7 +20,7 @@ Eng::DirectionalLight::DirectionalLight(const glm::vec3 &color, const glm::vec3 
  * @param index The index of the light (0-7, corresponding to GL_LIGHT0 to GL_LIGHT7).
  */
 
-void Eng::DirectionalLight::configureLight(const int &lightId) {
+void Eng::DirectionalLight::configureLight(const glm::mat4 &viewMatrix) {
    // Note that we first negate the light.direction vector.
    // The lighting calculations we used so far expect the light direction to be
    // a direction from the fragment towards the light source, but people generally prefer to
@@ -33,9 +33,15 @@ void Eng::DirectionalLight::configureLight(const int &lightId) {
    // REF: https://learnopengl.com/Lighting/Light-casters
    // ALTRA REF: SLIDE LIGHTS DEL CORSO -> IL VETTORE L VA DAL PUNTO ILLUMINATO ALLA LUCEEEEEEE
 
-   glm::vec3 direction = -this->direction; //MENOOOOOOOOOOO //normalizzato nel costruttore
-   GLfloat lightDir[] = {direction.x, direction.y, direction.z, 0.0f}; // w=0 for directional
-   glLightfv(lightId, GL_POSITION, lightDir);
+   glm::vec3 wDir = -this->direction; //MENOOOOOOOOOOO //normalizzato nel costruttore
+   //GLfloat lightDir[] = {direction.x, direction.y, direction.z, 0.0f}; // w=0 for directional
+   //glLightfv(lightId, GL_POSITION, lightDir);
+
+   glm::vec3 eDir = glm::mat3(viewMatrix) * wDir;
+   eDir = glm::normalize(eDir);
+
+   auto& sm = ShaderManager::getInstance();
+   sm.setLightPosition(eDir);
 }
 
 /**

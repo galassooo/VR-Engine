@@ -15,7 +15,7 @@ public:
    glm::vec3 getPosition() const;
 
 private:
-   void configureLight(const int &lightId) override;
+   void configureLight(const glm::mat4 &viewMatrix) override;
    ///> radius is written as attenuation
    float attenuation;
 };

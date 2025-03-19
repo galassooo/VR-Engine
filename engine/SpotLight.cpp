@@ -23,26 +23,34 @@ Eng::SpotLight::SpotLight(const glm::vec3 &color, const glm::vec3 &direction, co
  *
  * @param index The index of the light (0-7, corresponding to GL_LIGHT0 to GL_LIGHT7).
  */
-void Eng::SpotLight::configureLight(const int &lightId) {
+void Eng::SpotLight::configureLight(const glm::mat4 &viewMatrix) {
    // Get position from transformation matrix
-   const GLfloat lightPosition[] = {0, 0, 0, 1.0f};
+   //const GLfloat lightPosition[] = {0, 0, 0, 1.0f};
 
-   // Set position and direction
-   glLightfv(lightId, GL_POSITION, lightPosition);
-   glLightfv(lightId, GL_SPOT_DIRECTION, glm::value_ptr(direction));
+   //// Set position and direction
+   //glLightfv(lightId, GL_POSITION, lightPosition);
+   //glLightfv(lightId, GL_SPOT_DIRECTION, glm::value_ptr(direction));
 
-   // Set spot parameters
-   glLightf(lightId, GL_SPOT_CUTOFF, cutoffAngle);
-   glLightf(lightId, GL_SPOT_EXPONENT, falloff);
+   //// Set spot parameters
+   //glLightf(lightId, GL_SPOT_CUTOFF, cutoffAngle);
+   //glLightf(lightId, GL_SPOT_EXPONENT, falloff);
 
-   const float radius = std::max(100.0f, this->radius);
-   constexpr float constAttenuation = 1.0f;
-   const float linearAttenuation = 2.0f / radius;
-   const float quadraticAttenuation = 1.0f / (radius * radius);
+   //const float radius = std::max(100.0f, this->radius);
+   //constexpr float constAttenuation = 1.0f;
+   //const float linearAttenuation = 2.0f / radius;
+   //const float quadraticAttenuation = 1.0f / (radius * radius);
 
-   glLightf(lightId, GL_CONSTANT_ATTENUATION, constAttenuation);
-   glLightf(lightId, GL_LINEAR_ATTENUATION, linearAttenuation);
-   glLightf(lightId, GL_QUADRATIC_ATTENUATION, quadraticAttenuation);
+   //glLightf(lightId, GL_CONSTANT_ATTENUATION, constAttenuation);
+   //glLightf(lightId, GL_LINEAR_ATTENUATION, linearAttenuation);
+   //glLightf(lightId, GL_QUADRATIC_ATTENUATION, quadraticAttenuation);
+
+    glm::vec4 ePos = viewMatrix * glm::vec4(getPosition(), 1.0);
+
+    glm::vec3 eDir = glm::mat3(viewMatrix) * direction;
+    eDir = glm::normalize(eDir);
+
+    auto& sm = ShaderManager::getInstance();
+    sm.setLightPosition(glm::vec3(ePos));
 }
 
 
