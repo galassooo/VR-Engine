@@ -1,8 +1,16 @@
-#include "engine.h"
-#include <iostream>
-#include <functional>
-#include <random>
-#include <array>
+//////////////
+// #INCLUDE //
+//////////////
+    
+    // Engine
+    #include "engine.h"
+
+    // Functionality
+    #include <iostream>
+    #include <functional>
+    #include <random>
+    #include <array>
+
 /**
  * @brief Sets up the chess piece movement logic.
  *
@@ -56,7 +64,6 @@ void setUpCameras(Eng::Base &eng);
 int main(int argc, char *argv[]) {
    std::cout << "Client application example, K. Quarenghi & M. Galasso (C) SUPSI" << std::endl;
    std::cout << std::endl;
-
 
    Eng::Base &eng = Eng::Base::getInstance();
    if (!eng.init()) {

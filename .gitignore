@@ -28,6 +28,9 @@ cmake-build-*/
 !dependencies/freeglut/lib/**
 !dependencies/freeimage/lib
 !dependencies/freeimage/lib/**
+!dependencies/glew/lib
 !dependencies/glew/lib/**
+!dependencies/glew/leap
+!dependencies/glew/leap/**
 !demo/
 !demo/**

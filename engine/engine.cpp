@@ -101,6 +101,15 @@ bool ENG_API Eng::Base::init() {
       return false;
    }
 
+   // Leap init:
+   leap = new Leap();
+   if (!leap->init())
+   {
+       std::cout << "[ERROR] Unable to init Leap Motion" << std::endl;
+       delete leap;
+       return -1;
+   }
+
    // OpenGL
    if (!initOpenGL()) {
       std::cerr << "ERROR: Failed to initialize OpenGL" << std::endl;

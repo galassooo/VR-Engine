@@ -93,6 +93,7 @@ namespace Eng {
 #include "FragmentShader.h"
 #include "Program.h"
 #include "ShaderManager.h"
+#include "leap.h"
 
 
     ///////////////
@@ -164,5 +165,8 @@ namespace Eng {
       List renderList;
       ///>  FreeGLUT window identifier
       int windowId;
+
+      // Leap Motion:   
+      Leap* leap = nullptr;
    };
 }; // end of namespace Eng::
