@@ -30,7 +30,8 @@ cmake-build-*/
 !dependencies/freeimage/lib/**
 !dependencies/glew/lib
 !dependencies/glew/lib/**
-!dependencies/glew/leap
-!dependencies/glew/leap/**
+!dependencies/leap
+!dependencies/leap/lib
+!dependencies/leap/lib/**
 !demo/
 !demo/**
