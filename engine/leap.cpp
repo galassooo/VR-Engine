@@ -12,7 +12,7 @@
 //////////////
 
    // Header:
-   #include "leap.h"
+   #include "engine.h"
 
 
 
@@ -24,7 +24,7 @@
 /**
  * Constructor.
  */
-Leap::Leap() : connection{ nullptr }, curFrame{ nullptr },
+Eng::Leap::Leap() : connection{ nullptr }, curFrame{ nullptr },
                lastFrameId{ 0 }
 {}
 
@@ -33,7 +33,7 @@ Leap::Leap() : connection{ nullptr }, curFrame{ nullptr },
 /**
  * Destructor. 
  */
-Leap::~Leap()
+Eng::Leap::~Leap()
 {}
 
 
@@ -42,7 +42,7 @@ Leap::~Leap()
  * Initializes Leap Motion connection.
  * @return TF
  */
-bool Leap::init() 
+bool Eng::Leap::init()
 {
    // Create and open connection:   
    if (LeapCreateConnection(nullptr, &connection) != eLeapRS_Success)
@@ -105,7 +105,7 @@ bool Leap::init()
  * Releases Leap Motion resources.
  * @return TF
  */
-bool Leap::free() 
+bool Eng::Leap::free()
 {   
    // Clean up Leap Motion:
    LeapCloseConnection(connection);
@@ -122,7 +122,7 @@ bool Leap::free()
  * Acquire new events. 
  * @return TF
  */
-bool Leap::update()
+bool Eng::Leap::update()
 {  
    const uint32_t timeout = 1000;      
    LEAP_CONNECTION_MESSAGE msg;
@@ -165,7 +165,7 @@ bool Leap::update()
  * Gets a pointer to the last updated frame.
  * @return pointer to last frame, or nullptr on error
  */
-const LEAP_TRACKING_EVENT *Leap::getCurFrame() const
+const LEAP_TRACKING_EVENT *Eng::Leap::getCurFrame() const
 {
    return &curFrame;
 }

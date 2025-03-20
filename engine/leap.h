@@ -12,14 +12,6 @@
 // #INCLUDE //
 //////////////
 
-   // GLM:
-   #include <glm/glm.hpp>
-   #include <glm/gtc/matrix_transform.hpp>
-   #include <glm/gtc/type_ptr.hpp>   
-   
-   // C/C++:
-   #include <iostream>
-
    // Leap Motion SDK:
    #include <LeapC.h>
 
@@ -32,7 +24,7 @@
 /**
  * @brief Leap Motion wrapper. 
  */
-class Leap
+class ENG_API Leap
 {	
 //////////
 public: //
