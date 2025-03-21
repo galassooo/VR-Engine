@@ -21,6 +21,11 @@ cmake-build-*/
 *.tmp
 *.bak
 
+# Mesa implementation for VM
+/mesa
+set_mesa_vs.bat
+run_mesa_vs.bat
+
 # Explicitly include the dependencies folder and its contents
 !dependencies/
 !dependencies/freeglut/
