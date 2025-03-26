@@ -31,6 +31,9 @@ public:
 	void setLightDiffuse(const glm::vec3& diff);
 	void setLightSpecular(const glm::vec3& spec);
 
+	void setUseTexture(bool use);
+	void setTextureSampler(int textureUnit);
+
 private:
 	/** @brief Private constructor to enforce singleton pattern */
 	ShaderManager() = default;
@@ -38,6 +41,9 @@ private:
 	bool initialized = false;
 	bool setDefaultShaders();
 	Eng::Program program;
+
+	int texSamplerLoc;
+	int useTextureLoc;
 
 	int projectionLocation;
 	int modelViewLocation;

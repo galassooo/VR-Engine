@@ -93,6 +93,7 @@ namespace Eng {
 #include "FragmentShader.h"
 #include "Program.h"
 #include "ShaderManager.h"
+#include "FrameBufferObject.h"
 
 
     ///////////////

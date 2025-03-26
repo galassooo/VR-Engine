@@ -60,6 +60,20 @@ void Eng::Material::render() {
    sm.setMaterialDiffuse(dif);
    sm.setMaterialSpecular(spe);
    sm.setMaterialShininess(shin);
+   sm.setMaterialEmission(glm::vec3(0.0f));
+   sm.setMaterialAmbient(glm::vec3(albedo.r * 0.2f, albedo.g * 0.2f, albedo.b * 0.2f));
+   sm.setMaterialDiffuse(glm::vec3(albedo.r * 0.6f, albedo.g * 0.6f, albedo.b * 0.6f));
+   sm.setMaterialSpecular(glm::vec3(albedo.r * 0.4f, albedo.g * 0.4f, albedo.b * 0.4f));
+   sm.setMaterialShininess((1.0f - std::sqrt(this->shininess)) * 128.0f);
+
+   //Texture
+   if (diffuseTexture) {
+       sm.setUseTexture(true);
+       diffuseTexture->render(); //ITA: associa texture automaticamente
+   }
+   else {
+       sm.setUseTexture(false);
+   }
 }
 
 /**

@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
    if (!eng.init()) {
       return -1;
    }
-   eng.loadScene("..\\resources\\scimmia.ovo");
+   eng.loadScene("..\\resources\\scarpa2.ovo");
    //eng.loadScene("..\\resources\\Scene.ovo");
 
    //setupMirrorEffect(eng);

@@ -93,6 +93,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="FragmentShader.cpp" />
+    <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="ListElement.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="FragmentShader.h" />
+    <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="ListElement.h" />
