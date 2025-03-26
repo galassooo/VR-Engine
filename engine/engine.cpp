@@ -53,9 +53,11 @@ struct Eng::Base::Reserved {
 /**
  * Constructor.
  */
-ENG_API Eng::Base::Base() : reserved(std::make_unique<Eng::Base::Reserved>()), windowId{ 0 } {
+ENG_API Eng::Base::Base() : reserved(std::make_unique<Eng::Base::Reserved>()), windowId{ 0 },
+leftEyeFbo(nullptr), rightEyeFbo(nullptr),
+leftEyeTexture(0), rightEyeTexture(0), eyeDistance(0.065f) {
 #ifdef _DEBUG
-   std::cout << "[+] " << std::source_location::current().function_name() << " invoked" << std::endl;
+    std::cout << "[+] " << std::source_location::current().function_name() << " invoked" << std::endl;
 #endif
 }
 
@@ -64,6 +66,13 @@ ENG_API Eng::Base::Base() : reserved(std::make_unique<Eng::Base::Reserved>()), w
  * Destructor.
  */
 ENG_API Eng::Base::~Base() {
+    if (leftEyeTexture != 0) {
+        glDeleteTextures(1, &leftEyeTexture);
+    }
+    if (rightEyeTexture != 0) {
+        glDeleteTextures(1, &rightEyeTexture);
+    }
+
 #ifdef _DEBUG
    std::cout << "[-] " << std::source_location::current().function_name() << " invoked" << std::endl;
 #endif
@@ -168,25 +177,29 @@ bool ENG_API Eng::Base::free() {
  * @return true if OpenGL context created successfully, false if context creation fails
  */
 bool ENG_API Eng::Base::initOpenGL() {
-   int argc = 1;
-   char *argv[] = {(char *) "engine"};
+    int argc = 1;
+    char* argv[] = { (char*)"engine" };
 
-   //Glut init
-   glutInit(&argc, argv);
-   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-   // 4.4 context flags
-   glutInitContextVersion(4, 4);
-   glutInitContextProfile(GLUT_CORE_PROFILE);
+    //Glut init
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+    // 4.4 context flags
+    glutInitContextVersion(4, 4);
+    glutInitContextProfile(GLUT_CORE_PROFILE);
 #ifdef _DEBUG
-   glutInitContextFlags(GLUT_DEBUG); // <-- Debug flag required by the OpenGL debug callback
+    glutInitContextFlags(GLUT_DEBUG); // <-- Debug flag required by the OpenGL debug callback
 #endif
 
-   windowId = glutCreateWindow("Graphics Engine");
+    // Set initial window size
+    glutInitWindowSize(APP_WINDOWSIZEX, APP_WINDOWSIZEY);
+    glutInitWindowPosition(100, 100);
 
-   if (!glutGetWindow()) {
-      std::cerr << "ERROR: Failed to create OpenGL context" << std::endl;
-      return false;
-   }
+    windowId = glutCreateWindow("Graphics Engine");
+
+    if (!glutGetWindow()) {
+        std::cerr << "ERROR: Failed to create OpenGL context" << std::endl;
+        return false;
+    }
 
    GLenum err = glewInit();
    if (err != GLEW_OK)
@@ -306,6 +319,11 @@ std::shared_ptr<Eng::Camera> ENG_API Eng::Base::getActiveCamera() const {
  */
 
 void ENG_API Eng::Base::renderScene() {
+    if (engIsEnabled(ENG_STEREO_RENDERING)) {
+        renderStereoscopic();
+        return;
+    }
+
    if (!activeCamera) {
       std::cerr << "ERROR: No active camera set for rendering" << std::endl;
       return;
@@ -389,6 +407,9 @@ void ENG_API Eng::Base::traverseAndAddToRenderList(const std::shared_ptr<Eng::No
  * Continuously renders the scene and processes events until an exit request is issued.
  */
 void ENG_API Eng::Base::run() {
+    if (engIsEnabled(ENG_STEREO_RENDERING)) {
+        setupStereoscopicRendering(APP_FBOSIZEX, APP_FBOSIZEY);
+    }
    // Enter FreeGLUT main loop
    glutMainLoop();
 }
@@ -427,8 +448,8 @@ std::shared_ptr<Eng::Node> Eng::Base::getRootNode() {
  */
 
 float Eng::Base::getWindowAspectRatio() {
-   const int width = glutGet(GLUT_WINDOW_WIDTH);
-   int height = glutGet(GLUT_WINDOW_HEIGHT);
+    const int width = engIsEnabled(ENG_STEREO_RENDERING) ? APP_WINDOWSIZEX / 2 : APP_WINDOWSIZEX;
+   int height = APP_WINDOWSIZEY;
    if (height == 0) height = 1; // Avoid division by zero
    return static_cast<float>(width) / height;
 }
@@ -437,7 +458,7 @@ float Eng::Base::getWindowAspectRatio() {
 * @param cap The capability flag to enable
 */
 void Eng::Base::engEnable(unsigned int cap) {
-   engineState |= cap;
+    engineState |= cap;
 }
 /**
 * @brief Disables a specified engine capability.
@@ -454,4 +475,152 @@ void Eng::Base::engDisable(unsigned int cap) {
 */
 bool Eng::Base::engIsEnabled(unsigned int cap) {
    return (engineState & cap) != 0;
+}
+
+/**
+ * @brief Configura il rendering stereoscopico creando gli FBO necessari
+ * @param width Larghezza degli FBO
+ * @param height Altezza degli FBO
+ */
+bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
+    std::cout << "DEBUG: Setting up stereoscopic rendering, requested size: "
+        << width << "x" << height << std::endl;
+
+    // Override with predefined constants for consistency
+    width = APP_FBOSIZEX;
+    height = APP_FBOSIZEY;
+    std::cout << "DEBUG: Using fixed FBO size: " << width << "x" << height << std::endl;
+
+    // Clean up existing FBOs if they exist
+    if (leftEyeTexture != 0) {
+        glDeleteTextures(1, &leftEyeTexture);
+        leftEyeTexture = 0;
+    }
+    if (rightEyeTexture != 0) {
+        glDeleteTextures(1, &rightEyeTexture);
+        rightEyeTexture = 0;
+    }
+
+    leftEyeFbo = std::make_shared<Fbo>();
+    rightEyeFbo = std::make_shared<Fbo>();
+
+    // Create texture for left eye
+    glGenTextures(1, &leftEyeTexture);
+    glBindTexture(GL_TEXTURE_2D, leftEyeTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    std::cout << "DEBUG: Left eye texture created with ID: " << leftEyeTexture << std::endl;
+
+    // Bind texture to left FBO
+    leftEyeFbo->bindTexture(0, Fbo::BIND_COLORTEXTURE, leftEyeTexture);
+    leftEyeFbo->bindRenderBuffer(1, Fbo::BIND_DEPTHBUFFER, width, height);
+
+    if (!leftEyeFbo->isOk()) {
+        std::cerr << "ERROR: Left eye FBO setup failed" << std::endl;
+        return false;
+    }
+    std::cout << "DEBUG: Left eye FBO setup successful, handle: " << leftEyeFbo->getHandle() << std::endl;
+
+    // Create texture for right eye
+    glGenTextures(1, &rightEyeTexture);
+    glBindTexture(GL_TEXTURE_2D, rightEyeTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    std::cout << "DEBUG: Right eye texture created with ID: " << rightEyeTexture << std::endl;
+
+    // Bind texture to right FBO
+    rightEyeFbo->bindTexture(0, Fbo::BIND_COLORTEXTURE, rightEyeTexture);
+    rightEyeFbo->bindRenderBuffer(1, Fbo::BIND_DEPTHBUFFER, width, height);
+
+    if (!rightEyeFbo->isOk()) {
+        std::cerr << "ERROR: Right eye FBO setup failed" << std::endl;
+        return false;
+    }
+    std::cout << "DEBUG: Right eye FBO setup successful, handle: " << rightEyeFbo->getHandle() << std::endl;
+
+    // Set default eye distance
+    eyeDistance = 0.065f; // 6.5 cm is the average human interpupillary distance
+    std::cout << "DEBUG: Eye distance set to " << eyeDistance << std::endl;
+
+    // Reset viewport to default
+    Fbo::disable();
+
+    return true;
+}
+glm::mat4 Eng::Base::computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, float eyeOffset) {
+    glm::vec3 cameraPos = glm::vec3(cameraWorldMatrix[3]);
+    glm::vec3 cameraRight = glm::vec3(cameraWorldMatrix[0]); // X-axis
+    glm::vec3 up = glm::vec3(cameraWorldMatrix[1]);
+    glm::vec3 forward = -glm::vec3(cameraWorldMatrix[2]);
+
+    glm::vec3 eyePos = cameraPos + (cameraRight * eyeOffset);
+    glm::vec3 target = eyePos + forward;
+
+    return glm::lookAt(eyePos, target, up);
+}
+
+void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+    ShaderManager& sm = ShaderManager::getInstance();
+
+    eyeFbo->render();
+    glViewport(0, 0, APP_FBOSIZEX, APP_FBOSIZEY);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    sm.setProjectionMatrix(projectionMatrix);
+
+    renderList.clear();
+    traverseAndAddToRenderList(rootNode);
+    renderList.setViewMatrix(viewMatrix);
+    renderList.render();
+}
+
+
+void ENG_API Eng::Base::renderStereoscopic() {
+    if (!leftEyeFbo || !rightEyeFbo) {
+        std::cerr << "ERROR: FBOs non inizializzati per il rendering stereoscopico." << std::endl;
+        renderScene();
+        return;
+    }
+
+    int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+    int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+
+    glm::mat4 cameraWorldMatrix = glm::inverse(activeCamera->getLocalMatrix());
+    glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
+
+    glm::mat4 leftViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, -eyeDistance / 2.0f);
+    glm::mat4 rightViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, +eyeDistance / 2.0f);
+
+    renderEye(leftEyeFbo.get(), leftViewMatrix, projectionMatrix);
+    renderEye(rightEyeFbo.get(), rightViewMatrix, projectionMatrix);
+
+    // Blit sullo schermo
+    Fbo::disable();
+    glViewport(0, 0, windowWidth, windowHeight);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, leftEyeFbo->getHandle());
+    glBlitFramebuffer(
+        0, 0, APP_FBOSIZEX, APP_FBOSIZEY,
+        0, 0, APP_FBOSIZEX, APP_FBOSIZEY,
+        GL_COLOR_BUFFER_BIT, GL_LINEAR
+    );
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, rightEyeFbo->getHandle());
+    glBlitFramebuffer(
+        0, 0, APP_FBOSIZEX, APP_FBOSIZEY,
+        APP_FBOSIZEX, 0, APP_WINDOWSIZEX, APP_FBOSIZEY,
+        GL_COLOR_BUFFER_BIT, GL_LINEAR
+    );
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+
+    CallbackManager::getInstance().executeRenderCallbacks();
+    glutSwapBuffers();
 }

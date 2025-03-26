@@ -36,15 +36,13 @@ void Eng::CallbackManager::setDefaultCallbacks() {
 
    // Reshape callback rimane invariato
    reshapeCallback = [](int width, int height) {
-      if (height == 0) height = 1;
-      glViewport(0, 0, width, height);
 
       auto &engine = Base::getInstance();
       auto activeCamera = engine.getActiveCamera();
 
       if (activeCamera) {
          if (auto perspectiveCamera = std::dynamic_pointer_cast<PerspectiveCamera>(activeCamera)) {
-            perspectiveCamera->setAspect(static_cast<float>(width) / height);
+            perspectiveCamera->setAspect(engine.getWindowAspectRatio());
          }
          glm::mat4 projection = activeCamera->getProjectionMatrix();
          /* unsupported 4.4
@@ -131,6 +129,42 @@ void Eng::CallbackManager::setDefaultCallbacks() {
 
    registerRenderCallback("helpText", [this]() {
    renderInfoBar();
+
+   reshapeCallback = [](int width, int height) {
+       auto& engine = Base::getInstance();
+
+       if (engine.engIsEnabled(ENG_STEREO_RENDERING)) {
+           if (width != APP_WINDOWSIZEX / 2 || height != APP_WINDOWSIZEY) {
+               glutReshapeWindow(APP_WINDOWSIZEX , APP_WINDOWSIZEY);
+               return;
+           }
+       }
+       else {
+           // Force window size to be constant for stereoscopic rendering
+           if (width != APP_WINDOWSIZEX || height != APP_WINDOWSIZEY) {
+               glutReshapeWindow(APP_WINDOWSIZEX, APP_WINDOWSIZEY);
+               return;
+           }
+       }
+       
+
+       glViewport(0, 0, width, height);
+
+       auto activeCamera = engine.getActiveCamera();
+
+       if (activeCamera) {
+           if (auto perspectiveCamera = std::dynamic_pointer_cast<PerspectiveCamera>(activeCamera)) {
+               perspectiveCamera->setAspect(engine.getWindowAspectRatio());
+           }
+           glm::mat4 projection = activeCamera->getProjectionMatrix();
+           ShaderManager::getInstance().setProjectionMatrix(projection);
+       }
+       };
+
+   // Register the reshape callback
+   glutReshapeFunc([](int w, int h) {
+       if (const auto& manager = getInstance(); manager.reshapeCallback) manager.reshapeCallback(w, h);
+       });
 });
 }
 

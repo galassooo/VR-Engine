@@ -63,6 +63,8 @@ int main(int argc, char *argv[]) {
       return -1;
    }
    eng.loadScene("..\\resources\\scarpa2.ovo");
+   eng.engEnable(ENG_STEREO_RENDERING);
+
    //eng.loadScene("..\\resources\\Scene.ovo");
 
    //setupMirrorEffect(eng);
@@ -489,6 +491,7 @@ void setUpCameras(Eng::Base &eng) {
    static std::vector<std::shared_ptr<Eng::PerspectiveCamera> > cameras;
    auto &callbackManager = Eng::CallbackManager::getInstance();
    float initialAspect = eng.getWindowAspectRatio();
+
 
    // Camera 1
    auto camera1 = std::make_shared<Eng::PerspectiveCamera>(45.0f, initialAspect, 0.1f, 1000000.0f);

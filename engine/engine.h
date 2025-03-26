@@ -59,6 +59,13 @@
 
 // Engine capability flags
 #define ENG_RENDER_NORMAL   0x0001
+#define ENG_STEREO_RENDERING  0x0002
+
+// Window and FBO size constants
+#define APP_WINDOWSIZEX   1024
+#define APP_WINDOWSIZEY   512
+#define APP_FBOSIZEX      (APP_WINDOWSIZEX / 2)
+#define APP_FBOSIZEY      APP_WINDOWSIZEY
 
 /**
  * @namespace Eng
@@ -132,7 +139,7 @@ namespace Eng {
       static void engDisable(unsigned int cap);
       static bool engIsEnabled(unsigned int cap);
 
-      static void run();
+      void run();
       bool init();
       bool free();
 
@@ -144,10 +151,27 @@ namespace Eng {
       std::shared_ptr<Camera> getActiveCamera() const;
       float getWindowAspectRatio() ;
 
+
+      bool setupStereoscopicRendering(int width, int height);
+      void renderStereoscopic();
+
+
+      void setEyeDistance(float distance) { eyeDistance = distance; }
+      float getEyeDistance() const { return eyeDistance; }
+
    private:
       /** @brief Reserved implementation details */
       struct Reserved;
       std::unique_ptr<Reserved> reserved;
+
+      std::shared_ptr<Fbo> leftEyeFbo;
+      std::shared_ptr<Fbo> rightEyeFbo;
+      unsigned int leftEyeTexture;
+      unsigned int rightEyeTexture;
+
+      float eyeDistance;
+      glm::mat4 computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, float eyeOffset);
+      void renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
       Base();
       ~Base();
