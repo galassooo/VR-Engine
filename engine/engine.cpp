@@ -554,6 +554,11 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
     return true;
 }
 glm::mat4 Eng::Base::computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, float eyeOffset) {
+    //ITA: serve per estrarre la posizione della camera selezionata per poterci applicare l'offset per ogni occhio
+    //ITA: come funziona: la view matrix è l'inversa della wrold, (in view coordinates la camera è in 0 0 0)
+    //ITA: una volta fatta l'inversa (nel metodo chiamante) la posizione vien eestratta insieme agli altri valori
+    //ITA: per applicare l'offset prendo la posizone iniziale in x e la traslo per ottenere left e right eye
+    //ITA: ricalcolo poi la lookat matrix usando i valori della camera vecchia estratti ma con l'offset su x
     glm::vec3 cameraPos = glm::vec3(cameraWorldMatrix[3]);
     glm::vec3 cameraRight = glm::vec3(cameraWorldMatrix[0]); // X-axis
     glm::vec3 up = glm::vec3(cameraWorldMatrix[1]);
@@ -600,7 +605,6 @@ void ENG_API Eng::Base::renderStereoscopic() {
     renderEye(leftEyeFbo.get(), leftViewMatrix, projectionMatrix);
     renderEye(rightEyeFbo.get(), rightViewMatrix, projectionMatrix);
 
-    // Blit sullo schermo
     Fbo::disable();
     glViewport(0, 0, windowWidth, windowHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
