@@ -350,19 +350,6 @@ void ENG_API Eng::Base::renderScene() {
    // Set Projection Matrix for the ShaderManager
    sm.setProjectionMatrix(projectionMatrix);
 
-   // -------- HardCoded OmniLight for testing --------
-   glm::vec4 worldLightPos(2.0f, 4.0f, 3.0f, 1.0f);
-
-   glm::vec4 eyeSpaceLightPos = viewMatrix * worldLightPos;
-
-   sm.setLightPosition(glm::vec3(eyeSpaceLightPos));
-
-   sm.setLightAmbient(glm::vec3(0.2f, 0.2f, 0.2f));
-   sm.setLightDiffuse(glm::vec3(1.0f, 1.0f, 1.0f));
-   sm.setLightSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
-
-   // -------- End HardCoded OmniLight --------
-
    // Clear list
    renderList.clear();
 
