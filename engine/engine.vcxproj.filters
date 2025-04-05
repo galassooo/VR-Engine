@@ -245,5 +245,8 @@
     <ClInclude Include="FrameBufferObject.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
+    <ClInclude Include="ovr.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

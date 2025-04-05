@@ -22,9 +22,19 @@
 // Freeimage
 #include <FreeImage.h>
 
+// OpenVR:
+#include "ovr.h"
+
 #ifndef _WIN32
 #define __stdcall // Just defined as an empty macro under Linux
 #endif
+
+// Extern to request the use of high performance GPUs when available (Nvidia or AMD)
+extern "C" {
+    _declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+    _declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
+
 /**
  * Debug message callback for OpenGL. See https://www.opengl.org/wiki/Debug_Output
  */
@@ -41,11 +51,24 @@ struct Eng::Base::Reserved {
    // Flags:
    bool initFlag;
 
+   // OpenVR interface:
+   OvVR* ovr;
+   int fboSizeX;
+   int fboSizeY;
 
    /**
     * Constructor.
     */
-   Reserved() : initFlag{false} {
+   Reserved() : initFlag{ false }, ovr{ nullptr }, fboSizeX{ 0 }, fboSizeY{ 0 } {
+   }
+   ~Reserved() {
+#ifdef _DEBUG
+       std::cout << "[-] " << std::source_location::current().function_name() << " invoked" << std::endl;
+#endif
+       if (ovr != nullptr) {
+           ovr->free();
+           delete ovr;
+       }
    }
 };
 
@@ -66,16 +89,16 @@ leftEyeTexture(0), rightEyeTexture(0), eyeDistance(0.065f) {
  * Destructor.
  */
 ENG_API Eng::Base::~Base() {
+#ifdef _DEBUG
+    std::cout << "[-] " << std::source_location::current().function_name() << " invoked" << std::endl;
+#endif
+
     if (leftEyeTexture != 0) {
         glDeleteTextures(1, &leftEyeTexture);
     }
     if (rightEyeTexture != 0) {
         glDeleteTextures(1, &rightEyeTexture);
     }
-
-#ifdef _DEBUG
-   std::cout << "[-] " << std::source_location::current().function_name() << " invoked" << std::endl;
-#endif
 }
 
 
@@ -163,6 +186,33 @@ bool ENG_API Eng::Base::free() {
    return true;
 }
 
+/**
+ * @brief Initializes OpenVR and links to SteamVR
+ *
+ * More info in OvVR implementation
+ * Also logs tracking device information
+ *
+ * @return true if OpenGL context created successfully, false if context creation fails
+ */
+bool ENG_API Eng::Base::initOpenVR() {
+    reserved->ovr = new OvVR();
+    if (reserved->ovr->init() == false)
+    {
+        std::cout << "[ERROR] Unable to init OpenVR" << std::endl;
+        delete reserved->ovr;
+        return false;
+    }
+
+    // OpenVR device info:
+    std::cout << "   Manufacturer . . :  " << reserved->ovr->getManufacturerName() << std::endl;
+    std::cout << "   Tracking system  :  " << reserved->ovr->getTrackingSysName() << std::endl;
+    std::cout << "   Model number . . :  " << reserved->ovr->getModelNumber() << std::endl;
+
+    // Read OpenVR ideal FBO sizes
+    reserved->fboSizeX = reserved->ovr->getHmdIdealHorizRes();
+    reserved->fboSizeY = reserved->ovr->getHmdIdealVertRes();
+    std::cout << "   Ideal resolution :  " << reserved->fboSizeX << "x" << reserved->fboSizeY << std::endl;
+}
 
 /**
  * @brief Initializes OpenGL context and graphics settings
@@ -395,7 +445,14 @@ void ENG_API Eng::Base::traverseAndAddToRenderList(const std::shared_ptr<Eng::No
  */
 void ENG_API Eng::Base::run() {
     if (engIsEnabled(ENG_STEREO_RENDERING)) {
-        setupStereoscopicRendering(APP_FBOSIZEX, APP_FBOSIZEY);
+        // OpenVR
+        if (!initOpenVR()) {
+            std::cout << "DEBUG: Falling back to standard mono rendering" << std::endl;
+            engDisable(ENG_STEREO_RENDERING);
+        }
+        else {
+            setupStereoscopicRendering(reserved->fboSizeX, reserved->fboSizeY);
+        }
     }
    // Enter FreeGLUT main loop
    glutMainLoop();
@@ -473,10 +530,12 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
     std::cout << "DEBUG: Setting up stereoscopic rendering, requested size: "
         << width << "x" << height << std::endl;
 
-    // Override with predefined constants for consistency
-    width = APP_FBOSIZEX;
-    height = APP_FBOSIZEY;
-    std::cout << "DEBUG: Using fixed FBO size: " << width << "x" << height << std::endl;
+    if (width <= 0 || height <= 0) {
+        // Override with predefined constants for consistency
+        width = APP_FBOSIZEX;
+        height = APP_FBOSIZEY;
+        std::cout << "DEBUG: Using fixed FBO size: " << width << "x" << height << std::endl;
+    }
 
     // Clean up existing FBOs if they exist
     if (leftEyeTexture != 0) {
@@ -499,7 +558,7 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    std::cout << "DEBUG: Left eye texture created with ID: " << leftEyeTexture << std::endl;
+    std::cout << "DEBUG: Left eye texture created with ID : " << leftEyeTexture << std::endl;
 
     // Bind texture to left FBO
     leftEyeFbo->bindTexture(0, Fbo::BIND_COLORTEXTURE, leftEyeTexture);
@@ -509,12 +568,12 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
         std::cerr << "ERROR: Left eye FBO setup failed" << std::endl;
         return false;
     }
-    std::cout << "DEBUG: Left eye FBO setup successful, handle: " << leftEyeFbo->getHandle() << std::endl;
+    std::cout << "DEBUG: Left eye FBO setup successful, handle: " << leftEyeFbo->getHandle() << ", size " << leftEyeFbo->getSizeX() << "x" << leftEyeFbo->getSizeY() << std::endl;
 
     // Create texture for right eye
     glGenTextures(1, &rightEyeTexture);
     glBindTexture(GL_TEXTURE_2D, rightEyeTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -529,7 +588,7 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
         std::cerr << "ERROR: Right eye FBO setup failed" << std::endl;
         return false;
     }
-    std::cout << "DEBUG: Right eye FBO setup successful, handle: " << rightEyeFbo->getHandle() << std::endl;
+    std::cout << "DEBUG: Right eye FBO setup successful, handle: " << rightEyeFbo->getHandle() << ", size " << rightEyeFbo->getSizeX() << "x" << rightEyeFbo->getSizeY() << std::endl;
 
     // Set default eye distance
     eyeDistance = 0.065f; // 6.5 cm is the average human interpupillary distance
@@ -542,7 +601,7 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
 }
 glm::mat4 Eng::Base::computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, float eyeOffset) {
     //ITA: serve per estrarre la posizione della camera selezionata per poterci applicare l'offset per ogni occhio
-    //ITA: come funziona: la view matrix è l'inversa della wrold, (in view coordinates la camera è in 0 0 0)
+    //ITA: come funziona: la view matrix ï¿½ l'inversa della wrold, (in view coordinates la camera ï¿½ in 0 0 0)
     //ITA: una volta fatta l'inversa (nel metodo chiamante) la posizione vien eestratta insieme agli altri valori
     //ITA: per applicare l'offset prendo la posizone iniziale in x e la traslo per ottenere left e right eye
     //ITA: ricalcolo poi la lookat matrix usando i valori della camera vecchia estratti ma con l'offset su x
@@ -561,7 +620,7 @@ void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, const glm::mat4& p
     ShaderManager& sm = ShaderManager::getInstance();
 
     eyeFbo->render();
-    glViewport(0, 0, APP_FBOSIZEX, APP_FBOSIZEY);
+    glViewport(0, 0, eyeFbo->getSizeX(), eyeFbo->getSizeY());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     sm.setProjectionMatrix(projectionMatrix);
@@ -582,30 +641,61 @@ void ENG_API Eng::Base::renderStereoscopic() {
 
     int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
     int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+    OvVR::OvEye leftEye = OvVR::OvEye::EYE_LEFT;    // Use of more simple variable names for readability
+    OvVR::OvEye rightEye = OvVR::OvEye::EYE_RIGHT;
 
-    glm::mat4 cameraWorldMatrix = glm::inverse(activeCamera->getLocalMatrix());
-    glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
+    // Update current user position
+    reserved->ovr->update();
 
-    glm::mat4 leftViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, -eyeDistance / 2.0f);
-    glm::mat4 rightViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, +eyeDistance / 2.0f);
+    // Compute modelViewMatrix based on user VR position
+    glm::mat4 headPositionMatrix = reserved->ovr->getModelviewMatrix();
+    glm::mat4 modelViewMatrix = glm::inverse(headPositionMatrix);
 
-    renderEye(leftEyeFbo.get(), leftViewMatrix, projectionMatrix);
-    renderEye(rightEyeFbo.get(), rightViewMatrix, projectionMatrix);
+    //glm::mat4 cameraWorldMatrix = glm::inverse(activeCamera->getLocalMatrix());
+    //glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
 
+    //glm::mat4 leftViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, -eyeDistance / 2.0f);
+    //glm::mat4 rightViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, +eyeDistance / 2.0f);
+
+    // Left Eye Rendering:
+    // Retreiving Left eye data from OpenVR
+    glm::mat4 tmpProjMat = reserved->ovr->getProjMatrix(leftEye, STEREO_NEAR_CLIP, STEREO_FAR_CLIP);
+    glm::mat4 eye2Head = reserved->ovr->getEye2HeadMatrix(leftEye);
+    // Computing Left Eye matrix
+    glm::mat4 leftEyeProjMat = tmpProjMat * glm::inverse(eye2Head);
+    renderEye(leftEyeFbo.get(), modelViewMatrix, leftEyeProjMat);
+    // Sending rendered FBO to OpenVR
+    reserved->ovr->pass(leftEye, leftEyeTexture);
+
+    // Right Eye Rendering:
+    // Retreiving right eye data from OpenVR
+    tmpProjMat = reserved->ovr->getProjMatrix(rightEye, STEREO_NEAR_CLIP, STEREO_FAR_CLIP);
+    eye2Head = reserved->ovr->getEye2HeadMatrix(rightEye);
+    // Computing Right Eye matrix
+    glm::mat4 rightEyeProjMat = tmpProjMat * glm::inverse(eye2Head);
+    renderEye(rightEyeFbo.get(), modelViewMatrix, rightEyeProjMat);
+    // Sending rendered FBO to OpenVR
+    reserved->ovr->pass(rightEye, rightEyeTexture);
+
+    // Update internal OpenVR settings (sends data to VR System):
+    reserved->ovr->render();
+
+    // Reset to standard render output
     Fbo::disable();
     glViewport(0, 0, windowWidth, windowHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    // Display Left and Right Eye images on standard screen as split screen
     glBindFramebuffer(GL_READ_FRAMEBUFFER, leftEyeFbo->getHandle());
     glBlitFramebuffer(
-        0, 0, APP_FBOSIZEX, APP_FBOSIZEY,
+        0, 0, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY(),
         0, 0, APP_FBOSIZEX, APP_FBOSIZEY,
         GL_COLOR_BUFFER_BIT, GL_LINEAR
     );
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, rightEyeFbo->getHandle());
     glBlitFramebuffer(
-        0, 0, APP_FBOSIZEX, APP_FBOSIZEY,
+        0, 0, rightEyeFbo->getSizeX(), rightEyeFbo->getSizeY(),
         APP_FBOSIZEX, 0, APP_WINDOWSIZEX, APP_FBOSIZEY,
         GL_COLOR_BUFFER_BIT, GL_LINEAR
     );

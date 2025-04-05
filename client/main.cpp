@@ -3,6 +3,7 @@
 #include <functional>
 #include <random>
 #include <array>
+
 /**
  * @brief Sets up the chess piece movement logic.
  *

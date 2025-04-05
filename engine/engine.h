@@ -67,6 +67,10 @@
 #define APP_FBOSIZEX      (APP_WINDOWSIZEX / 2)
 #define APP_FBOSIZEY      APP_WINDOWSIZEY
 
+// Stereo camera constants
+#define STEREO_NEAR_CLIP    0.1f
+#define STEREO_FAR_CLIP     1000000.0f
+
 /**
  * @namespace Eng
  * @brief Main namespace containing all engine components
@@ -177,6 +181,7 @@ namespace Eng {
       ~Base();
 
       bool initOpenGL();
+      bool initOpenVR();
       void freeOpenGL();
 
       void traverseAndAddToRenderList(const std::shared_ptr<Node> &node);
