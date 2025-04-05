@@ -4,6 +4,12 @@
 #include <random>
 #include <array>
 
+// Extern to request the use of high performance GPUs when available (Nvidia or AMD)
+extern "C" {
+    _declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+    _declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
+
 /**
  * @brief Sets up the chess piece movement logic.
  *

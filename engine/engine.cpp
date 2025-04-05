@@ -29,12 +29,6 @@
 #define __stdcall // Just defined as an empty macro under Linux
 #endif
 
-// Extern to request the use of high performance GPUs when available (Nvidia or AMD)
-extern "C" {
-    _declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
-    _declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
-}
-
 /**
  * Debug message callback for OpenGL. See https://www.opengl.org/wiki/Debug_Output
  */
@@ -212,6 +206,8 @@ bool ENG_API Eng::Base::initOpenVR() {
     reserved->fboSizeX = reserved->ovr->getHmdIdealHorizRes();
     reserved->fboSizeY = reserved->ovr->getHmdIdealVertRes();
     std::cout << "   Ideal resolution :  " << reserved->fboSizeX << "x" << reserved->fboSizeY << std::endl;
+
+    return true;
 }
 
 /**
