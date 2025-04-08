@@ -44,6 +44,7 @@ void __stdcall DebugCallback(GLenum source, GLenum type, GLuint id, GLenum sever
 struct Eng::Base::Reserved {
    // Flags:
    bool initFlag;
+   bool ovrReady;
 
    // OpenVR interface:
    OvVR* ovr;
@@ -53,7 +54,7 @@ struct Eng::Base::Reserved {
    /**
     * Constructor.
     */
-   Reserved() : initFlag{ false }, ovr{ nullptr }, fboSizeX{ 0 }, fboSizeY{ 0 } {
+   Reserved() : initFlag{ false }, ovrReady{ false }, ovr { nullptr }, fboSizeX{ 0 }, fboSizeY{ 0 } {
    }
    ~Reserved() {
 #ifdef _DEBUG
@@ -181,15 +182,20 @@ bool ENG_API Eng::Base::free() {
 }
 
 /**
- * @brief Initializes OpenVR and links to SteamVR
+ * @brief Initializes OpenVR which links to SteamVR
  *
  * More info in OvVR implementation
  * Also logs tracking device information
  *
- * @return true if OpenGL context created successfully, false if context creation fails
+ * @return true if OpenVR initialization succeeds or already initialized, false if initialization fails
  */
 bool ENG_API Eng::Base::initOpenVR() {
-    reserved->ovr = new OvVR();
+    // Do nothing if already initialized
+    if (reserved->ovrReady)
+        return true;
+
+    if(!reserved->ovr)
+        reserved->ovr = new OvVR();
     if (reserved->ovr->init() == false)
     {
         std::cout << "[ERROR] Unable to init OpenVR" << std::endl;
@@ -197,14 +203,14 @@ bool ENG_API Eng::Base::initOpenVR() {
         return false;
     }
 
+    // Read and store OpenVR ideal FBO sizes
+    reserved->fboSizeX = reserved->ovr->getHmdIdealHorizRes();
+    reserved->fboSizeY = reserved->ovr->getHmdIdealVertRes();
+
     // OpenVR device info:
     std::cout << "   Manufacturer . . :  " << reserved->ovr->getManufacturerName() << std::endl;
     std::cout << "   Tracking system  :  " << reserved->ovr->getTrackingSysName() << std::endl;
     std::cout << "   Model number . . :  " << reserved->ovr->getModelNumber() << std::endl;
-
-    // Read OpenVR ideal FBO sizes
-    reserved->fboSizeX = reserved->ovr->getHmdIdealHorizRes();
-    reserved->fboSizeY = reserved->ovr->getHmdIdealVertRes();
     std::cout << "   Ideal resolution :  " << reserved->fboSizeX << "x" << reserved->fboSizeY << std::endl;
 
     return true;
@@ -442,8 +448,9 @@ void ENG_API Eng::Base::traverseAndAddToRenderList(const std::shared_ptr<Eng::No
 void ENG_API Eng::Base::run() {
     if (engIsEnabled(ENG_STEREO_RENDERING)) {
         // OpenVR
-        if (!initOpenVR()) {
-            std::cout << "DEBUG: Falling back to standard mono rendering" << std::endl;
+        reserved->ovrReady = initOpenVR();
+        if (!reserved->ovrReady) {
+            std::cout << "Falling back to standard mono rendering" << std::endl;
             engDisable(ENG_STEREO_RENDERING);
         }
         else {
