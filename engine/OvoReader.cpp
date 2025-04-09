@@ -734,6 +734,17 @@ std::shared_ptr<Eng::Node> ENG_API Eng::OvoReader::parseMesh(
         .setMaterial(materials.find(materialName) != materials.end() ? materials.at(materialName) : nullptr)
         .build();
 
+    // Virtual Environemnt
+    // 
+    // 'radius' was read from the OVO file as the bounding sphere radius.
+    // bBoxMin and bBoxMax were also parsed.
+    // Compute a center as the midpoint of the bounding box.
+    glm::vec3 sphereCenter = (bBoxMin + bBoxMax) * 0.5f;
+
+    finalMesh->setBoundingSphereCenter(sphereCenter);
+    finalMesh->setBoundingSphereRadius(radius);
+    finalMesh->setBoundingBox(bBoxMin, bBoxMax);
+
     return std::static_pointer_cast<Eng::Node>(finalMesh);
 }
 

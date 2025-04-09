@@ -24,6 +24,17 @@ public:
    // method to initialize GPU buffers
    void initBuffers();
 
+   // Virtual Environment
+   void setBoundingSphereCenter(const glm::vec3& center);
+   glm::vec3 getBoundingSphereCenter() const;
+
+   void setBoundingSphereRadius(float radius);
+   float getBoundingSphereRadius() const;
+
+   void setBoundingBox(const glm::vec3& min, const glm::vec3& max);
+   glm::vec3 getBoundingBoxMin() const;
+   glm::vec3 getBoundingBoxMax() const;
+
 private:
    void renderNormals() const;
    ///> Vector of vertex positions.
@@ -41,4 +52,10 @@ private:
    unsigned int ebo = 0;
 
    bool buffersInitialized = false;
+
+   // Virtual Environment
+   glm::vec3 boundingSphereCenter = glm::vec3(0.0f);
+   float boundingSphereRadius = 0.0f;
+   glm::vec3 boundingBoxMin = glm::vec3(0.0f);
+   glm::vec3 boundingBoxMax = glm::vec3(0.0f);
 };
