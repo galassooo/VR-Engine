@@ -420,6 +420,36 @@ void ENG_API Eng::Base::renderScene() {
    glutSwapBuffers();
 }
 
+// Virtual Environment
+glm::vec3 ENG_API Eng::Base::computeCullingCenter(const std::shared_ptr<Eng::Camera>& cam)
+{
+    // Extract camera position from the final matrix.
+    glm::vec3 camPos = glm::vec3(cam->getFinalMatrix()[3]);
+
+    // Camera forward
+    glm::vec3 camForward = -glm::vec3(cam->getFinalMatrix()[2]);
+
+    // Use camera's near and far clip values:
+    float nearPlane = 0.1f, farPlane = 1000.f;
+    if (const Eng::PerspectiveCamera* persp = dynamic_cast<const Eng::PerspectiveCamera*>(cam.get()))
+    {
+        nearPlane = persp->getNearClip();
+        farPlane = persp->getFarClip();
+    }
+    float midDistance = (nearPlane + farPlane) * 0.5f;
+    return camPos + camForward * midDistance;
+}
+
+float ENG_API Eng::Base::computeCullingRadius(const std::shared_ptr<Eng::Camera>& cam)
+{
+    float nearPlane = 0.1f, farPlane = 1000.f;
+    if (const Eng::PerspectiveCamera* persp = dynamic_cast<const Eng::PerspectiveCamera*>(cam.get()))
+    {
+        nearPlane = persp->getNearClip();
+        farPlane = persp->getFarClip();
+    }
+    return (farPlane - nearPlane) * 0.5f;
+}
 
 /**
  * @brief Recursively traverses the scene graph and adds nodes to the render list.
@@ -428,16 +458,78 @@ void ENG_API Eng::Base::renderScene() {
  *
  * @param node The current node being traversed.
  */
-void ENG_API Eng::Base::traverseAndAddToRenderList(const std::shared_ptr<Eng::Node> &node) {
-   // Compute the final transformation matrix
-   const glm::mat4 worldCoordinates = node->getFinalMatrix();
+void ENG_API Eng::Base::traverseAndAddToRenderList(const std::shared_ptr<Eng::Node>& node) {
+    
+    const glm::mat4 worldMatrix = node->getFinalMatrix();
 
+    // If the node is a Mesh, check its bounding sphere.
+    Eng::Mesh* mesh = dynamic_cast<Eng::Mesh*>(node.get());
+    if (mesh)
+    {
+        // Get the bounding sphere in local space.
+        glm::vec3 localCenter = mesh->getBoundingSphereCenter();
+        float localRadius = mesh->getBoundingSphereRadius();
 
-   renderList.addNode(node, worldCoordinates);
+        // Transform the center into world coordinates.
+        glm::vec3 worldCenter = glm::vec3(worldMatrix * glm::vec4(localCenter, 1.0f));
 
-   for (auto &child: *node->getChildren()) {
-      traverseAndAddToRenderList(child);
-   }
+        // For non-uniform scaling, use a conservative estimate.
+        float scale = glm::length(glm::vec3(worldMatrix[0])); // using length of first column vector
+        float effectiveRadius = localRadius * scale;
+
+        // Determine which culling parameters to use:
+        glm::vec3 cullingCenter;
+        float cullingRadius;
+
+        if (engIsEnabled(ENG_STEREO_RENDERING))
+        {
+            // For stereoscopic rendering, use the head's pose from OpenVR.
+            glm::mat4 headPosMatrix = reserved->ovr->getModelviewMatrix();
+
+            // Invert to get head's world transform.
+            glm::mat4 headWorldMatrix = glm::inverse(headPosMatrix);
+            glm::vec3 headPos = glm::vec3(headWorldMatrix[3]);
+           
+            glm::vec3 headForward = -glm::vec3(headWorldMatrix[2]);
+
+            // Use stereo clipping constants.
+            float nearPlane = STEREO_NEAR_CLIP;
+            float farPlane = STEREO_FAR_CLIP;
+            float midDistance = (nearPlane + farPlane) * 0.5f;
+            cullingCenter = headPos + headForward * midDistance;
+            cullingRadius = (farPlane - nearPlane) * 0.5f;
+        }
+        else
+        {
+            // For legacy (monoscopic) mode: use the active camera.
+            auto cam = getActiveCamera();
+            if (cam)
+            {
+                cullingCenter = computeCullingCenter(cam);
+                cullingRadius = computeCullingRadius(cam);
+            }
+            else
+            {
+                // Fallback defaults.
+                cullingCenter = glm::vec3(0.0f);
+                cullingRadius = 1000.0f;
+            }
+        }
+
+        // Perform the sphere culling test using dot-product for squared length.
+        glm::vec3 diff = worldCenter - cullingCenter;
+        float distSq = glm::dot(diff, diff);
+        float sumRadii = effectiveRadius + cullingRadius;
+        if (distSq > (sumRadii * sumRadii))
+            return; // Skip this node.
+    }
+
+    // If the node passed culling (or is not a Mesh), add it.
+    renderList.addNode(node, worldMatrix);
+
+    // Recursively process children.
+    for (auto& child : *node->getChildren())
+        traverseAndAddToRenderList(child);
 }
 
 /**
