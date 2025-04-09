@@ -1,4 +1,5 @@
 #include "engine.h"
+#include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <FreeImage.h>
 
@@ -89,6 +90,8 @@ void Eng::Texture::configureTextureParameters() {
  * @param index Optional index parameter (default is -1).
  */
 void Eng::Texture::render() {
-   // Bind the texture to the current OpenGL context.
+   // Activate the correct texture unit based on the shader manager parameters
+   glActiveTexture(GL_TEXTURE0 + ShaderManager::DIFFUSE_TEXURE_UNIT);
+   // Bind the texture to the current OpenGL context in the given unit.
    glBindTexture(GL_TEXTURE_2D, textureID);
 }

@@ -19,7 +19,8 @@ public:
 
 	unsigned int getGlId();
 
-	void bind(int location, const char* attribName);
+	Program& bindAttribute(int location, const char* attribName);
+	Program& bindSampler(int unitIndex, const char* samplerName);
 
 	// Get/set:
 	int getParamLocation(const char* name);

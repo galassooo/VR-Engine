@@ -123,9 +123,17 @@ void ENG_API Eng::Program::setVec4(int param, const glm::vec4& vect)
 	glUniform4fv(param, 1, glm::value_ptr(vect));
 }
 
-void ENG_API Eng::Program::bind(int location, const char* attribName)
+ENG_API Eng::Program& Eng::Program::bindAttribute(int location, const char* attribName)
 {
 	glBindAttribLocation(id, location, attribName);
+	return *this;
+}
+
+ENG_API Eng::Program& Eng::Program::bindSampler(int unitIndex, const char* samplerName)
+{
+	GLint samplerLocation = glGetUniformLocation(id, samplerName);
+	glUniform1i(samplerLocation, unitIndex);
+	return *this;
 }
 
 unsigned int ENG_API Eng::Program::getGlId() {

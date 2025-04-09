@@ -16,6 +16,36 @@ public:
 	ShaderManager(const ShaderManager&) = delete;
 	ShaderManager& operator=(const ShaderManager&) = delete;
 
+	// LOCATIONS and UNITS
+	static constexpr GLint POSITION_LOCATION = 0;	//Location bound to position coordinates in the Vertex Shader
+	static constexpr GLint NORMAL_LOCATION = 1;		//Location bound to normal coordinates in the Vertex Shader
+	static constexpr GLint TEX_COORD_LOCATION = 2;	//Location bound to texture coordinates in the Vertex Shader
+	static constexpr GLint DIFFUSE_TEXURE_UNIT = 0;	//Texture Unit bound to the diffuse texture sampler in the Fragment Shader
+	static constexpr GLint SHADOW_MAP_UNIT = 1;		//Texture Unit bound to the shadow map sampler in the Fragment Shader
+
+	// VARIABLE NAMES
+	static constexpr const char* UNIFORM_PROJECTION_MATRIX = "projection";		//Projection matrix - Uniform name
+	static constexpr const char* UNIFORM_MODELVIEW_MATRIX = "modelview";		//ModelView matrix - Uniform name
+	static constexpr const char* UNIFORM_NORMAL_MATRIX = "normalMatrix";		//Normal matrix - Uniform name
+
+	static constexpr const char* UNIFORM_MATERIAL_EMISSION = "matEmission";		//Material emission - Uniform name
+	static constexpr const char* UNIFORM_MATERIAL_AMBIENT = "matAmbient";		//Material ambient contribution - Uniform name
+	static constexpr const char* UNIFORM_MATERIAL_DIFFUSE = "matDiffuse";		//Material diffuse contribution - Uniform name
+	static constexpr const char* UNIFORM_MATERIAL_SPECULAR = "matSpecular";		//Material specular contribution - Uniform name
+	static constexpr const char* UNIFORM_MATERIAL_SHININESS = "matShininess";	//Material shininess - Uniform name
+	static constexpr const char* UNIFORM_USE_TEXTURE_DIFFUSE = "useTexture";	//Diffuse texture use flag (bool) - Uniform name
+	//static constexpr const char* UNIFORM_TEXTURE_DIFFUSE = "texSampler";		//(Unused)Diffuse texture sampler - Uniform name
+
+	static constexpr const char* UNIFORM_LIGHT_POSITION = "lightPos";			//Light position - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_DIRECTION = "lightDir";			//Light direction - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_AMBIENT = "lightAmbient";		//Light ambient contribution - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_DIFFUSE = "lightDiffuse";		//Light diffuse contribution - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_SPECULAR = "lightSpecular";		//Light specular contribution - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_CASTS_SHADOWS = "useShadowMap";	//Light shadow cast flag (bool) - Uniform name
+	//static constexpr const char* UNIFORM_TEXTURE_SHADOWS = "shadowMap";		//(Unused)Shadow map texture sampler - Uniform name
+
+	bool loadProgram(std::shared_ptr<Eng::Program>& program);
+
 	void setProjectionMatrix(const glm::mat4& matrix);
 	void setModelViewMatrix(const glm::mat4& matrix);
 	void setNormalMatrix(const glm::mat3& matrix);
@@ -27,12 +57,14 @@ public:
 	void setMaterialShininess(float shininess);
 
 	void setLightPosition(const glm::vec3& pos);
+	void setLightDirection(const glm::vec3& pos);
 	void setLightAmbient(const glm::vec3& amb);
 	void setLightDiffuse(const glm::vec3& diff);
 	void setLightSpecular(const glm::vec3& spec);
+	void setLightCastsShadows(bool castsShadows);
 
 	void setUseTexture(bool use);
-	void setTextureSampler(int textureUnit);
+	//void setTextureSampler(int textureUnit); unused: texture unit is defined during texture binding
 
 private:
 	/** @brief Private constructor to enforce singleton pattern */
@@ -40,9 +72,9 @@ private:
 	///< Initialization state flag
 	bool initialized = false;
 	bool setDefaultShaders();
-	Eng::Program program;
+	std::shared_ptr<Eng::Program> currentProgram;
 
-	int texSamplerLoc;
+	//int texSamplerLoc; not necessary, texture sampler location is set engine side when binding the texture
 	int useTextureLoc;
 
 	int projectionLocation;
@@ -56,7 +88,9 @@ private:
 	int matShininessLoc;
 
 	int lightPosLoc;
+	int lightDirLoc;
 	int lightAmbientLoc;
 	int lightDiffuseLoc;
 	int lightSpecularLoc;
+	int lightCastsShadowsLoc;
 };

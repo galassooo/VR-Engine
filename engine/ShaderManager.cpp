@@ -11,14 +11,12 @@ ENG_API Eng::ShaderManager& Eng::ShaderManager::getInstance()
 
 bool ENG_API Eng::ShaderManager::initialize() {
 	if (initialized) {
-		std::cerr << "ShaderManager::initialize() already called. Skipping reinitialization." << std::endl;
-		return false;
+		std::cout << "ShaderManager::initialize() already called. Skipping reinitialization." << std::endl;
+		return true;
 	}
 
 	if (!setDefaultShaders())
 		return false;
-
-	glUseProgram(program.getGlId());
 
 	initialized = true;
 	return true;
@@ -27,58 +25,98 @@ bool ENG_API Eng::ShaderManager::initialize() {
 // MATRICES
 void ENG_API Eng::ShaderManager::setProjectionMatrix(const glm::mat4& matrix)
 {
-	program.setMatrix(projectionLocation, matrix);
+	if (projectionLocation == -1)
+		return;
+	currentProgram->setMatrix(projectionLocation, matrix);
 }
 
 void ENG_API Eng::ShaderManager::setModelViewMatrix(const glm::mat4& matrix)
 {
-	program.setMatrix(modelViewLocation, matrix);
+	if (modelViewLocation == -1)
+		return;
+	currentProgram->setMatrix(modelViewLocation, matrix);
 }
 
 void ENG_API Eng::ShaderManager::setNormalMatrix(const glm::mat3& matrix)
 {
-	program.setMatrix(normalMatrixLocation, matrix);
+	if (normalMatrixLocation == -1)
+		return;
+	currentProgram->setMatrix(normalMatrixLocation, matrix);
 }
 
 // MATERIAL
 void ENG_API Eng::ShaderManager::setMaterialEmission(const glm::vec3& emission) {
-	program.setVec3(matEmissionLoc, emission);
+	if (matEmissionLoc == -1)
+		return;
+	currentProgram->setVec3(matEmissionLoc, emission);
 }
 void ENG_API Eng::ShaderManager::setMaterialAmbient(const glm::vec3& ambient) {
-	program.setVec3(matAmbientLoc, ambient);
+	if (matAmbientLoc == -1)
+		return;
+	currentProgram->setVec3(matAmbientLoc, ambient);
 }
 void ENG_API Eng::ShaderManager::setMaterialDiffuse(const glm::vec3& diffuse) {
-	program.setVec3(matDiffuseLoc, diffuse);
+	if (matDiffuseLoc == -1)
+		return;
+	currentProgram->setVec3(matDiffuseLoc, diffuse);
 }
 void ENG_API Eng::ShaderManager::setMaterialSpecular(const glm::vec3& spec) {
-	program.setVec3(matSpecularLoc, spec);
+	if (matSpecularLoc == -1)
+		return;
+	currentProgram->setVec3(matSpecularLoc, spec);
 }
 void ENG_API Eng::ShaderManager::setMaterialShininess(float shininess) {
-	program.setFloat(matShininessLoc, shininess);
+	if (matShininessLoc == -1)
+		return;
+	currentProgram->setFloat(matShininessLoc, shininess);
 }
 
 // LIGHT
 void ENG_API Eng::ShaderManager::setLightPosition(const glm::vec3& pos) {
-	program.setVec3(lightPosLoc, pos);
+	if (lightPosLoc == -1)
+		return;
+	currentProgram->setVec3(lightPosLoc, pos);
+}
+void ENG_API Eng::ShaderManager::setLightDirection(const glm::vec3& dir) {
+	if (lightDirLoc == -1)
+		return;
+	currentProgram->setVec3(lightDirLoc, dir);
 }
 void ENG_API Eng::ShaderManager::setLightAmbient(const glm::vec3& amb) {
-	program.setVec3(lightAmbientLoc, amb);
+	if (lightAmbientLoc == -1)
+		return;
+	currentProgram->setVec3(lightAmbientLoc, amb);
 }
 void ENG_API Eng::ShaderManager::setLightDiffuse(const glm::vec3& diff) {
-	program.setVec3(lightDiffuseLoc, diff);
+	if (lightDiffuseLoc == -1)
+		return;
+	currentProgram->setVec3(lightDiffuseLoc, diff);
 }
 void ENG_API Eng::ShaderManager::setLightSpecular(const glm::vec3& spec) {
-	program.setVec3(lightSpecularLoc, spec);
+	if (lightSpecularLoc == -1)
+		return;
+	currentProgram->setVec3(lightSpecularLoc, spec);
+}
+void ENG_API Eng::ShaderManager::setLightCastsShadows(bool castsShadows) {
+	if (lightCastsShadowsLoc == -1)
+		return;
+	currentProgram->setInt(lightCastsShadowsLoc, castsShadows ? 1 : 0);
 }
 
 //TEXTURES
 void ENG_API Eng::ShaderManager::setUseTexture(bool use) {
-	program.setInt(useTextureLoc, use ? 1 : 0);
+	if (useTextureLoc == -1)
+		return;
+	currentProgram->setInt(useTextureLoc, use ? 1 : 0);
 }
 
+/* Unused: Texture unit is defined during texture binding
 void ENG_API Eng::ShaderManager::setTextureSampler(int textureUnit) {
+	if (texSamplerLoc == -1)
+		return;
 	program.setInt(texSamplerLoc, textureUnit);
 }
+*/
 
 bool ENG_API Eng::ShaderManager::setDefaultShaders() {
 	// Nel metodo setDefaultShaders() in ShaderManager.cpp
@@ -190,32 +228,49 @@ bool ENG_API Eng::ShaderManager::setDefaultShaders() {
 	fragmentShader->load(fs);
 
 	// Setup shader program:
-	program = Eng::Program();
+	std::shared_ptr<Eng::Program> program = std::make_shared<Eng::Program>();
 
-	// Important: position = 0, normal = 1
-	program.bind(0, "in_Position");
-	program.bind(1, "in_Normal");
+	// Important: position = 0, normal = 1, texture = 2
+	program->bindAttribute(0, "in_Position").bindAttribute(1, "in_Normal").bindAttribute(2, "in_TexCoord");
+	program->bindSampler(DIFFUSE_TEXURE_UNIT, "texSampler");
 
-	if (!program.addShader(fragmentShader).addShader(vertexShader).build())
+	if (!program->addShader(fragmentShader).addShader(vertexShader).build())
 		return false;
 
-	projectionLocation = program.getParamLocation("projection");
-	modelViewLocation = program.getParamLocation("modelview");
-	normalMatrixLocation = program.getParamLocation("normalMatrix");
+	return loadProgram(program);
+}
 
-	matEmissionLoc = program.getParamLocation("matEmission");
-	matAmbientLoc = program.getParamLocation("matAmbient");
-	matDiffuseLoc = program.getParamLocation("matDiffuse");
-	matSpecularLoc = program.getParamLocation("matSpecular");
-	matShininessLoc = program.getParamLocation("matShininess");
+bool ENG_API Eng::ShaderManager::loadProgram(std::shared_ptr<Eng::Program>& program) {
+	if (!program || !program->getGlId())
+		return false;
 
-	lightPosLoc = program.getParamLocation("lightPos");
-	lightAmbientLoc = program.getParamLocation("lightAmbient");
-	lightDiffuseLoc = program.getParamLocation("lightDiffuse");
-	lightSpecularLoc = program.getParamLocation("lightSpecular");
+	if (currentProgram == program) {
+		std::cout << "[DEBUG]ShaderManager: Skipping loading, Program " << program->getGlId() << " already loaded" << std::endl;
+		return true;
+	}
 
-	texSamplerLoc = program.getParamLocation("texSampler");
-	useTextureLoc = program.getParamLocation("useTexture");
+	projectionLocation = program->getParamLocation(UNIFORM_PROJECTION_MATRIX);
+	modelViewLocation = program->getParamLocation(UNIFORM_MODELVIEW_MATRIX);
+	normalMatrixLocation = program->getParamLocation(UNIFORM_NORMAL_MATRIX);
+
+	matEmissionLoc = program->getParamLocation(UNIFORM_MATERIAL_EMISSION);
+	matAmbientLoc = program->getParamLocation(UNIFORM_MATERIAL_AMBIENT);
+	matDiffuseLoc = program->getParamLocation(UNIFORM_MATERIAL_DIFFUSE);
+	matSpecularLoc = program->getParamLocation(UNIFORM_MATERIAL_SPECULAR);
+	matShininessLoc = program->getParamLocation(UNIFORM_MATERIAL_SHININESS);
+
+	lightPosLoc = program->getParamLocation(UNIFORM_LIGHT_POSITION);
+	lightDirLoc = program->getParamLocation(UNIFORM_LIGHT_DIRECTION);	//Aggiunto per luci direzionali e spot lights
+	lightAmbientLoc = program->getParamLocation(UNIFORM_LIGHT_AMBIENT);
+	lightDiffuseLoc = program->getParamLocation(UNIFORM_LIGHT_DIFFUSE);
+	lightSpecularLoc = program->getParamLocation(UNIFORM_LIGHT_SPECULAR);
+	lightCastsShadowsLoc = program->getParamLocation(UNIFORM_LIGHT_CASTS_SHADOWS);	//Aggiunto per shodow mapping nelle luci direzionali (WIP)
+
+	//texSamplerLoc = program->getParamLocation(UNIFORM_TEXTURE_DIFFUSE); //not used: handled engine side when binding the texture
+	useTextureLoc = program->getParamLocation(UNIFORM_USE_TEXTURE_DIFFUSE);
+
+	program->render();
+	currentProgram = program;
 
 	return true;
 }

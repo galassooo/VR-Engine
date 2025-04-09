@@ -101,8 +101,8 @@ void Eng::Mesh::initBuffers() {
     glGenBuffers(1, &posVBO);
     glBindBuffer(GL_ARRAY_BUFFER, posVBO);
     glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(float), positions.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);  // set index 0 for positions attribute
-    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(ShaderManager::POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(ShaderManager::POSITION_LOCATION);
     /* Unsupported 4.4
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, 0);
@@ -112,8 +112,8 @@ void Eng::Mesh::initBuffers() {
     glGenBuffers(1, &normVBO);
     glBindBuffer(GL_ARRAY_BUFFER, normVBO);
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), normals.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);  // set index 1 for normals attribute
-    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(ShaderManager::NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(ShaderManager::NORMAL_LOCATION);
     /* Unsupported 4.4
     glEnableClientState(GL_NORMAL_ARRAY);
     glNormalPointer(GL_FLOAT, 0, 0);
@@ -123,8 +123,8 @@ void Eng::Mesh::initBuffers() {
     glGenBuffers(1, &texVBO);
     glBindBuffer(GL_ARRAY_BUFFER, texVBO);
     glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(float), texCoords.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);  // set index 2 for tex coords attribute
-    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(ShaderManager::TEX_COORD_LOCATION, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(ShaderManager::TEX_COORD_LOCATION);
     /* Unsupported 4.4
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, 0);
