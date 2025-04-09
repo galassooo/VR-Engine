@@ -31,7 +31,16 @@ bool ENG_API Eng::Program::build()
 		return false;
 	}
 
-	for (auto& shader : shaders) {
+	for (const auto& attrib : attributeBindings) {
+		glBindAttribLocation(id, attrib.first, attrib.second.c_str());
+	}
+
+	for (const auto& sampler : samplerBindings) {
+		GLint samplerLocation = glGetUniformLocation(id, sampler.second.c_str());
+		glUniform1i(samplerLocation, sampler.first);
+	}
+
+	for (const auto& shader : shaders) {
 		glAttachShader(id, shader->getGlId());
 	}
 
@@ -125,14 +134,13 @@ void ENG_API Eng::Program::setVec4(int param, const glm::vec4& vect)
 
 ENG_API Eng::Program& Eng::Program::bindAttribute(int location, const char* attribName)
 {
-	glBindAttribLocation(id, location, attribName);
+	attributeBindings[location] = attribName;
 	return *this;
 }
 
 ENG_API Eng::Program& Eng::Program::bindSampler(int unitIndex, const char* samplerName)
 {
-	GLint samplerLocation = glGetUniformLocation(id, samplerName);
-	glUniform1i(samplerLocation, unitIndex);
+	samplerBindings[unitIndex] = samplerName;
 	return *this;
 }
 

@@ -42,4 +42,6 @@ private:
 	// OGL id:
 	unsigned int id;
 	std::vector<std::shared_ptr<Eng::Shader>> shaders;
+	std::unordered_map<int, std::string> attributeBindings;
+	std::unordered_map<int, std::string> samplerBindings;
 };

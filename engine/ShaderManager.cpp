@@ -25,88 +25,118 @@ bool ENG_API Eng::ShaderManager::initialize() {
 // MATRICES
 void ENG_API Eng::ShaderManager::setProjectionMatrix(const glm::mat4& matrix)
 {
-	if (projectionLocation == -1)
+	if (projectionLocation == -1) {
+		std::cerr << "[ERROR]ShaderManager: projection location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setMatrix(projectionLocation, matrix);
 }
 
 void ENG_API Eng::ShaderManager::setModelViewMatrix(const glm::mat4& matrix)
 {
-	if (modelViewLocation == -1)
+	if (modelViewLocation == -1) {
+		std::cerr << "[ERROR]ShaderManager: model view location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setMatrix(modelViewLocation, matrix);
 }
 
 void ENG_API Eng::ShaderManager::setNormalMatrix(const glm::mat3& matrix)
 {
-	if (normalMatrixLocation == -1)
+	if (normalMatrixLocation == -1) {
+		std::cerr << "[ERROR]ShaderManager: normal matrix location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setMatrix(normalMatrixLocation, matrix);
 }
 
 // MATERIAL
 void ENG_API Eng::ShaderManager::setMaterialEmission(const glm::vec3& emission) {
-	if (matEmissionLoc == -1)
+	if (matEmissionLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: material emission location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setVec3(matEmissionLoc, emission);
 }
 void ENG_API Eng::ShaderManager::setMaterialAmbient(const glm::vec3& ambient) {
-	if (matAmbientLoc == -1)
+	if (matAmbientLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: material ambient location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setVec3(matAmbientLoc, ambient);
 }
 void ENG_API Eng::ShaderManager::setMaterialDiffuse(const glm::vec3& diffuse) {
-	if (matDiffuseLoc == -1)
+	if (matDiffuseLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: material diffuse location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setVec3(matDiffuseLoc, diffuse);
 }
 void ENG_API Eng::ShaderManager::setMaterialSpecular(const glm::vec3& spec) {
-	if (matSpecularLoc == -1)
+	if (matSpecularLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: material specular location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setVec3(matSpecularLoc, spec);
 }
 void ENG_API Eng::ShaderManager::setMaterialShininess(float shininess) {
-	if (matShininessLoc == -1)
+	if (matShininessLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: material shininess location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setFloat(matShininessLoc, shininess);
 }
 
 // LIGHT
 void ENG_API Eng::ShaderManager::setLightPosition(const glm::vec3& pos) {
-	if (lightPosLoc == -1)
+	if (lightPosLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: light position location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setVec3(lightPosLoc, pos);
 }
 void ENG_API Eng::ShaderManager::setLightDirection(const glm::vec3& dir) {
-	if (lightDirLoc == -1)
+	if (lightDirLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: light direction location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setVec3(lightDirLoc, dir);
 }
 void ENG_API Eng::ShaderManager::setLightAmbient(const glm::vec3& amb) {
-	if (lightAmbientLoc == -1)
+	if (lightAmbientLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: light ambient location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setVec3(lightAmbientLoc, amb);
 }
 void ENG_API Eng::ShaderManager::setLightDiffuse(const glm::vec3& diff) {
-	if (lightDiffuseLoc == -1)
+	if (lightDiffuseLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: light diffuse location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setVec3(lightDiffuseLoc, diff);
 }
 void ENG_API Eng::ShaderManager::setLightSpecular(const glm::vec3& spec) {
-	if (lightSpecularLoc == -1)
+	if (lightSpecularLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: light specular location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setVec3(lightSpecularLoc, spec);
 }
 void ENG_API Eng::ShaderManager::setLightCastsShadows(bool castsShadows) {
-	if (lightCastsShadowsLoc == -1)
+	if (lightCastsShadowsLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: light casts shadow location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setInt(lightCastsShadowsLoc, castsShadows ? 1 : 0);
 }
 
 //TEXTURES
 void ENG_API Eng::ShaderManager::setUseTexture(bool use) {
-	if (useTextureLoc == -1)
+	if (useTextureLoc == -1) {
+		std::cerr << "[ERROR]ShaderManager: texture use location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
+	}
 	currentProgram->setInt(useTextureLoc, use ? 1 : 0);
 }
 
@@ -232,7 +262,7 @@ bool ENG_API Eng::ShaderManager::setDefaultShaders() {
 
 	// Important: position = 0, normal = 1, texture = 2
 	program->bindAttribute(0, "in_Position").bindAttribute(1, "in_Normal").bindAttribute(2, "in_TexCoord");
-	program->bindSampler(DIFFUSE_TEXURE_UNIT, "texSampler");
+	program->bindSampler(DIFFUSE_TEXTURE_UNIT, "texSampler");
 
 	if (!program->addShader(fragmentShader).addShader(vertexShader).build())
 		return false;

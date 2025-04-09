@@ -91,7 +91,7 @@ void Eng::Texture::configureTextureParameters() {
  */
 void Eng::Texture::render() {
    // Activate the correct texture unit based on the shader manager parameters
-   glActiveTexture(GL_TEXTURE0 + ShaderManager::DIFFUSE_TEXURE_UNIT);
+   glActiveTexture(GL_TEXTURE0 + ShaderManager::DIFFUSE_TEXTURE_UNIT);
    // Bind the texture to the current OpenGL context in the given unit.
    glBindTexture(GL_TEXTURE_2D, textureID);
 }
