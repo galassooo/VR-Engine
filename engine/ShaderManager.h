@@ -17,11 +17,11 @@ public:
 	ShaderManager& operator=(const ShaderManager&) = delete;
 
 	// LOCATIONS and UNITS
-	static constexpr GLint POSITION_LOCATION = 0;	//Location bound to position coordinates in the Vertex Shader
-	static constexpr GLint NORMAL_LOCATION = 1;		//Location bound to normal coordinates in the Vertex Shader
-	static constexpr GLint TEX_COORD_LOCATION = 2;	//Location bound to texture coordinates in the Vertex Shader
-	static constexpr GLint DIFFUSE_TEXURE_UNIT = 0;	//Texture Unit bound to the diffuse texture sampler in the Fragment Shader
-	static constexpr GLint SHADOW_MAP_UNIT = 1;		//Texture Unit bound to the shadow map sampler in the Fragment Shader
+	static constexpr int POSITION_LOCATION = 0;	//Location bound to position coordinates in the Vertex Shader
+	static constexpr int NORMAL_LOCATION = 1;		//Location bound to normal coordinates in the Vertex Shader
+	static constexpr int TEX_COORD_LOCATION = 2;	//Location bound to texture coordinates in the Vertex Shader
+	static constexpr int DIFFUSE_TEXURE_UNIT = 0;	//Texture Unit bound to the diffuse texture sampler in the Fragment Shader
+	static constexpr int SHADOW_MAP_UNIT = 1;		//Texture Unit bound to the shadow map sampler in the Fragment Shader
 
 	// VARIABLE NAMES
 	static constexpr const char* UNIFORM_PROJECTION_MATRIX = "projection";		//Projection matrix - Uniform name
