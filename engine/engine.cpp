@@ -60,7 +60,7 @@ struct Eng::Base::Reserved {
 #ifdef _DEBUG
        std::cout << "[-] " << std::source_location::current().function_name() << " invoked" << std::endl;
 #endif
-       if (ovr != nullptr) {
+       if (ovr != nullptr && ovrReady) {
            ovr->free();
            delete ovr;
        }
