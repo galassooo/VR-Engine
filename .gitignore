@@ -34,6 +34,6 @@ run_mesa_vs.bat
 !dependencies/freeimage/lib
 !dependencies/freeimage/lib/**
 !dependencies/glew/lib/**
-!dependencies/openvr/lib/**
+!dependencies/openvr/bin/**
 !demo/
 !demo/**
