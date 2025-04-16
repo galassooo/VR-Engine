@@ -501,7 +501,7 @@ void setUpCameras(Eng::Base &eng) {
 
 
    // Camera 1
-   auto camera1 = std::make_shared<Eng::PerspectiveCamera>(45.0f, initialAspect, 0.1f, 1000000.0f);
+   auto camera1 = std::make_shared<Eng::PerspectiveCamera>(45.0f, initialAspect, 0.1f, 50.0f);
    glm::vec3 cameraPos1(0.0f, 4.f, 3.f);
    glm::vec3 lookAtPoint1(0.0f, 0.f, 0.f);
    glm::vec3 upVector1(0.0f, 1.0f, 0.0f);

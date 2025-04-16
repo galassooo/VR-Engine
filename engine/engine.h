@@ -184,10 +184,6 @@ namespace Eng {
       bool initOpenVR();
       void freeOpenGL();
 
-      // VirtualEnvironment
-      glm::vec3 computeCullingCenter(const std::shared_ptr<Eng::Camera>& cam);
-      float computeCullingRadius(const std::shared_ptr<Eng::Camera>& cam);
-
       void traverseAndAddToRenderList(const std::shared_ptr<Node> &node);
 
       ///> Root node of the scene graph
