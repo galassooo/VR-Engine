@@ -10,6 +10,16 @@ extern "C" {
     _declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
 
+// Skybox
+std::vector<std::string> myCubemapFaces = {
+    "../resources/posx.jpg", // right
+    "../resources/negx.jpg", // left
+    "../resources/posy.jpg", // top
+    "../resources/negy.jpg", // bottom
+    "../resources/posz.jpg", // front
+    "../resources/negz.jpg"  // back
+};
+
 /**
  * @brief Sets up the chess piece movement logic.
  *
@@ -78,6 +88,8 @@ int main(int argc, char *argv[]) {
    setUpCameras(eng);
    //setupLightControls(eng);
    //setupChessMovement(eng);
+
+   eng.registerSkybox(myCubemapFaces);
 
    eng.run();
    eng.free();
