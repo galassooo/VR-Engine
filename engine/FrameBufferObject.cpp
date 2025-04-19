@@ -205,6 +205,16 @@ bool ENG_API Eng::Fbo::updateMrtCache()
 void ENG_API Eng::Fbo::disable()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDrawBuffer(GL_BACK);
+	glReadBuffer(GL_BACK);
+}
+
+/**
+ * Disable color rendering
+ */
+void ENG_API Eng::Fbo::setDepthOnly(bool value)
+{
+	depthOnly = value;
 }
 
 
@@ -221,6 +231,11 @@ bool ENG_API Eng::Fbo::render(void* data)
 	{
 		glDrawBuffers(nrOfMrts, mrt);
 		glViewport(0, 0, sizeX, sizeY);
+	}
+
+	if (depthOnly) {
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
 	}
 
 	// Done:   

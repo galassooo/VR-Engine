@@ -25,8 +25,11 @@ public:
 
 	// VARIABLE NAMES
 	static constexpr const char* UNIFORM_PROJECTION_MATRIX = "projection";		//Projection matrix - Uniform name
+	static constexpr const char* UNIFORM_MODEL_MATRIX = "model";				//Model matrix - Uniform name
+	static constexpr const char* UNIFORM_VIEW_MATRIX = "view";					//View matrix - Uniform name
 	static constexpr const char* UNIFORM_MODELVIEW_MATRIX = "modelview";		//ModelView matrix - Uniform name
 	static constexpr const char* UNIFORM_NORMAL_MATRIX = "normalMatrix";		//Normal matrix - Uniform name
+	static constexpr const char* UNIFORM_LIGHTSPACE_MATRIX = "lightspaceMatrix";//Light Space matrix - Uniform name
 
 	static constexpr const char* UNIFORM_MATERIAL_EMISSION = "matEmission";		//Material emission - Uniform name
 	static constexpr const char* UNIFORM_MATERIAL_AMBIENT = "matAmbient";		//Material ambient contribution - Uniform name
@@ -38,17 +41,26 @@ public:
 
 	static constexpr const char* UNIFORM_LIGHT_POSITION = "lightPos";			//Light position - Uniform name
 	static constexpr const char* UNIFORM_LIGHT_DIRECTION = "lightDir";			//Light direction - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_CUTOFF_ANGLE = "lightCutoff";	//Spot Light cutoff angle - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_FALLOFF = "lightFalloff";		//Spot Light falloff - Uniform name
 	static constexpr const char* UNIFORM_LIGHT_AMBIENT = "lightAmbient";		//Light ambient contribution - Uniform name
 	static constexpr const char* UNIFORM_LIGHT_DIFFUSE = "lightDiffuse";		//Light diffuse contribution - Uniform name
 	static constexpr const char* UNIFORM_LIGHT_SPECULAR = "lightSpecular";		//Light specular contribution - Uniform name
 	static constexpr const char* UNIFORM_LIGHT_CASTS_SHADOWS = "useShadowMap";	//Light shadow cast flag (bool) - Uniform name
+	static constexpr const char* UNIFORM_ATTENUATION_CONSTANT = "constAttenuatuion";	//Light attenuation constant - Uniform name
+	static constexpr const char* UNIFORM_ATTENUATION_LINEAR = "linearAttenuation";		//Light attenuation linear - Uniform name
+	static constexpr const char* UNIFORM_ATTENUATION_QUADRATIC = "quadraticAttenuation";//Light attenuation quadratic - Uniform name
 	//static constexpr const char* UNIFORM_TEXTURE_SHADOWS = "shadowMap";		//(Unused)Shadow map texture sampler - Uniform name
+
 
 	bool loadProgram(std::shared_ptr<Eng::Program>& program);
 
 	void setProjectionMatrix(const glm::mat4& matrix);
 	void setModelViewMatrix(const glm::mat4& matrix);
+	void setModelMatrix(const glm::mat4& matrix);
+	void setViewMatrix(const glm::mat4& matrix);
 	void setNormalMatrix(const glm::mat3& matrix);
+	void setLightSpaceMatrix(const glm::mat4& matrix);
 
 	void setMaterialEmission(const glm::vec3& emission);
 	void setMaterialAmbient(const glm::vec3& ambient);
@@ -58,13 +70,18 @@ public:
 
 	void setLightPosition(const glm::vec3& pos);
 	void setLightDirection(const glm::vec3& pos);
+	void setLightCutoffAngle(float angle);
+	void setLightFalloff(float falloff);
 	void setLightAmbient(const glm::vec3& amb);
 	void setLightDiffuse(const glm::vec3& diff);
 	void setLightSpecular(const glm::vec3& spec);
 	void setLightCastsShadows(bool castsShadows);
+	void setLightAttenuation(float constant, float linear, float quadratic);
 
 	void setUseTexture(bool use);
 	//void setTextureSampler(int textureUnit); unused: texture unit is defined during texture binding
+
+	static std::string preprocessShaderCode(const std::string& source);
 
 private:
 	/** @brief Private constructor to enforce singleton pattern */
@@ -72,6 +89,10 @@ private:
 	///< Initialization state flag
 	bool initialized = false;
 	bool setDefaultShaders();
+
+	static std::unordered_map<std::string, std::string> buildShaderSymbolMap();
+
+	std::shared_ptr<Eng::Program> defaultProgram;
 	std::shared_ptr<Eng::Program> currentProgram;
 
 	//int texSamplerLoc; not necessary, texture sampler location is set engine side when binding the texture
@@ -79,7 +100,10 @@ private:
 
 	int projectionLocation;
 	int modelViewLocation;
+	int modelLocation;
+	int viewLocation;
 	int normalMatrixLocation;
+	int lightSpaceMatrixLocation;
 
 	int matEmissionLoc;
 	int matAmbientLoc;
@@ -89,8 +113,13 @@ private:
 
 	int lightPosLoc;
 	int lightDirLoc;
+	int lightCutoffAngleLoc;
+	int lightFalloffLoc;
 	int lightAmbientLoc;
 	int lightDiffuseLoc;
 	int lightSpecularLoc;
 	int lightCastsShadowsLoc;
+	int attenuationConstantLoc;
+	int attenuationLinearLoc;
+	int attenuationQuadraticLoc;
 };

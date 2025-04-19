@@ -25,15 +25,8 @@ void Eng::PointLight::configureLight(const glm::mat4 &viewMatrix) {
    // Not supported on OpenGl 4.4
    /*glLightfv(lightId, GL_POSITION, lightPosition);
 
-
    glLightf(lightId, GL_SPOT_CUTOFF, 180.0f);
    glLightf(lightId, GL_SPOT_EXPONENT, 0.0f);*/
-
-   // Set attenuation
-   /*float radius = std::max(10.0f, attenuation);
-   float constAttenuation = 1.0f;
-   float linearAttenuation = 2.0f / radius;
-   float quadraticAttenuation = 1.0f / (radius * radius);*/
 
    /*glLightf(lightId, GL_CONSTANT_ATTENUATION, constAttenuation);
    glLightf(lightId, GL_LINEAR_ATTENUATION, linearAttenuation);
@@ -45,6 +38,13 @@ void Eng::PointLight::configureLight(const glm::mat4 &viewMatrix) {
 
     auto& sm = ShaderManager::getInstance();
     sm.setLightPosition(glm::vec3(ePos));
+
+    // Set attenuation
+   float radius = std::max(10.0f, attenuation);
+   float constAttenuation = 1.0f;
+   float linearAttenuation = 2.0f / radius;
+   float quadraticAttenuation = 1.0f / (radius * radius);
+   sm.setLightAttenuation(constAttenuation, linearAttenuation, quadraticAttenuation);
 }
 
 /**

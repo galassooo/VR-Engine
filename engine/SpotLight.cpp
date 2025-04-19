@@ -35,10 +35,10 @@ void Eng::SpotLight::configureLight(const glm::mat4 &viewMatrix) {
    //glLightf(lightId, GL_SPOT_CUTOFF, cutoffAngle);
    //glLightf(lightId, GL_SPOT_EXPONENT, falloff);
 
-   //const float radius = std::max(100.0f, this->radius);
-   //constexpr float constAttenuation = 1.0f;
-   //const float linearAttenuation = 2.0f / radius;
-   //const float quadraticAttenuation = 1.0f / (radius * radius);
+   const float radius = std::max(100.0f, this->radius);
+   constexpr float constAttenuation = 1.0f;
+   const float linearAttenuation = 2.0f / radius;
+   const float quadraticAttenuation = 1.0f / (radius * radius);
 
    //glLightf(lightId, GL_CONSTANT_ATTENUATION, constAttenuation);
    //glLightf(lightId, GL_LINEAR_ATTENUATION, linearAttenuation);
@@ -51,6 +51,10 @@ void Eng::SpotLight::configureLight(const glm::mat4 &viewMatrix) {
 
     auto& sm = ShaderManager::getInstance();
     sm.setLightPosition(glm::vec3(ePos));
+    sm.setLightDirection(eDir);
+	sm.setLightCutoffAngle(cutoffAngle);
+	sm.setLightFalloff(falloff);
+	sm.setLightAttenuation(constAttenuation, linearAttenuation, quadraticAttenuation);
 }
 
 

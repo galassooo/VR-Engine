@@ -1,4 +1,8 @@
 #include "engine.h"
+
+// GLEW
+#include <GL/glew.h>
+
 #include <GL/freeglut.h>
 
 /**
@@ -21,12 +25,21 @@ Eng::Material::Material(const glm::vec3 &albedo, const float alpha, const float 
  * @param index The index of the material, typically used to identify material order.
  */
 void Eng::Material::render() {
+    // Remember previous OpenGL blending state
+   bool blendingEnabled = glIsEnabled(GL_BLEND);
+   //std::cout << "(Material) Blending: " << (blendingEnabled ? "Enabled" : "Disabled") << std::endl;
+   GLint srcRGB = 0;
+   GLint dstRGB = 0;
+
    if(getAlpha() < 1.0f) {
+       if (blendingEnabled) {
+           glGetIntegerv(GL_BLEND_SRC_RGB, &srcRGB);
+           glGetIntegerv(GL_BLEND_DST_RGB, &dstRGB);
+       }
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   } else {
-       glDisable(GL_BLEND);
    }
+
    const GLfloat ambient[] = {albedo.r * 0.2f, albedo.g * 0.2f, albedo.b * 0.2f, 1.0f};
    const GLfloat diffuse[] = {albedo.r * 0.6f, albedo.g * 0.6f, albedo.b * 0.6f, albedo.a};
    const GLfloat specular[] = {albedo.r * 0.4f, albedo.g * 0.4f, albedo.b * 0.4f, 1.0f};
@@ -73,6 +86,16 @@ void Eng::Material::render() {
    }
    else {
        sm.setUseTexture(false);
+   }
+
+   // Reset previous OpenGL blending state
+   if (getAlpha() < 1.0f) {
+       if (blendingEnabled) {
+           glEnable(GL_BLEND);
+           glBlendFunc(srcRGB, dstRGB);
+       } else {
+           glDisable(GL_BLEND);
+       }
    }
 }
 

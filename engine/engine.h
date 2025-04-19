@@ -80,6 +80,7 @@ namespace Eng {
     /////////////////
     // SceneGraph //
     ///////////////
+#include "FrameBufferObject.h"
 #include "Object.h"
 #include "Node.h"
 #include "Camera.h"
@@ -93,18 +94,17 @@ namespace Eng {
 #include "Material.h"
 #include "Vertex.h"
 #include "Mesh.h"
+#include "Shader.h"
+#include "VertexShader.h"
+#include "FragmentShader.h"
+#include "Program.h"
 #include "RenderLayer.h"
 #include "ListElement.h"
 #include "List.h"
 #include "OvoReader.h"
 #include "CallbackManager.h"
 #include "Builder.h"
-#include "Shader.h"
-#include "VertexShader.h"
-#include "FragmentShader.h"
-#include "Program.h"
 #include "ShaderManager.h"
-#include "FrameBufferObject.h"
 
 
     ///////////////
@@ -175,7 +175,7 @@ namespace Eng {
 
       float eyeDistance;
       glm::mat4 computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, float eyeOffset);
-      void renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
+      void renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& projectionMatrix);
 
       Base();
       ~Base();

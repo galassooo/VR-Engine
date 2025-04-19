@@ -138,10 +138,6 @@ bool ENG_API Eng::Base::init() {
    if (callbackManager.initialize())
     std::cout << "   CallbackManager initialized successfully!" << std::endl;
 
-   auto &shaderManager = ShaderManager::getInstance();
-   if (shaderManager.initialize())
-       std::cout << "   ShaderManager initialized successfully!" << std::endl;
-
    // Init freeimage
    FreeImage_Initialise();
    std::cout << "   FreeImage initialized successfully!" << std::endl;
@@ -278,14 +274,16 @@ bool ENG_API Eng::Base::initOpenGL() {
    glm::vec4 ambient = glm::vec4(.6f, .6f, .6f, 1.0f);
    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, glm::value_ptr(ambient));   // 4.4 unsupported
    glEnable(GL_DEPTH_TEST);     // Enable depth testing
+   glDepthFunc(GL_LESS);
    //glEnable(GL_LIGHTING);       // Enable lighting        // 4.4 unsupported
    //glEnable(GL_NORMALIZE);      // Enable normal normalization        // 4.4 unsupported - unnecessary with shaders
 
    // Enable smooth shading
-   glShadeModel(GL_SMOOTH);
+   //glShadeModel(GL_SMOOTH);     // Not necessary with pixel shading
 
    // Set the background color for the rendering context
    glClearColor(0.0f, 1.0f, 0.0f, 1.0f); // Light background
+   //glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Light background
 
    // Add back-face culling
    glEnable(GL_CULL_FACE);  // Enable face culling
@@ -396,12 +394,6 @@ void ENG_API Eng::Base::renderScene() {
    glMatrixMode(GL_MODELVIEW);
    */
 
-   // Retrieve ShaderManager instance
-   ShaderManager &sm = ShaderManager::getInstance();
-
-   // Set Projection Matrix for the ShaderManager
-   sm.setProjectionMatrix(projectionMatrix);
-
    // Clear list
    renderList.clear();
 
@@ -410,6 +402,7 @@ void ENG_API Eng::Base::renderScene() {
 
    // Render all nodes in the render list
    renderList.setViewMatrix(viewMatrix);
+   renderList.setEyeProjectionMatrix(projectionMatrix);
    renderList.render();
 
    // Execute optional render callbacks
@@ -473,6 +466,11 @@ void ENG_API Eng::Base::loadScene(const std::string &fileName) {
    rootNode = reader.parseOvoFile(fileName);
    std::cout << "Printing scene " << fileName << std::endl;
    reader.printGraph();
+   auto& shaderManager = ShaderManager::getInstance();
+   if (shaderManager.initialize())
+       std::cout << "   ShaderManager initialized successfully!" << std::endl;
+   if(renderList.initShaders())
+       std::cout << "   Shaders loaded successfully!" << std::endl;
 }
 
 /**
@@ -619,18 +617,17 @@ glm::mat4 Eng::Base::computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, fl
     return glm::lookAt(eyePos, target, up);
 }
 
-void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
-    ShaderManager& sm = ShaderManager::getInstance();
+void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& projectionMatrix) {
 
     eyeFbo->render();
     glViewport(0, 0, eyeFbo->getSizeX(), eyeFbo->getSizeY());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    sm.setProjectionMatrix(projectionMatrix);
 
     renderList.clear();
     traverseAndAddToRenderList(rootNode);
     renderList.setViewMatrix(viewMatrix);
+	renderList.setEyeProjectionMatrix(projectionMatrix);
     renderList.render();
 }
 

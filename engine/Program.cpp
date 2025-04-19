@@ -31,15 +31,6 @@ bool ENG_API Eng::Program::build()
 		return false;
 	}
 
-	for (const auto& attrib : attributeBindings) {
-		glBindAttribLocation(id, attrib.first, attrib.second.c_str());
-	}
-
-	for (const auto& sampler : samplerBindings) {
-		GLint samplerLocation = glGetUniformLocation(id, sampler.second.c_str());
-		glUniform1i(samplerLocation, sampler.first);
-	}
-
 	for (const auto& shader : shaders) {
 		glAttachShader(id, shader->getGlId());
 	}
@@ -60,12 +51,17 @@ bool ENG_API Eng::Program::build()
 		std::cout << "[ERROR] Program link error: " << buffer << std::endl;
 		return false;
 	}
+
 	glValidateProgram(id);
 	glGetProgramiv(id, GL_VALIDATE_STATUS, &status);
 	if (status == GL_FALSE)
 	{
 		std::cout << "[ERROR] Unable to validate program" << std::endl;
 		return false;
+	}
+
+	for (const auto& attrib : attributeBindings) {
+		glBindAttribLocation(id, attrib.first, attrib.second.c_str());
 	}
 
 	// Done:
@@ -75,8 +71,14 @@ bool ENG_API Eng::Program::build()
 void ENG_API Eng::Program::render()
 {
 	// Activate program:
-	if (id)
+	if (id) {
 		glUseProgram(id);
+
+		for (const auto& sampler : samplerBindings) {
+			GLint samplerLocation = glGetUniformLocation(id, sampler.second.c_str());
+			glUniform1i(samplerLocation, sampler.first);
+		}
+	}
 	else
 	{
 		std::cerr << "[ERROR] Invalid program for render" << std::endl;
@@ -92,14 +94,16 @@ int ENG_API Eng::Program::getParamLocation(const char* name)
 {
 	if (name == nullptr)
 	{
-		std::cout << "[ERROR] Invalid params" << std::endl;
+		std::cerr << "[ERROR] Invalid params" << std::endl;
 		return 0;
 	}
 
 	// Return location:
 	int r = glGetUniformLocation(id, name);
+	/*
 	if (r == -1)
 		std::cout << "[ERROR] Param '" << name << "' not found" << std::endl;
+	*/
 	return r;
 }
 

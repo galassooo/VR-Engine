@@ -34,6 +34,7 @@ public:
 	bool isOk();
 	bool bindTexture(unsigned int textureNumber, unsigned int operation, unsigned int texture, int param1 = 0, int param2 = 0);
 	bool bindRenderBuffer(unsigned int renderBuffer, unsigned int operation, int sizeX, int sizeY);
+	void setDepthOnly(bool value);
 
 	// Rendering:     
 	bool render(void* data = nullptr);
@@ -45,6 +46,7 @@ private:
 	int sizeX, sizeY, sizeZ;	         					///< FBO width, height and depth
 	unsigned int texture[MAX_ATTACHMENTS];             ///< Attached textures
 	int drawBuffer[MAX_ATTACHMENTS];       		      ///< Set color attachment per texture
+	bool depthOnly = false;
 
 	// OGL stuff:
 	unsigned int glId;                                 ///< OpenGL ID

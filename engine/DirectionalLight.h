@@ -12,6 +12,7 @@ class ENG_API DirectionalLight final : public Eng::Light {
 public:
 	DirectionalLight(const glm::vec3& color, const glm::vec3& direction);
 	glm::vec3 getDirection() const;
+	glm::mat4 getLightViewMatrix(glm::vec3& center, float range);
 
 private:
 	void configureLight(const glm::mat4& viewMatrix) override;

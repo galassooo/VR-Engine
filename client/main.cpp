@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
       return -1;
    }
    eng.loadScene("..\\resources\\scarpa2.ovo");
-   eng.engEnable(ENG_STEREO_RENDERING);
+   //eng.engEnable(ENG_STEREO_RENDERING);
 
    //eng.loadScene("..\\resources\\Scene.ovo");
 

@@ -33,15 +33,16 @@ void Eng::DirectionalLight::configureLight(const glm::mat4 &viewMatrix) {
    // REF: https://learnopengl.com/Lighting/Light-casters
    // ALTRA REF: SLIDE LIGHTS DEL CORSO -> IL VETTORE L VA DAL PUNTO ILLUMINATO ALLA LUCEEEEEEE
 
-   glm::vec3 wDir = -this->direction; //MENOOOOOOOOOOO //normalizzato nel costruttore
+   //glm::vec3 wDir = -this->direction; //MENOOOOOOOOOOO //normalizzato nel costruttore
    //GLfloat lightDir[] = {direction.x, direction.y, direction.z, 0.0f}; // w=0 for directional
    //glLightfv(lightId, GL_POSITION, lightDir);
 
-   glm::vec3 eDir = glm::mat3(viewMatrix) * wDir;
+   glm::vec3 eDir = glm::mat3(viewMatrix) * direction;
    eDir = glm::normalize(eDir);
 
    auto& sm = ShaderManager::getInstance();
-   sm.setLightPosition(eDir);
+   sm.setLightDirection(eDir);
+   //sm.setLightDirection(direction);
 }
 
 /**
@@ -52,4 +53,15 @@ void Eng::DirectionalLight::configureLight(const glm::mat4 &viewMatrix) {
 
 glm::vec3 Eng::DirectionalLight::getDirection() const {
    return direction;
+}
+
+glm::mat4 Eng::DirectionalLight::getLightViewMatrix(glm::vec3& center, float range) {
+    float halfRange = range * 0.5f;
+
+    // Fake light position: moved back in opposite direction to its own
+    glm::vec3 lightPos = center - direction * halfRange;
+
+    glm::mat4 lightView = glm::lookAt(lightPos, center, glm::vec3(0, 1, 0));
+
+    return lightView;
 }
