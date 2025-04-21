@@ -12,8 +12,8 @@ extern "C" {
 
 // Skybox
 std::vector<std::string> myCubemapFaces = {
-    "../resources/posx.jpg", // right
-    "../resources/negx.jpg", // left
+    "../resources/negx.jpg", // right
+    "../resources/posx.jpg", // left
     "../resources/posy.jpg", // top
     "../resources/negy.jpg", // bottom
     "../resources/posz.jpg", // front
