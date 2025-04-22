@@ -12,12 +12,12 @@ extern "C" {
 
 // Skybox
 std::vector<std::string> myCubemapFaces = {
-    "../resources/negx.jpg", // right
-    "../resources/posx.jpg", // left
-    "../resources/posy.jpg", // top
-    "../resources/negy.jpg", // bottom
-    "../resources/posz.jpg", // front
-    "../resources/negz.jpg"  // back
+    "../resources/right.png", // right
+    "../resources/left.png", // left
+    "../resources/top.png", // top
+    "../resources/bottom.png", // bottom
+    "../resources/front.png", // front
+    "../resources/back.png"  // back
 };
 
 /**
@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
    if (!eng.init()) {
       return -1;
    }
-   eng.loadScene("..\\resources\\scarpa2.ovo");
+   eng.loadScene("..\\resources\\Chess.ovo");
    eng.engEnable(ENG_STEREO_RENDERING);
 
    //eng.loadScene("..\\resources\\Scene.ovo");
