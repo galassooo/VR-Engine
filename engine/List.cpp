@@ -791,3 +791,59 @@ bool Eng::List::setupShadowMap(int width, int height, float range) {
 
     return true;
 }
+
+/**
+ * @brief Renders all nodes in the render list.
+ *
+ * This method iterates through all nodes, computes their model-view matrices,
+ * and invokes their render methods.
+ *
+ */
+void Eng::List::renderNew() {
+    glEnable(GL_DEPTH_TEST);
+    auto& sm = ShaderManager::getInstance();
+
+    // Render base color
+    if (!sm.loadProgram(baseColorProgram)) {
+        std::cerr << "ERROR: Failed to load base color program" << std::endl;
+        return;
+    }
+    renderPass(false);
+
+    // Render lights contribution
+    for (int i = 0; i < lightsCount; ++i) {
+        auto light = elements[i]->getNode();
+        if (std::dynamic_pointer_cast<Eng::SpotLight>(light)) {
+            if (!sm.loadProgram(spotLightProgram)) {
+                std::cerr << "ERROR: Failed to load spot light program" << std::endl;
+                return;
+            }
+        }
+        else if (std::dynamic_pointer_cast<Eng::PointLight>(light)) {
+            if (!sm.loadProgram(pointLightProgram)) {
+                std::cerr << "ERROR: Failed to load point light program" << std::endl;
+                return;
+            }
+        }
+        else if (auto dirLight = std::dynamic_pointer_cast<Eng::DirectionalLight>(light)) {
+
+            shadowPass(dirLight);
+
+            if (!sm.loadProgram(dirLightProgram)) {
+                std::cerr << "ERROR: Failed to load directional light program" << std::endl;
+                return;
+            }
+            // Hard coded for always casting shadows with directional lights
+            sm.setLightCastsShadows(true);
+        }
+        else {
+            std::cerr << "ERROR: Unsupported light type" << std::endl;
+            continue;
+        }
+        light->render();
+        renderPass(true);
+    }
+
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LESS);
+}

@@ -19,6 +19,8 @@ public:
 
 	void setViewMatrix(glm::mat4& viewMatrix);
 	void setEyeProjectionMatrix(glm::mat4& eyeProjectionMatrix);
+
+	void renderNew();
 	
 private:
 	/** @brief Sorted collection of renderable nodes with their world coordinates and materials.
