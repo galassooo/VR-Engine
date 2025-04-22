@@ -219,8 +219,6 @@ void Eng::Skybox::render(const glm::mat4& viewMatrix, const glm::mat4& projectio
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
 
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-
     // Restore default depth function.
     glUseProgram(prevProgram);        // programma precedente
     glDepthFunc(GL_LESS);
