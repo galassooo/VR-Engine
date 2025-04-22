@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 /**
  * @class List
  * @brief A render list that extends Object to integrate with the scene graph.
@@ -10,6 +12,7 @@
 class ENG_API List final : public Eng::Object {
 public:
 	List();
+	~List();
 
 	void addNode(const std::shared_ptr<Eng::Node>& node, const glm::mat4& finalMatrix);
 	void render() override;
@@ -19,8 +22,6 @@ public:
 
 	void setViewMatrix(glm::mat4& viewMatrix);
 	void setEyeProjectionMatrix(glm::mat4& eyeProjectionMatrix);
-
-	void renderNew();
 	
 private:
 	/** @brief Sorted collection of renderable nodes with their world coordinates and materials.
@@ -37,11 +38,16 @@ private:
 	glm::mat4 lightProjectionMatrix;
 	glm::mat4 lightSpaceMatrix;
 
+	struct CullingSphere;
+	std::unique_ptr<CullingSphere> cullingSphere;
+
 	std::shared_ptr<Eng::Fbo> shadowMapFbo;
 	unsigned int shadowMapTexture = 0;
 
+	bool isWithinCullingSphere(Eng::Mesh* mesh);
+
 	bool setupShadowMap(int width, int height, float range);
-	void renderPass(bool useBlending);
+	void renderPass(bool isAdditive, bool useCulling);
 	void shadowPass(std::shared_ptr <Eng::DirectionalLight>& light);
 
 	std::shared_ptr<Eng::VertexShader> basicVertexShader;

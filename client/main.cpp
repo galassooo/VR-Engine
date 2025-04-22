@@ -79,7 +79,8 @@ int main(int argc, char *argv[]) {
    if (!eng.init()) {
       return -1;
    }
-   eng.loadScene("..\\resources\\Chess.ovo");
+   //eng.loadScene("..\\resources\\Chess.ovo");
+   eng.loadScene("..\\resources\\Scarpa.ovo");
    //eng.engEnable(ENG_STEREO_RENDERING);
 
    //eng.loadScene("..\\resources\\Scene.ovo");
