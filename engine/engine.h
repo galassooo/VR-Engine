@@ -105,6 +105,7 @@ namespace Eng {
 #include "CallbackManager.h"
 #include "Builder.h"
 #include "ShaderManager.h"
+#include "Skybox.h"
 
 
     ///////////////
@@ -163,6 +164,10 @@ namespace Eng {
       void setEyeDistance(float distance) { eyeDistance = distance; }
       float getEyeDistance() const { return eyeDistance; }
 
+      // Skybox
+      void registerSkybox(const std::vector<std::string>& faces);
+      std::shared_ptr<Skybox> getSkybox() const;
+
    private:
       /** @brief Reserved implementation details */
       struct Reserved;
@@ -194,5 +199,8 @@ namespace Eng {
       List renderList;
       ///>  FreeGLUT window identifier
       int windowId;
+
+      // Skybox
+      std::shared_ptr<Skybox> skybox;
    };
 }; // end of namespace Eng::

@@ -215,3 +215,33 @@ void Eng::Mesh::renderNormals() const {
    glEnd();
    glEnable(GL_LIGHTING);
 }
+
+// Virtual Environment
+void Eng::Mesh::setBoundingSphereCenter(const glm::vec3& center) {
+    boundingSphereCenter = center;
+}
+
+glm::vec3 Eng::Mesh::getBoundingSphereCenter() const {
+    return boundingSphereCenter;
+}
+
+void Eng::Mesh::setBoundingSphereRadius(float radius) {
+    boundingSphereRadius = radius;
+}
+
+float Eng::Mesh::getBoundingSphereRadius() const {
+    return boundingSphereRadius;
+}
+
+void Eng::Mesh::setBoundingBox(const glm::vec3& min, const glm::vec3& max) {
+    boundingBoxMin = min;
+    boundingBoxMax = max;
+}
+
+glm::vec3 Eng::Mesh::getBoundingBoxMin() const {
+    return boundingBoxMin;
+}
+
+glm::vec3 Eng::Mesh::getBoundingBoxMax() const {
+    return boundingBoxMax;
+}

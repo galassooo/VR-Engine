@@ -38,3 +38,6 @@ glm::mat4 Eng::PerspectiveCamera::getProjectionMatrix() const {
 void Eng::PerspectiveCamera::setAspect(float newAspect) {
    aspect = newAspect;
 }
+
+float Eng::PerspectiveCamera::getNearClip() const{ return nearClip; }
+float Eng::PerspectiveCamera::getFarClip() const { return farClip; }

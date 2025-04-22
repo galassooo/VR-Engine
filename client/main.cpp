@@ -10,6 +10,16 @@ extern "C" {
     _declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
 
+// Skybox
+std::vector<std::string> myCubemapFaces = {
+    "../resources/right.png", // right
+    "../resources/left.png", // left
+    "../resources/top.png", // top
+    "../resources/bottom.png", // bottom
+    "../resources/front.png", // front
+    "../resources/back.png"  // back
+};
+
 /**
  * @brief Sets up the chess piece movement logic.
  *
@@ -69,7 +79,7 @@ int main(int argc, char *argv[]) {
    if (!eng.init()) {
       return -1;
    }
-   eng.loadScene("..\\resources\\scarpa2.ovo");
+   eng.loadScene("..\\resources\\Chess.ovo");
    //eng.engEnable(ENG_STEREO_RENDERING);
 
    //eng.loadScene("..\\resources\\Scene.ovo");
@@ -78,6 +88,8 @@ int main(int argc, char *argv[]) {
    setUpCameras(eng);
    //setupLightControls(eng);
    //setupChessMovement(eng);
+
+   eng.registerSkybox(myCubemapFaces);
 
    eng.run();
    eng.free();
@@ -501,7 +513,7 @@ void setUpCameras(Eng::Base &eng) {
 
 
    // Camera 1
-   auto camera1 = std::make_shared<Eng::PerspectiveCamera>(45.0f, initialAspect, 0.1f, 1000000.0f);
+   auto camera1 = std::make_shared<Eng::PerspectiveCamera>(45.0f, initialAspect, 0.1f, 50.0f);
    glm::vec3 cameraPos1(0.0f, 4.f, 3.f);
    glm::vec3 lookAtPoint1(0.0f, 0.f, 0.f);
    glm::vec3 upVector1(0.0f, 1.0f, 0.0f);

@@ -16,6 +16,9 @@ public:
 
    void setAspect(float newAspect); //-> when reshaping the window
 
+   float getNearClip() const;
+   float getFarClip() const;
+
 private:
    ///> Field of view angle in degrees
    float fov;

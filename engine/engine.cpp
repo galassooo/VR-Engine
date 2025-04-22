@@ -283,7 +283,6 @@ bool ENG_API Eng::Base::initOpenGL() {
 
    // Set the background color for the rendering context
    glClearColor(0.0f, 1.0f, 0.0f, 1.0f); // Light background
-   //glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Light background
 
    // Add back-face culling
    glEnable(GL_CULL_FACE);  // Enable face culling
@@ -394,6 +393,12 @@ void ENG_API Eng::Base::renderScene() {
    glMatrixMode(GL_MODELVIEW);
    */
 
+   if (skybox) {
+       // Remove the translation component by converting to a 3x3 and back to a 4x4.
+       glm::mat4 viewNoTrans = glm::mat4(glm::mat3(viewMatrix));
+       skybox->render(viewNoTrans, projectionMatrix);
+   }
+
    // Clear list
    renderList.clear();
 
@@ -413,7 +418,6 @@ void ENG_API Eng::Base::renderScene() {
    glutSwapBuffers();
 }
 
-
 /**
  * @brief Recursively traverses the scene graph and adds nodes to the render list.
  *
@@ -421,16 +425,16 @@ void ENG_API Eng::Base::renderScene() {
  *
  * @param node The current node being traversed.
  */
-void ENG_API Eng::Base::traverseAndAddToRenderList(const std::shared_ptr<Eng::Node> &node) {
-   // Compute the final transformation matrix
-   const glm::mat4 worldCoordinates = node->getFinalMatrix();
+void ENG_API Eng::Base::traverseAndAddToRenderList(const std::shared_ptr<Eng::Node>& node) {
+    // Compute the final transformation matrix
+    const glm::mat4 worldMatrix = node->getFinalMatrix();
 
+    // If the node passed culling (or is not a Mesh), add it.
+    renderList.addNode(node, worldMatrix);
 
-   renderList.addNode(node, worldCoordinates);
-
-   for (auto &child: *node->getChildren()) {
-      traverseAndAddToRenderList(child);
-   }
+    // Recursively process children.
+    for (auto& child : *node->getChildren())
+        traverseAndAddToRenderList(child);
 }
 
 /**
@@ -657,25 +661,50 @@ void ENG_API Eng::Base::renderStereoscopic() {
     //glm::mat4 leftViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, -eyeDistance / 2.0f);
     //glm::mat4 rightViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, +eyeDistance / 2.0f);
 
-    // Left Eye Rendering:
-    // Retreiving Left eye data from OpenVR
-    glm::mat4 tmpProjMat = reserved->ovr->getProjMatrix(leftEye, STEREO_NEAR_CLIP, STEREO_FAR_CLIP);
-    glm::mat4 eye2Head = reserved->ovr->getEye2HeadMatrix(leftEye);
-    // Computing Left Eye matrix
-    glm::mat4 leftEyeProjMat = tmpProjMat * glm::inverse(eye2Head);
-    renderEye(leftEyeFbo.get(), modelViewMatrix, leftEyeProjMat);
-    // Sending rendered FBO to OpenVR
-    reserved->ovr->pass(leftEye, leftEyeTexture);
+    // Skybox
+    glm::mat4 skyboxView = glm::mat4(glm::mat3(modelViewMatrix));
 
-    // Right Eye Rendering:
-    // Retreiving right eye data from OpenVR
-    tmpProjMat = reserved->ovr->getProjMatrix(rightEye, STEREO_NEAR_CLIP, STEREO_FAR_CLIP);
-    eye2Head = reserved->ovr->getEye2HeadMatrix(rightEye);
-    // Computing Right Eye matrix
-    glm::mat4 rightEyeProjMat = tmpProjMat * glm::inverse(eye2Head);
-    renderEye(rightEyeFbo.get(), modelViewMatrix, rightEyeProjMat);
-    // Sending rendered FBO to OpenVR
-    reserved->ovr->pass(rightEye, rightEyeTexture);
+    glm::mat4 tmpProjMat, eye2Head;
+
+    // ---- Left Eye Rendering ----
+    {
+        // Retrieve the left-eye projection matrix from OpenVR.
+        tmpProjMat = reserved->ovr->getProjMatrix(leftEye, STEREO_NEAR_CLIP, STEREO_FAR_CLIP);
+        eye2Head = reserved->ovr->getEye2HeadMatrix(leftEye);
+
+        // Computing Left Eye matrix
+        glm::mat4 leftEyeProjMat = tmpProjMat * glm::inverse(eye2Head);
+
+        // Render the skybox for the left eye:
+        if (skybox) {
+            skybox->render(skyboxView, leftEyeProjMat);
+        }
+
+        // Render the scene for the left eye.
+        renderEye(leftEyeFbo.get(), modelViewMatrix, leftEyeProjMat);
+        // Pass the rendered FBO texture to OpenVR.
+        reserved->ovr->pass(leftEye, leftEyeTexture);
+    }
+
+    // ---- Right Eye Rendering ----
+    {
+        // Retrieve the right-eye projection matrix from OpenVR.
+        tmpProjMat = reserved->ovr->getProjMatrix(rightEye, STEREO_NEAR_CLIP, STEREO_FAR_CLIP);
+        eye2Head = reserved->ovr->getEye2HeadMatrix(rightEye);
+
+        // Computing Right Eye matrix
+        glm::mat4 rightEyeProjMat = tmpProjMat * glm::inverse(eye2Head);
+
+        // Render the skybox for the right eye:
+        if (skybox) {
+            skybox->render(skyboxView, rightEyeProjMat);
+        }
+
+        // Render the scene for the right eye.
+        renderEye(rightEyeFbo.get(), modelViewMatrix, rightEyeProjMat);
+        // Pass the rendered FBO texture to OpenVR.
+        reserved->ovr->pass(rightEye, rightEyeTexture);
+    }
 
     // Update internal OpenVR settings (sends data to VR System):
     reserved->ovr->render();
@@ -704,4 +733,19 @@ void ENG_API Eng::Base::renderStereoscopic() {
 
     CallbackManager::getInstance().executeRenderCallbacks();
     glutSwapBuffers();
+}
+
+// Skybox
+std::shared_ptr <Eng::Skybox> Eng::Base::getSkybox() const {
+    return skybox;
+}
+
+void Eng::Base::registerSkybox(const std::vector<std::string>& faces) {
+    // Create a new Skybox instance if one doesn’t already exist,
+    skybox = std::make_shared<Skybox>(faces);
+
+    if (!skybox->init()) {
+        std::cerr << "[Base] Skybox initialization failed." << std::endl;
+        skybox.reset();
+    }
 }
