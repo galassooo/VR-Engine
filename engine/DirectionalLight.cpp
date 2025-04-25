@@ -58,10 +58,21 @@ glm::vec3 Eng::DirectionalLight::getDirection() const {
 glm::mat4 Eng::DirectionalLight::getLightViewMatrix(glm::vec3& center, float range) {
     float halfRange = range * 0.5f;
 
+    if (glm::length(direction) == 0.0f) {
+        std::cerr << "ERROR: Direction vector is zero!" << std::endl;
+    }
+
     // Fake light position: moved back in opposite direction to its own
     glm::vec3 lightPos = center - direction * halfRange;
 
-    glm::mat4 lightView = glm::lookAt(lightPos, center, glm::vec3(0, 1, 0));
+    if (glm::distance(lightPos, center) < 0.0001f) {
+        std::cerr << "ERROR: lightPos and center too close or equal!" << std::endl;
+    }
+
+    glm::vec3 up = fabs(glm::dot(direction, glm::vec3(0, 1, 0))) > 0.99f ?
+        glm::vec3(0, 0, 1) : glm::vec3(0, 1, 0);
+
+    glm::mat4 lightView = glm::lookAt(lightPos, center, up);
 
     return lightView;
 }
