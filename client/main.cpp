@@ -4,6 +4,8 @@
 #include <random>
 #include <array>
 
+#include "leap.h"
+
 // Extern to request the use of high performance GPUs when available (Nvidia or AMD)
 extern "C" {
     _declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
@@ -19,6 +21,16 @@ std::vector<std::string> myCubemapFaces = {
     "../resources/front.png", // front
     "../resources/back.png"  // back
 };
+
+// Leap Motion
+Leap* leap = nullptr;
+std::shared_ptr<Eng::Node> handsNode = nullptr; // Root node for hands visualization
+
+// Update hands
+void updateLeapHands();
+
+// LepMotion setup
+void setupLeapMotion(Eng::Base& eng);
 
 /**
  * @brief Sets up the chess piece movement logic.
@@ -79,20 +91,26 @@ int main(int argc, char *argv[]) {
    if (!eng.init()) {
       return -1;
    }
+
+   // Setup Leap Motion with its own render callback
+   setupLeapMotion(eng);
+
    eng.loadScene("..\\resources\\Chess.ovo");
-   //eng.loadScene("..\\resources\\test\\scarpa2.ovo");
    eng.engEnable(ENG_STEREO_RENDERING);
 
-   //eng.loadScene("..\\resources\\Scene.ovo");
-
-   //setupMirrorEffect(eng);
    setUpCameras(eng);
-   //setupLightControls(eng);
-   //setupChessMovement(eng);
 
    eng.registerSkybox(myCubemapFaces);
 
    eng.run();
+
+   // Clean up Leap Motion before engine cleanup
+   if (leap) {
+       leap->free();
+       delete leap;
+       leap = nullptr;
+   }
+
    eng.free();
 
    return 0;
@@ -100,6 +118,63 @@ int main(int argc, char *argv[]) {
 
 #include <deque>
 
+// Initialize Leap Motion and set up callbacks
+void setupLeapMotion(Eng::Base& eng) {
+    // Initialize Leap Motion
+    leap = new Leap();
+    if (!leap->init()) {
+        std::cout << "[ERROR] Unable to init Leap Motion" << std::endl;
+        delete leap;
+        leap = nullptr;
+        return;
+    }
+
+    // Create hands geometry
+    handsNode = std::make_shared<Eng::Node>();
+    handsNode->setName("LeapMotionHands");
+    eng.getRootNode()->addChild(handsNode);
+
+    // Register update callback for Leap Motion
+    auto& callbackManager = Eng::CallbackManager::getInstance();
+    callbackManager.registerRenderCallback("leapMotionUpdate", []() {
+        updateLeapHands();
+        });
+
+    // Register a key binding to toggle Leap Motion visualization
+    callbackManager.registerKeyBinding('l', "Toggle Leap Motion Visualization", [](unsigned char key, int x, int y) {
+        static bool leapVisible = true;
+        leapVisible = !leapVisible;
+        if (handsNode) {
+            // Simple way to toggle visibility - could be improved with a proper visibility system
+            if (!leapVisible) {
+                handsNode->getChildren()->clear();
+            }
+        }
+        });
+
+    std::cout << "Leap Motion initialized successfully. Press 'L' to toggle hand visualization." << std::endl;
+}
+
+// Function to update hand positions based on Leap data
+void updateLeapHands() {
+    if (!leap || !handsNode) return;
+
+    // Update Leap Motion status:
+    leap->update();
+    const LEAP_TRACKING_EVENT* leapFrame = leap->getCurFrame();
+
+    // Clear previous hand nodes
+    handsNode->getChildren()->clear();
+
+    // Create hand visualization using the Builder pattern
+    for (unsigned int h = 0; h < leapFrame->nHands; h++) {
+        LEAP_HAND hand = leapFrame->pHands[h];
+
+        // Set color based on hand index (left/right)
+        glm::vec3 handColor((float)h, (float)(1 - h), 0.5f);
+        auto material = std::make_shared<Eng::Material>(handColor, 1.0f, 0.5f);
+    }
+}
 
 /**
  * @brief Structure to store the state of a chess move.
