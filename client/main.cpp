@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
    }
    eng.loadScene("..\\resources\\Chess.ovo");
    //eng.loadScene("..\\resources\\test\\scarpa2.ovo");
-   //eng.engEnable(ENG_STEREO_RENDERING);
+   eng.engEnable(ENG_STEREO_RENDERING);
 
    //eng.loadScene("..\\resources\\Scene.ovo");
 

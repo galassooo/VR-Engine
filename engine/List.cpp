@@ -5,6 +5,8 @@
 
 #include <GL/freeglut.h>
 
+#define SHADOW_RANGE 100.0f
+
 /**
  * @brief Default constructor for the List class.
  *
@@ -280,7 +282,7 @@ void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
 
 	sm.loadProgram(shadowMapProgram);
 
-    float range = 30.0f; //STEREO_FAR_CLIP - STEREO_NEAR_CLIP;
+    float range = SHADOW_RANGE; //STEREO_FAR_CLIP - STEREO_NEAR_CLIP;
     float halfrange = range * 0.5f;
 
     // Inverse of camera view matrix
@@ -430,7 +432,7 @@ bool Eng::List::initShaders() {
     if (initialized) return true;
 
     // Set up the shadow map framebuffer object (FBO)
-    if (!setupShadowMap(2048, 2048, 30.0f)) // STEREO_FAR_CLIP-STEREO_NEAR_CLIP
+    if (!setupShadowMap(2048, 2048, SHADOW_RANGE)) // STEREO_FAR_CLIP-STEREO_NEAR_CLIP
         return false;
 
     /**************** Basic vertex shader *****************/

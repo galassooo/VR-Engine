@@ -37,7 +37,8 @@ void Eng::DirectionalLight::configureLight(const glm::mat4 &viewMatrix) {
    //GLfloat lightDir[] = {direction.x, direction.y, direction.z, 0.0f}; // w=0 for directional
    //glLightfv(lightId, GL_POSITION, lightDir);
 
-   glm::vec3 eDir = glm::mat3(viewMatrix) * direction;
+   glm::vec3 wDir = glm::normalize(glm::mat3(localMatrix) * direction);
+   glm::vec3 eDir = glm::mat3(viewMatrix) * wDir;
    eDir = glm::normalize(eDir);
 
    auto& sm = ShaderManager::getInstance();
@@ -62,14 +63,16 @@ glm::mat4 Eng::DirectionalLight::getLightViewMatrix(glm::vec3& center, float ran
         std::cerr << "ERROR: Direction vector is zero!" << std::endl;
     }
 
+    glm::vec3 wDir = glm::normalize(glm::mat3(localMatrix) * direction);
+
     // Fake light position: moved back in opposite direction to its own
-    glm::vec3 lightPos = center - direction * halfRange;
+    glm::vec3 lightPos = center - wDir * halfRange;
 
     if (glm::distance(lightPos, center) < 0.0001f) {
         std::cerr << "ERROR: lightPos and center too close or equal!" << std::endl;
     }
 
-    glm::vec3 up = fabs(glm::dot(direction, glm::vec3(0, 1, 0))) > 0.99f ?
+    glm::vec3 up = fabs(glm::dot(wDir, glm::vec3(0, 1, 0))) > 0.99f ?
         glm::vec3(0, 0, 1) : glm::vec3(0, 1, 0);
 
     glm::mat4 lightView = glm::lookAt(lightPos, center, up);
