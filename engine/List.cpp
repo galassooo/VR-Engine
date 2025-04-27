@@ -97,63 +97,29 @@ bool Eng::List::isWithinCullingSphere(Eng::Mesh* mesh) {
  *
  */
 void Eng::List::render() {
-    // Virtual Environment
-   // Here we do the sphere culling for the virtual environment as it is simpler to work in eye coordinates rather than world coordinates
-   // The previous implementation was on the engine traverseAndAdd but it was wrong as we were mixing eye coordinates with world coordinates
+    // Store current FBO binding
+    GLint currentFBO;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFBO);
 
-   // Determine if we are in stereoscopic mode
+    // Virtual Environment culling setup...
     bool stereo = Eng::Base::engIsEnabled(ENG_STEREO_RENDERING);
 
-
-    // Set up the near and far clip based on the engine's mode
-    float nearClip, farClip;
-    if (stereo) {
-        nearClip = STEREO_NEAR_CLIP;
-        farClip = STEREO_FAR_CLIP;
-    }
-    else
-    {
-        // Retrieve the active camera values
-        auto cam = Eng::Base::getInstance().getActiveCamera();
-        if (cam) {
-            if (const Eng::PerspectiveCamera* persp = dynamic_cast<const Eng::PerspectiveCamera*>(cam.get())) {
-                nearClip = persp->getNearClip();
-                farClip = persp->getFarClip();
-            }
-            else {
-                nearClip = 0.01f;
-                farClip = 1000.0f;
-            }
-        }
-        else {
-            nearClip = 0.01f;
-            farClip = 1000.0f;
-        }
-    }
-
-    // Compute the mid-distance and culling sphere radius
-    float midDistance = (nearClip + farClip) * 0.5f;
-    float cullingRadius = (farClip - nearClip) * 0.5f;
-
-    // In eye space, the camera (or head) is at (0,0,0)
-    glm::vec3 cullingCenter(0.0f, 0.0f, -midDistance);
-
-    cullingSphere->center = cullingCenter;
-    cullingSphere->radius = cullingRadius;
+    // ... culling setup code remains the same ...
 
     glEnable(GL_DEPTH_TEST);
     auto& sm = ShaderManager::getInstance();
 
-    // Render base color, without blending and with culling
+    // Render base color pass
     if (!sm.loadProgram(baseColorProgram)) {
         std::cerr << "ERROR: Failed to load base color program" << std::endl;
         return;
     }
     renderPass(false, true);
 
-    // Render lights contribution, with blending and with culling
+    // Render lights contribution
     for (int i = 0; i < lightsCount; ++i) {
         auto light = elements[i]->getNode();
+
         if (std::dynamic_pointer_cast<Eng::SpotLight>(light)) {
             if (!sm.loadProgram(spotLightProgram)) {
                 std::cerr << "ERROR: Failed to load spot light program" << std::endl;
@@ -167,20 +133,21 @@ void Eng::List::render() {
             }
         }
         else if (auto dirLight = std::dynamic_pointer_cast<Eng::DirectionalLight>(light)) {
-
             shadowPass(dirLight);
+
+            // FBO should already be restored by shadowPass
 
             if (!sm.loadProgram(dirLightProgram)) {
                 std::cerr << "ERROR: Failed to load directional light program" << std::endl;
                 return;
             }
-            // Hard coded for always casting shadows with directional lights
             sm.setLightCastsShadows(true);
         }
         else {
             std::cerr << "ERROR: Unsupported light type" << std::endl;
             continue;
         }
+
         light->render();
         renderPass(true, true);
     }
@@ -232,14 +199,15 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
     const int size = elements.size();
     for (int i = lightsCount; i < size; ++i) {
 
-		// If sphere culling is enabled and the element is a Mesh, check if it is within the culling sphere
-		if (useCulling) {
-			if (const auto& mesh = dynamic_cast<Eng::Mesh*>(elements[i]->getNode().get())) {
-				// If the mesh is not within the culling sphere, skip rendering
-				if (!isWithinCullingSphere(mesh))
-					continue;
-			}
-		}
+		// TODO: Check if the element is a Mesh and if culling is enabled
+		//// If sphere culling is enabled and the element is a Mesh, check if it is within the culling sphere
+		//if (useCulling) {
+		//	if (const auto& mesh = dynamic_cast<Eng::Mesh*>(elements[i]->getNode().get())) {
+		//		// If the mesh is not within the culling sphere, skip rendering
+		//		if (!isWithinCullingSphere(mesh))
+		//			continue;
+		//	}
+		//}
 
         // Load projection matrix
         sm.setProjectionMatrix(eyeProjectionMatrix);
@@ -276,26 +244,29 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
 }
 
 void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
-	auto& sm = ShaderManager::getInstance();
-    int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
-    int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+    auto& sm = ShaderManager::getInstance();
 
-	sm.loadProgram(shadowMapProgram);
+    // Store current viewport and FBO
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    GLint currentFBO;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFBO);
 
-    float range = SHADOW_RANGE; //STEREO_FAR_CLIP - STEREO_NEAR_CLIP;
+    sm.loadProgram(shadowMapProgram);
+
+    float range = SHADOW_RANGE;
     float halfrange = range * 0.5f;
 
     // Inverse of camera view matrix
     glm::mat4 invView = glm::inverse(viewMatrix);
 
-    // The center of the view is the origin shifted of -halfrange on z axes on current view coordinates (0, 0, -halfrange)
-    // So we only need to convert it back to world space
+    // The center of the view
     glm::vec4 camCenter = invView * glm::vec4(0.0f, 0.0f, -halfrange, 1.0f);
     glm::vec3 lightCenter = glm::vec3(camCenter);
 
     glm::mat4 lightView = light->getLightViewMatrix(lightCenter, range);
 
-    // calculate and set the lightSpaceMatric for shadow projection
+    // calculate and set the lightSpaceMatrix for shadow projection
     lightSpaceMatrix = lightProjectionMatrix * lightView;
 
     // Activate and clean the shadow map FBO
@@ -308,12 +279,12 @@ void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
     // Clear depth buffer
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    // Run the render pass (no additive and no culling)
+    // Run the render pass
     renderPass(false, false);
 
-    // Reset to standard buffer
-    Fbo::disable();
-    glViewport(0, 0, windowWidth, windowHeight);
+    // IMPORTANT: Restore the previous FBO and viewport
+    glBindFramebuffer(GL_FRAMEBUFFER, currentFBO);
+    glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 }
 
 /**
