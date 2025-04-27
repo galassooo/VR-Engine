@@ -625,6 +625,13 @@ void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& project
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+    if (skybox) {
+        // Remove the translation component by converting to a 3x3 and back to a 4x4.
+        glm::mat4 viewNoTrans = glm::mat4(glm::mat3(viewMatrix));
+        skybox->render(viewNoTrans, projectionMatrix);
+    }
+
+
     renderList.clear();
     traverseAndAddToRenderList(rootNode);
     renderList.setViewMatrix(viewMatrix);
