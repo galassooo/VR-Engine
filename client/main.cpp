@@ -246,13 +246,12 @@ void updateLeapHands() {
     const float LEAP_TO_WORLD = 0.001f;  // mm → m
     size_t jointIndex = 0;
 
-    // Traccia se ci sono mani attive nel frame
     bool hasActiveHands = (frame->nHands > 0);
 
     // 1) Position all joint spheres
     for (unsigned h = 0; h < frame->nHands && h < MAX_HANDS; ++h) {
         const LEAP_HAND& hand = frame->pHands[h];
-        glm::vec3 handColor = (h == 0) ? glm::vec3(0.2f, 0.8f, 0.2f) : glm::vec3(0.2f, 0.2f, 0.8f);  // Colori diversi per le due mani
+        glm::vec3 handColor = (h == 0) ? glm::vec3(0.2f, 0.8f, 0.2f) : glm::vec3(0.2f, 0.2f, 0.8f);
 
         auto setJoint = [&](const glm::vec3& pos) {
             if (jointIndex >= jointMeshes.size()) return;
@@ -262,14 +261,13 @@ void updateLeapHands() {
                 ->setLocalMatrix(glm::translate(glm::mat4(1.0f), pos));
             };
 
-        // Elbow, Wrist, Palm - Verifica se le coordinate sono valide
+        // Elbow, Wrist, Palm - manteniamo questi punti visibili
         glm::vec3 elbowPos = glm::vec3(hand.arm.prev_joint.x, hand.arm.prev_joint.y, hand.arm.prev_joint.z) * LEAP_TO_WORLD;
         glm::vec3 wristPos = glm::vec3(hand.arm.next_joint.x, hand.arm.next_joint.y, hand.arm.next_joint.z) * LEAP_TO_WORLD;
         glm::vec3 palmPos = glm::vec3(hand.palm.position.x, hand.palm.position.y, hand.palm.position.z) * LEAP_TO_WORLD;
 
-        // Aggiungi controlli per verificare se le posizioni sono valide
         if (glm::length(elbowPos) > 0.001f) setJoint(elbowPos);
-        else setJoint(glm::vec3(0.0f)); // Posizione predefinita se non valida
+        else setJoint(glm::vec3(0.0f));
 
         if (glm::length(wristPos) > 0.001f) setJoint(wristPos);
         else setJoint(glm::vec3(0.0f));
@@ -277,7 +275,7 @@ void updateLeapHands() {
         if (glm::length(palmPos) > 0.001f) setJoint(palmPos);
         else setJoint(glm::vec3(0.0f));
 
-        // Finger bones - come prima
+        // Finger bones
         for (unsigned d = 0; d < 5; ++d) {
             const LEAP_DIGIT& finger = hand.digits[d];
             for (unsigned b = 0; b < 4; ++b) {
@@ -307,9 +305,8 @@ void updateLeapHands() {
         J.push_back(glm::vec3(M[3]));  // extract translation
     }
 
-    // 3) Define which joints to connect (elbow→wrist, wrist→palm, finger chains)
+    // 3) Definire solo le connessioni tra le giunture delle dita
     std::vector<std::pair<int, int>> bonePairs;
-    int boneIndex = 0;
 
     // Nascondi tutti gli ossi se non ci sono mani attive
     if (!hasActiveHands) {
@@ -322,17 +319,11 @@ void updateLeapHands() {
     for (int h = 0; h < MAX_HANDS && h < frame->nHands; ++h) {
         int base = h * JOINTS_PER_HAND;
 
-        // Verifica se i punti sono validi (non sono nella posizione predefinita)
-        if (glm::length(J[base]) > 0.001f && glm::length(J[base + 1]) > 0.001f) {
-            bonePairs.emplace_back(base + 0, base + 1);  // elbow to wrist
-        }
-
-        if (glm::length(J[base + 1]) > 0.001f && glm::length(J[base + 2]) > 0.001f) {
-            bonePairs.emplace_back(base + 1, base + 2);  // wrist to palm
-        }
+        // RIMOSSO collegamenti a gomito, polso e palmo
+        // Manteniamo solo le dita
 
         for (int f = 0; f < 5; ++f) {
-            int fb = base + 3 + f * 4;
+            int fb = base + 3 + f * 4;  // Base index per questa dita
             for (int b = 0; b < 3; ++b) {
                 if (glm::length(J[fb + b]) > 0.001f && glm::length(J[fb + b + 1]) > 0.001f) {
                     bonePairs.emplace_back(fb + b, fb + b + 1);
@@ -397,7 +388,6 @@ void updateLeapHands() {
         boneNodes[i]->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
     }
 }
-
 
 
 // Create the sphere mesh (same as before but with optimized parameters)
