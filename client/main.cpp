@@ -31,10 +31,14 @@ static const int MAX_HANDS = 2;
 static const int JOINTS_PER_HAND = 3 + (5 * 4);  // elbow, wrist, palm + 5 fingers * 4 bones
 static std::vector<std::shared_ptr<Eng::Mesh>> jointMeshes;
 
+static std::shared_ptr<Eng::Mesh> cylinderMesh = nullptr;
+static std::vector<std::shared_ptr<Eng::Node>> boneNodes;
+
 // Update hands
 void updateLeapHands();
 
 std::shared_ptr<Eng::Mesh> createSphereMesh(float radius = 5.0f);
+std::shared_ptr<Eng::Mesh> createCylinderMesh(float radius = 0.002f, float height = 1.0f);
 
 // LepMotion setup
 void setupLeapMotion(Eng::Base& eng);
@@ -161,6 +165,13 @@ void setupLeapMotion(Eng::Base& eng) {
         sphereMesh->initBuffers();
     }
 
+    if (!cylinderMesh) {
+        cylinderMesh = createCylinderMesh(0.002f, 1.0f);
+        auto mat = std::make_shared<Eng::Material>(glm::vec3(1), 1.0f, 0.0f);
+        cylinderMesh->setMaterial(mat);
+        cylinderMesh->initBuffers();
+    }
+
     // Pre-create mesh instances for all joints
     if (jointMeshes.empty()) {
         jointMeshes.reserve(MAX_HANDS * JOINTS_PER_HAND);
@@ -181,6 +192,27 @@ void setupLeapMotion(Eng::Base& eng) {
             jointMesh->setParent(handsNode.get());
 
             jointMeshes.push_back(jointMesh);
+        }
+    }
+
+    // 2) Create one Node-per-bone
+    //    bones per hand = 2 (elbow→wrist, wrist→palm) + 5*4 finger bones = 22
+    const int bonesPerHand = 2 + 5 * 4;
+    if (boneNodes.empty()) {
+        boneNodes.reserve(MAX_HANDS * bonesPerHand);
+        for (int i = 0; i < MAX_HANDS * bonesPerHand; ++i) {
+            auto boneNode = std::make_shared<Eng::Node>();
+            auto meshInst = std::make_shared<Eng::Mesh>();
+            meshInst->setVertices(cylinderMesh->getVertices());
+            meshInst->setIndices(cylinderMesh->getIndices());
+            meshInst->setMaterial(cylinderMesh->getMaterial());
+            meshInst->initBuffers();
+            boneNode->addChild(meshInst);
+            meshInst->setParent(boneNode.get());
+
+            handsNode->addChild(boneNode);
+            boneNode->setParent(handsNode.get());
+            boneNodes.push_back(boneNode);
         }
     }
 
@@ -206,31 +238,18 @@ void setupLeapMotion(Eng::Base& eng) {
     std::cout << "Leap Motion initialized successfully. Press 'L' to toggle hand visualization." << std::endl;
 }
 
-// Fixed updateLeapHands function with proper coordinate system handling
 void updateLeapHands() {
     if (!leap || !handsNode || !leapVisualizationEnabled) return;
-
-    // 1) Print camera **world-space** position once per frame
-    if (auto cam = Eng::Base::getInstance().getActiveCamera()) {
-        // camera’s world matrix is its local matrix because its parent is the root
-        glm::mat4 camWorld = cam->getLocalMatrix();
-        glm::vec3 camPos = glm::vec3(camWorld[3]);
-        std::cout << "[Camera] world-pos = ("
-            << camPos.x << ", "
-            << camPos.y << ", "
-            << camPos.z << ")\n";
-    }
 
     leap->update();
     const LEAP_TRACKING_EVENT* frame = leap->getCurFrame();
     const float LEAP_TO_WORLD = 0.001f;  // mm → m
     size_t jointIndex = 0;
 
+    // 1) Position all joint spheres
     for (unsigned h = 0; h < frame->nHands && h < MAX_HANDS; ++h) {
         const LEAP_HAND& hand = frame->pHands[h];
-        glm::vec3 handColor = (hand.type == eLeapHandType_Left)
-            ? glm::vec3(1, 1, 1)
-            : glm::vec3(1, 1, 1);
+        glm::vec3 handColor(1.0f);
 
         auto setJoint = [&](const glm::vec3& pos) {
             if (jointIndex >= jointMeshes.size()) return;
@@ -240,53 +259,90 @@ void updateLeapHands() {
                 ->setLocalMatrix(glm::translate(glm::mat4(1.0f), pos));
             };
 
-        // 1) Elbow
-        glm::vec3 elbowPos = glm::vec3(
-            hand.arm.prev_joint.x,
+        // Elbow, Wrist, Palm
+        setJoint(glm::vec3(hand.arm.prev_joint.x,
             hand.arm.prev_joint.y,
-            hand.arm.prev_joint.z
-        ) * LEAP_TO_WORLD;
-        setJoint(elbowPos);
-
-        // 2) Wrist
-        glm::vec3 wristPos = glm::vec3(
-            hand.arm.next_joint.x,
+            hand.arm.prev_joint.z) * LEAP_TO_WORLD);
+        setJoint(glm::vec3(hand.arm.next_joint.x,
             hand.arm.next_joint.y,
-            hand.arm.next_joint.z
-        ) * LEAP_TO_WORLD;
-        setJoint(wristPos);
-
-        // 3) Palm — compute & print **eye-space** palm pos
-        glm::vec3 palmPos = glm::vec3(
-            hand.palm.position.x,
+            hand.arm.next_joint.z) * LEAP_TO_WORLD);
+        setJoint(glm::vec3(hand.palm.position.x,
             hand.palm.position.y,
-            hand.palm.position.z
-        ) * LEAP_TO_WORLD;
-        std::cout << "[Leap] palmPos = ("
-            << palmPos.x << ", "
-            << palmPos.y << ", "
-            << palmPos.z << ")\n";
-        setJoint(palmPos);
+            hand.palm.position.z) * LEAP_TO_WORLD);
 
-        // 4) Finger bones
+        // Finger bones
         for (unsigned d = 0; d < 5; ++d) {
             const LEAP_DIGIT& finger = hand.digits[d];
             for (unsigned b = 0; b < 4; ++b) {
                 const LEAP_BONE& bone = finger.bones[b];
-                glm::vec3 bonePos = glm::vec3(
-                    bone.next_joint.x,
+                setJoint(glm::vec3(bone.next_joint.x,
                     bone.next_joint.y,
-                    bone.next_joint.z
-                ) * LEAP_TO_WORLD;
-                setJoint(bonePos);
+                    bone.next_joint.z) * LEAP_TO_WORLD);
             }
         }
     }
 
-    // Hide any unused joint meshes
+    // Hide any extra spheres
     while (jointIndex < jointMeshes.size()) {
         jointMeshes[jointIndex++]
             ->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
+    }
+
+    // 2) Build flat list of joint positions
+    std::vector<glm::vec3> J;
+    J.reserve(jointMeshes.size());
+    for (auto& jm : jointMeshes) {
+        glm::mat4 M = jm->getLocalMatrix();
+        J.push_back(glm::vec3(M[3]));  // extract translation
+    }
+
+    // 3) Define which joints to connect (elbow→wrist, wrist→palm, finger chains)
+    std::vector<std::pair<int, int>> bonePairs;
+    for (int h = 0; h < MAX_HANDS; ++h) {
+        int base = h * JOINTS_PER_HAND;
+        bonePairs.emplace_back(base + 0, base + 1);
+        bonePairs.emplace_back(base + 1, base + 2);
+        for (int f = 0; f < 5; ++f) {
+            int fb = base + 3 + f * 4;
+            for (int b = 0; b < 3; ++b) {
+                bonePairs.emplace_back(fb + b, fb + b + 1);
+            }
+        }
+    }
+
+    // 4) Stretch & orient each cylinder‐bone node to match its joint pair
+    for (size_t i = 0; i < bonePairs.size(); ++i) {
+        auto [a, b] = bonePairs[i];
+        glm::vec3 A = J[a], B = J[b];
+        glm::vec3 dir = B - A;
+        float len = glm::length(dir);
+        auto node = boneNodes[i];
+
+        if (len < 1e-5f) {
+            node->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
+            continue;
+        }
+
+        // 1) Translate to the midpoint
+        glm::vec3 mid = 0.5f * (A + B);
+        glm::mat4 T = glm::translate(glm::mat4(1.0f), mid);
+
+        // 2) Compute the axis & angle from +Z to our bone direction
+        glm::vec3 up = glm::vec3(0, 0, 1);
+        glm::vec3 ndir = glm::normalize(dir);
+        glm::vec3 axis = glm::cross(up, ndir);
+        float     cosA = glm::clamp(glm::dot(up, ndir), -1.0f, 1.0f);
+        float     angle = acos(cosA);
+
+        // 3) Build a rotation matrix around that axis
+        glm::mat4 R = glm::rotate(glm::mat4(1.0f), angle, axis);
+
+        // 4) Scale so our unit‐height cylinder stretches to 'len'
+        glm::mat4 S = glm::scale(glm::mat4(1.0f),
+            glm::vec3(1.0f, 1.0f, len));
+
+        // 5) Combine: T * R * S
+        node->setLocalMatrix(T * R * S);
     }
 }
 
@@ -344,6 +400,38 @@ std::shared_ptr<Eng::Mesh> createSphereMesh(float radius) {
         .setName(std::string("SphereMesh"))
         .addVertices(vertices)
         .addIndices(indices)
+        .build();
+}
+
+std::shared_ptr<Eng::Mesh> createCylinderMesh(float radius, float height) {
+    // build a vertical cylinder (centered at origin, from z=0 to z=height)
+    const int slices = 12;
+    std::vector<Eng::Vertex> verts;
+    std::vector<unsigned int> idx;
+
+    for (int i = 0; i <= slices; ++i) {
+        float angle = i * 2.0f * glm::pi<float>() / slices;
+        float x = cos(angle) * radius;
+        float y = sin(angle) * radius;
+        // bottom circle
+        Eng::Vertex vb; vb.setPosition({ x, y, 0.0f }); vb.setNormal({ x, y, 0 });
+        // top circle
+        Eng::Vertex vt; vt.setPosition({ x, y, height }); vt.setNormal({ x, y, 0 });
+        verts.push_back(vb);
+        verts.push_back(vt);
+    }
+    // build side quads as two triangles each slice
+    for (int i = 0; i < slices; ++i) {
+        unsigned int b0 = 2 * i, t0 = 2 * i + 1;
+        unsigned int b1 = 2 * (i + 1), t1 = 2 * (i + 1) + 1;
+        // quad: b0,t0,b1  and  t0,t1,b1
+        idx.insert(idx.end(), { b0, t0, b1,  t0, t1, b1 });
+    }
+
+    auto& B = Eng::Builder::getInstance();
+    return B.setName("BoneCylinder")
+        .addVertices(verts)
+        .addIndices(idx)
         .build();
 }
 
