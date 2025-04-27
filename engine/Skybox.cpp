@@ -159,8 +159,8 @@ bool Eng::Skybox::loadCubemap()
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glm::vec3 faceAverageColorSum(0.0f);
-	int faceCount = faces.size();
+    glm::vec3 faceAverageColorSum(0.0f);
+    int faceCount = faces.size();
 
     // Load each of the six faces.
     for (unsigned int i = 0; i < faces.size(); i++) {
@@ -182,23 +182,47 @@ bool Eng::Skybox::loadCubemap()
         int width = FreeImage_GetWidth(dib);
         int height = FreeImage_GetHeight(dib);
 
-        GLenum format = (FreeImage_GetBPP(dib) == 32) ? GL_RGBA : GL_RGB;
+        // Determine internal format and pixel data format.
+        // FreeImage stores pixel data in BGR(A) format, but we want OpenGL to store it internally as RGB(A).
+        GLenum internalFormat;
+        GLenum format;
+        int channels;
+        if (FreeImage_GetBPP(dib) == 32) {
+            internalFormat = GL_RGBA;
+            format = GL_BGRA;
+			channels = 4;
+        }
+        else {
+            internalFormat = GL_RGB;
+            format = GL_BGR;
+			channels = 3;
+        }
+
         FreeImage_FlipVertical(dib);
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height,
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, width, height,
             0, format, GL_UNSIGNED_BYTE, bits);
 
-		// Calculate the average color of the face and add it to the sum.
-		glm::vec3 faceAverageColor = calculateWeightedAverageColor(bits, width, height);
-		faceAverageColorSum += faceAverageColor;
+        // Calculate the average color of the face and add it to the sum.
+        glm::vec3 faceAverageColor = calculateWeightedAverageColor(bits, width, height, channels);
+
+        // Debug print average face color
+        std::cout << "[Skybox] Face " << i << " average color: " << faceAverageColor.x << ", "
+            << faceAverageColor.y << ", " << faceAverageColor.z << std::endl;
+
+        faceAverageColorSum += faceAverageColor;
 
         FreeImage_Unload(dib);
     }
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
-	// Set the global ambient color to the average of all faces.
-	globalAmbient = faceAverageColorSum / static_cast<float>(faceCount);
+	// Compute average color of all faces
+	glm::vec3 globalAverageColor = faceAverageColorSum / static_cast<float>(faceCount);
+
+	// Set the global ambient color based on the average color of the skybox
+    globalAmbient = glm::vec3{ globalAverageColor.r * 0.2f, globalAverageColor.g * 0.2f, globalAverageColor.b * 0.2f };
     return true;
 }
+
 
 void Eng::Skybox::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix)
 {
@@ -238,37 +262,38 @@ void Eng::Skybox::render(const glm::mat4& viewMatrix, const glm::mat4& projectio
 }
 
 /// Calculate the average color of the skybox texture using luminance weighting.
-glm::vec3 Eng::Skybox::calculateWeightedAverageColor(unsigned char* bits, int width, int height)
+/// bits: pixel data
+/// width: image width
+/// height: image height
+/// channels: number of color channels (3 for BGR, 4 for BGRA, default 3)
+glm::vec3 Eng::Skybox::calculateWeightedAverageColor(unsigned char* bits, int width, int height, int channels)
 {
     float totalLuminance = 0.0f;
     glm::vec3 weightedColor(0.0f);
 
-    // Parsi ogni pixel dell'immagine
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
-            int pixelIndex = (y * width + x) * 3;  // 3 per RGB (nel formato 24 bit per pixel)
+            int pixelIndex = (y * width + x) * channels;
 
-            // Ottieni il colore del pixel
-            float r = bits[pixelIndex + 2] / 255.0f;  // FreeImage usa la convenzione BGR, quindi r è il terzo byte
-            float g = bits[pixelIndex + 1] / 255.0f;  // Verde (G)
-            float b = bits[pixelIndex + 0] / 255.0f;  // Blu (B)
+            // Read colors (ignoring alpha if present)
+            float r = bits[pixelIndex + 2] / 255.0f;  // Red (index +2 in BGR(A))
+            float g = bits[pixelIndex + 1] / 255.0f;  // Green
+            float b = bits[pixelIndex + 0] / 255.0f;  // Blue
 
-            // Calcola la luminanza (sulla base della formula sRGB)
             float luminance = 0.2126f * r + 0.7152f * g + 0.0722f * b;
 
-            // Somma i valori ponderati
             weightedColor += glm::vec3(r, g, b) * luminance;
             totalLuminance += luminance;
         }
     }
 
-    // Se la luminanza totale è maggiore di zero, calcoliamo il colore medio ponderato
     if (totalLuminance > 0.0f) {
         weightedColor /= totalLuminance;
     }
 
     return weightedColor;
 }
+
 
 glm::vec3 Eng::Skybox::getGlobalAmbient()
 {

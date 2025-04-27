@@ -748,4 +748,6 @@ void Eng::Base::registerSkybox(const std::vector<std::string>& faces) {
         std::cerr << "[Base] Skybox initialization failed." << std::endl;
         skybox.reset();
     }
+
+    renderList.setGlobalAmbient(skybox->getGlobalAmbient());
 }

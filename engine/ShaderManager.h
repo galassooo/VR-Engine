@@ -52,6 +52,8 @@ public:
 	static constexpr const char* UNIFORM_ATTENUATION_QUADRATIC = "quadraticAttenuation";//Light attenuation quadratic - Uniform name
 	//static constexpr const char* UNIFORM_TEXTURE_SHADOWS = "shadowMap";		//(Unused)Shadow map texture sampler - Uniform name
 
+	static constexpr const char* UNIFORM_GLOBAL_AMBIENT = "globalAmbient";		//Global ambient color - Uniform name
+
 
 	bool loadProgram(std::shared_ptr<Eng::Program>& program);
 
@@ -80,6 +82,8 @@ public:
 
 	void setUseTexture(bool use);
 	//void setTextureSampler(int textureUnit); unused: texture unit is defined during texture binding
+
+	void setGlobalAmbient(const glm::vec3& amb);
 
 	static std::string preprocessShaderCode(const std::string& source);
 
@@ -122,4 +126,6 @@ private:
 	int attenuationConstantLoc;
 	int attenuationLinearLoc;
 	int attenuationQuadraticLoc;
+
+	int globalAmbientLoc;
 };

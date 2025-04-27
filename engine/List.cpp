@@ -241,6 +241,9 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
 			}
 		}
 
+		// Load global ambient light color
+		sm.setGlobalAmbient(globalAmbient);
+
         // Load projection matrix
         sm.setProjectionMatrix(eyeProjectionMatrix);
 
@@ -338,6 +341,17 @@ void Eng::List::setViewMatrix(glm::mat4& viewMatrix) {
 */
 void Eng::List::setEyeProjectionMatrix(glm::mat4& eyeProjectionMatrix) {
 	this->eyeProjectionMatrix = eyeProjectionMatrix;
+}
+
+/**
+ * @brief Sets the global ambient light color.
+ *
+ * This method sets the global ambient light color used in the rendering process.
+ *
+ * @param globalAmbient The new global ambient light color.
+ */
+void Eng::List::setGlobalAmbient(const glm::vec3& globalAmbient) {
+    this->globalAmbient = globalAmbient;
 }
 
 /**
@@ -498,8 +512,6 @@ void main() {
 
 )";
 
-    ShaderManager::UNIFORM_MATERIAL_AMBIENT;
-
     shadowMapFragmentShader = std::make_shared<Eng::FragmentShader>();
     shadowMapFragmentShader->load(shadowMapFragmentCode.c_str());
 
@@ -516,6 +528,9 @@ void main() {
 
    // Material properties:
    uniform vec3 ShaderManager::UNIFORM_MATERIAL_EMISSION;
+
+   // Global properties:
+   uniform vec3 ShaderManager::UNIFORM_GLOBAL_AMBIENT;
    
    // Texture mapping:
    layout(binding = ShaderManager::DIFFUSE_TEXTURE_UNIT) uniform sampler2D texSampler;
@@ -526,7 +541,23 @@ void main() {
       // Emission only
       vec3 color = ShaderManager::UNIFORM_MATERIAL_EMISSION;
 
-      //fragOutput = vec4(1.0, 0.0, 0.0, 1.0); // rosso opaco
+      //fragOutput = vec4(1.0, 0.0, 0.0, 1.0); // rosso opaco per debug
+
+      // Global specular contribution based on the normal's tilt relative to the horizontal plane
+
+      // Interpolated normal form the vertex shader
+      vec3 N = normalize(fragNormal);
+
+      float globalSpecStrength = 0.3; // controls how strong the global specular is
+
+      // Calculate how "horizontal" the normal is: Y = 1.0 -> vertical, Y = 0.0 -> horizontal
+      float horizontalness = 1.0 - abs(N.y);
+
+      // Raise to a power to controll the falloff
+      horizontalness = pow(horizontalness, 2.0);
+
+      // Add global specular contribution
+      color += ShaderManager::UNIFORM_GLOBAL_AMBIENT * horizontalness * globalSpecStrength;
 
 
       // Final color calculation with texture

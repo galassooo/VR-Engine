@@ -30,5 +30,5 @@ private:
     bool loadCubemap();
 
 	glm::vec3 globalAmbient = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 calculateWeightedAverageColor(unsigned char* bits, int width, int height);
+    glm::vec3 calculateWeightedAverageColor(unsigned char* bits, int width, int height, int channels = 3);
 };

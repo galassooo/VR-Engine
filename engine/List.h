@@ -22,6 +22,8 @@ public:
 
 	void setViewMatrix(glm::mat4& viewMatrix);
 	void setEyeProjectionMatrix(glm::mat4& eyeProjectionMatrix);
+
+	void setGlobalAmbient(const glm::vec3& globalAmbient);
 	
 private:
 	/** @brief Sorted collection of renderable nodes with their world coordinates and materials.
@@ -37,6 +39,8 @@ private:
 	glm::mat4 eyeProjectionMatrix;
 	glm::mat4 lightProjectionMatrix;
 	glm::mat4 lightSpaceMatrix;
+
+	glm::vec3 globalAmbient = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	struct CullingSphere;
 	std::unique_ptr<CullingSphere> cullingSphere;

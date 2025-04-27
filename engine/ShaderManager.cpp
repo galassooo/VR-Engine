@@ -198,6 +198,14 @@ void ENG_API Eng::ShaderManager::setTextureSampler(int textureUnit) {
 }
 */
 
+void ENG_API Eng::ShaderManager::setGlobalAmbient(const glm::vec3& amb) {
+	if (globalAmbientLoc == -1) {
+		//std::cerr << "[ERROR]ShaderManager: global ambient location not found in Program " << currentProgram->getGlId() << std::endl;
+		return;
+	}
+	currentProgram->setVec3(globalAmbientLoc, amb);
+}
+
 bool ENG_API Eng::ShaderManager::setDefaultShaders() {
 	// Nel metodo setDefaultShaders() in ShaderManager.cpp
 	const char* vs = R"(
@@ -288,6 +296,8 @@ bool ENG_API Eng::ShaderManager::loadProgram(std::shared_ptr<Eng::Program>& prog
 	//texSamplerLoc = program->getParamLocation(UNIFORM_TEXTURE_DIFFUSE); //not used: handled engine side when binding the texture
 	useTextureLoc = program->getParamLocation(UNIFORM_USE_TEXTURE_DIFFUSE);
 
+	globalAmbientLoc = program->getParamLocation(UNIFORM_GLOBAL_AMBIENT);
+
 	program->render();
 	currentProgram = program;
 
@@ -344,6 +354,7 @@ std::unordered_map<std::string, std::string> ENG_API Eng::ShaderManager::buildSh
 		{"ShaderManager::UNIFORM_ATTENUATION_LINEAR", UNIFORM_ATTENUATION_LINEAR},
 		{"ShaderManager::UNIFORM_ATTENUATION_QUADRATIC", UNIFORM_ATTENUATION_QUADRATIC},
 		{"ShaderManager::UNIFORM_LIGHT_CUTOFF_ANGLE", UNIFORM_LIGHT_CUTOFF_ANGLE},
-		{"ShaderManager::UNIFORM_LIGHT_FALLOFF", UNIFORM_LIGHT_FALLOFF}
+		{"ShaderManager::UNIFORM_LIGHT_FALLOFF", UNIFORM_LIGHT_FALLOFF},
+		{"ShaderManager::UNIFORM_GLOBAL_AMBIENT", UNIFORM_GLOBAL_AMBIENT}
 	};
 }
