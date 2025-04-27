@@ -168,6 +168,9 @@ namespace Eng {
       void registerSkybox(const std::vector<std::string>& faces);
       std::shared_ptr<Skybox> getSkybox() const;
 
+	  // HeadNode for LeapMotion
+      std::shared_ptr<Node> getHeadNode();
+
    private:
       /** @brief Reserved implementation details */
       struct Reserved;
@@ -202,5 +205,8 @@ namespace Eng {
 
       // Skybox
       std::shared_ptr<Skybox> skybox;
+
+      // HeadNode for LeapMotion
+	  std::shared_ptr<Node> headNode;
    };
 }; // end of namespace Eng::

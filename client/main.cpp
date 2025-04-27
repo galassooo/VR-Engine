@@ -1,4 +1,4 @@
-#include "engine.h"
+﻿#include "engine.h"
 #include <iostream>
 #include <functional>
 #include <random>
@@ -25,9 +25,16 @@ std::vector<std::string> myCubemapFaces = {
 // Leap Motion
 Leap* leap = nullptr;
 std::shared_ptr<Eng::Node> handsNode = nullptr; // Root node for hands visualization
+bool leapVisualizationEnabled = true;
+
+static const int MAX_HANDS = 2;
+static const int JOINTS_PER_HAND = 3 + (5 * 4);  // elbow, wrist, palm + 5 fingers * 4 bones
+static std::vector<std::shared_ptr<Eng::Mesh>> jointMeshes;
 
 // Update hands
 void updateLeapHands();
+
+std::shared_ptr<Eng::Mesh> createSphereMesh(float radius = 5.0f);
 
 // LepMotion setup
 void setupLeapMotion(Eng::Base& eng);
@@ -92,10 +99,11 @@ int main(int argc, char *argv[]) {
       return -1;
    }
 
+   eng.loadScene("..\\resources\\Chess.ovo");
+
    // Setup Leap Motion with its own render callback
    setupLeapMotion(eng);
 
-   eng.loadScene("..\\resources\\Chess.ovo");
    eng.engEnable(ENG_STEREO_RENDERING);
 
    setUpCameras(eng);
@@ -118,7 +126,7 @@ int main(int argc, char *argv[]) {
 
 #include <deque>
 
-// Initialize Leap Motion and set up callbacks
+// Updated setupLeapMotion function with proper mesh reuse
 void setupLeapMotion(Eng::Base& eng) {
     // Initialize Leap Motion
     leap = new Leap();
@@ -129,10 +137,67 @@ void setupLeapMotion(Eng::Base& eng) {
         return;
     }
 
-    // Create hands geometry
+    auto head = eng.getHeadNode();
     handsNode = std::make_shared<Eng::Node>();
     handsNode->setName("LeapMotionHands");
-    eng.getRootNode()->addChild(handsNode);
+
+    const float HAND_DISTANCE = 1.0f;  // 1 m in front
+    glm::mat4 forward = glm::translate(
+        glm::mat4(1.0f),
+        glm::vec3(0.0f, 0.0f, -HAND_DISTANCE)
+    );
+    handsNode->setLocalMatrix(forward);
+
+
+    head->addChild(handsNode);
+    handsNode->setParent(head.get());
+
+    static std::shared_ptr<Eng::Mesh> boneMesh = nullptr;
+    // Create the bone‐mesh once
+    if (!boneMesh) {
+        boneMesh = std::make_shared<Eng::Mesh>();
+        // white lines, fully opaque
+        auto mat = std::make_shared<Eng::Material>(glm::vec3(1, 1, 1), 1.0f, 0.0f);
+        boneMesh->setMaterial(mat);
+        // tell the GPU we’ll draw GL_LINES
+        boneMesh->setMode(GL_LINES);
+        // no vertices yet
+        boneMesh->initBuffers();
+        handsNode->addChild(boneMesh);
+        boneMesh->setParent(handsNode.get());
+    }
+
+    // Create shared sphere mesh only once
+    static std::shared_ptr<Eng::Mesh> sphereMesh = nullptr;
+    if (!sphereMesh) {
+        sphereMesh = createSphereMesh(0.005f);  // Increase size to 5.0f
+        auto mat = std::make_shared<Eng::Material>(glm::vec3(1, 0, 0), 1.0f, 0.2f);
+        sphereMesh->setMaterial(mat);
+        sphereMesh->initBuffers();
+    }
+
+    // Pre-create mesh instances for all joints
+    if (jointMeshes.empty()) {
+        jointMeshes.reserve(MAX_HANDS * JOINTS_PER_HAND);
+        for (int i = 0; i < MAX_HANDS * JOINTS_PER_HAND; ++i) {
+            // Create a mesh that shares vertices/indices with sphereMesh
+            auto jointMesh = std::make_shared<Eng::Mesh>();
+
+            // Share the same vertex and index data
+            jointMesh->setVertices(sphereMesh->getVertices());
+            jointMesh->setIndices(sphereMesh->getIndices());
+            jointMesh->setMaterial(sphereMesh->getMaterial());
+
+            // Initialize buffers for this instance
+            jointMesh->initBuffers();
+
+            // Add to the scene graph
+            handsNode->addChild(jointMesh);
+            jointMesh->setParent(handsNode.get());
+
+            jointMeshes.push_back(jointMesh);
+        }
+    }
 
     // Register update callback for Leap Motion
     auto& callbackManager = Eng::CallbackManager::getInstance();
@@ -142,12 +207,13 @@ void setupLeapMotion(Eng::Base& eng) {
 
     // Register a key binding to toggle Leap Motion visualization
     callbackManager.registerKeyBinding('l', "Toggle Leap Motion Visualization", [](unsigned char key, int x, int y) {
-        static bool leapVisible = true;
-        leapVisible = !leapVisible;
+        leapVisualizationEnabled = !leapVisualizationEnabled;
         if (handsNode) {
-            // Simple way to toggle visibility - could be improved with a proper visibility system
-            if (!leapVisible) {
-                handsNode->getChildren()->clear();
+            if (!leapVisualizationEnabled) {
+                // Hide all joint meshes
+                for (auto& jointMesh : jointMeshes) {
+                    jointMesh->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
+                }
             }
         }
         });
@@ -155,26 +221,147 @@ void setupLeapMotion(Eng::Base& eng) {
     std::cout << "Leap Motion initialized successfully. Press 'L' to toggle hand visualization." << std::endl;
 }
 
-// Function to update hand positions based on Leap data
+// Fixed updateLeapHands function with proper coordinate system handling
 void updateLeapHands() {
-    if (!leap || !handsNode) return;
+    if (!leap || !handsNode || !leapVisualizationEnabled) return;
 
-    // Update Leap Motion status:
+    // 1) Print camera **world-space** position once per frame
+    if (auto cam = Eng::Base::getInstance().getActiveCamera()) {
+        // camera’s world matrix is its local matrix because its parent is the root
+        glm::mat4 camWorld = cam->getLocalMatrix();
+        glm::vec3 camPos = glm::vec3(camWorld[3]);
+        std::cout << "[Camera] world-pos = ("
+            << camPos.x << ", "
+            << camPos.y << ", "
+            << camPos.z << ")\n";
+    }
+
     leap->update();
-    const LEAP_TRACKING_EVENT* leapFrame = leap->getCurFrame();
+    const LEAP_TRACKING_EVENT* frame = leap->getCurFrame();
+    const float LEAP_TO_WORLD = 0.001f;  // mm → m
+    size_t jointIndex = 0;
 
-    // Clear previous hand nodes
-    handsNode->getChildren()->clear();
+    for (unsigned h = 0; h < frame->nHands && h < MAX_HANDS; ++h) {
+        const LEAP_HAND& hand = frame->pHands[h];
+        glm::vec3 handColor = (hand.type == eLeapHandType_Left)
+            ? glm::vec3(1, 1, 1)
+            : glm::vec3(1, 1, 1);
 
-    // Create hand visualization using the Builder pattern
-    for (unsigned int h = 0; h < leapFrame->nHands; h++) {
-        LEAP_HAND hand = leapFrame->pHands[h];
+        auto setJoint = [&](const glm::vec3& pos) {
+            if (jointIndex >= jointMeshes.size()) return;
+            jointMeshes[jointIndex]
+                ->setMaterial(std::make_shared<Eng::Material>(handColor, 1.0f, 0.2f));
+            jointMeshes[jointIndex++]
+                ->setLocalMatrix(glm::translate(glm::mat4(1.0f), pos));
+            };
 
-        // Set color based on hand index (left/right)
-        glm::vec3 handColor((float)h, (float)(1 - h), 0.5f);
-        auto material = std::make_shared<Eng::Material>(handColor, 1.0f, 0.5f);
+        // 1) Elbow
+        glm::vec3 elbowPos = glm::vec3(
+            hand.arm.prev_joint.x,
+            hand.arm.prev_joint.y,
+            hand.arm.prev_joint.z
+        ) * LEAP_TO_WORLD;
+        setJoint(elbowPos);
+
+        // 2) Wrist
+        glm::vec3 wristPos = glm::vec3(
+            hand.arm.next_joint.x,
+            hand.arm.next_joint.y,
+            hand.arm.next_joint.z
+        ) * LEAP_TO_WORLD;
+        setJoint(wristPos);
+
+        // 3) Palm — compute & print **eye-space** palm pos
+        glm::vec3 palmPos = glm::vec3(
+            hand.palm.position.x,
+            hand.palm.position.y,
+            hand.palm.position.z
+        ) * LEAP_TO_WORLD;
+        std::cout << "[Leap] palmPos = ("
+            << palmPos.x << ", "
+            << palmPos.y << ", "
+            << palmPos.z << ")\n";
+        setJoint(palmPos);
+
+        // 4) Finger bones
+        for (unsigned d = 0; d < 5; ++d) {
+            const LEAP_DIGIT& finger = hand.digits[d];
+            for (unsigned b = 0; b < 4; ++b) {
+                const LEAP_BONE& bone = finger.bones[b];
+                glm::vec3 bonePos = glm::vec3(
+                    bone.next_joint.x,
+                    bone.next_joint.y,
+                    bone.next_joint.z
+                ) * LEAP_TO_WORLD;
+                setJoint(bonePos);
+            }
+        }
+    }
+
+    // Hide any unused joint meshes
+    while (jointIndex < jointMeshes.size()) {
+        jointMeshes[jointIndex++]
+            ->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
     }
 }
+
+
+
+// Create the sphere mesh (same as before but with optimized parameters)
+std::shared_ptr<Eng::Mesh> createSphereMesh(float radius) {
+    std::vector<Eng::Vertex> vertices;
+    std::vector<unsigned int> indices;
+
+    int gradation = 10;  // Same as your teacher's implementation
+
+    // Create sphere vertices (same as teacher's implementation)
+    for (int lat = 0; lat <= gradation; lat++) {
+        float theta = lat * glm::pi<float>() / gradation;
+        float sinTheta = sin(theta);
+        float cosTheta = cos(theta);
+
+        for (int lon = 0; lon <= gradation; lon++) {
+            float phi = lon * 2 * glm::pi<float>() / gradation;
+            float sinPhi = sin(phi);
+            float cosPhi = cos(phi);
+
+            float x = cosPhi * sinTheta;
+            float y = cosTheta;
+            float z = sinPhi * sinTheta;
+
+            Eng::Vertex vertex;
+            vertex.setPosition(glm::vec3(x, y, z) * radius);
+            vertex.setNormal(glm::normalize(glm::vec3(x, y, z)));
+            vertex.setTexCoords(glm::vec2((float)lon / gradation, (float)lat / gradation));
+
+            vertices.push_back(vertex);
+        }
+    }
+
+    // Create indices
+    for (int lat = 0; lat < gradation; lat++) {
+        for (int lon = 0; lon < gradation; lon++) {
+            int first = (lat * (gradation + 1)) + lon;
+            int second = first + gradation + 1;
+
+            indices.push_back(first);
+            indices.push_back(second);
+            indices.push_back(first + 1);
+
+            indices.push_back(second);
+            indices.push_back(second + 1);
+            indices.push_back(first + 1);
+        }
+    }
+
+    auto& builder = Eng::Builder::getInstance();
+    return builder
+        .setName(std::string("SphereMesh"))
+        .addVertices(vertices)
+        .addIndices(indices)
+        .build();
+}
+
 
 /**
  * @brief Structure to store the state of a chess move.

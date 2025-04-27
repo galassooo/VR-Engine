@@ -377,6 +377,7 @@ void ENG_API Eng::Base::renderScene() {
       std::cerr << "ERROR: No active camera set for rendering" << std::endl;
       return;
    }
+
    // Clear Buffers
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -386,12 +387,8 @@ void ENG_API Eng::Base::renderScene() {
    // Get Projection matrix
    glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 
-   // Continue with normal rendering
-   /* Unsupported 4.4
-   glMatrixMode(GL_PROJECTION);
-   glLoadMatrixf(glm::value_ptr(projectionMatrix));
-   glMatrixMode(GL_MODELVIEW);
-   */
+   glm::mat4 headWorld = glm::inverse(viewMatrix);
+   getHeadNode()->setLocalMatrix(headWorld);
 
    if (skybox) {
        // Remove the translation component by converting to a 3x3 and back to a 4x4.
@@ -402,6 +399,10 @@ void ENG_API Eng::Base::renderScene() {
    // Clear list
    renderList.clear();
 
+   // Execute optional render callbacks
+   auto& callbackManager = CallbackManager::getInstance();
+   callbackManager.executeRenderCallbacks();
+
    // Traverse the root nodes and add them to the render list
    traverseAndAddToRenderList(rootNode);
 
@@ -409,10 +410,6 @@ void ENG_API Eng::Base::renderScene() {
    renderList.setViewMatrix(viewMatrix);
    renderList.setEyeProjectionMatrix(projectionMatrix);
    renderList.render();
-
-   // Execute optional render callbacks
-   auto &callbackManager = CallbackManager::getInstance();
-   callbackManager.executeRenderCallbacks();
 
 
    glutSwapBuffers();
@@ -748,4 +745,17 @@ void Eng::Base::registerSkybox(const std::vector<std::string>& faces) {
         std::cerr << "[Base] Skybox initialization failed." << std::endl;
         skybox.reset();
     }
+}
+
+
+// HeadNode for LeapMotion
+std::shared_ptr<Eng::Node> Eng::Base::getHeadNode() {
+    if (!headNode) {
+        // lazily create it and parent under the scene root
+        headNode = std::make_shared<Node>();
+        headNode->setName("Head");
+        rootNode->addChild(headNode);
+        headNode->setParent(rootNode.get());
+    }
+    return headNode;
 }
