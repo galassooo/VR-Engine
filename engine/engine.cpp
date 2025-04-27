@@ -655,15 +655,23 @@ void ENG_API Eng::Base::renderStereoscopic() {
     // Compute modelViewMatrix based on user VR position
     glm::mat4 headPositionMatrix = reserved->ovr->getModelviewMatrix();
 
-    // Add vertical offset to raise the camera position
-    glm::mat4 heightOffset = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, stereoEyeHeight, 0.0f));
-    headPositionMatrix = headPositionMatrix * heightOffset;
+    // Definisci una matrice di trasformazione iniziale fissa che posiziona e orienta correttamente la camera
+    // Prima ruota di 270 gradi intorno all'asse Y (per orientarti verso la scacchiera)
+    // Poi trasla nella posizione desiderata
+    glm::mat4 initialTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, stereoEyeHeight, -6.0f)) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-    glm::mat4 modelViewMatrix = glm::inverse(headPositionMatrix);
+    // Applica la trasformazione iniziale fissa PRIMA della matrice della posizione della testa
+    // In questo modo, la trasformazione iniziale diventa la "posizione zero" del VR
+    glm::mat4 finalHeadPosition = initialTransform * headPositionMatrix;
 
-    // Update the head node with the VR head position
-    getHeadNode()->setLocalMatrix(headPositionMatrix);
+    // Calcola la matrice di vista finale
+    glm::mat4 modelViewMatrix = glm::inverse(finalHeadPosition);
 
+    // Aggiorna il nodo della testa se necessario
+    if (auto headNode = getHeadNode()) {
+        headNode->setLocalMatrix(finalHeadPosition);
+    }
     // CallBackManager for the LeapMotion
     auto& callbackManager = CallbackManager::getInstance();
 

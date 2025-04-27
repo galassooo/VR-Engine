@@ -76,6 +76,7 @@ int main(int argc, char *argv[]) {
 
    eng.loadScene("..\\resources\\Chess.ovo");
 
+   // Dopo aver caricato la scena in main.cpp
    // Setup Leap Motion with its own render callback
    setupLeapMotion(eng);
 
