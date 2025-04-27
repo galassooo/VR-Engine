@@ -1,0 +1,4 @@
+C:/Users/marti/OneDrive/Desktop/VR/VirtualReality/out/build/x64-Debug/CMakeFiles/cg.dir
+C:/Users/marti/OneDrive/Desktop/VR/VirtualReality/out/build/x64-Debug/CMakeFiles/create_demo_dir.dir
+C:/Users/marti/OneDrive/Desktop/VR/VirtualReality/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/marti/OneDrive/Desktop/VR/VirtualReality/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
