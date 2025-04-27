@@ -652,16 +652,18 @@ void ENG_API Eng::Base::renderStereoscopic() {
     glm::mat4 headPositionMatrix = reserved->ovr->getModelviewMatrix();
     glm::mat4 modelViewMatrix = glm::inverse(headPositionMatrix);
 
-    //glm::mat4 cameraWorldMatrix = glm::inverse(activeCamera->getLocalMatrix());
-    //glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
-
-    //glm::mat4 leftViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, -eyeDistance / 2.0f);
-    //glm::mat4 rightViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, +eyeDistance / 2.0f);
+    // Update the head node with the VR head position
+    getHeadNode()->setLocalMatrix(headPositionMatrix);
 
     // Skybox
     glm::mat4 skyboxView = glm::mat4(glm::mat3(modelViewMatrix));
 
     glm::mat4 tmpProjMat, eye2Head;
+
+    // CallBackManager for the LeapMotion
+    auto& callbackManager = CallbackManager::getInstance();
+    callbackManager.executeRenderCallbacks();
+
 
     // ---- Left Eye Rendering ----
     {

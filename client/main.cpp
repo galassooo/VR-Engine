@@ -145,10 +145,10 @@ void setupLeapMotion(Eng::Base& eng) {
     handsNode = std::make_shared<Eng::Node>();
     handsNode->setName("LeapMotionHands");
 
-    const float HAND_DISTANCE = 1.0f;  // 1 m in front
+    const float HAND_DISTANCE = 0.3f;  // 1 m in front
     glm::mat4 forward = glm::translate(
         glm::mat4(1.0f),
-        glm::vec3(0.0f, 0.0f, -HAND_DISTANCE)
+        glm::vec3(0.0f, -0.1f, -HAND_DISTANCE)
     );
     handsNode->setLocalMatrix(forward);
 
@@ -246,10 +246,13 @@ void updateLeapHands() {
     const float LEAP_TO_WORLD = 0.001f;  // mm → m
     size_t jointIndex = 0;
 
+    // Traccia se ci sono mani attive nel frame
+    bool hasActiveHands = (frame->nHands > 0);
+
     // 1) Position all joint spheres
     for (unsigned h = 0; h < frame->nHands && h < MAX_HANDS; ++h) {
         const LEAP_HAND& hand = frame->pHands[h];
-        glm::vec3 handColor(1.0f);
+        glm::vec3 handColor = (h == 0) ? glm::vec3(0.2f, 0.8f, 0.2f) : glm::vec3(0.2f, 0.2f, 0.8f);  // Colori diversi per le due mani
 
         auto setJoint = [&](const glm::vec3& pos) {
             if (jointIndex >= jointMeshes.size()) return;
@@ -259,25 +262,33 @@ void updateLeapHands() {
                 ->setLocalMatrix(glm::translate(glm::mat4(1.0f), pos));
             };
 
-        // Elbow, Wrist, Palm
-        setJoint(glm::vec3(hand.arm.prev_joint.x,
-            hand.arm.prev_joint.y,
-            hand.arm.prev_joint.z) * LEAP_TO_WORLD);
-        setJoint(glm::vec3(hand.arm.next_joint.x,
-            hand.arm.next_joint.y,
-            hand.arm.next_joint.z) * LEAP_TO_WORLD);
-        setJoint(glm::vec3(hand.palm.position.x,
-            hand.palm.position.y,
-            hand.palm.position.z) * LEAP_TO_WORLD);
+        // Elbow, Wrist, Palm - Verifica se le coordinate sono valide
+        glm::vec3 elbowPos = glm::vec3(hand.arm.prev_joint.x, hand.arm.prev_joint.y, hand.arm.prev_joint.z) * LEAP_TO_WORLD;
+        glm::vec3 wristPos = glm::vec3(hand.arm.next_joint.x, hand.arm.next_joint.y, hand.arm.next_joint.z) * LEAP_TO_WORLD;
+        glm::vec3 palmPos = glm::vec3(hand.palm.position.x, hand.palm.position.y, hand.palm.position.z) * LEAP_TO_WORLD;
 
-        // Finger bones
+        // Aggiungi controlli per verificare se le posizioni sono valide
+        if (glm::length(elbowPos) > 0.001f) setJoint(elbowPos);
+        else setJoint(glm::vec3(0.0f)); // Posizione predefinita se non valida
+
+        if (glm::length(wristPos) > 0.001f) setJoint(wristPos);
+        else setJoint(glm::vec3(0.0f));
+
+        if (glm::length(palmPos) > 0.001f) setJoint(palmPos);
+        else setJoint(glm::vec3(0.0f));
+
+        // Finger bones - come prima
         for (unsigned d = 0; d < 5; ++d) {
             const LEAP_DIGIT& finger = hand.digits[d];
             for (unsigned b = 0; b < 4; ++b) {
                 const LEAP_BONE& bone = finger.bones[b];
-                setJoint(glm::vec3(bone.next_joint.x,
-                    bone.next_joint.y,
-                    bone.next_joint.z) * LEAP_TO_WORLD);
+                glm::vec3 jointPos = glm::vec3(bone.next_joint.x, bone.next_joint.y, bone.next_joint.z) * LEAP_TO_WORLD;
+                if (glm::length(jointPos) > 0.001f) {
+                    setJoint(jointPos);
+                }
+                else {
+                    setJoint(glm::vec3(0.0f));
+                }
             }
         }
     }
@@ -298,20 +309,40 @@ void updateLeapHands() {
 
     // 3) Define which joints to connect (elbow→wrist, wrist→palm, finger chains)
     std::vector<std::pair<int, int>> bonePairs;
-    for (int h = 0; h < MAX_HANDS; ++h) {
+    int boneIndex = 0;
+
+    // Nascondi tutti gli ossi se non ci sono mani attive
+    if (!hasActiveHands) {
+        for (auto& node : boneNodes) {
+            node->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
+        }
+        return;
+    }
+
+    for (int h = 0; h < MAX_HANDS && h < frame->nHands; ++h) {
         int base = h * JOINTS_PER_HAND;
-        bonePairs.emplace_back(base + 0, base + 1);
-        bonePairs.emplace_back(base + 1, base + 2);
+
+        // Verifica se i punti sono validi (non sono nella posizione predefinita)
+        if (glm::length(J[base]) > 0.001f && glm::length(J[base + 1]) > 0.001f) {
+            bonePairs.emplace_back(base + 0, base + 1);  // elbow to wrist
+        }
+
+        if (glm::length(J[base + 1]) > 0.001f && glm::length(J[base + 2]) > 0.001f) {
+            bonePairs.emplace_back(base + 1, base + 2);  // wrist to palm
+        }
+
         for (int f = 0; f < 5; ++f) {
             int fb = base + 3 + f * 4;
             for (int b = 0; b < 3; ++b) {
-                bonePairs.emplace_back(fb + b, fb + b + 1);
+                if (glm::length(J[fb + b]) > 0.001f && glm::length(J[fb + b + 1]) > 0.001f) {
+                    bonePairs.emplace_back(fb + b, fb + b + 1);
+                }
             }
         }
     }
 
     // 4) Stretch & orient each cylinder‐bone node to match its joint pair
-    for (size_t i = 0; i < bonePairs.size(); ++i) {
+    for (size_t i = 0; i < bonePairs.size() && i < boneNodes.size(); ++i) {
         auto [a, b] = bonePairs[i];
         glm::vec3 A = J[a], B = J[b];
         glm::vec3 dir = B - A;
@@ -330,9 +361,25 @@ void updateLeapHands() {
         // 2) Compute the axis & angle from +Z to our bone direction
         glm::vec3 up = glm::vec3(0, 0, 1);
         glm::vec3 ndir = glm::normalize(dir);
+
+        // Evita problemi se ndir è parallelo a up
+        if (glm::abs(glm::dot(up, ndir)) > 0.999f) {
+            // Usiamo un vettore diverso se sono paralleli
+            if (glm::dot(up, ndir) > 0) {
+                node->setLocalMatrix(glm::translate(glm::mat4(1.0f), mid) *
+                    glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, len)));
+            }
+            else {
+                node->setLocalMatrix(glm::translate(glm::mat4(1.0f), mid) *
+                    glm::rotate(glm::mat4(1.0f), glm::pi<float>(), glm::vec3(1, 0, 0)) *
+                    glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, len)));
+            }
+            continue;
+        }
+
         glm::vec3 axis = glm::cross(up, ndir);
-        float     cosA = glm::clamp(glm::dot(up, ndir), -1.0f, 1.0f);
-        float     angle = acos(cosA);
+        float cosA = glm::clamp(glm::dot(up, ndir), -1.0f, 1.0f);
+        float angle = acos(cosA);
 
         // 3) Build a rotation matrix around that axis
         glm::mat4 R = glm::rotate(glm::mat4(1.0f), angle, axis);
@@ -343,6 +390,11 @@ void updateLeapHands() {
 
         // 5) Combine: T * R * S
         node->setLocalMatrix(T * R * S);
+    }
+
+    // Nascondi gli ossi rimanenti
+    for (size_t i = bonePairs.size(); i < boneNodes.size(); ++i) {
+        boneNodes[i]->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
     }
 }
 
