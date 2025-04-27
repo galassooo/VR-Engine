@@ -152,21 +152,6 @@ void setupLeapMotion(Eng::Base& eng) {
     head->addChild(handsNode);
     handsNode->setParent(head.get());
 
-    static std::shared_ptr<Eng::Mesh> boneMesh = nullptr;
-    // Create the bone‐mesh once
-    if (!boneMesh) {
-        boneMesh = std::make_shared<Eng::Mesh>();
-        // white lines, fully opaque
-        auto mat = std::make_shared<Eng::Material>(glm::vec3(1, 1, 1), 1.0f, 0.0f);
-        boneMesh->setMaterial(mat);
-        // tell the GPU we’ll draw GL_LINES
-        boneMesh->setMode(GL_LINES);
-        // no vertices yet
-        boneMesh->initBuffers();
-        handsNode->addChild(boneMesh);
-        boneMesh->setParent(handsNode.get());
-    }
-
     // Create shared sphere mesh only once
     static std::shared_ptr<Eng::Mesh> sphereMesh = nullptr;
     if (!sphereMesh) {
