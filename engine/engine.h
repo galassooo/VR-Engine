@@ -168,6 +168,8 @@ namespace Eng {
       void registerSkybox(const std::vector<std::string>& faces);
       std::shared_ptr<Skybox> getSkybox() const;
 
+	  glm::mat4 getHeadMatrix() const { return headMatrix; }
+
    private:
       /** @brief Reserved implementation details */
       struct Reserved;
@@ -202,5 +204,7 @@ namespace Eng {
 
       // Skybox
       std::shared_ptr<Skybox> skybox;
+
+      glm::mat4 headMatrix;
    };
 }; // end of namespace Eng::

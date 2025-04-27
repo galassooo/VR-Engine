@@ -383,6 +383,8 @@ void ENG_API Eng::Base::renderScene() {
    // Get View Matrix
    glm::mat4 viewMatrix = activeCamera->getFinalMatrix();
 
+   headMatrix = activeCamera->getViewMatrix();
+
    // Get Projection matrix
    glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 
@@ -654,6 +656,8 @@ void ENG_API Eng::Base::renderStereoscopic() {
     // Compute modelViewMatrix based on user VR position
     glm::mat4 headPositionMatrix = reserved->ovr->getModelviewMatrix();
     glm::mat4 modelViewMatrix = glm::inverse(headPositionMatrix);
+
+	headMatrix = modelViewMatrix;
 
     //glm::mat4 cameraWorldMatrix = glm::inverse(activeCamera->getLocalMatrix());
     //glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
