@@ -670,7 +670,7 @@ void ENG_API Eng::Base::renderStereoscopic() {
     // Definisci una matrice di trasformazione iniziale fissa che posiziona e orienta correttamente la camera
     // Prima ruota di 270 gradi intorno all'asse Y (per orientarti verso la scacchiera)
     // Poi trasla nella posizione desiderata
-    glm::mat4 initialTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, stereoEyeHeight, -6.0f)) *
+    glm::mat4 initialTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-1.4f, stereoEyeHeight, -0.6f)) *
         glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
     // Applica la trasformazione iniziale fissa PRIMA della matrice della posizione della testa
