@@ -408,7 +408,7 @@ void ENG_API Eng::Base::renderScene() {
    traverseAndAddToRenderList(rootNode);
 
    // Render all nodes in the render list
-   renderList.setViewMatrix(viewMatrix);
+   renderList.setEyeViewMatrix(viewMatrix);
    renderList.setEyeProjectionMatrix(projectionMatrix);
    renderList.render();
 
@@ -632,7 +632,7 @@ void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& project
 
     renderList.clear();
     traverseAndAddToRenderList(rootNode);
-    renderList.setViewMatrix(viewMatrix);
+    renderList.setEyeViewMatrix(viewMatrix);
 	renderList.setEyeProjectionMatrix(projectionMatrix);
     renderList.render();
 }
@@ -753,5 +753,5 @@ void Eng::Base::registerSkybox(const std::vector<std::string>& faces) {
         skybox.reset();
     }
 
-    renderList.setGlobalAmbient(skybox->getGlobalAmbient());
+    renderList.setGlobalLightColor(skybox->getGlobalColor());
 }

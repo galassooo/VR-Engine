@@ -20,10 +20,10 @@ public:
 	bool initShaders();
 	std::vector<std::shared_ptr<Eng::ListElement>> getElements() const;
 
-	void setViewMatrix(glm::mat4& viewMatrix);
+	void setEyeViewMatrix(glm::mat4& viewMatrix);
 	void setEyeProjectionMatrix(glm::mat4& eyeProjectionMatrix);
 
-	void setGlobalAmbient(const glm::vec3& globalAmbient);
+	void setGlobalLightColor(const glm::vec3& globalColor);
 	
 private:
 	/** @brief Sorted collection of renderable nodes with their world coordinates and materials.
@@ -35,22 +35,29 @@ private:
 	///> Maximum number of lights supported by OpenGL
 	static const int MAX_LIGHTS = 8;
 	int lightsCount = 0;
-	glm::mat4 viewMatrix;
+	glm::mat4 eyeViewMatrix;
 	glm::mat4 eyeProjectionMatrix;
 	glm::mat4 lightProjectionMatrix;
 	glm::mat4 lightSpaceMatrix;
 
-	glm::vec3 globalAmbient = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 globalLightColor = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	struct CullingSphere;
 	std::unique_ptr<CullingSphere> cullingSphere;
 
+	std::unique_ptr<Eng::BoundingBox> boundingBox;
+
 	std::shared_ptr<Eng::Fbo> shadowMapFbo;
 	unsigned int shadowMapTexture = 0;
 
+	bool firstRender = true;
+
 	bool isWithinCullingSphere(Eng::Mesh* mesh);
 
-	bool setupShadowMap(int width, int height, float range);
+	std::vector<glm::vec3> computeFrustumCorners(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
+	glm::mat4 computeLightProjectionMatrix(const glm::mat4& lightViewMatrix, const std::vector<glm::vec3>& boundingBoxCorners);
+
+	bool setupShadowMap(int width, int height);
 	void renderPass(bool isAdditive, bool useCulling);
 	void shadowPass(std::shared_ptr <Eng::DirectionalLight>& light);
 

@@ -19,7 +19,7 @@ void Eng::testListNodeManagement() {
 
     // Render the list with a mock view matrix
     glm::mat4 viewMatrix = glm::mat4(1.0f);
-    list.setViewMatrix(viewMatrix);
+    list.setEyeViewMatrix(viewMatrix);
     list.render();
 
     // Clear the list

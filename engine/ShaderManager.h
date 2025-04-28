@@ -50,9 +50,11 @@ public:
 	static constexpr const char* UNIFORM_ATTENUATION_CONSTANT = "constAttenuatuion";	//Light attenuation constant - Uniform name
 	static constexpr const char* UNIFORM_ATTENUATION_LINEAR = "linearAttenuation";		//Light attenuation linear - Uniform name
 	static constexpr const char* UNIFORM_ATTENUATION_QUADRATIC = "quadraticAttenuation";//Light attenuation quadratic - Uniform name
-	//static constexpr const char* UNIFORM_TEXTURE_SHADOWS = "shadowMap";		//(Unused)Shadow map texture sampler - Uniform name
+	//static constexpr const char* UNIFORM_TEXTURE_SHADOWS = "shadowMap";				//(Unused)Shadow map texture sampler - Uniform name
 
-	static constexpr const char* UNIFORM_GLOBAL_AMBIENT = "globalAmbient";		//Global ambient color - Uniform name
+	static constexpr const char* UNIFORM_GLOBAL_LIGHT_COLOR = "globalLightColor";		//Global light color - Uniform name
+
+	static constexpr const char* UNIFORM_EYE_FRONT = "eyeFront";	//Camera front vector - Uniform name
 
 
 	bool loadProgram(std::shared_ptr<Eng::Program>& program);
@@ -83,7 +85,9 @@ public:
 	void setUseTexture(bool use);
 	//void setTextureSampler(int textureUnit); unused: texture unit is defined during texture binding
 
-	void setGlobalAmbient(const glm::vec3& amb);
+	void setGlobalLightColor(const glm::vec3& color);
+
+	void setEyeFront(const glm::vec3& front);
 
 	static std::string preprocessShaderCode(const std::string& source);
 
@@ -127,5 +131,7 @@ private:
 	int attenuationLinearLoc;
 	int attenuationQuadraticLoc;
 
-	int globalAmbientLoc;
+	int globalLightColorLoc;
+
+	int eyeFrontLoc;
 };

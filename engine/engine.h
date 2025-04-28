@@ -98,6 +98,7 @@ namespace Eng {
 #include "VertexShader.h"
 #include "FragmentShader.h"
 #include "Program.h"
+#include "BoundingBox.h"
 #include "RenderLayer.h"
 #include "ListElement.h"
 #include "List.h"

@@ -1,4 +1,5 @@
 #include "engine.h"
+#include <iomanip>
 
 // GLEW
 #include <GL/glew.h>
@@ -12,7 +13,8 @@
  *
  * Initializes the render list and assigns a default name.
  */
-Eng::List::List() : Object(), cullingSphere(std::make_unique<Eng::List::CullingSphere>()) {
+Eng::List::List() : Object(), cullingSphere(std::make_unique<Eng::List::CullingSphere>()), 
+boundingBox(std::make_unique<Eng::BoundingBox>()) {
    name = "RenderList";
 }
 Eng::List::~List() = default;
@@ -44,8 +46,10 @@ void Eng::List::addNode(const std::shared_ptr<Eng::Node> &node, const glm::mat4 
    auto element = std::make_shared<Eng::ListElement>(node, finalMatrix);
 
    // Keep lights count to use it as an index later
+   // And for meshes use vertices to calculate the boundig box of the scene
    if (element->getLayer() == RenderLayer::Lights)
        lightsCount++;
+
 
    const auto it = std::ranges::find_if(elements, [&element](const auto &e) {
       return element->getLayer() < e->getLayer();
@@ -70,7 +74,7 @@ bool Eng::List::isWithinCullingSphere(Eng::Mesh* mesh) {
     float localRadius = mesh->getBoundingSphereRadius();
 
     // Transform the bounding sphere center to eye space.
-    glm::mat4 modelViewMatrix = viewMatrix * mesh->getFinalMatrix();
+    glm::mat4 modelViewMatrix = eyeViewMatrix * mesh->getFinalMatrix();
     glm::vec3 eyeCenter = glm::vec3(modelViewMatrix * glm::vec4(localCenter, 1.0f));
 
     // For non-uniform scaling, extract an approximate uniform scale:
@@ -97,6 +101,23 @@ bool Eng::List::isWithinCullingSphere(Eng::Mesh* mesh) {
  *
  */
 void Eng::List::render() {
+    if (firstRender) {
+        std::cout << "[List] Computing Scene Bounding Box" << std::endl;
+        for (int i = lightsCount; i < elements.size(); ++i) {
+
+            if (const auto& mesh = dynamic_cast<Eng::Mesh*>(elements[i]->getNode().get())) {
+                for (auto& vertex : mesh->getVertices()) {
+                    boundingBox->update(glm::vec3(mesh->getFinalMatrix() * glm::vec4(vertex.getPosition(), 1.0f)));
+                }
+            } 
+        }
+        for (auto& vertex : boundingBox->getVertices()) {
+            std::cout << "  (" << vertex.x << ", " << vertex.y << ", " << vertex.z << ")" << std::endl;
+        }
+        firstRender = false;
+    }
+
+
     // Virtual Environment
    // Here we do the sphere culling for the virtual environment as it is simpler to work in eye coordinates rather than world coordinates
    // The previous implementation was on the engine traverseAndAdd but it was wrong as we were mixing eye coordinates with world coordinates
@@ -241,8 +262,8 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
 			}
 		}
 
-		// Load global ambient light color
-		sm.setGlobalAmbient(globalAmbient);
+		// Load global light color
+		sm.setGlobalLightColor(globalLightColor);
 
         // Load projection matrix
         sm.setProjectionMatrix(eyeProjectionMatrix);
@@ -250,7 +271,7 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
         glm::mat4 modelMatrix = elements[i]->getWorldCoordinates();
 
         // Generate modelView matrix
-        glm::mat4 modelViewMatrix = viewMatrix * modelMatrix;
+        glm::mat4 modelViewMatrix = eyeViewMatrix * modelMatrix;
 
         // glLoadMatrixf(glm::value_ptr(modelViewMatrix));    unsupported 4.4
 
@@ -264,6 +285,11 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
         // Send lightSpaceModel matrix
         glm::mat4 modelLightMatrix = lightSpaceMatrix * modelMatrix;
         sm.setLightSpaceMatrix(modelLightMatrix);
+
+		// Send eye front vector: this is the camera front vector in world coordinates
+		// which corresponds to the third column of the view matrix
+		glm::vec3 eyeFront = -glm::vec3(glm::transpose(glm::mat3(eyeViewMatrix))[2]);
+		sm.setEyeFront(eyeFront);
 
         elements[i]->getNode()->render();
     }
@@ -285,21 +311,44 @@ void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
 
 	sm.loadProgram(shadowMapProgram);
 
-    float range = SHADOW_RANGE; //STEREO_FAR_CLIP - STEREO_NEAR_CLIP;
-    float halfrange = range * 0.5f;
+    std::vector<glm::vec3> cameraFrustumCorners = computeFrustumCorners(eyeProjectionMatrix, eyeViewMatrix);
 
-    // Inverse of camera view matrix
-    glm::mat4 invView = glm::inverse(viewMatrix);
+    std::vector<glm::vec3> sceneBoundingBoxVertices = boundingBox->getVertices();
 
-    // The center of the view is the origin shifted of -halfrange on z axes on current view coordinates (0, 0, -halfrange)
-    // So we only need to convert it back to world space
-    glm::vec4 camCenter = invView * glm::vec4(0.0f, 0.0f, -halfrange, 1.0f);
-    glm::vec3 lightCenter = glm::vec3(camCenter);
+    glm::mat4 lightViewMatrix = light->getLightViewMatrix(cameraFrustumCorners, glm::length(boundingBox->getSize()));
 
-    glm::mat4 lightView = light->getLightViewMatrix(lightCenter, range);
+	glm::mat4 lightProjectionMatrix = computeLightProjectionMatrix(lightViewMatrix, sceneBoundingBoxVertices);
+
+    /*
+    // Print projection matrix for debug
+    const float* matrixPtr = glm::value_ptr(lightViewMatrix);
+
+    std::cout << "View Matrix (glm::mat4):" << std::endl;
+
+    // Format the matrix in a human-readable form
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            std::cout << std::fixed << std::setprecision(6) << matrixPtr[i * 4 + j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    // Print projection matrix for debug
+    matrixPtr = glm::value_ptr(lightProjectionMatrix);
+
+    std::cout << "Projection Matrix (glm::mat4):" << std::endl;
+
+    // Format the matrix in a human-readable form
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            std::cout << std::fixed << std::setprecision(6) << matrixPtr[i * 4 + j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    */
 
     // calculate and set the lightSpaceMatric for shadow projection
-    lightSpaceMatrix = lightProjectionMatrix * lightView;
+    lightSpaceMatrix = lightProjectionMatrix * lightViewMatrix;
 
     // Activate and clean the shadow map FBO
     shadowMapFbo->render();
@@ -320,6 +369,64 @@ void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
 }
 
 /**
+ * @brief Computes the light projection matrix based on the light view matrix and the scene bounding box corners.
+ *
+ * This method transforms the bounding box corners to light space and computes the
+ * orthographic projection matrix based on the light space bounding box.
+ *
+ * @param lightViewMatrix The view matrix of the light source.
+ * @param boundingBoxVertices The corners of the scene bounding box in world coordinates.
+ * @return The computed orthographic projection matrix for the light source.
+ */
+glm::mat4 Eng::List::computeLightProjectionMatrix(const glm::mat4& lightViewMatrix, const std::vector<glm::vec3>& boundingBoxVertices) {
+    std::vector<glm::vec3> lightSpaceVertices;
+    for (const auto& vertex : boundingBoxVertices) {
+        glm::vec4 transformed = lightViewMatrix * glm::vec4(vertex, 1.0f);
+        lightSpaceVertices.push_back(glm::vec3(transformed));
+    }
+
+    glm::vec3 minLS(FLT_MAX);
+    glm::vec3 maxLS(-FLT_MAX);
+    
+    for (const auto& v : lightSpaceVertices) {
+        minLS = glm::min(minLS, v);
+        maxLS = glm::max(maxLS, v);
+    }
+
+	// Build the ortho projection matrix based on the light space bounding box
+    glm::mat4 lightProjection = glm::ortho(
+        minLS.x, maxLS.x,
+        minLS.y, maxLS.y,
+        -maxLS.z, -minLS.z // OpenGL NDC depth goes in the opposite direction -1 to 1
+    );
+
+    return lightProjection;
+}
+
+std::vector<glm::vec3> Eng::List::computeFrustumCorners(glm::mat4 projectionMatrix, glm::mat4 viewMatrix) {
+    std::vector<glm::vec3> corners = {
+        glm::vec3(-1, -1, -1),
+        glm::vec3(1, -1, -1),
+        glm::vec3(1,  1, -1),
+        glm::vec3(-1,  1, -1),
+        glm::vec3(-1, -1,  1),
+        glm::vec3(1, -1,  1),
+        glm::vec3(1,  1,  1),
+        glm::vec3(-1,  1,  1)
+    };
+
+    glm::mat4 invViewProj = glm::inverse(projectionMatrix * viewMatrix);
+
+    for (auto& corner : corners) {
+        glm::vec4 corner4(corner, 1.0f);
+        corner4 = invViewProj * corner4;
+        corner = glm::vec3(corner4 / corner4.w); // normalize the omogeneous coordinates
+    }
+
+    return corners;
+}
+
+/**
  * @brief Retrieves all elements in the list.
  * @return A vector of shared pointers to the list elements in the list.
  */
@@ -331,8 +438,8 @@ std::vector<std::shared_ptr<Eng::ListElement> > Eng::List::getElements() const {
 * @brief Set new view matrix in the render list.
 * @param glm::mat4 View matrix.
 */
-void Eng::List::setViewMatrix(glm::mat4& viewMatrix) {
-    this->viewMatrix = viewMatrix;
+void Eng::List::setEyeViewMatrix(glm::mat4& viewMatrix) {
+    this->eyeViewMatrix = viewMatrix;
 }
 
 /**
@@ -344,14 +451,14 @@ void Eng::List::setEyeProjectionMatrix(glm::mat4& eyeProjectionMatrix) {
 }
 
 /**
- * @brief Sets the global ambient light color.
+ * @brief Sets the global light color for the render list.
  *
- * This method sets the global ambient light color used in the rendering process.
+ * This method updates the global light color used in the rendering process.
  *
- * @param globalAmbient The new global ambient light color.
+ * @param globalColor The new global light color as a glm::vec3.
  */
-void Eng::List::setGlobalAmbient(const glm::vec3& globalAmbient) {
-    this->globalAmbient = globalAmbient;
+void Eng::List::setGlobalLightColor(const glm::vec3& globalColor) {
+    this->globalLightColor = globalColor;
 }
 
 /**
@@ -365,16 +472,15 @@ void Eng::List::setGlobalAmbient(const glm::vec3& globalAmbient) {
  * @param range The range of the light source for shadow mapping.
  * @return true if the setup is successful, false otherwise.
  */
-bool Eng::List::setupShadowMap(int width, int height, float range) {
-    std::cout << "DEBUG: Setting up shadow map, requested size: "
-        << width << "x" << height << ", range: " << range << std::endl;
+bool Eng::List::setupShadowMap(int width, int height) {
+    std::cout << "DEBUG: [List] Setting up shadow map, requested size: "
+        << width << "x" << height << std::endl;
 
-    if (width <= 0 || height <= 0 || range <= 0.0f) {
+    if (width <= 0 || height <= 0) {
         width = 1024;
         height = 1024;
-        range = 10.0f;
-        std::cout << "DEBUG: Using default shadow map size and range: "
-            << width << "x" << height << ", range: " << range << std::endl;
+        std::cout << "DEBUG: [List] Using default shadow map size and range: "
+            << width << "x" << height << std::endl;
     }
 
     // Elimina texture e FBO precedenti
@@ -397,7 +503,7 @@ bool Eng::List::setupShadowMap(int width, int height, float range) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-    std::cout << "DEBUG: Shadow depth texture created with ID: " << shadowMapTexture << std::endl;
+    std::cout << "DEBUG: [List] Shadow depth texture created with ID: " << shadowMapTexture << std::endl;
 
     // Bind texture all'FBO
     shadowMapFbo->bindTexture(0, Fbo::BIND_DEPTHTEXTURE, shadowMapTexture);
@@ -407,20 +513,9 @@ bool Eng::List::setupShadowMap(int width, int height, float range) {
         std::cerr << "ERROR: Shadow FBO setup failed" << std::endl;
         return false;
     }
-    std::cout << "DEBUG: Shadow FBO setup successful, handle: "
+    std::cout << "DEBUG: [List] Shadow FBO setup successful, handle: "
         << shadowMapFbo->getHandle() << ", size "
         << shadowMapFbo->getSizeX() << "x" << shadowMapFbo->getSizeY() << std::endl;
-
-    // Orthogonal projection matrix for shadow projection
-    // range ideally should be calculated based on the camera frustum, but here it is
-    // hard coded for prototyping
-    float halfRange = range * 0.5f;
-    lightProjectionMatrix = glm::ortho(-halfRange, halfRange, -halfRange, halfRange, -halfRange, halfRange);
-    //glm::vec3 lightDir = glm::normalize(glm::vec3(-1.0f, -1.0f, -1.0f));
-    //glm::mat4 lightView = glm::lookAt(-lightDir * range * 0.5f, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    //lightSpaceMatrix = lightProjection * lightView;
-
-    std::cout << "DEBUG: Light space matrix computed with orthographic range: ±" << halfRange << std::endl;
 
     // Ripristina lo stato di default
     Fbo::disable();
@@ -446,7 +541,7 @@ bool Eng::List::initShaders() {
     if (initialized) return true;
 
     // Set up the shadow map framebuffer object (FBO)
-    if (!setupShadowMap(2048, 2048, SHADOW_RANGE)) // STEREO_FAR_CLIP-STEREO_NEAR_CLIP
+    if (!setupShadowMap(2048, 2048))
         return false;
 
     /**************** Basic vertex shader *****************/
@@ -530,7 +625,10 @@ void main() {
    uniform vec3 ShaderManager::UNIFORM_MATERIAL_EMISSION;
 
    // Global properties:
-   uniform vec3 ShaderManager::UNIFORM_GLOBAL_AMBIENT;
+   uniform vec3 ShaderManager::UNIFORM_GLOBAL_LIGHT_COLOR;
+
+   // Eye properties
+   uniform vec3 ShaderManager::UNIFORM_EYE_FRONT;
    
    // Texture mapping:
    layout(binding = ShaderManager::DIFFUSE_TEXTURE_UNIT) uniform sampler2D texSampler;
@@ -545,19 +643,29 @@ void main() {
 
       // Global specular contribution based on the normal's tilt relative to the horizontal plane
 
-      // Interpolated normal form the vertex shader
+      // Direction from texel to eye in eye-space
+      vec3 V = normalize(-fragPos.xyz);
+      // Interpolated normal form the vertex shader in eye-space
       vec3 N = normalize(fragNormal);
 
-      float globalSpecStrength = 0.3; // controls how strong the global specular is
+      float globalSpecStrength = 0.8; // controls how strong the global specular is
 
-      // Calculate how "horizontal" the normal is: Y = 1.0 -> vertical, Y = 0.0 -> horizontal
-      float horizontalness = 1.0 - abs(N.y);
+      // 1. How much the normal is perpendicular to the view direction
+      float normalViewAlignment = abs(dot(N, V));
+      float perpendFactor = 1.0 - normalViewAlignment;
+
+      // 2. How much the camera is tilted relative to the horizontal plane
+      float cameraInclination = dot(normalize(ShaderManager::UNIFORM_EYE_FRONT), vec3(0.0, 1.0, 0.0));
+      float horizonFactor = (cameraInclination >= 0.0) ? 1.0 : 1.0 + cameraInclination;
+
+      // 3. Combine the two factors
+      float globalSpecFactor = perpendFactor * horizonFactor;
 
       // Raise to a power to controll the falloff
-      horizontalness = pow(horizontalness, 2.0);
+      //globalSpecFactor = pow(globalSpecFactor, 2.0);
 
       // Add global specular contribution
-      color += ShaderManager::UNIFORM_GLOBAL_AMBIENT * horizontalness * globalSpecStrength;
+      color += ShaderManager::UNIFORM_GLOBAL_LIGHT_COLOR * globalSpecFactor * globalSpecStrength;
 
 
       // Final color calculation with texture

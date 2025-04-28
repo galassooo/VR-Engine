@@ -206,8 +206,10 @@ bool Eng::Skybox::loadCubemap()
         glm::vec3 faceAverageColor = calculateWeightedAverageColor(bits, width, height, channels);
 
         // Debug print average face color
+        /*
         std::cout << "[Skybox] Face " << i << " average color: " << faceAverageColor.x << ", "
             << faceAverageColor.y << ", " << faceAverageColor.z << std::endl;
+        */
 
         faceAverageColorSum += faceAverageColor;
 
@@ -218,8 +220,8 @@ bool Eng::Skybox::loadCubemap()
 	// Compute average color of all faces
 	glm::vec3 globalAverageColor = faceAverageColorSum / static_cast<float>(faceCount);
 
-	// Set the global ambient color based on the average color of the skybox
-    globalAmbient = glm::vec3{ globalAverageColor.r * 0.2f, globalAverageColor.g * 0.2f, globalAverageColor.b * 0.2f };
+	// Set the global color based on the average color of the skybox
+    globalColor = glm::vec3{ globalAverageColor.r * 0.2f, globalAverageColor.g * 0.2f, globalAverageColor.b * 0.2f };
     return true;
 }
 
@@ -295,7 +297,7 @@ glm::vec3 Eng::Skybox::calculateWeightedAverageColor(unsigned char* bits, int wi
 }
 
 
-glm::vec3 Eng::Skybox::getGlobalAmbient()
+glm::vec3 Eng::Skybox::getGlobalColor()
 {
-	return globalAmbient;
+	return globalColor;
 }

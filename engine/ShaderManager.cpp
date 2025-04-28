@@ -198,12 +198,20 @@ void ENG_API Eng::ShaderManager::setTextureSampler(int textureUnit) {
 }
 */
 
-void ENG_API Eng::ShaderManager::setGlobalAmbient(const glm::vec3& amb) {
-	if (globalAmbientLoc == -1) {
-		//std::cerr << "[ERROR]ShaderManager: global ambient location not found in Program " << currentProgram->getGlId() << std::endl;
+void ENG_API Eng::ShaderManager::setGlobalLightColor(const glm::vec3& color) {
+	if (globalLightColorLoc == -1) {
+		//std::cerr << "[ERROR]ShaderManager: global light color location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
 	}
-	currentProgram->setVec3(globalAmbientLoc, amb);
+	currentProgram->setVec3(globalLightColorLoc, color);
+}
+
+void ENG_API Eng::ShaderManager::setEyeFront(const glm::vec3& front) {
+	if (eyeFrontLoc == -1) {
+		//std::cerr << "[ERROR]ShaderManager: eye front location not found in Program " << currentProgram->getGlId() << std::endl;
+		return;
+	}
+	currentProgram->setVec3(eyeFrontLoc, front);
 }
 
 bool ENG_API Eng::ShaderManager::setDefaultShaders() {
@@ -296,7 +304,9 @@ bool ENG_API Eng::ShaderManager::loadProgram(std::shared_ptr<Eng::Program>& prog
 	//texSamplerLoc = program->getParamLocation(UNIFORM_TEXTURE_DIFFUSE); //not used: handled engine side when binding the texture
 	useTextureLoc = program->getParamLocation(UNIFORM_USE_TEXTURE_DIFFUSE);
 
-	globalAmbientLoc = program->getParamLocation(UNIFORM_GLOBAL_AMBIENT);
+	globalLightColorLoc = program->getParamLocation(UNIFORM_GLOBAL_LIGHT_COLOR);
+
+	eyeFrontLoc = program->getParamLocation(UNIFORM_EYE_FRONT);
 
 	program->render();
 	currentProgram = program;
@@ -355,6 +365,7 @@ std::unordered_map<std::string, std::string> ENG_API Eng::ShaderManager::buildSh
 		{"ShaderManager::UNIFORM_ATTENUATION_QUADRATIC", UNIFORM_ATTENUATION_QUADRATIC},
 		{"ShaderManager::UNIFORM_LIGHT_CUTOFF_ANGLE", UNIFORM_LIGHT_CUTOFF_ANGLE},
 		{"ShaderManager::UNIFORM_LIGHT_FALLOFF", UNIFORM_LIGHT_FALLOFF},
-		{"ShaderManager::UNIFORM_GLOBAL_AMBIENT", UNIFORM_GLOBAL_AMBIENT}
+		{"ShaderManager::UNIFORM_GLOBAL_LIGHT_COLOR", UNIFORM_GLOBAL_LIGHT_COLOR},
+		{"ShaderManager::UNIFORM_EYE_FRONT", UNIFORM_EYE_FRONT}
 	};
 }

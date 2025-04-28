@@ -56,23 +56,27 @@ glm::vec3 Eng::DirectionalLight::getDirection() const {
    return direction;
 }
 
-glm::mat4 Eng::DirectionalLight::getLightViewMatrix(glm::vec3& center, float range) {
-    float halfRange = range * 0.5f;
+glm::mat4 Eng::DirectionalLight::getLightViewMatrix(const std::vector<glm::vec3>& frustumCorners, float maxRange) {
+    if (frustumCorners.empty()) {
+        std::cerr << "ERROR: Frustum corners array is empty!" << std::endl;
+        return glm::mat4(1.0f);
+    }
 
-    if (glm::length(direction) == 0.0f) {
+    // calculate the center by finding the median point within the frustum
+    glm::vec3 center(0.0f);
+    for (const auto& corner : frustumCorners) {
+        center += corner;
+    }
+    center /= static_cast<float>(frustumCorners.size());
+
+    glm::vec3 wDir = glm::normalize(glm::mat3(localMatrix) * direction);
+    if (glm::length(wDir) == 0.0f) {
         std::cerr << "ERROR: Direction vector is zero!" << std::endl;
     }
 
-    glm::vec3 wDir = glm::normalize(glm::mat3(localMatrix) * direction);
+    glm::vec3 lightPos = center - wDir * maxRange;
 
-    // Fake light position: moved back in opposite direction to its own
-    glm::vec3 lightPos = center - wDir * halfRange;
-
-    if (glm::distance(lightPos, center) < 0.0001f) {
-        std::cerr << "ERROR: lightPos and center too close or equal!" << std::endl;
-    }
-
-    glm::vec3 up = fabs(glm::dot(wDir, glm::vec3(0, 1, 0))) > 0.99f ?
+    glm::vec3 up = glm::abs(glm::dot(wDir, glm::vec3(0, 1, 0))) > 0.99f ?
         glm::vec3(0, 0, 1) : glm::vec3(0, 1, 0);
 
     glm::mat4 lightView = glm::lookAt(lightPos, center, up);
