@@ -24,7 +24,9 @@ public:
 	void setEyeProjectionMatrix(glm::mat4& eyeProjectionMatrix);
 
 	void setGlobalLightColor(const glm::vec3& globalColor);
-	
+
+	void setCurrentFBO(Fbo* fbo) { currentFBO = std::shared_ptr<Fbo>(fbo, [](Fbo*) {}); }
+
 private:
 	/** @brief Sorted collection of renderable nodes with their world coordinates and materials.
 	 *
@@ -76,6 +78,8 @@ private:
 	std::shared_ptr<Eng::Program> pointLightProgram;
 	std::shared_ptr<Eng::Program> spotLightProgram;
 	std::shared_ptr<Eng::Program> shadowMapProgram;
+
+	std::shared_ptr<Eng::Fbo> currentFBO = nullptr;
 };
 
 

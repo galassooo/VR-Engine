@@ -71,6 +71,8 @@
 #define STEREO_NEAR_CLIP    0.1f
 #define STEREO_FAR_CLIP     1000000.0f
 
+#define STEREO_EYE_HEIGHT   2.6f
+
 /**
  * @namespace Eng
  * @brief Main namespace containing all engine components
@@ -169,7 +171,11 @@ namespace Eng {
       void registerSkybox(const std::vector<std::string>& faces);
       std::shared_ptr<Skybox> getSkybox() const;
 
-	  glm::mat4 getHeadMatrix() const { return headMatrix; }
+	  // HeadNode for LeapMotion
+      std::shared_ptr<Node> getHeadNode();
+
+      void setStereoEyeHeight(float height) { stereoEyeHeight = height; }
+      float getStereoEyeHeight() const { return stereoEyeHeight; }
 
    private:
       /** @brief Reserved implementation details */
@@ -206,6 +212,9 @@ namespace Eng {
       // Skybox
       std::shared_ptr<Skybox> skybox;
 
-      glm::mat4 headMatrix;
+      // HeadNode for LeapMotion
+	  std::shared_ptr<Node> headNode;
+
+      float stereoEyeHeight = STEREO_EYE_HEIGHT;
    };
 }; // end of namespace Eng::

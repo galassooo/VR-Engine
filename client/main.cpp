@@ -1,4 +1,4 @@
-#include "engine.h"
+﻿#include "engine.h"
 #include <iostream>
 #include <functional>
 #include <random>
@@ -25,41 +25,23 @@ std::vector<std::string> myCubemapFaces = {
 // Leap Motion
 Leap* leap = nullptr;
 std::shared_ptr<Eng::Node> handsNode = nullptr; // Root node for hands visualization
+bool leapVisualizationEnabled = true;
+
+static const int MAX_HANDS = 2;
+static const int JOINTS_PER_HAND = 3 + (5 * 4);  // elbow, wrist, palm + 5 fingers * 4 bones
+static std::vector<std::shared_ptr<Eng::Mesh>> jointMeshes;
+
+static std::shared_ptr<Eng::Mesh> cylinderMesh = nullptr;
+static std::vector<std::shared_ptr<Eng::Node>> boneNodes;
 
 // Update hands
 void updateLeapHands();
 
+std::shared_ptr<Eng::Mesh> createSphereMesh(float radius = 5.0f);
+std::shared_ptr<Eng::Mesh> createCylinderMesh(float radius = 0.002f, float height = 1.0f);
+
 // LepMotion setup
 void setupLeapMotion(Eng::Base& eng);
-
-/**
- * @brief Sets up the chess piece movement logic.
- *
- * This function initializes the chessboard, manages piece selection,
- * movement, and captures, and provides an undo functionality for moves.
- *
- * @param eng Reference to the engine instance.
- */
-void setupChessMovement(Eng::Base &eng);
-
-/**
- * @brief Sets up the mirror effect on the chessboard.
- *
- * This function makes the squares transparent and adds a reflective effect
- * to the chess pieces.
- *
- * @param engine Reference to the engine instance.
- */
-void setupMirrorEffect(Eng::Base &engine);
-
-/**
- * @brief Sets up controls for manipulating the light source in the scene.
- *
- * This function allows the user to move the light source and change its color.
- *
- * @param eng Reference to the engine instance.
- */
-void setupLightControls(Eng::Base &eng);
 
 /**
  * @brief Sets up multiple cameras and their controls.
@@ -92,10 +74,12 @@ int main(int argc, char *argv[]) {
       return -1;
    }
 
+   eng.loadScene("..\\resources\\Chess.ovo");
+
+   // Dopo aver caricato la scena in main.cpp
    // Setup Leap Motion with its own render callback
    setupLeapMotion(eng);
 
-   eng.loadScene("..\\resources\\Chess.ovo");
    eng.engEnable(ENG_STEREO_RENDERING);
 
    setUpCameras(eng);
@@ -118,7 +102,7 @@ int main(int argc, char *argv[]) {
 
 #include <deque>
 
-// Initialize Leap Motion and set up callbacks
+// Updated setupLeapMotion function with proper mesh reuse
 void setupLeapMotion(Eng::Base& eng) {
     // Initialize Leap Motion
     leap = new Leap();
@@ -129,10 +113,80 @@ void setupLeapMotion(Eng::Base& eng) {
         return;
     }
 
-    // Create hands geometry
+    auto head = eng.getHeadNode();
     handsNode = std::make_shared<Eng::Node>();
     handsNode->setName("LeapMotionHands");
-    eng.getRootNode()->addChild(handsNode);
+
+    const float HAND_DISTANCE = 0.3f;  // 1 m in front
+    glm::mat4 forward = glm::translate(
+        glm::mat4(1.0f),
+        glm::vec3(0.0f, -0.1f, -HAND_DISTANCE)
+    );
+    handsNode->setLocalMatrix(forward);
+
+
+    head->addChild(handsNode);
+    handsNode->setParent(head.get());
+
+    // Create shared sphere mesh only once
+    static std::shared_ptr<Eng::Mesh> sphereMesh = nullptr;
+    if (!sphereMesh) {
+        sphereMesh = createSphereMesh(0.005f);  // Increase size to 5.0f
+        auto mat = std::make_shared<Eng::Material>(glm::vec3(1, 0, 0), 1.0f, 0.2f);
+        sphereMesh->setMaterial(mat);
+        sphereMesh->initBuffers();
+    }
+
+    if (!cylinderMesh) {
+        cylinderMesh = createCylinderMesh(0.002f, 1.0f);
+        auto mat = std::make_shared<Eng::Material>(glm::vec3(1), 1.0f, 0.0f);
+        cylinderMesh->setMaterial(mat);
+        cylinderMesh->initBuffers();
+    }
+
+    // Pre-create mesh instances for all joints
+    if (jointMeshes.empty()) {
+        jointMeshes.reserve(MAX_HANDS * JOINTS_PER_HAND);
+        for (int i = 0; i < MAX_HANDS * JOINTS_PER_HAND; ++i) {
+            // Create a mesh that shares vertices/indices with sphereMesh
+            auto jointMesh = std::make_shared<Eng::Mesh>();
+
+            // Share the same vertex and index data
+            jointMesh->setVertices(sphereMesh->getVertices());
+            jointMesh->setIndices(sphereMesh->getIndices());
+            jointMesh->setMaterial(sphereMesh->getMaterial());
+
+            // Initialize buffers for this instance
+            jointMesh->initBuffers();
+
+            // Add to the scene graph
+            handsNode->addChild(jointMesh);
+            jointMesh->setParent(handsNode.get());
+
+            jointMeshes.push_back(jointMesh);
+        }
+    }
+
+    // 2) Create one Node-per-bone
+    //    bones per hand = 2 (elbow→wrist, wrist→palm) + 5*4 finger bones = 22
+    const int bonesPerHand = 2 + 5 * 4;
+    if (boneNodes.empty()) {
+        boneNodes.reserve(MAX_HANDS * bonesPerHand);
+        for (int i = 0; i < MAX_HANDS * bonesPerHand; ++i) {
+            auto boneNode = std::make_shared<Eng::Node>();
+            auto meshInst = std::make_shared<Eng::Mesh>();
+            meshInst->setVertices(cylinderMesh->getVertices());
+            meshInst->setIndices(cylinderMesh->getIndices());
+            meshInst->setMaterial(cylinderMesh->getMaterial());
+            meshInst->initBuffers();
+            boneNode->addChild(meshInst);
+            meshInst->setParent(boneNode.get());
+
+            handsNode->addChild(boneNode);
+            boneNode->setParent(handsNode.get());
+            boneNodes.push_back(boneNode);
+        }
+    }
 
     // Register update callback for Leap Motion
     auto& callbackManager = Eng::CallbackManager::getInstance();
@@ -142,12 +196,13 @@ void setupLeapMotion(Eng::Base& eng) {
 
     // Register a key binding to toggle Leap Motion visualization
     callbackManager.registerKeyBinding('l', "Toggle Leap Motion Visualization", [](unsigned char key, int x, int y) {
-        static bool leapVisible = true;
-        leapVisible = !leapVisible;
+        leapVisualizationEnabled = !leapVisualizationEnabled;
         if (handsNode) {
-            // Simple way to toggle visibility - could be improved with a proper visibility system
-            if (!leapVisible) {
-                handsNode->getChildren()->clear();
+            if (!leapVisualizationEnabled) {
+                // Hide all joint meshes
+                for (auto& jointMesh : jointMeshes) {
+                    jointMesh->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
+                }
             }
         }
         });
@@ -155,430 +210,243 @@ void setupLeapMotion(Eng::Base& eng) {
     std::cout << "Leap Motion initialized successfully. Press 'L' to toggle hand visualization." << std::endl;
 }
 
-// Function to update hand positions based on Leap data
 void updateLeapHands() {
-    if (!leap || !handsNode) return;
+    if (!leap || !handsNode || !leapVisualizationEnabled) return;
 
-    // Update Leap Motion status:
     leap->update();
-    const LEAP_TRACKING_EVENT* leapFrame = leap->getCurFrame();
+    const LEAP_TRACKING_EVENT* frame = leap->getCurFrame();
+    const float LEAP_TO_WORLD = 0.001f;  // mm → m
+    size_t jointIndex = 0;
 
-    // Clear previous hand nodes
-    handsNode->getChildren()->clear();
+    bool hasActiveHands = (frame->nHands > 0);
 
-    // Create hand visualization using the Builder pattern
-    for (unsigned int h = 0; h < leapFrame->nHands; h++) {
-        LEAP_HAND hand = leapFrame->pHands[h];
+    // 1) Position all joint spheres
+    for (unsigned h = 0; h < frame->nHands && h < MAX_HANDS; ++h) {
+        const LEAP_HAND& hand = frame->pHands[h];
+        glm::vec3 handColor = (h == 0) ? glm::vec3(0.2f, 0.8f, 0.2f) : glm::vec3(0.2f, 0.2f, 0.8f);
 
-        // Set color based on hand index (left/right)
-        glm::vec3 handColor((float)h, (float)(1 - h), 0.5f);
-        auto material = std::make_shared<Eng::Material>(handColor, 1.0f, 0.5f);
+        auto setJoint = [&](const glm::vec3& pos) {
+            if (jointIndex >= jointMeshes.size()) return;
+            jointMeshes[jointIndex]
+                ->setMaterial(std::make_shared<Eng::Material>(handColor, 1.0f, 0.2f));
+            jointMeshes[jointIndex++]
+                ->setLocalMatrix(glm::translate(glm::mat4(1.0f), pos));
+            };
+
+        // Elbow, Wrist, Palm - manteniamo questi punti visibili
+        glm::vec3 elbowPos = glm::vec3(hand.arm.prev_joint.x, hand.arm.prev_joint.y, hand.arm.prev_joint.z) * LEAP_TO_WORLD;
+        glm::vec3 wristPos = glm::vec3(hand.arm.next_joint.x, hand.arm.next_joint.y, hand.arm.next_joint.z) * LEAP_TO_WORLD;
+        glm::vec3 palmPos = glm::vec3(hand.palm.position.x, hand.palm.position.y, hand.palm.position.z) * LEAP_TO_WORLD;
+
+        if (glm::length(elbowPos) > 0.001f) setJoint(elbowPos);
+        else setJoint(glm::vec3(0.0f));
+
+        if (glm::length(wristPos) > 0.001f) setJoint(wristPos);
+        else setJoint(glm::vec3(0.0f));
+
+        if (glm::length(palmPos) > 0.001f) setJoint(palmPos);
+        else setJoint(glm::vec3(0.0f));
+
+        // Finger bones
+        for (unsigned d = 0; d < 5; ++d) {
+            const LEAP_DIGIT& finger = hand.digits[d];
+            for (unsigned b = 0; b < 4; ++b) {
+                const LEAP_BONE& bone = finger.bones[b];
+                glm::vec3 jointPos = glm::vec3(bone.next_joint.x, bone.next_joint.y, bone.next_joint.z) * LEAP_TO_WORLD;
+                if (glm::length(jointPos) > 0.001f) {
+                    setJoint(jointPos);
+                }
+                else {
+                    setJoint(glm::vec3(0.0f));
+                }
+            }
+        }
+    }
+
+    // Hide any extra spheres
+    while (jointIndex < jointMeshes.size()) {
+        jointMeshes[jointIndex++]
+            ->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
+    }
+
+    // 2) Build flat list of joint positions
+    std::vector<glm::vec3> J;
+    J.reserve(jointMeshes.size());
+    for (auto& jm : jointMeshes) {
+        glm::mat4 M = jm->getLocalMatrix();
+        J.push_back(glm::vec3(M[3]));  // extract translation
+    }
+
+    // 3) Definire solo le connessioni tra le giunture delle dita
+    std::vector<std::pair<int, int>> bonePairs;
+
+    // Nascondi tutti gli ossi se non ci sono mani attive
+    if (!hasActiveHands) {
+        for (auto& node : boneNodes) {
+            node->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
+        }
+        return;
+    }
+
+    for (int h = 0; h < MAX_HANDS && h < frame->nHands; ++h) {
+        int base = h * JOINTS_PER_HAND;
+
+        // RIMOSSO collegamenti a gomito, polso e palmo
+        // Manteniamo solo le dita
+
+        for (int f = 0; f < 5; ++f) {
+            int fb = base + 3 + f * 4;  // Base index per questa dita
+            for (int b = 0; b < 3; ++b) {
+                if (glm::length(J[fb + b]) > 0.001f && glm::length(J[fb + b + 1]) > 0.001f) {
+                    bonePairs.emplace_back(fb + b, fb + b + 1);
+                }
+            }
+        }
+    }
+
+    // 4) Stretch & orient each cylinder‐bone node to match its joint pair
+    for (size_t i = 0; i < bonePairs.size() && i < boneNodes.size(); ++i) {
+        auto [a, b] = bonePairs[i];
+        glm::vec3 A = J[a], B = J[b];
+        glm::vec3 dir = B - A;
+        float len = glm::length(dir);
+        auto node = boneNodes[i];
+
+        if (len < 1e-5f) {
+            node->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
+            continue;
+        }
+
+        // 1) Translate to the midpoint
+        glm::vec3 mid = 0.5f * (A + B);
+        glm::mat4 T = glm::translate(glm::mat4(1.0f), mid);
+
+        // 2) Compute the axis & angle from +Z to our bone direction
+        glm::vec3 up = glm::vec3(0, 0, 1);
+        glm::vec3 ndir = glm::normalize(dir);
+
+        // Evita problemi se ndir è parallelo a up
+        if (glm::abs(glm::dot(up, ndir)) > 0.999f) {
+            // Usiamo un vettore diverso se sono paralleli
+            if (glm::dot(up, ndir) > 0) {
+                node->setLocalMatrix(glm::translate(glm::mat4(1.0f), mid) *
+                    glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, len)));
+            }
+            else {
+                node->setLocalMatrix(glm::translate(glm::mat4(1.0f), mid) *
+                    glm::rotate(glm::mat4(1.0f), glm::pi<float>(), glm::vec3(1, 0, 0)) *
+                    glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, len)));
+            }
+            continue;
+        }
+
+        glm::vec3 axis = glm::cross(up, ndir);
+        float cosA = glm::clamp(glm::dot(up, ndir), -1.0f, 1.0f);
+        float angle = acos(cosA);
+
+        // 3) Build a rotation matrix around that axis
+        glm::mat4 R = glm::rotate(glm::mat4(1.0f), angle, axis);
+
+        // 4) Scale so our unit‐height cylinder stretches to 'len'
+        glm::mat4 S = glm::scale(glm::mat4(1.0f),
+            glm::vec3(1.0f, 1.0f, len));
+
+        // 5) Combine: T * R * S
+        node->setLocalMatrix(T * R * S);
+    }
+
+    // Nascondi gli ossi rimanenti
+    for (size_t i = bonePairs.size(); i < boneNodes.size(); ++i) {
+        boneNodes[i]->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
     }
 }
 
-/**
- * @brief Structure to store the state of a chess move.
- */
-struct Move {
-   glm::ivec2 fromPosition; /**< The starting position of the move. */
-   glm::ivec2 toPosition;   /**< The destination position of the move. */
-   std::shared_ptr<Eng::Node> movedPiece; /**< Pointer to the moved piece. */
-   std::vector<std::shared_ptr<Eng::Node>> movedPieceChildren; /**< Reflections of the moved piece. */
-   std::shared_ptr<Eng::Node> capturedPiece; /**< Pointer to the captured piece, nullptr if no capture. */
-   std::vector<std::shared_ptr<Eng::Node>> capturedPieceChildren; /**< Reflections of the captured piece. */
-};
 
-/**
- * @brief Vector to store initial state of the board.
- *
- * It is used in the rest functionality.
- */
-static std::vector<Move> initialState;
+// Create the sphere mesh (same as before but with optimized parameters)
+std::shared_ptr<Eng::Mesh> createSphereMesh(float radius) {
+    std::vector<Eng::Vertex> vertices;
+    std::vector<unsigned int> indices;
 
-/**
- * @brief Deque to store the history of moves.
- *
- * Maintains the last 10 moves for undo functionality.
- */
-static std::deque<Move> moveHistory;
+    int gradation = 10;  // Same as your teacher's implementation
 
-/**
- * @brief Deque to store the history of undo moves.
- *
- * Maintains the last 10 moves for redo functionality.
- */
-static std::deque<Move> redoHistory;
+    // Create sphere vertices (same as teacher's implementation)
+    for (int lat = 0; lat <= gradation; lat++) {
+        float theta = lat * glm::pi<float>() / gradation;
+        float sinTheta = sin(theta);
+        float cosTheta = cos(theta);
 
-/**
- * @brief Maximum number of moves to store in the history.
- */
-constexpr size_t MAX_HISTORY = 10;
+        for (int lon = 0; lon <= gradation; lon++) {
+            float phi = lon * 2 * glm::pi<float>() / gradation;
+            float sinPhi = sin(phi);
+            float cosPhi = cos(phi);
 
-void setupChessMovement(Eng::Base &eng) {
-   auto &callbackManager = Eng::CallbackManager::getInstance();
-   auto root = eng.getRootNode();
+            float x = cosPhi * sinTheta;
+            float y = cosTheta;
+            float z = sinPhi * sinTheta;
 
-   // Matrix to store chess squares
-   static std::array<std::array<std::shared_ptr<Eng::Node>, 8>, 8> chessBoard;
-   static std::array<std::array<glm::vec3, 8>, 8> originalColors;
-   static glm::ivec2 selectedPosition(0, 0); // Current position in the matrix
-   static std::shared_ptr<Eng::Node> selectedPiece = nullptr;
-   static bool isSelectionMode = true; // true = selecting piece, false = selecting destination
+            Eng::Vertex vertex;
+            vertex.setPosition(glm::vec3(x, y, z) * radius);
+            vertex.setNormal(glm::normalize(glm::vec3(x, y, z)));
+            vertex.setTexCoords(glm::vec2((float)lon / gradation, (float)lat / gradation));
 
-   // Find the board node
-   std::shared_ptr<Eng::Node> boardNode = nullptr;
-   std::function<void(const std::shared_ptr<Eng::Node> &)> findBoard =
-         [&findBoard, &boardNode](const std::shared_ptr<Eng::Node> &node) {
-      if (!node) return;
-      if (node->getName() == "Board") {
-         boardNode = node;
-         return;
-      }
-      for (const auto &child: *node->getChildren()) {
-         findBoard(child);
-      }
-   };
+            vertices.push_back(vertex);
+        }
+    }
 
-   findBoard(root);
+    // Create indices
+    for (int lat = 0; lat < gradation; lat++) {
+        for (int lon = 0; lon < gradation; lon++) {
+            int first = (lat * (gradation + 1)) + lon;
+            int second = first + gradation + 1;
 
-   if (!boardNode) {
-      std::cout << "Board not found!" << std::endl;
-      return;
-   }
+            indices.push_back(first);
+            indices.push_back(second);
+            indices.push_back(first + 1);
 
-   // Initialize the chess board matrix
-   for (auto &child: *boardNode->getChildren()) {
-      std::string name = child->getName();
-      if (name.length() == 2 && name[0] >= 'A' && name[0] <= 'H' &&
-          name[1] >= '1' && name[1] <= '8') {
-         int col = name[0] - 'A';
-         int row = name[1] - '1';
-         chessBoard[row][col] = child;
-         glm::vec3 originalColor = std::dynamic_pointer_cast<Eng::Mesh>(child)->getMaterial()->getAlbedo();
-         originalColors[row][col] = originalColor;
-      }
-   }
+            indices.push_back(second);
+            indices.push_back(second + 1);
+            indices.push_back(first + 1);
+        }
+    }
 
-   // Helper function to update square colors
-   auto updateSquareColors = [&]() {
-      for (int i = 0; i < 8; i++) {
-         for (int j = 0; j < 8; j++) {
-            auto square = chessBoard[i][j];
-            if (auto squareMesh = std::dynamic_pointer_cast<Eng::Mesh>(square)) {
-               glm::vec3 color(originalColors[i][j]); // Default color
-               float alpha = 0.4f; // Default alpha
-
-               if (i == selectedPosition.y && j == selectedPosition.x) {
-                  if (isSelectionMode) {
-                     color = glm::vec3(1.0f, 1.0f, 0.0f); // Yellow for selection
-                     alpha = 1.0f;
-                  } else if (!squareMesh->getChildren()->empty() &&
-                             squareMesh->getChildren()->front()->getName() != selectedPiece->getName()) {
-                     color = glm::vec3(1.0f, 0.0f, 0.0f); // Red for eat
-                     alpha = 1.0f;
-                  } else {
-                     color = glm::vec3(0.0f, 1.0f, 0.0f); // Green for destination
-                     alpha = 1.0f;
-                  }
-               } else if (squareMesh == selectedPiece) {
-                  color = glm::vec3(0.0f, 1.0f, 0.0f); // Green for selected piece
-                  alpha = 1.0f;
-               }
-
-               auto newMaterial = std::make_shared<Eng::Material>(color, alpha, 0.0f);
-               squareMesh->setMaterial(newMaterial);
-            }
-         }
-      }
-   };
-
-   // Register special key callback for arrow keys
-   callbackManager.setSpecialCallback([&](int key, int x, int y) {
-      switch (key) {
-         case 100: // Left arrow
-            selectedPosition.x = std::max(0, selectedPosition.x - 1);
-            break;
-         case 102: // Right arrow
-            selectedPosition.x = std::min(7, selectedPosition.x + 1);
-            break;
-         case 101: // Up arrow
-            selectedPosition.y = std::min(7, selectedPosition.y + 1);
-            break;
-         case 103: // Down arrow
-            selectedPosition.y = std::max(0, selectedPosition.y - 1);
-            break;
-      }
-      updateSquareColors();
-   });
-
-   // Register keyboard callback for Enter key
-   callbackManager.registerKeyBinding('\r', "Select/Move Chess Piece", [&](unsigned char key, int x, int y) {
-      auto currentSquare = chessBoard[selectedPosition.y][selectedPosition.x];
-
-      if (isSelectionMode) {
-         // Check if there's a piece to select
-         if (!currentSquare->getChildren()->empty()) {
-            selectedPiece = currentSquare->getChildren()->front();
-            isSelectionMode = false;
-         }
-      } else {
-         if (selectedPiece) {
-            auto& targetSquare = chessBoard[selectedPosition.y][selectedPosition.x];
-
-            // Save the state of the move in the deque
-            if (moveHistory.size() >= MAX_HISTORY) {
-               moveHistory.pop_front(); // Remove the oldest move
-            }
-            Move move = {
-               glm::ivec2(selectedPiece->getParent()->getName()[0] - 'A', selectedPiece->getParent()->getName()[1] - '1'),
-               glm::ivec2(selectedPosition.x, selectedPosition.y),
-               selectedPiece,
-               *selectedPiece->getChildren(), // Save the reflections of the moved piece
-               targetSquare->getChildren()->empty() ? nullptr : targetSquare->getChildren()->front(),
-               targetSquare->getChildren()->empty() ? std::vector<std::shared_ptr<Eng::Node>>() : *targetSquare->getChildren()->front()->getChildren() // Reflections of the captured piece
-            };
-            moveHistory.push_back(move);
-
-            if (!targetSquare->getChildren()->empty()) {
-               auto existingPiece = targetSquare->getChildren()->front();
-               existingPiece->getChildren()->clear();
-               targetSquare->getChildren()->clear();
-               existingPiece->setParent(nullptr);
-            }
-
-            if (auto oldParent = selectedPiece->getParent()) {
-               oldParent->getChildren()->clear();
-            }
-
-            targetSquare->addChild(selectedPiece);
-            selectedPiece->setParent(targetSquare.get());
-
-            selectedPiece = nullptr;
-            isSelectionMode = true;
-         }
-      }
-      updateSquareColors();
-   });
-
-   // Register the 'U' key for undoing a move
-   callbackManager.registerKeyBinding('u', "Undo Move", [&](unsigned char key, int x, int y) {
-      if (moveHistory.empty()) {
-         return;
-      }
-
-      // Retrieve the last move
-      Move lastMove = moveHistory.back();
-      moveHistory.pop_back();
-      redoHistory.push_back(lastMove); // Push to redo stack
-
-      // Restore the previous state
-      auto fromSquare = chessBoard[lastMove.fromPosition.y][lastMove.fromPosition.x];
-      auto toSquare = chessBoard[lastMove.toPosition.y][lastMove.toPosition.x];
-
-      if (auto oldParent = lastMove.movedPiece->getParent()) {
-         oldParent->getChildren()->clear();
-      }
-
-      fromSquare->addChild(lastMove.movedPiece);
-      lastMove.movedPiece->setParent(fromSquare.get());
-
-      // Restore the reflections of the moved piece
-      auto& movedChildren = *lastMove.movedPiece->getChildren();
-      movedChildren.clear();
-      movedChildren.insert(movedChildren.end(), lastMove.movedPieceChildren.begin(), lastMove.movedPieceChildren.end());
-
-      if (lastMove.capturedPiece) {
-         toSquare->addChild(lastMove.capturedPiece);
-         lastMove.capturedPiece->setParent(toSquare.get());
-
-         // Restore the reflections of the captured piece
-         auto& capturedChildren = *lastMove.capturedPiece->getChildren();
-         capturedChildren.clear();
-         capturedChildren.insert(capturedChildren.end(), lastMove.capturedPieceChildren.begin(), lastMove.capturedPieceChildren.end());
-      }
-
-      updateSquareColors();
-   });
-
-   // Redo functionality
-   callbackManager.registerKeyBinding('o', "Redo Move", [&](unsigned char key, int x, int y) {
-       if (redoHistory.empty()) {
-           return; // No moves to redo
-       }
-
-       // Retrieve the last undone move
-       Move lastRedo = redoHistory.back();
-       redoHistory.pop_back();
-       moveHistory.push_back(lastRedo); // Push back to undo stack
-
-       // Apply the move logic
-       auto fromSquare = chessBoard[lastRedo.fromPosition.y][lastRedo.fromPosition.x];
-       auto toSquare = chessBoard[lastRedo.toPosition.y][lastRedo.toPosition.x];
-
-       // Clear any existing piece at the destination
-       if (!toSquare->getChildren()->empty()) {
-           auto existingPiece = toSquare->getChildren()->front();
-           existingPiece->getChildren()->clear();
-           toSquare->getChildren()->clear();
-           existingPiece->setParent(nullptr);
-       }
-
-       // Move the piece from source to destination
-       if (auto oldParent = lastRedo.movedPiece->getParent()) {
-           oldParent->getChildren()->clear();
-       }
-
-       toSquare->addChild(lastRedo.movedPiece);
-       lastRedo.movedPiece->setParent(toSquare.get());
-
-       // Restore the moved piece's reflections
-       auto& movedChildren = *lastRedo.movedPiece->getChildren();
-       movedChildren.clear();
-       movedChildren.insert(movedChildren.end(), lastRedo.movedPieceChildren.begin(), lastRedo.movedPieceChildren.end());
-
-       updateSquareColors();
-       });
-
-   // Reset functionality
-   callbackManager.registerKeyBinding('p', "Reset Board", [&](unsigned char key, int x, int y) {
-       // Clear current board state
-       for (auto& row : chessBoard) {
-           for (auto& square : row) {
-               if (!square->getChildren()->empty()) {
-                   auto piece = square->getChildren()->front();
-                   piece->getChildren()->clear();
-                   square->getChildren()->clear();
-               }
-           }
-       }
-
-       // Restore the initial state
-       for (const auto& move : initialState) {
-           auto square = chessBoard[move.fromPosition.y][move.fromPosition.x];
-           square->addChild(move.movedPiece);
-           move.movedPiece->setParent(square.get());
-
-           auto& pieceChildren = *move.movedPiece->getChildren();
-           pieceChildren.clear();
-           pieceChildren.insert(pieceChildren.end(), move.movedPieceChildren.begin(), move.movedPieceChildren.end());
-       }
-
-       // Clear undo and redo histories
-       moveHistory.clear();
-       redoHistory.clear();
-
-       // Update visuals
-       updateSquareColors();
-       });
-
-   // Capture the initial state of the board
-   if (initialState.empty()) { // Only save once
-       for (int row = 0; row < 8; ++row) {
-           for (int col = 0; col < 8; ++col) {
-               auto square = chessBoard[row][col];
-               if (!square->getChildren()->empty()) {
-                   auto piece = square->getChildren()->front();
-                   Move initialMove = {
-                       glm::ivec2(col, row),
-                       glm::ivec2(col, row),
-                       piece,
-                       *piece->getChildren(),
-                       nullptr,
-                       {} // No captured pieces in the initial state
-                   };
-                   initialState.push_back(initialMove);
-               }
-           }
-       }
-   }
-
-   // Initial color update
-   updateSquareColors();
+    auto& builder = Eng::Builder::getInstance();
+    return builder
+        .setName(std::string("SphereMesh"))
+        .addVertices(vertices)
+        .addIndices(indices)
+        .build();
 }
 
+std::shared_ptr<Eng::Mesh> createCylinderMesh(float radius, float height) {
+    // build a vertical cylinder (centered at origin, from z=0 to z=height)
+    const int slices = 12;
+    std::vector<Eng::Vertex> verts;
+    std::vector<unsigned int> idx;
 
-void setupLightControls(Eng::Base &eng) {
-   auto &callbackManager = Eng::CallbackManager::getInstance();
-   auto root = eng.getRootNode();
+    for (int i = 0; i <= slices; ++i) {
+        float angle = i * 2.0f * glm::pi<float>() / slices;
+        float x = cos(angle) * radius;
+        float y = sin(angle) * radius;
+        // bottom circle
+        Eng::Vertex vb; vb.setPosition({ x, y, 0.0f }); vb.setNormal({ x, y, 0 });
+        // top circle
+        Eng::Vertex vt; vt.setPosition({ x, y, height }); vt.setNormal({ x, y, 0 });
+        verts.push_back(vb);
+        verts.push_back(vt);
+    }
+    // build side quads as two triangles each slice
+    for (int i = 0; i < slices; ++i) {
+        unsigned int b0 = 2 * i, t0 = 2 * i + 1;
+        unsigned int b1 = 2 * (i + 1), t1 = 2 * (i + 1) + 1;
+        // quad: b0,t0,b1  and  t0,t1,b1
+        idx.insert(idx.end(), { b0, t0, b1,  t0, t1, b1 });
+    }
 
-   // Find and store the reference to the light
-   static std::shared_ptr<Eng::PointLight> plantLight;
-   std::function<void(const std::shared_ptr<Eng::Node> &)> findLight =
-         [&findLight](const std::shared_ptr<Eng::Node> &node) {
-      if (!node) return;
-      if (node->getName() == "PlantLight") {
-         plantLight = std::dynamic_pointer_cast<Eng::PointLight>(node);
-      }
-      for (auto &child: *node->getChildren()) {
-         findLight(child);
-      }
-   };
-
-   findLight(root);
-
-   if (!plantLight) {
-      std::cout << "PlantLight not found in scene!" << std::endl;
-      return;
-   }
-
-   constexpr float moveSpeed = 0.4f;
-
-   //register light controls with their descriptions
-   callbackManager.registerKeyBinding('y', "Move light forward",
-                                      [=](unsigned char key, int x, int y) {
-                                         if (!plantLight) return;
-                                         glm::mat4 currentMatrix = plantLight->getLocalMatrix();
-                                         plantLight->setLocalMatrix(
-                                            glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -moveSpeed)) *
-                                            currentMatrix
-                                         );
-                                      });
-
-   callbackManager.registerKeyBinding('h', "Move light backward",
-                                      [=](unsigned char key, int x, int y) {
-                                         if (!plantLight) return;
-                                         glm::mat4 currentMatrix = plantLight->getLocalMatrix();
-                                         plantLight->setLocalMatrix(
-                                            glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, moveSpeed)) *
-                                            currentMatrix
-                                         );
-                                      });
-
-   callbackManager.registerKeyBinding('g', "Move light left",
-                                      [=](unsigned char key, int x, int y) {
-                                         if (!plantLight) return;
-                                         glm::mat4 currentMatrix = plantLight->getLocalMatrix();
-                                         plantLight->setLocalMatrix(
-                                            glm::translate(glm::mat4(1.0f), glm::vec3(-moveSpeed, 0.0f, 0.0f)) *
-                                            currentMatrix
-                                         );
-                                      });
-
-   callbackManager.registerKeyBinding('j', "Move light right",
-                                      [=](unsigned char key, int x, int y) {
-                                         if (!plantLight) return;
-                                         glm::mat4 currentMatrix = plantLight->getLocalMatrix();
-                                         plantLight->setLocalMatrix(
-                                            glm::translate(glm::mat4(1.0f), glm::vec3(moveSpeed, 0.0f, 0.0f)) *
-                                            currentMatrix
-                                         );
-                                      });
-   // Randomize light color when 'R' is pressed
-   callbackManager.registerKeyBinding('r', "Randomize light color",
-                                      [=](unsigned char key, int x, int y) {
-                                         if (!plantLight) return;
-
-                                         // Random number generator for RGB values
-                                         std::random_device rd;
-                                         std::mt19937 gen(rd());
-                                         std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-
-                                         // Generate random RGB values
-                                         glm::vec3 randomColor(dist(gen), dist(gen), dist(gen));
-
-                                         // Set the light color
-                                         plantLight->setColor(randomColor);
-                                      });
+    auto& B = Eng::Builder::getInstance();
+    return B.setName("BoneCylinder")
+        .addVertices(verts)
+        .addIndices(idx)
+        .build();
 }
 
 

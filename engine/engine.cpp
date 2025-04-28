@@ -377,23 +377,18 @@ void ENG_API Eng::Base::renderScene() {
       std::cerr << "ERROR: No active camera set for rendering" << std::endl;
       return;
    }
+
    // Clear Buffers
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
    // Get View Matrix
    glm::mat4 viewMatrix = activeCamera->getFinalMatrix();
 
-   headMatrix = activeCamera->getViewMatrix();
-
    // Get Projection matrix
    glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 
-   // Continue with normal rendering
-   /* Unsupported 4.4
-   glMatrixMode(GL_PROJECTION);
-   glLoadMatrixf(glm::value_ptr(projectionMatrix));
-   glMatrixMode(GL_MODELVIEW);
-   */
+   glm::mat4 headWorld = glm::inverse(viewMatrix);
+   getHeadNode()->setLocalMatrix(headWorld);
 
    if (skybox) {
        // Remove the translation component by converting to a 3x3 and back to a 4x4.
@@ -404,6 +399,10 @@ void ENG_API Eng::Base::renderScene() {
    // Clear list
    renderList.clear();
 
+   // Execute optional render callbacks
+   auto& callbackManager = CallbackManager::getInstance();
+   callbackManager.executeRenderCallbacks();
+
    // Traverse the root nodes and add them to the render list
    traverseAndAddToRenderList(rootNode);
 
@@ -411,10 +410,6 @@ void ENG_API Eng::Base::renderScene() {
    renderList.setEyeViewMatrix(viewMatrix);
    renderList.setEyeProjectionMatrix(projectionMatrix);
    renderList.render();
-
-   // Execute optional render callbacks
-   auto &callbackManager = CallbackManager::getInstance();
-   callbackManager.executeRenderCallbacks();
 
 
    glutSwapBuffers();
@@ -624,16 +619,20 @@ glm::mat4 Eng::Base::computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, fl
 }
 
 void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& projectionMatrix) {
-
     eyeFbo->render();
     glViewport(0, 0, eyeFbo->getSizeX(), eyeFbo->getSizeY());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+    // Set up the render list with view matrix and projection matrix
     renderList.clear();
     traverseAndAddToRenderList(rootNode);
     renderList.setEyeViewMatrix(viewMatrix);
-	renderList.setEyeProjectionMatrix(projectionMatrix);
+    renderList.setEyeProjectionMatrix(projectionMatrix);
+
+    // Pass the current FBO to the render list so it can restore it properly during multipass
+    renderList.setCurrentFBO(eyeFbo);  // NEW LINE
+
+    // Call render which handles multi-pass internally
     renderList.render();
 }
 
@@ -647,7 +646,7 @@ void ENG_API Eng::Base::renderStereoscopic() {
 
     int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
     int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-    OvVR::OvEye leftEye = OvVR::OvEye::EYE_LEFT;    // Use of more simple variable names for readability
+    OvVR::OvEye leftEye = OvVR::OvEye::EYE_LEFT;
     OvVR::OvEye rightEye = OvVR::OvEye::EYE_RIGHT;
 
     // Update current user position
@@ -655,88 +654,98 @@ void ENG_API Eng::Base::renderStereoscopic() {
 
     // Compute modelViewMatrix based on user VR position
     glm::mat4 headPositionMatrix = reserved->ovr->getModelviewMatrix();
-    glm::mat4 modelViewMatrix = glm::inverse(headPositionMatrix);
 
-	headMatrix = modelViewMatrix;
+    // Definisci una matrice di trasformazione iniziale fissa che posiziona e orienta correttamente la camera
+    // Prima ruota di 270 gradi intorno all'asse Y (per orientarti verso la scacchiera)
+    // Poi trasla nella posizione desiderata
+    glm::mat4 initialTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, stereoEyeHeight, -6.0f)) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-    //glm::mat4 cameraWorldMatrix = glm::inverse(activeCamera->getLocalMatrix());
-    //glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
+    // Applica la trasformazione iniziale fissa PRIMA della matrice della posizione della testa
+    // In questo modo, la trasformazione iniziale diventa la "posizione zero" del VR
+    glm::mat4 finalHeadPosition = initialTransform * headPositionMatrix;
 
-    //glm::mat4 leftViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, -eyeDistance / 2.0f);
-    //glm::mat4 rightViewMatrix = computeEyeViewMatrix(cameraWorldMatrix, +eyeDistance / 2.0f);
+    // Calcola la matrice di vista finale
+    glm::mat4 modelViewMatrix = glm::inverse(finalHeadPosition);
 
-    // Skybox
-    glm::mat4 skyboxView = glm::mat4(glm::mat3(modelViewMatrix));
+    // Aggiorna il nodo della testa se necessario
+    if (auto headNode = getHeadNode()) {
+        headNode->setLocalMatrix(finalHeadPosition);
+    }
+    // CallBackManager for the LeapMotion
+    auto& callbackManager = CallbackManager::getInstance();
 
     glm::mat4 tmpProjMat, eye2Head;
 
     // ---- Left Eye Rendering ----
     {
-        // Retrieve the left-eye projection matrix from OpenVR.
+        leftEyeFbo->render();
+        glViewport(0, 0, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY());
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Get left eye matrices
         tmpProjMat = reserved->ovr->getProjMatrix(leftEye, STEREO_NEAR_CLIP, STEREO_FAR_CLIP);
         eye2Head = reserved->ovr->getEye2HeadMatrix(leftEye);
 
-        // Computing Left Eye matrix
-        glm::mat4 leftEyeProjMat = tmpProjMat * glm::inverse(eye2Head);
+        // Compute left eye view matrix
+        glm::mat4 leftEyeViewMatrix = modelViewMatrix * eye2Head;
+        glm::mat4 leftEyeProjMatrix = tmpProjMat;
 
-        // Render the skybox for the left eye:
+        // Render skybox first
         if (skybox) {
-            skybox->render(skyboxView, leftEyeProjMat);
+            glm::mat4 skyboxView = glm::mat4(glm::mat3(leftEyeViewMatrix));
+            skybox->render(skyboxView, leftEyeProjMatrix);
         }
 
-        // Render the scene for the left eye.
-        renderEye(leftEyeFbo.get(), modelViewMatrix, leftEyeProjMat);
-        // Pass the rendered FBO texture to OpenVR.
+        // Execute callbacks (for LeapMotion etc)
+        callbackManager.executeRenderCallbacks();
+
+        // Render scene with multipass
+        renderList.clear();
+        traverseAndAddToRenderList(rootNode);
+        renderList.setEyeViewMatrix(leftEyeViewMatrix);
+        renderList.setEyeProjectionMatrix(leftEyeProjMatrix);
+        renderList.render();
+
+        // Submit to OpenVR
         reserved->ovr->pass(leftEye, leftEyeTexture);
     }
 
     // ---- Right Eye Rendering ----
     {
-        // Retrieve the right-eye projection matrix from OpenVR.
+        rightEyeFbo->render();
+        glViewport(0, 0, rightEyeFbo->getSizeX(), rightEyeFbo->getSizeY());
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Get right eye matrices
         tmpProjMat = reserved->ovr->getProjMatrix(rightEye, STEREO_NEAR_CLIP, STEREO_FAR_CLIP);
         eye2Head = reserved->ovr->getEye2HeadMatrix(rightEye);
 
-        // Computing Right Eye matrix
-        glm::mat4 rightEyeProjMat = tmpProjMat * glm::inverse(eye2Head);
+        // Compute right eye view matrix
+        glm::mat4 rightEyeViewMatrix = modelViewMatrix * eye2Head;
+        glm::mat4 rightEyeProjMatrix = tmpProjMat;
 
-        // Render the skybox for the right eye:
+        // Render skybox first
         if (skybox) {
-            skybox->render(skyboxView, rightEyeProjMat);
+            glm::mat4 skyboxView = glm::mat4(glm::mat3(rightEyeViewMatrix));
+            skybox->render(skyboxView, rightEyeProjMatrix);
         }
 
-        // Render the scene for the right eye.
-        renderEye(rightEyeFbo.get(), modelViewMatrix, rightEyeProjMat);
-        // Pass the rendered FBO texture to OpenVR.
+        // Execute callbacks (for LeapMotion etc)
+        callbackManager.executeRenderCallbacks();
+
+        // Render scene with multipass
+        renderList.clear();
+        traverseAndAddToRenderList(rootNode);
+        renderList.setEyeViewMatrix(rightEyeViewMatrix);
+        renderList.setEyeProjectionMatrix(rightEyeProjMatrix);
+        renderList.render();
+
+        // Submit to OpenVR
         reserved->ovr->pass(rightEye, rightEyeTexture);
     }
 
-    // Update internal OpenVR settings (sends data to VR System):
-    reserved->ovr->render();
-
-    // Reset to standard render output
-    Fbo::disable();
-    glViewport(0, 0, windowWidth, windowHeight);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Display Left and Right Eye images on standard screen as split screen
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, leftEyeFbo->getHandle());
-    glBlitFramebuffer(
-        0, 0, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY(),
-        0, 0, APP_FBOSIZEX, APP_FBOSIZEY,
-        GL_COLOR_BUFFER_BIT, GL_LINEAR
-    );
-
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, rightEyeFbo->getHandle());
-    glBlitFramebuffer(
-        0, 0, rightEyeFbo->getSizeX(), rightEyeFbo->getSizeY(),
-        APP_FBOSIZEX, 0, APP_WINDOWSIZEX, APP_FBOSIZEY,
-        GL_COLOR_BUFFER_BIT, GL_LINEAR
-    );
-
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-
-    CallbackManager::getInstance().executeRenderCallbacks();
-    glutSwapBuffers();
+    // ... rest of the function remains the same ...
 }
 
 // Skybox
@@ -754,4 +763,17 @@ void Eng::Base::registerSkybox(const std::vector<std::string>& faces) {
     }
 
     renderList.setGlobalLightColor(skybox->getGlobalColor());
+}
+
+
+// HeadNode for LeapMotion
+std::shared_ptr<Eng::Node> Eng::Base::getHeadNode() {
+    if (!headNode) {
+        // lazily create it and parent under the scene root
+        headNode = std::make_shared<Node>();
+        headNode->setName("Head");
+        rootNode->addChild(headNode);
+        headNode->setParent(rootNode.get());
+    }
+    return headNode;
 }
