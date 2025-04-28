@@ -177,6 +177,9 @@ namespace Eng {
       void setStereoEyeHeight(float height) { stereoEyeHeight = height; }
       float getStereoEyeHeight() const { return stereoEyeHeight; }
 
+      void setBodyPosition(const glm::mat4& position);
+      glm::mat4 getBodyPosition() const;
+
    private:
       /** @brief Reserved implementation details */
       struct Reserved;
@@ -190,6 +193,8 @@ namespace Eng {
       std::shared_ptr<Fbo> rightEyeFbo;
       unsigned int leftEyeTexture;
       unsigned int rightEyeTexture;
+      glm::mat4 stereoInitialTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-1.4f, -0.1f, -0.6f)) *
+          glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
       float eyeDistance;
       glm::mat4 computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, float eyeOffset);

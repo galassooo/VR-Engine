@@ -3,6 +3,7 @@
 #include <functional>
 #include <random>
 #include <array>
+#include <chrono>
 
 #include "leap.h"
 
@@ -52,6 +53,7 @@ void updateBoundingBoxes(Eng::Base& eng);
 std::shared_ptr<Eng::Mesh> createLineMesh(const glm::vec3& start, const glm::vec3& end, const glm::vec3& color);
 void createBoundingBoxLines(Eng::Base& eng, const glm::vec3& min, const glm::vec3& max, const glm::vec3& color);
 void updateBoundingBoxes(Eng::Base& eng);
+void setupPositionCycling(Eng::Base& eng);
 
 bool showBoundingBoxes = false;
 std::vector<std::shared_ptr<Eng::Mesh>> boundingBoxMeshes;
@@ -73,15 +75,22 @@ bool isPinching = false;
 float pinchThreshold = 0.7f;
 glm::vec3 grabOffset;
 
-/**
- * @brief Sets up multiple cameras and their controls.
- *
- * This function initializes cameras at different positions and allows the
- * user to switch between them and control their movement and rotation.
- *
- * @param eng Reference to the engine instance.
- */
+
+//position switching
+
+std::vector<glm::mat4> predefinedPositions;
+int currentPositionIndex = 0;
+bool gestureActive = false;
+float lastGestureTime = 0.0f;
+const float GESTURE_COOLDOWN = 1.0f;
+
+
+void initPredefinedPositions();
 void setUpCameras(Eng::Base &eng);
+bool areHandsTogether();
+void updatePositionFromGesture();
+
+
 
 /**
  * @brief Entry point of the client application.
@@ -105,13 +114,13 @@ int main(int argc, char *argv[]) {
    }
 
    eng.loadScene("..\\resources\\Chess.ovo");
-   // Dopo aver caricato la scena in main.cpp
-   // Setup Leap Motion with its own render callback
+
    setupLeapMotion(eng);
    initChessPieceSelection(eng);
    eng.engEnable(ENG_STEREO_RENDERING);
 
    setUpCameras(eng);
+   setupPositionCycling(eng);
 
    eng.registerSkybox(myCubemapFaces);
 
@@ -128,6 +137,95 @@ int main(int argc, char *argv[]) {
 
    return 0;
 }
+
+void setupPositionCycling(Eng::Base& eng) {
+    // Initialize the predefined positions
+    initPredefinedPositions();
+
+    // Set the initial position
+    eng.setBodyPosition(predefinedPositions[currentPositionIndex]);
+
+    // Register the gesture detection callback
+    auto& callbackManager = Eng::CallbackManager::getInstance();
+    callbackManager.registerRenderCallback("positionCycling", []() {
+        updatePositionFromGesture();
+        });
+}
+
+void updatePositionFromGesture() {
+    if (!leap || !Eng::Base::engIsEnabled(ENG_STEREO_RENDERING)) return;
+
+    bool handsTogetherNow = areHandsTogether();
+    float currentTime = std::chrono::duration<float>(std::chrono::steady_clock::now().time_since_epoch()).count();
+
+
+    // Detect the gesture activation (hands coming together)
+    if (handsTogetherNow && !gestureActive && (currentTime - lastGestureTime > GESTURE_COOLDOWN)) {
+        // Cycle to next position
+        currentPositionIndex = (currentPositionIndex + 1) % predefinedPositions.size();
+
+        // Apply the new position
+        auto& eng = Eng::Base::getInstance();
+        eng.setBodyPosition(predefinedPositions[currentPositionIndex]);
+
+        // Update state and cooldown time
+        gestureActive = true;
+        lastGestureTime = currentTime;
+
+        std::cout << "Position changed to preset " << (currentPositionIndex + 1) << std::endl;
+    }
+    else if (!handsTogetherNow && gestureActive) {
+        // Reset gesture state when hands are separated
+        gestureActive = false;
+    }
+}
+
+bool areHandsTogether() {
+    if (!leap) return false;
+
+    leap->update();
+    const LEAP_TRACKING_EVENT* frame = leap->getCurFrame();
+
+    // We need at least two hands for this gesture
+    if (frame->nHands < 2) return false;
+
+    const LEAP_HAND& leftHand = frame->pHands[0];
+    const LEAP_HAND& rightHand = frame->pHands[1];
+
+    // Get the positions of both hands' palms
+    glm::vec3 leftPalmPos(leftHand.palm.position.x, leftHand.palm.position.y, leftHand.palm.position.z);
+    glm::vec3 rightPalmPos(rightHand.palm.position.x, rightHand.palm.position.y, rightHand.palm.position.z);
+
+    // Convert from mm to meters
+    leftPalmPos *= 0.001f;
+    rightPalmPos *= 0.001f;
+
+    // Calculate distance between palms
+    float distance = glm::distance(leftPalmPos, rightPalmPos);
+
+    // If palms are within 10cm of each other, consider it a "hands together" gesture
+    return distance < 0.1f;
+}
+
+void initPredefinedPositions() {
+    // Position 1: Default starting position
+    glm::mat4 position1 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.4f, -0.f, -0.6f)) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+    // Position 3: Side view position
+    glm::mat4 position2 = glm::translate(glm::mat4(1.0f), glm::vec3(-0.2f, 0.0f, -0.6f)) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+    // Position 2: Higher viewing position
+    glm::mat4 position3 = glm::translate(glm::mat4(1.0f), glm::vec3(-2.3f, 0.5f, -1.2f)) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(200.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+    glm::mat4 position4 = glm::translate(glm::mat4(1.0f), glm::vec3(2.6f, 1.0f, 5.f)) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+    predefinedPositions = { position1, position2, position3, position4 };
+}
+
 void updateBoundingBoxes(Eng::Base& eng) {
     // Clear previous bounding box meshes
     for (auto& mesh : boundingBoxMeshes) {
@@ -498,8 +596,9 @@ void updateChessPieceSelection() {
 
             // change albedo to glow 
             if (closestPiece->mesh && closestPiece->originalMaterial) {
+                
                 auto highlightMaterial = std::make_shared<Eng::Material>(
-                    closestPiece->originalMaterial->getAlbedo() * 1.5f,
+                     glm::vec3(1.f, 0.f, 0.f),
                     closestPiece->originalMaterial->getAlpha(),
                     0.5
                 );

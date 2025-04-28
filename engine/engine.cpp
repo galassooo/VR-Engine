@@ -643,7 +643,14 @@ void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& project
     // Call render which handles multi-pass internally
     renderList.render();
 }
+void ENG_API Eng::Base::setBodyPosition(const glm::mat4& position) {
 
+    stereoInitialTransform = position;
+}
+
+glm::mat4 ENG_API Eng::Base::getBodyPosition() const {
+    return stereoInitialTransform;
+}
 
 void ENG_API Eng::Base::renderStereoscopic() {
     if (!leftEyeFbo || !rightEyeFbo) {
@@ -670,8 +677,8 @@ void ENG_API Eng::Base::renderStereoscopic() {
     // Definisci una matrice di trasformazione iniziale fissa che posiziona e orienta correttamente la camera
     // Prima ruota di 270 gradi intorno all'asse Y (per orientarti verso la scacchiera)
     // Poi trasla nella posizione desiderata
-    glm::mat4 initialTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-1.4f, stereoEyeHeight, -0.6f)) *
-        glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 heightAdjustment = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, stereoEyeHeight, 0.0f));
+    glm::mat4 initialTransform = heightAdjustment * stereoInitialTransform;
 
     // Applica la trasformazione iniziale fissa PRIMA della matrice della posizione della testa
     // In questo modo, la trasformazione iniziale diventa la "posizione zero" del VR
