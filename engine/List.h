@@ -25,7 +25,9 @@ public:
 
 	void setGlobalLightColor(const glm::vec3& globalColor);
 
-	void setCurrentFBO(Fbo* fbo) { currentFBO = std::shared_ptr<Fbo>(fbo, [](Fbo*) {}); }
+	void setCurrentFBO(Eng::Fbo* fbo) { currentFBO = std::shared_ptr<Eng::Fbo>(fbo, [](Eng::Fbo*) {}); }
+
+	std::shared_ptr<Eng::BoundingBox> getSceneBoundingBox();
 
 private:
 	/** @brief Sorted collection of renderable nodes with their world coordinates and materials.
@@ -47,12 +49,10 @@ private:
 	struct CullingSphere;
 	std::unique_ptr<CullingSphere> cullingSphere;
 
-	std::unique_ptr<Eng::BoundingBox> boundingBox;
+	std::shared_ptr<Eng::BoundingBox> sceneBoundingBox = nullptr;
 
 	std::shared_ptr<Eng::Fbo> shadowMapFbo;
 	unsigned int shadowMapTexture = 0;
-
-	bool firstRender = true;
 
 	bool isWithinCullingSphere(Eng::Mesh* mesh);
 

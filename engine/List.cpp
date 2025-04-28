@@ -12,8 +12,7 @@
  *
  * Initializes the render list and assigns a default name.
  */
-Eng::List::List() : Object(), cullingSphere(std::make_unique<Eng::List::CullingSphere>()),
-boundingBox(std::make_unique<Eng::BoundingBox>()) {
+Eng::List::List() : Object(), cullingSphere(std::make_unique<Eng::List::CullingSphere>()) {
    name = "RenderList";
 }
 Eng::List::~List() = default;
@@ -29,6 +28,26 @@ struct Eng::List::CullingSphere {
     }
     ~CullingSphere() { }
 };
+
+std::shared_ptr<Eng::BoundingBox> Eng::List::getSceneBoundingBox() {
+    // The scene bounding box is computed only once at first call
+	if (!sceneBoundingBox) {
+		sceneBoundingBox = std::make_shared<Eng::BoundingBox>();
+        std::cout << "[List] Computing Scene Bounding Box" << std::endl;
+        for (int i = lightsCount; i < elements.size(); ++i) {
+
+            if (const auto& mesh = dynamic_cast<Eng::Mesh*>(elements[i]->getNode().get())) {
+                for (auto& vertex : mesh->getVertices()) {
+                    sceneBoundingBox->update(glm::vec3(mesh->getFinalMatrix() * glm::vec4(vertex.getPosition(), 1.0f)));
+                }
+            }
+        }
+        for (auto& vertex : sceneBoundingBox->getVertices()) {
+            std::cout << "  (" << vertex.x << ", " << vertex.y << ", " << vertex.z << ")" << std::endl;
+        }
+	}
+	return sceneBoundingBox;
+}
 
 /**
  * @brief Adds a node to the render list.
@@ -98,23 +117,6 @@ bool Eng::List::isWithinCullingSphere(Eng::Mesh* mesh) {
  *
  */
 void Eng::List::render() {
-    if (firstRender) {
-        std::cout << "[List] Computing Scene Bounding Box" << std::endl;
-        for (int i = lightsCount; i < elements.size(); ++i) {
-
-            if (const auto& mesh = dynamic_cast<Eng::Mesh*>(elements[i]->getNode().get())) {
-                for (auto& vertex : mesh->getVertices()) {
-                    boundingBox->update(glm::vec3(mesh->getFinalMatrix() * glm::vec4(vertex.getPosition(), 1.0f)));
-                }
-            }
-        }
-        for (auto& vertex : boundingBox->getVertices()) {
-            std::cout << "  (" << vertex.x << ", " << vertex.y << ", " << vertex.z << ")" << std::endl;
-        }
-        firstRender = false;
-    }
-
-
     // Virtual Environment
    // Here we do the sphere culling for the virtual environment as it is simpler to work in eye coordinates rather than world coordinates
    // The previous implementation was on the engine traverseAndAdd but it was wrong as we were mixing eye coordinates with world coordinates
@@ -153,6 +155,11 @@ void Eng::List::render() {
             shadowPass(dirLight);
 
             // FBO should already be restored by shadowPass
+
+            // Activate the correct texture unit based on the shader manager parameters
+            glActiveTexture(GL_TEXTURE0 + ShaderManager::SHADOW_MAP_UNIT);
+            // Bind the texture to the current OpenGL context in the given unit.
+            glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
 
             if (!sm.loadProgram(dirLightProgram)) {
                 std::cerr << "ERROR: Failed to load directional light program" << std::endl;
@@ -271,6 +278,8 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
 void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
     auto& sm = ShaderManager::getInstance();
 
+    const auto& boundingBox = getSceneBoundingBox();
+
     // Store current viewport and FBO
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
@@ -281,11 +290,11 @@ void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
 
     std::vector<glm::vec3> cameraFrustumCorners = computeFrustumCorners(eyeProjectionMatrix, eyeViewMatrix);
 
-    std::vector<glm::vec3> sceneBoundingBoxVertices = boundingBox->getVertices();
+    std::vector<glm::vec3> boundingBoxVertices = boundingBox->getVertices();
 
     glm::mat4 lightViewMatrix = light->getLightViewMatrix(cameraFrustumCorners, glm::length(boundingBox->getSize()));
 
-	glm::mat4 lightProjectionMatrix = computeLightProjectionMatrix(lightViewMatrix, sceneBoundingBoxVertices);
+	glm::mat4 lightProjectionMatrix = computeLightProjectionMatrix(lightViewMatrix, boundingBoxVertices);
 
     /*
     // Print projection matrix for debug
@@ -487,11 +496,7 @@ bool Eng::List::setupShadowMap(int width, int height) {
 
     // Ripristina lo stato di default
     Fbo::disable();
-
-    // Activate the correct texture unit based on the shader manager parameters
-    glActiveTexture(GL_TEXTURE0 + ShaderManager::SHADOW_MAP_UNIT);
-    // Bind the texture to the current OpenGL context in the given unit.
-    glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     return true;
 }

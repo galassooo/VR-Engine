@@ -182,6 +182,10 @@ namespace Eng {
       struct Reserved;
       std::unique_ptr<Reserved> reserved;
 
+	  std::shared_ptr<Eng::BoundingBox> sceneBoundingBox = nullptr;
+      float stereoNearClip = 0.1f;
+	  float stereoFarClip = 1000000.0f;
+
       std::shared_ptr<Fbo> leftEyeFbo;
       std::shared_ptr<Fbo> rightEyeFbo;
       unsigned int leftEyeTexture;

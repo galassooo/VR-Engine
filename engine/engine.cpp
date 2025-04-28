@@ -405,6 +405,10 @@ void ENG_API Eng::Base::renderScene() {
 
    // Traverse the root nodes and add them to the render list
    traverseAndAddToRenderList(rootNode);
+   if (!sceneBoundingBox) {
+       sceneBoundingBox = renderList.getSceneBoundingBox();
+       stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
+   }
 
    // Render all nodes in the render list
    renderList.setEyeViewMatrix(viewMatrix);
@@ -626,6 +630,10 @@ void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& project
     // Set up the render list with view matrix and projection matrix
     renderList.clear();
     traverseAndAddToRenderList(rootNode);
+    if (!sceneBoundingBox) {
+        sceneBoundingBox = renderList.getSceneBoundingBox();
+        stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
+    }
     renderList.setEyeViewMatrix(viewMatrix);
     renderList.setEyeProjectionMatrix(projectionMatrix);
 
@@ -643,6 +651,10 @@ void ENG_API Eng::Base::renderStereoscopic() {
         renderScene();
         return;
     }
+
+    // Store the current viewport size:
+    GLint prevViewport[4];
+    glGetIntegerv(GL_VIEWPORT, prevViewport);
 
     int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
     int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
@@ -680,16 +692,16 @@ void ENG_API Eng::Base::renderStereoscopic() {
     // ---- Left Eye Rendering ----
     {
         leftEyeFbo->render();
-        glViewport(0, 0, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY());
+        //glViewport(0, 0, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Get left eye matrices
-        tmpProjMat = reserved->ovr->getProjMatrix(leftEye, STEREO_NEAR_CLIP, STEREO_FAR_CLIP);
+        tmpProjMat = reserved->ovr->getProjMatrix(leftEye, stereoNearClip, stereoFarClip);
         eye2Head = reserved->ovr->getEye2HeadMatrix(leftEye);
 
         // Compute left eye view matrix
-        glm::mat4 leftEyeViewMatrix = modelViewMatrix * eye2Head;
-        glm::mat4 leftEyeProjMatrix = tmpProjMat;
+        glm::mat4 leftEyeViewMatrix = modelViewMatrix;
+        glm::mat4 leftEyeProjMatrix = tmpProjMat * glm::inverse(eye2Head);
 
         // Render skybox first
         if (skybox) {
@@ -703,6 +715,10 @@ void ENG_API Eng::Base::renderStereoscopic() {
         // Render scene with multipass
         renderList.clear();
         traverseAndAddToRenderList(rootNode);
+        if (!sceneBoundingBox) {
+            sceneBoundingBox = renderList.getSceneBoundingBox();
+            stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
+        }
         renderList.setEyeViewMatrix(leftEyeViewMatrix);
         renderList.setEyeProjectionMatrix(leftEyeProjMatrix);
         renderList.render();
@@ -714,16 +730,16 @@ void ENG_API Eng::Base::renderStereoscopic() {
     // ---- Right Eye Rendering ----
     {
         rightEyeFbo->render();
-        glViewport(0, 0, rightEyeFbo->getSizeX(), rightEyeFbo->getSizeY());
+        //glViewport(0, 0, rightEyeFbo->getSizeX(), rightEyeFbo->getSizeY());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Get right eye matrices
-        tmpProjMat = reserved->ovr->getProjMatrix(rightEye, STEREO_NEAR_CLIP, STEREO_FAR_CLIP);
+        tmpProjMat = reserved->ovr->getProjMatrix(rightEye, stereoNearClip, stereoFarClip);
         eye2Head = reserved->ovr->getEye2HeadMatrix(rightEye);
 
         // Compute right eye view matrix
-        glm::mat4 rightEyeViewMatrix = modelViewMatrix * eye2Head;
-        glm::mat4 rightEyeProjMatrix = tmpProjMat;
+        glm::mat4 rightEyeViewMatrix = modelViewMatrix;
+        glm::mat4 rightEyeProjMatrix = tmpProjMat * glm::inverse(eye2Head);
 
         // Render skybox first
         if (skybox) {
@@ -737,6 +753,10 @@ void ENG_API Eng::Base::renderStereoscopic() {
         // Render scene with multipass
         renderList.clear();
         traverseAndAddToRenderList(rootNode);
+        if (!sceneBoundingBox) {
+            sceneBoundingBox = renderList.getSceneBoundingBox();
+            stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
+        }
         renderList.setEyeViewMatrix(rightEyeViewMatrix);
         renderList.setEyeProjectionMatrix(rightEyeProjMatrix);
         renderList.render();
@@ -746,6 +766,37 @@ void ENG_API Eng::Base::renderStereoscopic() {
     }
 
     // ... rest of the function remains the same ...
+    // Update internal OpenVR settings (sends data to VR System):
+    reserved->ovr->render();
+
+    // Reset to standard render output
+    Fbo::disable();
+
+	// Clear the screen
+    glViewport(0, 0, windowWidth, windowHeight);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Display Left and Right Eye images on standard screen as split screen
+	// It is done by copying the FBOs to the main framebuffer
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, leftEyeFbo->getHandle());
+    glBlitFramebuffer(
+        0, 0, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY(),
+        0, 0, APP_FBOSIZEX, APP_FBOSIZEY,
+        GL_COLOR_BUFFER_BIT, GL_LINEAR
+    );
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, rightEyeFbo->getHandle());
+    glBlitFramebuffer(
+        0, 0, rightEyeFbo->getSizeX(), rightEyeFbo->getSizeY(),
+        APP_FBOSIZEX, 0, APP_WINDOWSIZEX, APP_FBOSIZEY,
+        GL_COLOR_BUFFER_BIT, GL_LINEAR
+    );
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+
+    glutSwapBuffers();
+
+    glViewport(0, 0, prevViewport[2], prevViewport[3]);
 }
 
 // Skybox

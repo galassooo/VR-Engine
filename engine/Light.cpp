@@ -49,7 +49,9 @@ void Eng::Light::render() {
    sm.setLightDiffuse(color);
    sm.setLightSpecular(color);
 
-   configureLight(Eng::Base::getInstance().getActiveCamera()->getFinalMatrix());
+   // Because the head position shall not depend on its parent, we need to
+   // use the inverse of its local matrix
+   configureLight(glm::inverse(Eng::Base::getInstance().getHeadNode()->getLocalMatrix()));
 }
 
 /**
