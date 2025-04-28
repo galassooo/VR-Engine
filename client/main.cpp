@@ -43,6 +43,36 @@ std::shared_ptr<Eng::Mesh> createCylinderMesh(float radius = 0.002f, float heigh
 // LepMotion setup
 void setupLeapMotion(Eng::Base& eng);
 
+// chess pieces
+
+void updateChessPieceSelection();
+void initChessPieceSelection(Eng::Base& eng);
+void findChessPieces(std::shared_ptr<Eng::Node> node);
+void updateBoundingBoxes(Eng::Base& eng);
+std::shared_ptr<Eng::Mesh> createLineMesh(const glm::vec3& start, const glm::vec3& end, const glm::vec3& color);
+void createBoundingBoxLines(Eng::Base& eng, const glm::vec3& min, const glm::vec3& max, const glm::vec3& color);
+void updateBoundingBoxes(Eng::Base& eng);
+
+bool showBoundingBoxes = false;
+std::vector<std::shared_ptr<Eng::Mesh>> boundingBoxMeshes;
+
+// Strutture e variabili globali per la gestione del "pinch" e della selezione dei pezzi
+struct SelectablePiece {
+    std::shared_ptr<Eng::Node> node;
+    std::shared_ptr<Eng::Mesh> mesh;
+    glm::vec3 boundingBoxMin;
+    glm::vec3 boundingBoxMax;
+    std::shared_ptr<Eng::Material> originalMaterial;
+    glm::mat4 originalMatrix;
+    bool isSelected = false;
+};
+
+std::vector<SelectablePiece> selectablePieces;
+std::shared_ptr<Eng::Node> selectedPiece = nullptr;
+bool isPinching = false;
+float pinchThreshold = 0.7f;
+glm::vec3 grabOffset;
+
 /**
  * @brief Sets up multiple cameras and their controls.
  *
@@ -75,11 +105,10 @@ int main(int argc, char *argv[]) {
    }
 
    eng.loadScene("..\\resources\\Chess.ovo");
-
    // Dopo aver caricato la scena in main.cpp
    // Setup Leap Motion with its own render callback
    setupLeapMotion(eng);
-
+   initChessPieceSelection(eng);
    eng.engEnable(ENG_STEREO_RENDERING);
 
    setUpCameras(eng);
@@ -99,8 +128,439 @@ int main(int argc, char *argv[]) {
 
    return 0;
 }
+void updateBoundingBoxes(Eng::Base& eng) {
+    // Clear previous bounding box meshes
+    for (auto& mesh : boundingBoxMeshes) {
+        auto parent = mesh->getParent();
+        if (parent) {
+            // Remove from parent's children list
+            auto& children = *parent->getChildren();
+            children.erase(std::remove(children.begin(), children.end(), mesh), children.end());
+        }
+    }
+    boundingBoxMeshes.clear();
+
+    // If visualization is disabled, return
+    if (!showBoundingBoxes) {
+        return;
+    }
+
+    for (const auto& piece : selectablePieces) {
+        // Get the piece's transformation matrix
+        glm::mat4 M = piece.node->getFinalMatrix();
+
+        // Calculate world space bounding box
+        glm::vec3 bbMinL = piece.boundingBoxMin;
+        glm::vec3 bbMaxL = piece.boundingBoxMax;
+        glm::vec3 bbMinW(+FLT_MAX), bbMaxW(-FLT_MAX);
+
+        for (int i = 0; i < 8; ++i) {
+            glm::vec3 cornerL(
+                (i & 1) ? bbMaxL.x : bbMinL.x,
+                (i & 2) ? bbMaxL.y : bbMinL.y,
+                (i & 4) ? bbMaxL.z : bbMinL.z);
+
+            glm::vec3 cornerW = glm::vec3(M * glm::vec4(cornerL, 1.0f));
+            bbMinW = glm::min(bbMinW, cornerW);
+            bbMaxW = glm::max(bbMaxW, cornerW);
+        }
+
+        // Create world-space bounding box (green or blue if selected)
+        glm::vec3 color = piece.isSelected ? glm::vec3(0.0f, 0.0f, 1.0f) : glm::vec3(0.0f, 1.0f, 0.0f);
+        createBoundingBoxLines(eng, bbMinW, bbMaxW, color);
+
+        // For debugging purposes, let's add a margin box (0.1m tolerance)
+        if (piece.isSelected) {
+            glm::vec3 expandedMin = bbMinW - glm::vec3(0.1f);
+            glm::vec3 expandedMax = bbMaxW + glm::vec3(0.1f);
+            createBoundingBoxLines(eng, expandedMin, expandedMax, glm::vec3(1.0f, 1.0f, 0.0f)); // Yellow
+        }
+    }
+}
 
 #include <deque>
+void createBoundingBoxLines(Eng::Base& eng, const glm::vec3& min, const glm::vec3& max, const glm::vec3& color) {
+    // Create 12 edges of the box as line segments
+    std::vector<std::pair<glm::vec3, glm::vec3>> edges = {
+        // Bottom face
+        {glm::vec3(min.x, min.y, min.z), glm::vec3(max.x, min.y, min.z)},
+        {glm::vec3(max.x, min.y, min.z), glm::vec3(max.x, min.y, max.z)},
+        {glm::vec3(max.x, min.y, max.z), glm::vec3(min.x, min.y, max.z)},
+        {glm::vec3(min.x, min.y, max.z), glm::vec3(min.x, min.y, min.z)},
+
+        // Top face
+        {glm::vec3(min.x, max.y, min.z), glm::vec3(max.x, max.y, min.z)},
+        {glm::vec3(max.x, max.y, min.z), glm::vec3(max.x, max.y, max.z)},
+        {glm::vec3(max.x, max.y, max.z), glm::vec3(min.x, max.y, max.z)},
+        {glm::vec3(min.x, max.y, max.z), glm::vec3(min.x, max.y, min.z)},
+
+        // Connecting edges
+        {glm::vec3(min.x, min.y, min.z), glm::vec3(min.x, max.y, min.z)},
+        {glm::vec3(max.x, min.y, min.z), glm::vec3(max.x, max.y, min.z)},
+        {glm::vec3(max.x, min.y, max.z), glm::vec3(max.x, max.y, max.z)},
+        {glm::vec3(min.x, min.y, max.z), glm::vec3(min.x, max.y, max.z)}
+    };
+
+    // Create and add each line segment
+    for (const auto& edge : edges) {
+        auto lineMesh = createLineMesh(edge.first, edge.second, color);
+        if (lineMesh) {
+            eng.getRootNode()->addChild(lineMesh);
+            lineMesh->setParent(eng.getRootNode().get());
+            boundingBoxMeshes.push_back(lineMesh);
+        }
+    }
+}
+std::shared_ptr<Eng::Mesh> createLineMesh(const glm::vec3& start, const glm::vec3& end, const glm::vec3& color) {
+    // Create a thin cylinder to represent a line
+    const float lineRadius = 0.003f; // Thin radius
+    const int segments = 8;          // Low polygon count for efficiency
+
+    // Calculate direction and length
+    glm::vec3 direction = end - start;
+    float length = glm::length(direction);
+
+    if (length < 0.0001f) {
+        // Avoid zero-length lines
+        return nullptr;
+    }
+
+    // Create normalized direction
+    direction = direction / length;
+
+    // Create a rotation matrix to orient the cylinder along the line direction
+    // First, find the rotation axis and angle from the z-axis to the line direction
+    glm::vec3 zAxis(0.0f, 0.0f, 1.0f);
+    glm::vec3 rotationAxis = glm::cross(zAxis, direction);
+
+    float rotationAngle = acos(glm::dot(zAxis, direction));
+
+    // Create vertices for a cylinder
+    std::vector<Eng::Vertex> vertices;
+    std::vector<unsigned int> indices;
+
+    // If the direction is nearly parallel to the z-axis, use a different rotation
+    if (glm::length(rotationAxis) < 0.001f) {
+        rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+        rotationAngle = (direction.z > 0.0f) ? 0.0f : glm::pi<float>();
+    }
+    else {
+        rotationAxis = glm::normalize(rotationAxis);
+    }
+
+    // Create the cylinder matrix
+    glm::mat4 cylinderMatrix = glm::translate(glm::mat4(1.0f), start) *
+        glm::rotate(glm::mat4(1.0f), rotationAngle, rotationAxis) *
+        glm::scale(glm::mat4(1.0f), glm::vec3(lineRadius, lineRadius, length));
+
+    // Generate vertices for the cylinder
+    for (int i = 0; i <= segments; i++) {
+        float angle = (float)i / segments * 2.0f * glm::pi<float>();
+        float x = cos(angle);
+        float y = sin(angle);
+
+        // Bottom vertex
+        Eng::Vertex v1;
+        v1.setPosition(glm::vec3(x, y, 0.0f));
+        v1.setNormal(glm::vec3(x, y, 0.0f));
+        v1.setTexCoords(glm::vec2(0.0f));
+        vertices.push_back(v1);
+
+        // Top vertex
+        Eng::Vertex v2;
+        v2.setPosition(glm::vec3(x, y, 1.0f));
+        v2.setNormal(glm::vec3(x, y, 0.0f));
+        v2.setTexCoords(glm::vec2(1.0f));
+        vertices.push_back(v2);
+    }
+
+    // Generate indices for the cylinder
+    for (int i = 0; i < segments; i++) {
+        int idx = i * 2;
+        indices.push_back(idx);
+        indices.push_back(idx + 1);
+        indices.push_back(idx + 2);
+
+        indices.push_back(idx + 1);
+        indices.push_back(idx + 3);
+        indices.push_back(idx + 2);
+    }
+
+    // Create a material with the specified color
+    auto material = std::make_shared<Eng::Material>(color, 1.0f, 0.0f);
+
+    // Create the mesh using the Builder pattern
+    auto& builder = Eng::Builder::getInstance();
+    auto mesh = builder.setName("LineMesh")
+        .addVertices(vertices)
+        .addIndices(indices)
+        .setMaterial(material)
+        .setLocalMatrix(cylinderMatrix)
+        .build();
+
+    return mesh;
+}
+
+void findChessPieces(std::shared_ptr<Eng::Node> node) {
+    if (!node) return;
+    
+    std::string name = node->getName();
+    // finds all meshes with name starting with B_ (black pieces) or W_
+    if ((name.length() >= 2 && (name.substr(0, 2) == "B_" || name.substr(0, 2) == "W_"))) {
+        auto mesh = std::dynamic_pointer_cast<Eng::Mesh>(node);
+        if (mesh) {
+            SelectablePiece piece;
+            piece.node = node;
+            piece.mesh = mesh;
+            piece.boundingBoxMin = mesh->getBoundingBoxMin();
+            piece.boundingBoxMax = mesh->getBoundingBoxMax();
+            piece.originalMaterial = mesh->getMaterial();
+            piece.originalMatrix = node->getLocalMatrix();
+            selectablePieces.push_back(piece);
+            std::cout << "Found chess piece: " << name << std::endl;
+        }
+    }
+    
+    // recursively check for children
+    for (auto& child : *node->getChildren()) {
+        findChessPieces(child);
+    }
+}
+
+bool isPointInBoundingBox(const glm::vec3& point, const SelectablePiece& piece) {
+    // get current final matrix
+    glm::mat4 M = piece.node->getFinalMatrix();
+
+    // convert bounding from local to global
+    glm::vec3 bbMinL = piece.boundingBoxMin;
+    glm::vec3 bbMaxL = piece.boundingBoxMax;
+
+    glm::vec3 bbMinW(+FLT_MAX), bbMaxW(-FLT_MAX);
+    for (int i = 0; i < 8; ++i) {
+        glm::vec3 cornerL(
+            (i & 1) ? bbMaxL.x : bbMinL.x,
+            (i & 2) ? bbMaxL.y : bbMinL.y,
+            (i & 4) ? bbMaxL.z : bbMinL.z);
+
+        glm::vec3 cornerW = glm::vec3(M * glm::vec4(cornerL, 1.0f));
+        bbMinW = glm::min(bbMinW, cornerW);
+        bbMaxW = glm::max(bbMaxW, cornerW);
+    }
+
+    //ITA margine
+    const float EPS = 0.05f; 
+    bbMinW -= glm::vec3(EPS);
+    bbMaxW += glm::vec3(EPS);
+
+    //inclusion test
+    return (
+        point.x >= bbMinW.x && point.x <= bbMaxW.x &&
+        point.y >= bbMinW.y && point.y <= bbMaxW.y &&
+        point.z >= bbMinW.z && point.z <= bbMaxW.z
+        );
+}
+
+void initChessPieceSelection(Eng::Base& eng) {
+    // Find all selectable pieces in the scene
+    findChessPieces(eng.getRootNode());
+    std::cout << "Found " << selectablePieces.size() << " selectable chess pieces" << std::endl;
+
+    // Register the callback for selection handling
+    auto& callbackManager = Eng::CallbackManager::getInstance();
+    callbackManager.registerRenderCallback("chessPieceSelection", []() {
+        updateChessPieceSelection();
+        });
+
+    // Register key binding for bounding box visualization
+    // Using 'v' instead of 'b' which is already used for face culling
+    callbackManager.registerKeyBinding('v', "Toggle bounding box visualization", [](unsigned char key, int x, int y) {
+        showBoundingBoxes = !showBoundingBoxes;
+        std::cout << "Bounding box visualization: " << (showBoundingBoxes ? "ON" : "OFF") << std::endl;
+
+        // Clear or initialize bounding boxes when toggled
+        auto& eng = Eng::Base::getInstance();
+        if (!showBoundingBoxes) {
+            // Clear all bounding box meshes when turning off
+            boundingBoxMeshes.clear();
+        }
+        else {
+            // Initial update when turning on
+            updateBoundingBoxes(eng);
+        }
+        });
+
+    // Register a render callback to update bounding boxes each frame when enabled
+    callbackManager.registerRenderCallback("boundingBoxUpdate", []() {
+        if (showBoundingBoxes) {
+            auto& eng = Eng::Base::getInstance();
+            updateBoundingBoxes(eng);
+        }
+        });
+}
+
+void updateChessPieceSelection() {
+    if (!leap) return;
+
+    leap->update();
+    const LEAP_TRACKING_EVENT* frame = leap->getCurFrame();
+
+   // if we have at least one hand
+    if (frame->nHands == 0) {
+        if (selectedPiece) {
+            selectedPiece = nullptr;
+            isPinching = false;
+        }
+        return;
+    }
+
+    // select first hand detected
+    const LEAP_HAND& hand = frame->pHands[0];
+    float pinchStrength = hand.pinch_strength;
+
+    // middel point between thumb and index
+    const LEAP_DIGIT& thumb = hand.digits[0];
+    const LEAP_DIGIT& index = hand.digits[1];
+
+    glm::vec3 thumbTip(thumb.distal.next_joint.x, thumb.distal.next_joint.y, thumb.distal.next_joint.z);
+    glm::vec3 indexTip(index.distal.next_joint.x, index.distal.next_joint.y, index.distal.next_joint.z);
+
+    //from mm to meters
+    const float LEAP_TO_WORLD = 0.001f;
+    thumbTip *= LEAP_TO_WORLD;
+    indexTip *= LEAP_TO_WORLD;
+
+    glm::vec3 pinchLocal = glm::vec3(index.distal.next_joint.x,
+        index.distal.next_joint.y,
+        index.distal.next_joint.z) * 0.001f;
+
+
+    // world matrix
+    glm::mat4 handsToWorld = handsNode->getFinalMatrix();
+    glm::vec3 pinchWorld = glm::vec3(handsToWorld * glm::vec4(pinchLocal, 1.0f));
+    glm::vec3 pinchPoint = pinchWorld;
+
+    if (selectablePieces.size() > 0) {
+        auto& piece = selectablePieces[0];
+        glm::vec3 piecePos = glm::vec3(piece.node->getFinalMatrix()[3]);
+
+        // debug
+        float distance = glm::distance(pinchPoint, piecePos);
+    }
+
+    // start pinch
+    if (pinchStrength > pinchThreshold && !isPinching) {
+        isPinching = true;
+
+        // find closest obj
+        float closestDistance = std::numeric_limits<float>::max();
+        SelectablePiece* closestPiece = nullptr;
+
+        for (auto& piece : selectablePieces) {
+            // test if is within box coords
+            if (isPointInBoundingBox(pinchPoint, piece)) {
+                std::cout << ">> INTERSEZIONE con " << piece.node->getName() << std::endl;
+
+                /// calculate distance
+                glm::vec3 piecePos = glm::vec3(piece.node->getFinalMatrix()[3]);
+                float dist = glm::distance(pinchPoint, piecePos);
+
+                if (dist < closestDistance) {
+                    closestDistance = dist;
+                    closestPiece = &piece;
+                }
+            }
+        }
+
+        // if we arent in a bounding box, we select another object within a max distance threshold
+        if (!closestPiece) {
+            const float MAX_SELECTION_DISTANCE = 0.001f;
+
+            for (auto& piece : selectablePieces) {
+                glm::vec3 piecePos = glm::vec3(piece.node->getFinalMatrix()[3]);
+                float distance = glm::distance(pinchPoint, piecePos);
+
+                if (distance < closestDistance && distance < MAX_SELECTION_DISTANCE) {
+                    closestDistance = distance;
+                    closestPiece = &piece;
+                }
+            }
+        }
+
+        if (closestPiece) {
+            // select piece
+            closestPiece->isSelected = true;
+            selectedPiece = closestPiece->node;
+
+            // save original material
+            if (!closestPiece->originalMaterial && closestPiece->mesh) {
+                closestPiece->originalMaterial = closestPiece->mesh->getMaterial();
+            }
+
+            // change albedo to glow 
+            if (closestPiece->mesh && closestPiece->originalMaterial) {
+                auto highlightMaterial = std::make_shared<Eng::Material>(
+                    closestPiece->originalMaterial->getAlbedo() * 1.5f,
+                    closestPiece->originalMaterial->getAlpha(),
+                    0.5
+                );
+                closestPiece->mesh->setMaterial(highlightMaterial);
+            }
+
+            // calculate offset for updated position
+            glm::vec3 objectPos = glm::vec3(closestPiece->node->getFinalMatrix()[3]);
+            grabOffset = objectPos - pinchPoint;
+
+        }
+    }
+    // release object
+    else if (pinchStrength <= pinchThreshold && isPinching) {
+        isPinching = false;
+
+        if (selectedPiece) {
+            // restore material
+            for (auto& piece : selectablePieces) {
+                if (piece.node == selectedPiece && piece.isSelected) {
+                    piece.isSelected = false;
+                    if (piece.mesh && piece.originalMaterial) {
+                        piece.mesh->setMaterial(piece.originalMaterial);
+                    }
+                    break;
+                }
+            }
+
+            selectedPiece = nullptr;
+        }
+    }
+    // update position while pinching
+    else if (isPinching && selectedPiece) {
+        // calculate new position
+        glm::vec3 newPos = pinchPoint + grabOffset;
+
+        // find piece in list
+        for (auto& piece : selectablePieces) {
+            if (piece.node == selectedPiece) {
+                // get parent node
+                Eng::Node* parent = piece.node->getParent();
+                if (parent) {
+                    // get local
+                    glm::mat4 parentMatrix = parent->getFinalMatrix();
+                    glm::mat4 invParentMatrix = glm::inverse(parentMatrix);
+                    glm::vec3 localPos = glm::vec3(invParentMatrix * glm::vec4(newPos, 1.0f));
+
+                    // update only translation (scaling and rotation are fine)
+                    glm::mat4 newMatrix = piece.node->getLocalMatrix();
+                    newMatrix[3] = glm::vec4(localPos, 1.0f);
+                    piece.node->setLocalMatrix(newMatrix);
+
+                    // IMPORTANTE: Aggiorna anche l'originalMatrix per mantenere il riferimento corretto
+                    piece.originalMatrix = newMatrix;
+
+                }
+                break;
+            }
+        }
+}
+}
 
 // Updated setupLeapMotion function with proper mesh reuse
 void setupLeapMotion(Eng::Base& eng) {
@@ -458,8 +918,8 @@ void setUpCameras(Eng::Base &eng) {
 
    // Camera 1
    auto camera1 = std::make_shared<Eng::PerspectiveCamera>(45.0f, initialAspect, 0.1f, 50.0f);
-   glm::vec3 cameraPos1(0.0f, 4.f, 3.f);
-   glm::vec3 lookAtPoint1(0.0f, 0.f, 0.f);
+   glm::vec3 cameraPos1(-1.5f, 1.8f, -0.6f);
+   glm::vec3 lookAtPoint1(-.6f, 0.2f, -0.6f);
    glm::vec3 upVector1(0.0f, 1.0f, 0.0f);
    camera1->setLocalMatrix(glm::lookAt(cameraPos1, lookAtPoint1, upVector1));
    camera1->setName("Main Camera");
@@ -578,69 +1038,4 @@ void setUpCameras(Eng::Base &eng) {
                                          }
                                          eng.SetActiveCamera(nextCamera);
                                       });
-}
-
-void setupMirrorEffect(Eng::Base &engine) {
-   auto root = engine.getRootNode();
-   if (!root) return;
-
-   auto boardNode = [&root]() -> std::shared_ptr<Eng::Node> {
-      std::function<std::shared_ptr<Eng::Node>(const std::shared_ptr<Eng::Node> &)> find =
-            [&find](const std::shared_ptr<Eng::Node> &node) -> std::shared_ptr<Eng::Node> {
-         if (!node) return nullptr;
-         if (node->getName() == "Board") return node;
-         for (auto &child: *node->getChildren()) {
-            if (auto found = find(child)) return found;
-         }
-         return nullptr;
-      };
-      return find(root);
-   }();
-
-   if (!boardNode) {
-      std::cout << "Board node not found!" << std::endl;
-      return;
-   }
-
-   // Make squares transparent
-   for (auto &square: *boardNode->getChildren()) {
-      if (!square) continue;
-
-      if (auto squareMesh = std::dynamic_pointer_cast<Eng::Mesh>(square)) {
-         if (auto material = squareMesh->getMaterial()) {
-            auto transparentMaterial = std::make_shared<Eng::Material>(
-               material->getAlbedo(),
-               0.4f,
-               0.0f
-            );
-            squareMesh->setMaterial(transparentMaterial);
-         }
-      }
-
-      // Create reflections for pieces
-      for (auto &piece: *square->getChildren()) {
-         if (!piece) continue;
-         if (auto mesh = std::dynamic_pointer_cast<Eng::Mesh>(piece)) {
-            std::string name = piece->getName();
-            if (name.find('P') != std::string::npos ||
-                name.find('R') != std::string::npos ||
-                name.find('H') != std::string::npos ||
-                name.find('B') != std::string::npos ||
-                name.find('Q') != std::string::npos ||
-                name.find('K') != std::string::npos) {
-               auto reflectedMesh = std::make_shared<Eng::Mesh>();
-               reflectedMesh->setName(name + "_reflection");
-               reflectedMesh->setVertices(mesh->getVertices());
-               reflectedMesh->setIndices(mesh->getIndices());
-               reflectedMesh->setMaterial(mesh->getMaterial());
-
-               glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, -1.0f, 1.0f));
-               reflectedMesh->setLocalMatrix(scaleMatrix);
-
-               mesh->addChild(reflectedMesh);
-               reflectedMesh->setParent(mesh.get());
-            }
-         }
-      }
-   }
 }
