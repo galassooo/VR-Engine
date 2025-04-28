@@ -71,7 +71,7 @@
 #define STEREO_NEAR_CLIP    0.1f
 #define STEREO_FAR_CLIP     1000000.0f
 
-#define STEREO_EYE_HEIGHT   2.8f 
+#define STEREO_EYE_HEIGHT   2.6f 
 
 /**
  * @namespace Eng

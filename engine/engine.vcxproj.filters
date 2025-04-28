@@ -28,9 +28,6 @@
     <Filter Include="Header Files\Render">
       <UniqueIdentifier>{0efab3b4-615e-4452-be87-bbd4bb9cd018}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Render">
-      <UniqueIdentifier>{216dad2a-b835-4686-b3c4-a8e29acf0895}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Base">
       <UniqueIdentifier>{bd21714a-69da-4926-9de9-252b3705a5a6}</UniqueIdentifier>
     </Filter>
@@ -49,13 +46,16 @@
     <Filter Include="Header Files\Control">
       <UniqueIdentifier>{5bc73e2e-8391-4689-9eac-6c8d2c3f008c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Light\Render">
+      <UniqueIdentifier>{216dad2a-b835-4686-b3c4-a8e29acf0895}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Object.cpp">
       <Filter>Source Files\Base</Filter>
     </ClCompile>
     <ClCompile Include="engine.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="Node.cpp">
       <Filter>Source Files\Base</Filter>
@@ -82,25 +82,25 @@
       <Filter>Source Files\Light</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="List.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="ListElement.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="OvoReader.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="Tests\Test_Camera.cpp">
       <Filter>Source Files\Tests</Filter>
@@ -133,22 +133,22 @@
       <Filter>Source Files\Base</Filter>
     </ClCompile>
     <ClCompile Include="Program.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="VertexShader.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="FragmentShader.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="FrameBufferObject.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
