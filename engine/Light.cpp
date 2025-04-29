@@ -46,8 +46,8 @@ void Eng::Light::render() {
    auto& sm = ShaderManager::getInstance();
 
    sm.setLightAmbient(color * 0.2f);
-   sm.setLightDiffuse(color);
-   sm.setLightSpecular(color);
+   sm.setLightDiffuse(color * 1.5f);
+   sm.setLightSpecular(color * 1.5f);
 
    // Because the head position shall not depend on its parent, we need to
    // use the inverse of its local matrix
@@ -57,7 +57,8 @@ void Eng::Light::render() {
 /**
 * @brief Sets the common light properties for OpenGL.
 *
-* This method configures the ambient, diffuse, and specular components for the light
+* This method configures the 
+, diffuse, and specular components for the light
 * using the color provided during initialization.
 *
 * @param lightId The OpenGL light ID

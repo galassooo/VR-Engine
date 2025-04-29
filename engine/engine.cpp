@@ -373,50 +373,60 @@ void ENG_API Eng::Base::renderScene() {
         return;
     }
 
-   if (!activeCamera) {
-      std::cerr << "ERROR: No active camera set for rendering" << std::endl;
-      return;
-   }
+    if (!activeCamera) {
+        std::cerr << "ERROR: No active camera set for rendering" << std::endl;
+        return;
+    }
 
-   // Clear Buffers
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Se il bloom è stato inizializzato, usalo per catturare la scena
+    if (bloomEffect && bloomEffect->isInitialized()) {
+        bloomEffect->beginSceneCapture();
+    }
+    else {
+        // Altrimenti pulisci i buffer normalmente
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 
-   // Get View Matrix
-   glm::mat4 viewMatrix = activeCamera->getFinalMatrix();
+    // Get View Matrix
+    glm::mat4 viewMatrix = activeCamera->getFinalMatrix();
 
-   // Get Projection matrix
-   glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
+    // Get Projection matrix
+    glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 
-   glm::mat4 headWorld = glm::inverse(viewMatrix);
-   getHeadNode()->setLocalMatrix(headWorld);
+    glm::mat4 headWorld = glm::inverse(viewMatrix);
+    getHeadNode()->setLocalMatrix(headWorld);
 
-   if (skybox) {
-       // Remove the translation component by converting to a 3x3 and back to a 4x4.
-       glm::mat4 viewNoTrans = glm::mat4(glm::mat3(viewMatrix));
-       skybox->render(viewNoTrans, projectionMatrix);
-   }
+    if (skybox) {
+        // Remove the translation component by converting to a 3x3 and back to a 4x4.
+        glm::mat4 viewNoTrans = glm::mat4(glm::mat3(viewMatrix));
+        skybox->render(viewNoTrans, projectionMatrix);
+    }
 
-   // Clear list
-   renderList.clear();
+    // Clear list
+    renderList.clear();
 
-   // Execute optional render callbacks
-   auto& callbackManager = CallbackManager::getInstance();
-   callbackManager.executeRenderCallbacks();
+    // Execute optional render callbacks
+    auto& callbackManager = CallbackManager::getInstance();
+    callbackManager.executeRenderCallbacks();
 
-   // Traverse the root nodes and add them to the render list
-   traverseAndAddToRenderList(rootNode);
-   if (!sceneBoundingBox) {
-       sceneBoundingBox = renderList.getSceneBoundingBox();
-       stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
-   }
+    // Traverse the root nodes and add them to the render list
+    traverseAndAddToRenderList(rootNode);
+    if (!sceneBoundingBox) {
+        sceneBoundingBox = renderList.getSceneBoundingBox();
+        stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
+    }
 
-   // Render all nodes in the render list
-   renderList.setEyeViewMatrix(viewMatrix);
-   renderList.setEyeProjectionMatrix(projectionMatrix);
-   renderList.render();
+    // Render all nodes in the render list
+    renderList.setEyeViewMatrix(viewMatrix);
+    renderList.setEyeProjectionMatrix(projectionMatrix);
+    renderList.render();
 
+    // Se il bloom è stato inizializzato, processa e renderizza il risultato finale
+    if (bloomEffect && bloomEffect->isInitialized()) {
+        bloomEffect->endSceneCapture();
+    }
 
-   glutSwapBuffers();
+    glutSwapBuffers();
 }
 
 /**
@@ -455,8 +465,25 @@ void ENG_API Eng::Base::run() {
             setupStereoscopicRendering(reserved->fboSizeX, reserved->fboSizeY);
         }
     }
-   // Enter FreeGLUT main loop
-   glutMainLoop();
+
+    // Inizializza l'effetto bloom
+    initBloomEffect();
+
+    // Enter FreeGLUT main loop
+    glutMainLoop();
+}
+
+void ENG_API Eng::Base::initBloomEffect() {
+    // Crea e inizializza l'effetto bloom con le dimensioni appropriate
+    bloomEffect = std::make_shared<BloomEffect>();
+
+    int width = reserved->fboSizeX;   // ← usa la risoluzione ideale di SteamVR
+    int height = reserved->fboSizeY;
+
+    if (!bloomEffect->init(width, height)) {
+        std::cerr << "ERROR: Failed to initialize bloom effect, disabling" << std::endl;
+        bloomEffect.reset();
+    }
 }
 
 /**
@@ -556,15 +583,16 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
     leftEyeFbo = std::make_shared<Fbo>();
     rightEyeFbo = std::make_shared<Fbo>();
 
-    // Create texture for left eye
+    // Create texture for left eye - CAMBIA QUI DA GL_RGBA8 a GL_RGBA16F
     glGenTextures(1, &leftEyeTexture);
     glBindTexture(GL_TEXTURE_2D, leftEyeTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr); // Usa GL_RGBA16F e GL_FLOAT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    std::cout << "DEBUG: Left eye texture created with ID : " << leftEyeTexture << std::endl;
+    std::cout << "DEBUG: Left eye texture created with ID : " << leftEyeTexture << " (GL_RGBA16F)" << std::endl;
+
 
     // Bind texture to left FBO
     leftEyeFbo->bindTexture(0, Fbo::BIND_COLORTEXTURE, leftEyeTexture);
@@ -576,15 +604,16 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
     }
     std::cout << "DEBUG: Left eye FBO setup successful, handle: " << leftEyeFbo->getHandle() << ", size " << leftEyeFbo->getSizeX() << "x" << leftEyeFbo->getSizeY() << std::endl;
 
-    // Create texture for right eye
+    // Create texture for right eye - CAMBIA QUI DA GL_RGBA8 a GL_RGBA16F
     glGenTextures(1, &rightEyeTexture);
     glBindTexture(GL_TEXTURE_2D, rightEyeTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr); // Usa GL_RGBA16F e GL_FLOAT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    std::cout << "DEBUG: Right eye texture created with ID: " << rightEyeTexture << std::endl;
+    std::cout << "DEBUG: Right eye texture created with ID: " << rightEyeTexture << " (GL_RGBA16F)" << std::endl;
+
 
     // Bind texture to right FBO
     rightEyeFbo->bindTexture(0, Fbo::BIND_COLORTEXTURE, rightEyeTexture);
@@ -595,6 +624,7 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
         return false;
     }
     std::cout << "DEBUG: Right eye FBO setup successful, handle: " << rightEyeFbo->getHandle() << ", size " << rightEyeFbo->getSizeX() << "x" << rightEyeFbo->getSizeY() << std::endl;
+
 
     // Set default eye distance
     eyeDistance = 0.065f; // 6.5 cm is the average human interpupillary distance
@@ -624,6 +654,8 @@ glm::mat4 Eng::Base::computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, fl
 
 void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& projectionMatrix) {
     eyeFbo->render();
+    static const GLenum drawBufs[1] = { GL_COLOR_ATTACHMENT0 };
+    glDrawBuffers(1, drawBufs);
     glViewport(0, 0, eyeFbo->getSizeX(), eyeFbo->getSizeY());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -652,161 +684,152 @@ glm::mat4 ENG_API Eng::Base::getBodyPosition() const {
     return stereoInitialTransform;
 }
 
-void ENG_API Eng::Base::renderStereoscopic() {
-    if (!leftEyeFbo || !rightEyeFbo) {
-        std::cerr << "ERROR: FBOs non inizializzati per il rendering stereoscopico." << std::endl;
+void Eng::Base::renderStereoscopic()
+{
+    // Check FBOs and bloom initialization
+    if (!leftEyeFbo || !rightEyeFbo)
+    {
+        std::cerr << "ERROR: FBOs not initialized for stereoscopic rendering." << std::endl;
+        renderScene();
+        return;
+    }
+    if (!bloomEffect || !bloomEffect->isInitialized())
+    {
+        std::cerr << "ERROR: BloomEffect not initialized." << std::endl;
         renderScene();
         return;
     }
 
-    // Store the current viewport size:
+    // Create post-processing textures if not already created
+    auto ensurePostTexture = [](GLuint& tex, int w, int h)
+        {
+            if (tex == 0)
+            {
+                glGenTextures(1, &tex);
+                glBindTexture(GL_TEXTURE_2D, tex);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, w, h, 0, GL_RGBA, GL_FLOAT, nullptr);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            }
+        };
+
+    GLuint leftEyePostTex = 0;
+    GLuint rightEyePostTex = 0;
+    ensurePostTexture(leftEyePostTex, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY());
+    ensurePostTexture(rightEyePostTex, rightEyeFbo->getSizeX(), rightEyeFbo->getSizeY());
+
+    // Save current viewport
     GLint prevViewport[4];
     glGetIntegerv(GL_VIEWPORT, prevViewport);
 
-    int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
-    int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-    OvVR::OvEye leftEye = OvVR::OvEye::EYE_LEFT;
-    OvVR::OvEye rightEye = OvVR::OvEye::EYE_RIGHT;
+    const int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+    const int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
 
-    // Update current user position
+    OvVR::OvEye eyeLeft = OvVR::OvEye::EYE_LEFT;
+    OvVR::OvEye eyeRight = OvVR::OvEye::EYE_RIGHT;
+
+    // Update VR tracking
     reserved->ovr->update();
 
-    // Compute modelViewMatrix based on user VR position
-    glm::mat4 headPositionMatrix = reserved->ovr->getModelviewMatrix();
+    // Calculate head and view transformation
+    glm::mat4 headPos = reserved->ovr->getModelviewMatrix();
+    glm::mat4 initT = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, stereoEyeHeight, 0.0f)) * stereoInitialTransform;
+    glm::mat4 finalHead = initT * headPos;
+    glm::mat4 modelView = glm::inverse(finalHead);
 
-    // Definisci una matrice di trasformazione iniziale fissa che posiziona e orienta correttamente la camera
-    // Prima ruota di 270 gradi intorno all'asse Y (per orientarti verso la scacchiera)
-    // Poi trasla nella posizione desiderata
-    glm::mat4 heightAdjustment = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, stereoEyeHeight, 0.0f));
-    glm::mat4 initialTransform = heightAdjustment * stereoInitialTransform;
+    if (auto hn = getHeadNode()) hn->setLocalMatrix(finalHead);
 
-    // Applica la trasformazione iniziale fissa PRIMA della matrice della posizione della testa
-    // In questo modo, la trasformazione iniziale diventa la "posizione zero" del VR
-    glm::mat4 finalHeadPosition = initialTransform * headPositionMatrix;
+    auto& cbMgr = CallbackManager::getInstance();
 
-    // Calcola la matrice di vista finale
-    glm::mat4 modelViewMatrix = glm::inverse(finalHeadPosition);
+    // Render a single eye
+    auto renderEye = [&](OvVR::OvEye eye,
+        std::shared_ptr<Fbo>& eyeFbo,
+        GLuint eyeTexture,
+        GLuint postTexture)
+        {
+            // Bind FBO and clear
+            eyeFbo->render();
+            glViewport(0, 0, eyeFbo->getSizeX(), eyeFbo->getSizeY());
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Aggiorna il nodo della testa se necessario
-    if (auto headNode = getHeadNode()) {
-        headNode->setLocalMatrix(finalHeadPosition);
-    }
-    // CallBackManager for the LeapMotion
-    auto& callbackManager = CallbackManager::getInstance();
+            // Eye-specific projection and view matrices
+            glm::mat4 projEye = reserved->ovr->getProjMatrix(eye, stereoNearClip, stereoFarClip);
+            glm::mat4 eye2Head = reserved->ovr->getEye2HeadMatrix(eye);
+            glm::mat4 viewEye = modelView;
+            glm::mat4 projEyeFix = projEye * glm::inverse(eye2Head);
 
-    glm::mat4 tmpProjMat, eye2Head;
+            // Render skybox
+            if (skybox)
+            {
+                glm::mat4 skyV = glm::mat4(glm::mat3(viewEye));
+                skybox->render(skyV, projEyeFix);
+            }
 
-    // ---- Left Eye Rendering ----
-    {
-        leftEyeFbo->render();
-        //glViewport(0, 0, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY());
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            // Execute registered rendering callbacks
+            cbMgr.executeRenderCallbacks();
 
-        // Get left eye matrices
-        tmpProjMat = reserved->ovr->getProjMatrix(leftEye, stereoNearClip, stereoFarClip);
-        eye2Head = reserved->ovr->getEye2HeadMatrix(leftEye);
+            // Build and render scene list
+            renderList.clear();
+            traverseAndAddToRenderList(rootNode);
 
-        // Compute left eye view matrix
-        glm::mat4 leftEyeViewMatrix = modelViewMatrix;
-        glm::mat4 leftEyeProjMatrix = tmpProjMat * glm::inverse(eye2Head);
+            if (!sceneBoundingBox)
+            {
+                sceneBoundingBox = renderList.getSceneBoundingBox();
+                stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
+            }
 
-        // Render skybox first
-        if (skybox) {
-            glm::mat4 skyboxView = glm::mat4(glm::mat3(leftEyeViewMatrix));
-            skybox->render(skyboxView, leftEyeProjMatrix);
-        }
+            renderList.setEyeViewMatrix(viewEye);
+            renderList.setEyeProjectionMatrix(projEyeFix);
+            renderList.render();
 
-        // Execute callbacks (for LeapMotion etc)
-        callbackManager.executeRenderCallbacks();
+            // Apply bloom post-processing
+            bloomEffect->applyToTexture(eyeTexture, postTexture,
+                eyeFbo->getSizeX(), eyeFbo->getSizeY());
 
-        // Render scene with multipass
-        renderList.clear();
-        traverseAndAddToRenderList(rootNode);
-        if (!sceneBoundingBox) {
-            sceneBoundingBox = renderList.getSceneBoundingBox();
-            stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
-        }
-        renderList.setEyeViewMatrix(leftEyeViewMatrix);
-        renderList.setEyeProjectionMatrix(leftEyeProjMatrix);
-        renderList.render();
+            // Submit frame to VR headset
+            reserved->ovr->pass(eye, postTexture);
+        };
 
-        // Submit to OpenVR
-        reserved->ovr->pass(leftEye, leftEyeTexture);
-    }
+    // Render left and right eye
+    renderEye(eyeLeft, leftEyeFbo, leftEyeTexture, leftEyePostTex);
+    renderEye(eyeRight, rightEyeFbo, rightEyeTexture, rightEyePostTex);
 
-    // ---- Right Eye Rendering ----
-    {
-        rightEyeFbo->render();
-        //glViewport(0, 0, rightEyeFbo->getSizeX(), rightEyeFbo->getSizeY());
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Get right eye matrices
-        tmpProjMat = reserved->ovr->getProjMatrix(rightEye, stereoNearClip, stereoFarClip);
-        eye2Head = reserved->ovr->getEye2HeadMatrix(rightEye);
-
-        // Compute right eye view matrix
-        glm::mat4 rightEyeViewMatrix = modelViewMatrix;
-        glm::mat4 rightEyeProjMatrix = tmpProjMat * glm::inverse(eye2Head);
-
-        // Render skybox first
-        if (skybox) {
-            glm::mat4 skyboxView = glm::mat4(glm::mat3(rightEyeViewMatrix));
-            skybox->render(skyboxView, rightEyeProjMatrix);
-        }
-
-        // Execute callbacks (for LeapMotion etc)
-        callbackManager.executeRenderCallbacks();
-
-        // Render scene with multipass
-        renderList.clear();
-        traverseAndAddToRenderList(rootNode);
-        if (!sceneBoundingBox) {
-            sceneBoundingBox = renderList.getSceneBoundingBox();
-            stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
-        }
-        renderList.setEyeViewMatrix(rightEyeViewMatrix);
-        renderList.setEyeProjectionMatrix(rightEyeProjMatrix);
-        renderList.render();
-
-        // Submit to OpenVR
-        reserved->ovr->pass(rightEye, rightEyeTexture);
-    }
-
-    // ... rest of the function remains the same ...
-    // Update internal OpenVR settings (sends data to VR System):
+    // Submit frames to VR runtime
     reserved->ovr->render();
-
-    // Reset to standard render output
     Fbo::disable();
 
-	// Clear the screen
+    // Render mirror view to monitor
     glViewport(0, 0, windowWidth, windowHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Display Left and Right Eye images on standard screen as split screen
-	// It is done by copying the FBOs to the main framebuffer
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, leftEyeFbo->getHandle());
-    glBlitFramebuffer(
-        0, 0, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY(),
-        0, 0, APP_FBOSIZEX, APP_FBOSIZEY,
-        GL_COLOR_BUFFER_BIT, GL_LINEAR
-    );
+    static GLuint mirrorFbo = 0;
+    if (mirrorFbo == 0) glGenFramebuffers(1, &mirrorFbo);
 
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, rightEyeFbo->getHandle());
-    glBlitFramebuffer(
-        0, 0, rightEyeFbo->getSizeX(), rightEyeFbo->getSizeY(),
-        APP_FBOSIZEX, 0, APP_WINDOWSIZEX, APP_FBOSIZEY,
-        GL_COLOR_BUFFER_BIT, GL_LINEAR
-    );
+    auto blitToScreen = [&](GLuint tex, int x0, int x1)
+        {
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, mirrorFbo);
+            glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                GL_TEXTURE_2D, tex, 0);
+            glReadBuffer(GL_COLOR_ATTACHMENT0);
+
+            glBlitFramebuffer(0, 0, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY(),
+                x0, 0, x1, APP_FBOSIZEY,
+                GL_COLOR_BUFFER_BIT, GL_LINEAR);
+        };
+
+    blitToScreen(leftEyePostTex, 0, APP_FBOSIZEX);
+    blitToScreen(rightEyePostTex, APP_FBOSIZEX, APP_WINDOWSIZEX);
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-
     glutSwapBuffers();
 
-    glViewport(0, 0, prevViewport[2], prevViewport[3]);
+    // Restore previous viewport
+    glViewport(prevViewport[0], prevViewport[1],
+        prevViewport[2], prevViewport[3]);
 }
 
-// Skybox
 std::shared_ptr <Eng::Skybox> Eng::Base::getSkybox() const {
     return skybox;
 }

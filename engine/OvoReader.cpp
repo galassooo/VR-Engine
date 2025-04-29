@@ -462,7 +462,7 @@ void ENG_API Eng::OvoReader::parseMaterial(unsigned int &position, const char *d
    position += static_cast<unsigned int>(strlen(textureName)) + 1;
 
    // add material
-   const auto material = std::make_shared<Eng::Material>(albedo, alpha, roughness);
+   const auto material = std::make_shared<Eng::Material>(albedo, alpha, roughness, emission);
 
    if (strcmp(textureName, "[none]") != 0) {
       std::string texturePath = basePath + std::string(textureName);

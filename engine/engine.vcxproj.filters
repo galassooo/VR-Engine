@@ -151,7 +151,10 @@
       <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
     <ClCompile Include="BoundingBox.cpp">
-      <Filter>Source Files\Render</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BloomEffect.cpp">
+      <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -258,6 +261,9 @@
       <Filter>Header Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="BoundingBox.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="BloomEffect.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
   </ItemGroup>

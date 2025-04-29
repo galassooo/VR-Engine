@@ -31,4 +31,5 @@ private:
 
 	glm::vec3 globalColor = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 calculateWeightedAverageColor(unsigned char* bits, int width, int height, int channels = 3);
+    glm::vec3 calculateWeightedAverageColorHDR(float* floatBits, int width, int height, int channels);
 };

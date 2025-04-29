@@ -33,7 +33,7 @@ void Eng::testMeshMaterial() {
     Eng::Mesh mesh;
 
     // Create a mock material with valid arguments
-    auto material = std::make_shared<Eng::Material>(glm::vec3(0.5f, 0.5f, 0.5f), 1.0f, 32.0f);
+    auto material = std::make_shared<Eng::Material>(glm::vec3(0.5f, 0.5f, 0.5f), 1.0f, 32.0f, glm::vec3(0));
 
     // Set material
     mesh.setMaterial(material);

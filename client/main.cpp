@@ -15,12 +15,12 @@ extern "C" {
 
 // Skybox
 std::vector<std::string> myCubemapFaces = {
-    "../resources/right.png", // right
-    "../resources/left.png", // left
-    "../resources/top.png", // top
-    "../resources/bottom.png", // bottom
-    "../resources/front.png", // front
-    "../resources/back.png"  // back
+    "../resources/right.hdr", // right
+    "../resources/left.hdr", // left
+    "../resources/top.hdr", // top
+    "../resources/bottom.hdr", // bottom
+    "../resources/front.hdr", // front
+    "../resources/back.hdr"  // back
 };
 
 // Leap Motion
@@ -220,7 +220,7 @@ void initPredefinedPositions() {
     glm::mat4 position3 = glm::translate(glm::mat4(1.0f), glm::vec3(-2.3f, 0.5f, -1.2f)) *
         glm::rotate(glm::mat4(1.0f), glm::radians(200.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-    glm::mat4 position4 = glm::translate(glm::mat4(1.0f), glm::vec3(2.6f, 1.0f, 5.f)) *
+    glm::mat4 position4 = glm::translate(glm::mat4(1.0f), glm::vec3(3.5f, 1.0f, 5.f)) *
         glm::rotate(glm::mat4(1.0f), glm::radians(10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
     predefinedPositions = { position1, position2, position3, position4 };
@@ -385,7 +385,7 @@ std::shared_ptr<Eng::Mesh> createLineMesh(const glm::vec3& start, const glm::vec
     }
 
     // Create a material with the specified color
-    auto material = std::make_shared<Eng::Material>(color, 1.0f, 0.0f);
+    auto material = std::make_shared<Eng::Material>(color, 1.0f, 0.0f, glm::vec3(0));
 
     // Create the mesh using the Builder pattern
     auto& builder = Eng::Builder::getInstance();
@@ -600,7 +600,8 @@ void updateChessPieceSelection() {
                 auto highlightMaterial = std::make_shared<Eng::Material>(
                      glm::vec3(1.f, 0.f, 0.f),
                     closestPiece->originalMaterial->getAlpha(),
-                    0.5
+                    0.5,
+                    glm::vec3(1.0, 0.0,0.0)
                 );
                 closestPiece->mesh->setMaterial(highlightMaterial);
             }
@@ -691,14 +692,14 @@ void setupLeapMotion(Eng::Base& eng) {
     static std::shared_ptr<Eng::Mesh> sphereMesh = nullptr;
     if (!sphereMesh) {
         sphereMesh = createSphereMesh(0.005f);  // Increase size to 5.0f
-        auto mat = std::make_shared<Eng::Material>(glm::vec3(1, 0, 0), 1.0f, 0.2f);
+        auto mat = std::make_shared<Eng::Material>(glm::vec3(1, 0, 0), 1.0f, 0.2f, glm::vec3(0));
         sphereMesh->setMaterial(mat);
         sphereMesh->initBuffers();
     }
 
     if (!cylinderMesh) {
         cylinderMesh = createCylinderMesh(0.002f, 1.0f);
-        auto mat = std::make_shared<Eng::Material>(glm::vec3(1), 1.0f, 0.0f);
+        auto mat = std::make_shared<Eng::Material>(glm::vec3(1), 1.0f, 0.0f, glm::vec3(0));
         cylinderMesh->setMaterial(mat);
         cylinderMesh->initBuffers();
     }
@@ -787,7 +788,7 @@ void updateLeapHands() {
         auto setJoint = [&](const glm::vec3& pos) {
             if (jointIndex >= jointMeshes.size()) return;
             jointMeshes[jointIndex]
-                ->setMaterial(std::make_shared<Eng::Material>(handColor, 1.0f, 0.2f));
+                ->setMaterial(std::make_shared<Eng::Material>(handColor, 1.0f, 0.2f, glm::vec3(0)));
             jointMeshes[jointIndex++]
                 ->setLocalMatrix(glm::translate(glm::mat4(1.0f), pos));
             };

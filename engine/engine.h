@@ -106,6 +106,7 @@ namespace Eng {
 #include "List.h"
 #include "OvoReader.h"
 #include "CallbackManager.h"
+#include "BloomEffect.h"
 #include "Builder.h"
 #include "ShaderManager.h"
 #include "Skybox.h"
@@ -223,6 +224,9 @@ namespace Eng {
 
       // HeadNode for LeapMotion
 	  std::shared_ptr<Node> headNode;
+
+      std::shared_ptr<BloomEffect> bloomEffect;
+      void initBloomEffect();
 
       float stereoEyeHeight = STEREO_EYE_HEIGHT;
    };

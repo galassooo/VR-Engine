@@ -74,10 +74,20 @@ static const char* skyboxFragShaderSrc = R"(
     
     uniform samplerCube skybox;
     
-    void main()
-    {    
-        fragColor = texture(skybox, TexCoords);
+void main() {    
+    vec3 color = texture(skybox, TexCoords).rgb;
+    
+    //amplify colors (il risultato viene piu carino cosi)
+    color *= 3.0; 
+    
+    // Amplify luminance
+    float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
+    if (luminance > 0.6) {
+        color *= 1.0 + (luminance - 0.6) * 2.0; // Amplifica ancora di più aree luminose
     }
+    
+    fragColor = vec4(color, 1.0);
+}
 )";
 
 Eng::Skybox::Skybox(const std::vector<std::string>& faces)
@@ -187,10 +197,17 @@ bool Eng::Skybox::loadCubemap()
         GLenum internalFormat;
         GLenum format;
         int channels;
+        GLenum type = GL_UNSIGNED_BYTE;
         if (FreeImage_GetBPP(dib) == 32) {
             internalFormat = GL_RGBA;
             format = GL_BGRA;
 			channels = 4;
+        }
+        else if (FreeImage_GetBPP(dib) == 128 || FreeImage_GetBPP(dib) == 96) { // 32 bit per canale (floating point HDR)
+            internalFormat = GL_RGB16F;
+            format = GL_RGB;
+            type = GL_FLOAT;
+            channels = 3;
         }
         else {
             internalFormat = GL_RGB;
@@ -200,17 +217,16 @@ bool Eng::Skybox::loadCubemap()
 
         FreeImage_FlipVertical(dib);
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, width, height,
-            0, format, GL_UNSIGNED_BYTE, bits);
+            0, format, type, bits);
 
-        // Calculate the average color of the face and add it to the sum.
-        glm::vec3 faceAverageColor = calculateWeightedAverageColor(bits, width, height, channels);
-
-        // Debug print average face color
-        /*
-        std::cout << "[Skybox] Face " << i << " average color: " << faceAverageColor.x << ", "
-            << faceAverageColor.y << ", " << faceAverageColor.z << std::endl;
-        */
-
+        glm::vec3 faceAverageColor;
+        if (type == GL_FLOAT) { //HDR
+            float* floatBits = (float*)bits;
+            faceAverageColor = calculateWeightedAverageColorHDR(floatBits, width, height, channels);
+        }
+        else { //LDR
+            faceAverageColor = calculateWeightedAverageColor(bits, width, height, channels);
+        }
         faceAverageColorSum += faceAverageColor;
 
         FreeImage_Unload(dib);
@@ -295,7 +311,40 @@ glm::vec3 Eng::Skybox::calculateWeightedAverageColor(unsigned char* bits, int wi
 
     return weightedColor;
 }
+glm::vec3 Eng::Skybox::calculateWeightedAverageColorHDR(float* floatBits, int width, int height, int channels) {
+    float totalLuminance = 0.0f;
+    glm::vec3 weightedColor(0.0f);
 
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            int pixelIndex = (y * width + x) * channels;
+
+            // Read colors (ignoring alpha if present)
+            float r = floatBits[pixelIndex + 0];  // Red (index +0 in RGB(A) format for EXR)
+            float g = floatBits[pixelIndex + 1];  // Green
+            float b = floatBits[pixelIndex + 2];  // Blue
+
+            //Uses tone mapping to map color to 0 -1 range
+            if (r > 1.0f || g > 1.0f || b > 1.0f) {
+                // log compression
+                r = 1.0f + log2(r) * 0.5f;
+                g = 1.0f + log2(g) * 0.5f;
+                b = 1.0f + log2(b) * 0.5f;
+            }
+
+            float luminance = 0.2126f * r + 0.7152f * g + 0.0722f * b;
+
+            weightedColor += glm::vec3(r, g, b) * luminance;
+            totalLuminance += luminance;
+        }
+    }
+
+    if (totalLuminance > 0.0f) {
+        weightedColor /= totalLuminance;
+    }
+
+    return weightedColor;
+}
 
 glm::vec3 Eng::Skybox::getGlobalColor()
 {

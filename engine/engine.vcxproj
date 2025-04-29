@@ -93,6 +93,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BloomEffect.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="Builder.cpp" />
     <ClCompile Include="CallbackManager.cpp" />
@@ -135,6 +136,7 @@
     <ClCompile Include="VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BloomEffect.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Builder.h" />
     <ClInclude Include="CallbackManager.h" />

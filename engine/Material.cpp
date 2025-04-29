@@ -12,8 +12,8 @@
  * @param alpha Transparency value (0.0 = fully transparent, 1.0 = fully opaque).
  * @param shininess The shininess factor for specular highlights.
  */
-Eng::Material::Material(const glm::vec3 &albedo, const float alpha, const float shininess)
-   : albedo(glm::vec4(albedo, alpha)), shininess(shininess) {
+Eng::Material::Material(const glm::vec3 &albedo, const float alpha, const float shininess, const glm::vec3 emission)
+   : albedo(glm::vec4(albedo, alpha)), shininess(shininess), emission(emission) {
 }
 
 /**
@@ -68,12 +68,11 @@ void Eng::Material::render() {
 
    float shin = shininess[0];
 
-   sm.setMaterialEmission(glm::vec3(0.0f));
    sm.setMaterialAmbient(amb);
    sm.setMaterialDiffuse(dif);
    sm.setMaterialSpecular(spe);
    sm.setMaterialShininess(shin);
-   sm.setMaterialEmission(glm::vec3(0.0f));
+   sm.setMaterialEmission(emission * 2.f);
    sm.setMaterialAmbient(glm::vec3(albedo.r * 0.2f, albedo.g * 0.2f, albedo.b * 0.2f));
    sm.setMaterialDiffuse(glm::vec3(albedo.r * 0.6f, albedo.g * 0.6f, albedo.b * 0.6f));
    sm.setMaterialSpecular(glm::vec3(albedo.r * 0.4f, albedo.g * 0.4f, albedo.b * 0.4f));

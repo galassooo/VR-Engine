@@ -9,7 +9,7 @@
  */
 class ENG_API Material : Eng::Object {
 public:
-   Material(const glm::vec3 &albedo, float alpha, float shininess);
+   Material(const glm::vec3 &albedo, float alpha, float shininess, const glm::vec3 emission);
 
    void render() override;
 
@@ -23,6 +23,7 @@ public:
 private:
    ///> Albedo with RGBA (alpha included)
    glm::vec4 albedo;
+   glm::vec3 emission;
    ///> shininess component
    float shininess;
    ///> pointer to texture (nullptr if not present)
