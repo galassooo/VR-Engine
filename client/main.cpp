@@ -113,6 +113,11 @@ int main(int argc, char *argv[]) {
       return -1;
    }
 
+   //set postprocessing
+   auto bloom = std::make_shared<Eng::BloomEffect>();
+   Eng::Base::getInstance().addPostProcessor(bloom);
+   Eng::Base::getInstance().setPostProcessingEnabled(true);
+
    eng.loadScene("..\\resources\\Chess.ovo");
 
    setupLeapMotion(eng);
@@ -171,8 +176,6 @@ void updatePositionFromGesture() {
         // Update state and cooldown time
         gestureActive = true;
         lastGestureTime = currentTime;
-
-        std::cout << "Position changed to preset " << (currentPositionIndex + 1) << std::endl;
     }
     else if (!handsTogetherNow && gestureActive) {
         // Reset gesture state when hands are separated
@@ -415,7 +418,6 @@ void findChessPieces(std::shared_ptr<Eng::Node> node) {
             piece.originalMaterial = mesh->getMaterial();
             piece.originalMatrix = node->getLocalMatrix();
             selectablePieces.push_back(piece);
-            std::cout << "Found chess piece: " << name << std::endl;
         }
     }
     
@@ -461,7 +463,7 @@ bool isPointInBoundingBox(const glm::vec3& point, const SelectablePiece& piece) 
 void initChessPieceSelection(Eng::Base& eng) {
     // Find all selectable pieces in the scene
     findChessPieces(eng.getRootNode());
-    std::cout << "Found " << selectablePieces.size() << " selectable chess pieces" << std::endl;
+
 
     // Register the callback for selection handling
     auto& callbackManager = Eng::CallbackManager::getInstance();
@@ -473,7 +475,6 @@ void initChessPieceSelection(Eng::Base& eng) {
     // Using 'v' instead of 'b' which is already used for face culling
     callbackManager.registerKeyBinding('v', "Toggle bounding box visualization", [](unsigned char key, int x, int y) {
         showBoundingBoxes = !showBoundingBoxes;
-        std::cout << "Bounding box visualization: " << (showBoundingBoxes ? "ON" : "OFF") << std::endl;
 
         // Clear or initialize bounding boxes when toggled
         auto& eng = Eng::Base::getInstance();
@@ -556,7 +557,6 @@ void updateChessPieceSelection() {
         for (auto& piece : selectablePieces) {
             // test if is within box coords
             if (isPointInBoundingBox(pinchPoint, piece)) {
-                std::cout << ">> INTERSEZIONE con " << piece.node->getName() << std::endl;
 
                 /// calculate distance
                 glm::vec3 piecePos = glm::vec3(piece.node->getFinalMatrix()[3]);
@@ -766,8 +766,6 @@ void setupLeapMotion(Eng::Base& eng) {
             }
         }
         });
-
-    std::cout << "Leap Motion initialized successfully. Press 'L' to toggle hand visualization." << std::endl;
 }
 
 void updateLeapHands() {

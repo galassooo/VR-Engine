@@ -119,6 +119,7 @@
     <ClCompile Include="OvoReader.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="PostProcessorManager.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
@@ -157,6 +158,8 @@
     <ClInclude Include="ovr.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="PostProcessor.h" />
+    <ClInclude Include="PostProcessorManager.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="RenderLayer.h" />
     <ClInclude Include="Shader.h" />

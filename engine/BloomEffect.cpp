@@ -505,10 +505,6 @@ bool Eng::BloomEffect::isInitialized() const {
 bool Eng::BloomEffect::processExternalTexture(unsigned int inputTexture, unsigned int outputTexture, int width, int height) {
     if (!initialized) return false;
 
-    // Analyze input texture (optional - for debugging)
-    // std::cout << "Analyzing input texture:" << std::endl;
-    // analyzeTextureHDRContent(inputTexture, width, height);
-
     // 1. Extract bright areas from input texture
     blurFbo[0]->render();
     glViewport(0, 0, width, height);
@@ -544,7 +540,6 @@ bool Eng::BloomEffect::processExternalTexture(unsigned int inputTexture, unsigne
     glClear(GL_COLOR_BUFFER_BIT);
 
     bloomFinalProgram->render();
-
     int sceneTexLocation = bloomFinalProgram->getParamLocation("sceneTex");
     int bloomTexLocation = bloomFinalProgram->getParamLocation("bloomTex");
     int intensityLocation = bloomFinalProgram->getParamLocation("bloomIntensity");
@@ -561,20 +556,14 @@ bool Eng::BloomEffect::processExternalTexture(unsigned int inputTexture, unsigne
 
     renderQuad();
 
-    // Analyze output texture (optional - for debugging)
-    // std::cout << "Analyzing output texture:" << std::endl;
-    // analyzeTextureHDRContent(outputTexture, width, height);
-
     // Cleanup
     glDeleteFramebuffers(1, &tempFbo);
 
     return true; // Indicate success
 }
 
-void Eng::BloomEffect::applyToTexture(unsigned int inputTexture, unsigned int outputTexture, int width, int height) {
-    if (!initialized) return;
-
-    // Try to apply bloom effect
+void Eng::BloomEffect::applyEffect(unsigned int inputTexture, unsigned int outputTexture, int width, int height) {
+    // Use the internal processing method
     if (!processExternalTexture(inputTexture, outputTexture, width, height)) {
         std::cout << "WARNING: Bloom processing failed, falling back to direct copy" << std::endl;
 
@@ -639,4 +628,21 @@ void Eng::BloomEffect::applyToTexture(unsigned int inputTexture, unsigned int ou
 
     // Reset to default framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Eng::BloomEffect::setParameter(const std::string& name, float value) {
+    if (name == "intensity") {
+        bloomIntensity = value;
+    }
+    else if (name == "threshold") {
+        bloomThreshold = value;
+    }
+    else if (name == "passes") {
+        blurPasses = static_cast<int>(value);
+    }
+    // More parameters could be added here
+}
+
+std::string Eng::BloomEffect::getName() const {
+    return "BloomEffect";
 }

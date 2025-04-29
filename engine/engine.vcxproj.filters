@@ -156,6 +156,9 @@
     <ClCompile Include="BloomEffect.cpp">
       <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
+    <ClCompile Include="PostProcessorManager.cpp">
+      <Filter>Source Files\Light\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -264,6 +267,12 @@
       <Filter>Header Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="BloomEffect.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessor.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessorManager.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
   </ItemGroup>

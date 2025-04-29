@@ -5,10 +5,11 @@
  * @author	Kevin Alexander Quarenghi Escobar, Martina Galasso
  */
 
-// Main include: f
+ // Main include: f
 #include "engine.h"
 #include <algorithm>
 // C/C++:
+#include <chrono>
 #include <iostream>
 #include <source_location>
 #include <utility>
@@ -34,7 +35,9 @@
  */
 void __stdcall DebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, GLvoid* userParam)
 {
-    std::cout << "OpenGL says: \"" << std::string(message) << "\"" << std::endl;
+#ifdef _DEBUG
+    //std::cout << "OpenGL says: \"" << std::string(message) << "\"" << std::endl;
+#endif
 }
 
 
@@ -42,29 +45,29 @@ void __stdcall DebugCallback(GLenum source, GLenum type, GLuint id, GLenum sever
  * @brief Base class reserved structure (using PIMPL/Bridge design pattern https://en.wikipedia.org/wiki/Opaque_pointer).
  */
 struct Eng::Base::Reserved {
-   // Flags:
-   bool initFlag;
-   bool ovrReady;
+    // Flags:
+    bool initFlag;
+    bool ovrReady;
 
-   // OpenVR interface:
-   OvVR* ovr;
-   int fboSizeX;
-   int fboSizeY;
+    // OpenVR interface:
+    OvVR* ovr;
+    int fboSizeX;
+    int fboSizeY;
 
-   /**
-    * Constructor.
-    */
-   Reserved() : initFlag{ false }, ovrReady{ false }, ovr { nullptr }, fboSizeX{ 0 }, fboSizeY{ 0 } {
-   }
-   ~Reserved() {
+    /**
+     * Constructor.
+     */
+    Reserved() : initFlag{ false }, ovrReady{ false }, ovr{ nullptr }, fboSizeX{ 0 }, fboSizeY{ 0 } {
+    }
+    ~Reserved() {
 #ifdef _DEBUG
-       std::cout << "[-] " << std::source_location::current().function_name() << " invoked" << std::endl;
+        std::cout << "[-] " << std::source_location::current().function_name() << " invoked" << std::endl;
 #endif
-       if (ovr != nullptr && ovrReady) {
-           ovr->free();
-           delete ovr;
-       }
-   }
+        if (ovr != nullptr && ovrReady) {
+            ovr->free();
+            delete ovr;
+        }
+    }
 };
 
 
@@ -101,9 +104,9 @@ ENG_API Eng::Base::~Base() {
  * Gets a reference to the (unique) singleton instance.
  * @return reference to singleton instance
  */
-Eng::Base ENG_API &Eng::Base::getInstance() {
-   static Base instance;
-   return instance;
+Eng::Base ENG_API& Eng::Base::getInstance() {
+    static Base instance;
+    return instance;
 }
 
 
@@ -122,30 +125,30 @@ Eng::Base ENG_API &Eng::Base::getInstance() {
  * @note Must be called before any other engine operations
  */
 bool ENG_API Eng::Base::init() {
-   // Already initialized?
-   if (reserved->initFlag) {
-      std::cout << "ERROR: engine already initialized" << std::endl;
-      return false;
-   }
+    // Already initialized?
+    if (reserved->initFlag) {
+        std::cout << "ERROR: engine already initialized" << std::endl;
+        return false;
+    }
 
-   // OpenGL
-   if (!initOpenGL()) {
-      std::cerr << "ERROR: Failed to initialize OpenGL" << std::endl;
-      return false;
-   }
+    // OpenGL
+    if (!initOpenGL()) {
+        std::cerr << "ERROR: Failed to initialize OpenGL" << std::endl;
+        return false;
+    }
 
-   auto &callbackManager = CallbackManager::getInstance();
-   if (callbackManager.initialize())
-    std::cout << "   CallbackManager initialized successfully!" << std::endl;
+    auto& callbackManager = CallbackManager::getInstance();
+    if (callbackManager.initialize())
+        std::cout << "   CallbackManager initialized successfully!" << std::endl;
 
-   // Init freeimage
-   FreeImage_Initialise();
-   std::cout << "   FreeImage initialized successfully!" << std::endl;
+    // Init freeimage
+    FreeImage_Initialise();
+    std::cout << "   FreeImage initialized successfully!" << std::endl;
 
-   // Done:
-   reserved->initFlag = true;
-   std::cout << "[>] " << LIB_NAME << " initialized" << std::endl;
-   return true;
+    // Done:
+    reserved->initFlag = true;
+    std::cout << "[>] " << LIB_NAME << " initialized" << std::endl;
+    return true;
 }
 
 
@@ -161,20 +164,20 @@ bool ENG_API Eng::Base::init() {
  * @return true if cleanup successful, false if engine was not initialized
  */
 bool ENG_API Eng::Base::free() {
-   // Not initialized?
-   if (!reserved->initFlag) {
-      std::cout << "ERROR: engine not initialized" << std::endl;
-      return false;
-   }
+    // Not initialized?
+    if (!reserved->initFlag) {
+        std::cout << "ERROR: engine not initialized" << std::endl;
+        return false;
+    }
 
-   freeOpenGL();
+    freeOpenGL();
 
-   FreeImage_DeInitialise();
+    FreeImage_DeInitialise();
 
-   // Done:
-   reserved->initFlag = false;
-   std::cout << "[<] " << LIB_NAME << " deinitialized" << std::endl;
-   return true;
+    // Done:
+    reserved->initFlag = false;
+    std::cout << "[<] " << LIB_NAME << " deinitialized" << std::endl;
+    return true;
 }
 
 /**
@@ -190,7 +193,7 @@ bool ENG_API Eng::Base::initOpenVR() {
     if (reserved->ovrReady)
         return true;
 
-    if(!reserved->ovr)
+    if (!reserved->ovr)
         reserved->ovr = new OvVR();
     if (reserved->ovr->init() == false)
     {
@@ -249,81 +252,76 @@ bool ENG_API Eng::Base::initOpenGL() {
         return false;
     }
 
-   GLenum err = glewInit();
-   if (err != GLEW_OK)
-   {
-       std::cerr << "[ERROR] " << glewGetErrorString(err) << std::endl;
-       return false;
-   }
-   else
-       if (GLEW_VERSION_4_4)
-           std::cout << "Driver supports OpenGL 4.4\n" << std::endl;
-       else
-       {
-           std::cout << "[ERROR] OpenGL 4.4 not supported\n" << std::endl;
-           return false;
-       }
+    GLenum err = glewInit();
+    if (err != GLEW_OK)
+    {
+        std::cerr << "[ERROR] " << glewGetErrorString(err) << std::endl;
+        return false;
+    }
+    else
+        if (GLEW_VERSION_4_4)
+            std::cout << "Driver supports OpenGL 4.4\n" << std::endl;
+        else
+        {
+            std::cout << "[ERROR] OpenGL 4.4 not supported\n" << std::endl;
+            return false;
+        }
 
-   // Register OpenGL debug callback:
+    // Register OpenGL debug callback:
 #ifdef _DEBUG
-   glDebugMessageCallback((GLDEBUGPROC)DebugCallback, nullptr);
-   glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // enable debug notifications
+    glDebugMessageCallback((GLDEBUGPROC)DebugCallback, nullptr);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // enable debug notifications
 #endif
 
-   //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);      // 4.4 unsupported
-   glm::vec4 ambient = glm::vec4(.6f, .6f, .6f, 1.0f);
-   //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, glm::value_ptr(ambient));   // 4.4 unsupported
-   glEnable(GL_DEPTH_TEST);     // Enable depth testing
-   glDepthFunc(GL_LESS);
-   //glEnable(GL_LIGHTING);       // Enable lighting        // 4.4 unsupported
-   //glEnable(GL_NORMALIZE);      // Enable normal normalization        // 4.4 unsupported - unnecessary with shaders
+    //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);      // 4.4 unsupported
+    glm::vec4 ambient = glm::vec4(.6f, .6f, .6f, 1.0f);
+    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, glm::value_ptr(ambient));   // 4.4 unsupported
+    glEnable(GL_DEPTH_TEST);     // Enable depth testing
+    glDepthFunc(GL_LESS);
 
-   // Enable smooth shading
-   //glShadeModel(GL_SMOOTH);     // Not necessary with pixel shading
 
-   // Set the background color for the rendering context
-   glClearColor(0.0f, 1.0f, 0.0f, 1.0f); // Light background
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f); // Light background
 
-   // Add back-face culling
-   glEnable(GL_CULL_FACE);  // Enable face culling
-   glCullFace(GL_BACK);     // Cull back faces
-   glFrontFace(GL_CCW);     // Counter-clockwise front faces
+    // Add back-face culling
+    glEnable(GL_CULL_FACE);  // Enable face culling
+    glCullFace(GL_BACK);     // Cull back faces
+    glFrontFace(GL_CCW);     // Counter-clockwise front faces
 
-   std::cout << "OpenGL context initialized successfully" << std::endl;
+    std::cout << "OpenGL context initialized successfully" << std::endl;
 
-   // Check OpenGL version:
-   std::cout << "OpenGL context" << std::endl;
-   std::cout << "   version  . . : " << glGetString(GL_VERSION) << std::endl;
-   std::cout << "   vendor . . . : " << glGetString(GL_VENDOR) << std::endl;
-   std::cout << "   renderer . . : " << glGetString(GL_RENDERER) << std::endl;
+    // Check OpenGL version:
+    std::cout << "OpenGL context" << std::endl;
+    std::cout << "   version  . . : " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "   vendor . . . : " << glGetString(GL_VENDOR) << std::endl;
+    std::cout << "   renderer . . : " << glGetString(GL_RENDERER) << std::endl;
 
-   int oglVersion[2];
-   glGetIntegerv(GL_MAJOR_VERSION, &oglVersion[0]);
-   glGetIntegerv(GL_MINOR_VERSION, &oglVersion[1]);
-   std::cout << "   Version  . . :  " << glGetString(GL_VERSION) << " [" << oglVersion[0] << "." << oglVersion[1] << "]" << std::endl;
+    int oglVersion[2];
+    glGetIntegerv(GL_MAJOR_VERSION, &oglVersion[0]);
+    glGetIntegerv(GL_MINOR_VERSION, &oglVersion[1]);
+    std::cout << "   Version  . . :  " << glGetString(GL_VERSION) << " [" << oglVersion[0] << "." << oglVersion[1] << "]" << std::endl;
 
-   int oglContextProfile;
-   glGetIntegerv(GL_CONTEXT_PROFILE_MASK, &oglContextProfile);
-   if (oglContextProfile & GL_CONTEXT_CORE_PROFILE_BIT)
-       std::cout << "                :  " << "Core profile" << std::endl;
-   if (oglContextProfile & GL_CONTEXT_COMPATIBILITY_PROFILE_BIT)
-       std::cout << "                :  " << "Compatibility profile" << std::endl;
+    int oglContextProfile;
+    glGetIntegerv(GL_CONTEXT_PROFILE_MASK, &oglContextProfile);
+    if (oglContextProfile & GL_CONTEXT_CORE_PROFILE_BIT)
+        std::cout << "                :  " << "Core profile" << std::endl;
+    if (oglContextProfile & GL_CONTEXT_COMPATIBILITY_PROFILE_BIT)
+        std::cout << "                :  " << "Compatibility profile" << std::endl;
 
-   int oglContextFlags;
-   glGetIntegerv(GL_CONTEXT_FLAGS, &oglContextFlags);
-   if (oglContextFlags & GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT)
-       std::cout << "                :  " << "Forward compatible" << std::endl;
-   if (oglContextFlags & GL_CONTEXT_FLAG_DEBUG_BIT)
-       std::cout << "                :  " << "Debug flag" << std::endl;
-   if (oglContextFlags & GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT)
-       std::cout << "                :  " << "Robust access flag" << std::endl;
-   if (oglContextFlags & GL_CONTEXT_FLAG_NO_ERROR_BIT)
-       std::cout << "                :  " << "No error flag" << std::endl;
+    int oglContextFlags;
+    glGetIntegerv(GL_CONTEXT_FLAGS, &oglContextFlags);
+    if (oglContextFlags & GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT)
+        std::cout << "                :  " << "Forward compatible" << std::endl;
+    if (oglContextFlags & GL_CONTEXT_FLAG_DEBUG_BIT)
+        std::cout << "                :  " << "Debug flag" << std::endl;
+    if (oglContextFlags & GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT)
+        std::cout << "                :  " << "Robust access flag" << std::endl;
+    if (oglContextFlags & GL_CONTEXT_FLAG_NO_ERROR_BIT)
+        std::cout << "                :  " << "No error flag" << std::endl;
 
-   std::cout << "   GLSL . . . . :  " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-   std::cout << std::endl;
+    std::cout << "   GLSL . . . . :  " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+    std::cout << std::endl;
 
-   return true;
+    return true;
 }
 
 
@@ -333,8 +331,8 @@ bool ENG_API Eng::Base::initOpenGL() {
  * Destroys the current FreeGLUT window and releases any associated resources.
  */
 void ENG_API Eng::Base::freeOpenGL() {
-   glutDestroyWindow(glutGetWindow());
-   std::cout << "OpenGL context destroyed" << std::endl;
+    glutDestroyWindow(glutGetWindow());
+    std::cout << "OpenGL context destroyed" << std::endl;
 }
 
 
@@ -346,7 +344,7 @@ void ENG_API Eng::Base::freeOpenGL() {
  * @param camera A shared pointer to the camera to be set as active.
  */
 void ENG_API Eng::Base::SetActiveCamera(std::shared_ptr<Eng::Camera> camera) {
-   activeCamera = std::move(camera);
+    activeCamera = std::move(camera);
 }
 
 /**
@@ -357,7 +355,7 @@ void ENG_API Eng::Base::SetActiveCamera(std::shared_ptr<Eng::Camera> camera) {
  * @return std::shared_ptr<Eng::Camera> A shared pointer to the active camera, or nullptr if no camera is set.
  */
 std::shared_ptr<Eng::Camera> ENG_API Eng::Base::getActiveCamera() const {
-   return activeCamera;
+    return activeCamera;
 }
 
 /**
@@ -368,6 +366,7 @@ std::shared_ptr<Eng::Camera> ENG_API Eng::Base::getActiveCamera() const {
  */
 
 void ENG_API Eng::Base::renderScene() {
+
     if (engIsEnabled(ENG_STEREO_RENDERING)) {
         renderStereoscopic();
         return;
@@ -378,52 +377,159 @@ void ENG_API Eng::Base::renderScene() {
         return;
     }
 
-    // Se il bloom è stato inizializzato, usalo per catturare la scena
-    if (bloomEffect && bloomEffect->isInitialized()) {
-        bloomEffect->beginSceneCapture();
-    }
-    else {
-        // Altrimenti pulisci i buffer normalmente
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Se ci sono post-processor attivi, dobbiamo renderizzare su un FBO
+    bool usePostProcessing = isPostProcessingEnabled() &&
+        PostProcessorManager::getInstance().getPostProcessorCount() > 0;
+
+    GLuint sceneTexture = 0;
+    GLuint outputTexture = 0;
+    GLuint sceneFBO = 0;
+
+    if (usePostProcessing) {
+        // Crea texture e FBO per la scena
+        glGenTextures(1, &sceneTexture);
+        glBindTexture(GL_TEXTURE_2D, sceneTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, APP_WINDOWSIZEX, APP_WINDOWSIZEY, 0, GL_RGBA, GL_FLOAT, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glGenTextures(1, &outputTexture);
+        glBindTexture(GL_TEXTURE_2D, outputTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, APP_WINDOWSIZEX, APP_WINDOWSIZEY, 0, GL_RGBA, GL_FLOAT, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glGenFramebuffers(1, &sceneFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture, 0);
+
+        // Attach depth buffer
+        GLuint depthRBO;
+        glGenRenderbuffers(1, &depthRBO);
+        glBindRenderbuffer(GL_RENDERBUFFER, depthRBO);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, APP_WINDOWSIZEX, APP_WINDOWSIZEY);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRBO);
+
+        // Render to FBO
+        glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO);
     }
 
-    // Get View Matrix
+    // Clear the buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Get matrices
     glm::mat4 viewMatrix = activeCamera->getFinalMatrix();
-
-    // Get Projection matrix
     glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 
+    // Set head node transform
     glm::mat4 headWorld = glm::inverse(viewMatrix);
     getHeadNode()->setLocalMatrix(headWorld);
 
+    // Render skybox if present
     if (skybox) {
-        // Remove the translation component by converting to a 3x3 and back to a 4x4.
         glm::mat4 viewNoTrans = glm::mat4(glm::mat3(viewMatrix));
         skybox->render(viewNoTrans, projectionMatrix);
     }
 
-    // Clear list
+    // Clear and prepare render list
     renderList.clear();
-
-    // Execute optional render callbacks
     auto& callbackManager = CallbackManager::getInstance();
     callbackManager.executeRenderCallbacks();
 
-    // Traverse the root nodes and add them to the render list
+    // Build scene
     traverseAndAddToRenderList(rootNode);
     if (!sceneBoundingBox) {
         sceneBoundingBox = renderList.getSceneBoundingBox();
         stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
     }
 
-    // Render all nodes in the render list
+    // Render scene
     renderList.setEyeViewMatrix(viewMatrix);
     renderList.setEyeProjectionMatrix(projectionMatrix);
     renderList.render();
 
-    // Se il bloom è stato inizializzato, processa e renderizza il risultato finale
-    if (bloomEffect && bloomEffect->isInitialized()) {
-        bloomEffect->endSceneCapture();
+    // Apply post-processing if enabled
+    if (usePostProcessing) {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        PostProcessorManager::getInstance().applyPostProcessing(sceneTexture, outputTexture, APP_WINDOWSIZEX, APP_WINDOWSIZEY);
+
+        // Render the final result to the screen
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Simple fullscreen quad rendering
+        static GLuint quadVAO = 0;
+        if (quadVAO == 0) {
+            // Create a full-screen quad
+            float quadVertices[] = {
+                // positions        // texture coords
+                -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+                -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+                 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+                -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+                 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+                 1.0f,  1.0f, 0.0f, 1.0f, 1.0f
+            };
+
+            GLuint quadVBO;
+            glGenVertexArrays(1, &quadVAO);
+            glGenBuffers(1, &quadVBO);
+            glBindVertexArray(quadVAO);
+            glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        }
+
+        // Use a simple shader to display the final texture
+        static std::shared_ptr<Program> displayProgram = nullptr;
+        if (!displayProgram) {
+            const char* vsCode = R"(
+            #version 440 core
+            layout (location = 0) in vec3 aPos;
+            layout (location = 1) in vec2 aTexCoords;
+            out vec2 TexCoords;
+            void main() {
+                TexCoords = aTexCoords;
+                gl_Position = vec4(aPos, 1.0);
+            }
+            )";
+
+            const char* fsCode = R"(
+            #version 440 core
+            out vec4 FragColor;
+            in vec2 TexCoords;
+            uniform sampler2D screenTexture;
+            void main() {
+                FragColor = texture(screenTexture, TexCoords);
+            }
+            )";
+
+            std::shared_ptr<VertexShader> vs = std::make_shared<VertexShader>();
+            vs->load(vsCode);
+
+            std::shared_ptr<FragmentShader> fs = std::make_shared<FragmentShader>();
+            fs->load(fsCode);
+
+            displayProgram = std::make_shared<Program>();
+            displayProgram->bindAttribute(0, "aPos");
+            displayProgram->bindAttribute(1, "aTexCoords");
+            displayProgram->bindSampler(0, "screenTexture");
+            displayProgram->addShader(vs).addShader(fs).build();
+        }
+
+        displayProgram->render();
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, outputTexture);
+        glBindVertexArray(quadVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        // Cleanup
+        glDeleteTextures(1, &sceneTexture);
+        glDeleteTextures(1, &outputTexture);
+        glDeleteFramebuffers(1, &sceneFBO);
     }
 
     glutSwapBuffers();
@@ -454,37 +560,34 @@ void ENG_API Eng::Base::traverseAndAddToRenderList(const std::shared_ptr<Eng::No
  * Continuously renders the scene and processes events until an exit request is issued.
  */
 void ENG_API Eng::Base::run() {
-    if (engIsEnabled(ENG_STEREO_RENDERING)) {
-        // OpenVR
+    // Base::run()
+    if (engIsEnabled(ENG_STEREO_RENDERING))
+    {
         reserved->ovrReady = initOpenVR();
-        if (!reserved->ovrReady) {
-            std::cout << "Falling back to standard mono rendering" << std::endl;
+        if (!reserved->ovrReady)
+        {
             engDisable(ENG_STEREO_RENDERING);
+            PostProcessorManager::getInstance()
+                .initializeAll(APP_WINDOWSIZEX, APP_WINDOWSIZEY);
         }
-        else {
+        else
+        {
             setupStereoscopicRendering(reserved->fboSizeX, reserved->fboSizeY);
+            PostProcessorManager::getInstance()
+                .initializeAll(stereoRenderWidth, stereoRenderHeight);
         }
     }
+    else
+    {
+        PostProcessorManager::getInstance()
+            .initializeAll(APP_WINDOWSIZEX, APP_WINDOWSIZEY);
+    }
 
-    // Inizializza l'effetto bloom
-    initBloomEffect();
 
     // Enter FreeGLUT main loop
     glutMainLoop();
 }
 
-void ENG_API Eng::Base::initBloomEffect() {
-    // Crea e inizializza l'effetto bloom con le dimensioni appropriate
-    bloomEffect = std::make_shared<BloomEffect>();
-
-    int width = reserved->fboSizeX;   // ← usa la risoluzione ideale di SteamVR
-    int height = reserved->fboSizeY;
-
-    if (!bloomEffect->init(width, height)) {
-        std::cerr << "ERROR: Failed to initialize bloom effect, disabling" << std::endl;
-        bloomEffect.reset();
-    }
-}
 
 /**
  * @brief Loads a scene from a file.
@@ -493,16 +596,16 @@ void ENG_API Eng::Base::initBloomEffect() {
  *
  * @param fileName The name of the file containing the scene description.
  */
-void ENG_API Eng::Base::loadScene(const std::string &fileName) {
-   Eng::OvoReader reader;
-   rootNode = reader.parseOvoFile(fileName);
-   std::cout << "Printing scene " << fileName << std::endl;
-   reader.printGraph();
-   auto& shaderManager = ShaderManager::getInstance();
-   if (shaderManager.initialize())
-       std::cout << "   ShaderManager initialized successfully!" << std::endl;
-   if(renderList.initShaders())
-       std::cout << "   Shaders loaded successfully!" << std::endl;
+void ENG_API Eng::Base::loadScene(const std::string& fileName) {
+    Eng::OvoReader reader;
+    rootNode = reader.parseOvoFile(fileName);
+    std::cout << "Printing scene " << fileName << std::endl;
+    reader.printGraph();
+    auto& shaderManager = ShaderManager::getInstance();
+    if (shaderManager.initialize())
+        std::cout << "   ShaderManager initialized successfully!" << std::endl;
+    if (renderList.initShaders())
+        std::cout << "   Shaders loaded successfully!" << std::endl;
 }
 
 /**
@@ -512,7 +615,7 @@ void ENG_API Eng::Base::loadScene(const std::string &fileName) {
  */
 
 std::shared_ptr<Eng::Node> Eng::Base::getRootNode() {
-   return rootNode;
+    return rootNode;
 }
 
 /**
@@ -526,9 +629,9 @@ std::shared_ptr<Eng::Node> Eng::Base::getRootNode() {
 
 float Eng::Base::getWindowAspectRatio() {
     const int width = engIsEnabled(ENG_STEREO_RENDERING) ? APP_WINDOWSIZEX / 2 : APP_WINDOWSIZEX;
-   int height = APP_WINDOWSIZEY;
-   if (height == 0) height = 1; // Avoid division by zero
-   return static_cast<float>(width) / height;
+    int height = APP_WINDOWSIZEY;
+    if (height == 0) height = 1; // Avoid division by zero
+    return static_cast<float>(width) / height;
 }
 /**
 * @brief Enables a specified engine capability.
@@ -542,7 +645,7 @@ void Eng::Base::engEnable(unsigned int cap) {
 * @param cap The capability flag to disable
 */
 void Eng::Base::engDisable(unsigned int cap) {
-   engineState &= ~cap;
+    engineState &= ~cap;
 }
 
 /**
@@ -551,7 +654,7 @@ void Eng::Base::engDisable(unsigned int cap) {
 * @return true if enabled, false otherwise
 */
 bool Eng::Base::engIsEnabled(unsigned int cap) {
-   return (engineState & cap) != 0;
+    return (engineState & cap) != 0;
 }
 
 /**
@@ -560,15 +663,16 @@ bool Eng::Base::engIsEnabled(unsigned int cap) {
  * @param height Altezza degli FBO
  */
 bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
-    std::cout << "DEBUG: Setting up stereoscopic rendering, requested size: "
-        << width << "x" << height << std::endl;
 
     if (width <= 0 || height <= 0) {
         // Override with predefined constants for consistency
         width = APP_FBOSIZEX;
         height = APP_FBOSIZEY;
-        std::cout << "DEBUG: Using fixed FBO size: " << width << "x" << height << std::endl;
     }
+
+    // Store these dimensions for later use
+    stereoRenderWidth = width;
+    stereoRenderHeight = height;
 
     // Clean up existing FBOs if they exist
     if (leftEyeTexture != 0) {
@@ -583,15 +687,14 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
     leftEyeFbo = std::make_shared<Fbo>();
     rightEyeFbo = std::make_shared<Fbo>();
 
-    // Create texture for left eye - CAMBIA QUI DA GL_RGBA8 a GL_RGBA16F
+    // Create texture for left eye with HDR format
     glGenTextures(1, &leftEyeTexture);
     glBindTexture(GL_TEXTURE_2D, leftEyeTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr); // Usa GL_RGBA16F e GL_FLOAT
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    std::cout << "DEBUG: Left eye texture created with ID : " << leftEyeTexture << " (GL_RGBA16F)" << std::endl;
 
 
     // Bind texture to left FBO
@@ -602,17 +705,15 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
         std::cerr << "ERROR: Left eye FBO setup failed" << std::endl;
         return false;
     }
-    std::cout << "DEBUG: Left eye FBO setup successful, handle: " << leftEyeFbo->getHandle() << ", size " << leftEyeFbo->getSizeX() << "x" << leftEyeFbo->getSizeY() << std::endl;
 
-    // Create texture for right eye - CAMBIA QUI DA GL_RGBA8 a GL_RGBA16F
+    // Create texture for right eye with HDR format
     glGenTextures(1, &rightEyeTexture);
     glBindTexture(GL_TEXTURE_2D, rightEyeTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr); // Usa GL_RGBA16F e GL_FLOAT
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    std::cout << "DEBUG: Right eye texture created with ID: " << rightEyeTexture << " (GL_RGBA16F)" << std::endl;
 
 
     // Bind texture to right FBO
@@ -623,32 +724,32 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
         std::cerr << "ERROR: Right eye FBO setup failed" << std::endl;
         return false;
     }
-    std::cout << "DEBUG: Right eye FBO setup successful, handle: " << rightEyeFbo->getHandle() << ", size " << rightEyeFbo->getSizeX() << "x" << rightEyeFbo->getSizeY() << std::endl;
-
 
     // Set default eye distance
     eyeDistance = 0.065f; // 6.5 cm is the average human interpupillary distance
-    std::cout << "DEBUG: Eye distance set to " << eyeDistance << std::endl;
 
     // Reset viewport to default
     Fbo::disable();
 
+    // Initialize post-processors for stereoscopic rendering
+    // Important: Use the actual FBO dimensions, not window dimensions
+    PostProcessorManager::getInstance().initializeAll(width, height);
+
     return true;
 }
+
 glm::mat4 Eng::Base::computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, float eyeOffset) {
-    //ITA: serve per estrarre la posizione della camera selezionata per poterci applicare l'offset per ogni occhio
-    //ITA: come funziona: la view matrix � l'inversa della wrold, (in view coordinates la camera � in 0 0 0)
-    //ITA: una volta fatta l'inversa (nel metodo chiamante) la posizione vien eestratta insieme agli altri valori
-    //ITA: per applicare l'offset prendo la posizone iniziale in x e la traslo per ottenere left e right eye
-    //ITA: ricalcolo poi la lookat matrix usando i valori della camera vecchia estratti ma con l'offset su x
+    // Extract camera properties from the world matrix
     glm::vec3 cameraPos = glm::vec3(cameraWorldMatrix[3]);
     glm::vec3 cameraRight = glm::vec3(cameraWorldMatrix[0]); // X-axis
     glm::vec3 up = glm::vec3(cameraWorldMatrix[1]);
     glm::vec3 forward = -glm::vec3(cameraWorldMatrix[2]);
 
+    // Apply eye offset along the right vector
     glm::vec3 eyePos = cameraPos + (cameraRight * eyeOffset);
     glm::vec3 target = eyePos + forward;
 
+    // Create a lookAt matrix for the eye
     return glm::lookAt(eyePos, target, up);
 }
 
@@ -669,8 +770,8 @@ void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& project
     renderList.setEyeViewMatrix(viewMatrix);
     renderList.setEyeProjectionMatrix(projectionMatrix);
 
-    // Pass the current FBO to the render list so it can restore it properly during multipass
-    renderList.setCurrentFBO(eyeFbo);  // NEW LINE
+    // Pass the current FBO to the render list
+    renderList.setCurrentFBO(eyeFbo);
 
     // Call render which handles multi-pass internally
     renderList.render();
@@ -683,42 +784,13 @@ void ENG_API Eng::Base::setBodyPosition(const glm::mat4& position) {
 glm::mat4 ENG_API Eng::Base::getBodyPosition() const {
     return stereoInitialTransform;
 }
-
-void Eng::Base::renderStereoscopic()
-{
-    // Check FBOs and bloom initialization
-    if (!leftEyeFbo || !rightEyeFbo)
-    {
+void Eng::Base::renderStereoscopic() {
+    // Check FBOs initialization
+    if (!leftEyeFbo || !rightEyeFbo) {
         std::cerr << "ERROR: FBOs not initialized for stereoscopic rendering." << std::endl;
         renderScene();
         return;
     }
-    if (!bloomEffect || !bloomEffect->isInitialized())
-    {
-        std::cerr << "ERROR: BloomEffect not initialized." << std::endl;
-        renderScene();
-        return;
-    }
-
-    // Create post-processing textures if not already created
-    auto ensurePostTexture = [](GLuint& tex, int w, int h)
-        {
-            if (tex == 0)
-            {
-                glGenTextures(1, &tex);
-                glBindTexture(GL_TEXTURE_2D, tex);
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, w, h, 0, GL_RGBA, GL_FLOAT, nullptr);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            }
-        };
-
-    GLuint leftEyePostTex = 0;
-    GLuint rightEyePostTex = 0;
-    ensurePostTexture(leftEyePostTex, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY());
-    ensurePostTexture(rightEyePostTex, rightEyeFbo->getSizeX(), rightEyeFbo->getSizeY());
 
     // Save current viewport
     GLint prevViewport[4];
@@ -739,9 +811,44 @@ void Eng::Base::renderStereoscopic()
     glm::mat4 finalHead = initT * headPos;
     glm::mat4 modelView = glm::inverse(finalHead);
 
-    if (auto hn = getHeadNode()) hn->setLocalMatrix(finalHead);
+    if (auto hn = getHeadNode()) {
+        hn->setLocalMatrix(finalHead);
+    }
 
     auto& cbMgr = CallbackManager::getInstance();
+
+    // Get actual FBO dimensions from the FBO objects
+    const int actualFboWidth = leftEyeFbo->getSizeX();
+    const int actualFboHeight = leftEyeFbo->getSizeY();
+
+    if (actualFboWidth != stereoRenderWidth || actualFboHeight != stereoRenderHeight) {
+        std::cout << "WARNING: FBO dimensions mismatch. Stored: " << stereoRenderWidth << "x" << stereoRenderHeight
+            << ", Actual: " << actualFboWidth << "x" << actualFboHeight << std::endl;
+        // Update stored dimensions
+        stereoRenderWidth = actualFboWidth;
+        stereoRenderHeight = actualFboHeight;
+    }
+
+    // Create textures for post-processing if needed
+    auto ensureTexture = [](GLuint& tex, int width, int height) {
+        if (tex == 0) {
+            glGenTextures(1, &tex);
+            glBindTexture(GL_TEXTURE_2D, tex);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        }
+        return tex;
+        };
+
+    static GLuint leftEyePostTex = 0;
+    static GLuint rightEyePostTex = 0;
+
+    // Ensure post-processing textures exist with correct dimensions
+    leftEyePostTex = ensureTexture(leftEyePostTex, stereoRenderWidth, stereoRenderHeight);
+    rightEyePostTex = ensureTexture(rightEyePostTex, stereoRenderWidth, stereoRenderHeight);
 
     // Render a single eye
     auto renderEye = [&](OvVR::OvEye eye,
@@ -751,7 +858,7 @@ void Eng::Base::renderStereoscopic()
         {
             // Bind FBO and clear
             eyeFbo->render();
-            glViewport(0, 0, eyeFbo->getSizeX(), eyeFbo->getSizeY());
+            glViewport(0, 0, stereoRenderWidth, stereoRenderHeight);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Eye-specific projection and view matrices
@@ -761,8 +868,7 @@ void Eng::Base::renderStereoscopic()
             glm::mat4 projEyeFix = projEye * glm::inverse(eye2Head);
 
             // Render skybox
-            if (skybox)
-            {
+            if (skybox) {
                 glm::mat4 skyV = glm::mat4(glm::mat3(viewEye));
                 skybox->render(skyV, projEyeFix);
             }
@@ -774,22 +880,33 @@ void Eng::Base::renderStereoscopic()
             renderList.clear();
             traverseAndAddToRenderList(rootNode);
 
-            if (!sceneBoundingBox)
-            {
+            if (!sceneBoundingBox) {
                 sceneBoundingBox = renderList.getSceneBoundingBox();
                 stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
             }
 
             renderList.setEyeViewMatrix(viewEye);
             renderList.setEyeProjectionMatrix(projEyeFix);
+            renderList.setCurrentFBO(eyeFbo.get());
             renderList.render();
 
-            // Apply bloom post-processing
-            bloomEffect->applyToTexture(eyeTexture, postTexture,
-                eyeFbo->getSizeX(), eyeFbo->getSizeY());
 
-            // Submit frame to VR headset
-            reserved->ovr->pass(eye, postTexture);
+            // Apply post-processing if enabled
+            if (PostProcessorManager::getInstance().isPostProcessingEnabled() &&
+                PostProcessorManager::getInstance().getPostProcessorCount() > 0) {
+
+                // Pass the ACTUAL FBO dimensions
+                PostProcessorManager::getInstance().applyPostProcessing(eyeTexture, postTexture,
+                    stereoRenderWidth, stereoRenderHeight);
+
+                // Submit post-processed frame to VR headset
+                reserved->ovr->pass(eye, postTexture);
+            }
+            else {
+
+                // Submit unprocessed frame to VR headset
+                reserved->ovr->pass(eye, eyeTexture);
+            }
         };
 
     // Render left and right eye
@@ -807,20 +924,24 @@ void Eng::Base::renderStereoscopic()
     static GLuint mirrorFbo = 0;
     if (mirrorFbo == 0) glGenFramebuffers(1, &mirrorFbo);
 
-    auto blitToScreen = [&](GLuint tex, int x0, int x1)
-        {
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, mirrorFbo);
-            glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                GL_TEXTURE_2D, tex, 0);
-            glReadBuffer(GL_COLOR_ATTACHMENT0);
+    // Select the appropriate texture based on post-processing
+    GLuint leftDisplayTex = PostProcessorManager::getInstance().isPostProcessingEnabled() ? leftEyePostTex : leftEyeTexture;
+    GLuint rightDisplayTex = PostProcessorManager::getInstance().isPostProcessingEnabled() ? rightEyePostTex : rightEyeTexture;
 
-            glBlitFramebuffer(0, 0, leftEyeFbo->getSizeX(), leftEyeFbo->getSizeY(),
-                x0, 0, x1, APP_FBOSIZEY,
-                GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    auto blitToScreen = [&](GLuint tex, int x0, int x1) {
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, mirrorFbo);
+        glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+            GL_TEXTURE_2D, tex, 0);
+        glReadBuffer(GL_COLOR_ATTACHMENT0);
+
+        glBlitFramebuffer(0, 0, stereoRenderWidth, stereoRenderHeight,
+            x0, 0, x1, APP_FBOSIZEY,
+            GL_COLOR_BUFFER_BIT, GL_LINEAR);
         };
 
-    blitToScreen(leftEyePostTex, 0, APP_FBOSIZEX);
-    blitToScreen(rightEyePostTex, APP_FBOSIZEX, APP_WINDOWSIZEX);
+    blitToScreen(leftDisplayTex, 0, APP_FBOSIZEX);
+    blitToScreen(rightDisplayTex, APP_FBOSIZEX, APP_WINDOWSIZEX);
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
     glutSwapBuffers();
@@ -846,6 +967,25 @@ void Eng::Base::registerSkybox(const std::vector<std::string>& faces) {
     renderList.setGlobalLightColor(skybox->getGlobalColor());
 }
 
+bool ENG_API Eng::Base::addPostProcessor(std::shared_ptr<PostProcessor> postProcessor) {
+    return PostProcessorManager::getInstance().addPostProcessor(postProcessor);
+}
+
+bool ENG_API Eng::Base::removePostProcessor(const std::string& name) {
+    return PostProcessorManager::getInstance().removePostProcessor(name);
+}
+
+std::shared_ptr<Eng::PostProcessor> ENG_API Eng::Base::getPostProcessor(const std::string& name) {
+    return PostProcessorManager::getInstance().getPostProcessor(name);
+}
+
+void ENG_API Eng::Base::setPostProcessingEnabled(bool enabled) {
+    PostProcessorManager::getInstance().setPostProcessingEnabled(enabled);
+}
+
+bool ENG_API Eng::Base::isPostProcessingEnabled() const {
+    return PostProcessorManager::getInstance().isPostProcessingEnabled();
+}
 
 // HeadNode for LeapMotion
 std::shared_ptr<Eng::Node> Eng::Base::getHeadNode() {

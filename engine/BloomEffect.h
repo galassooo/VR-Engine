@@ -9,7 +9,7 @@
  * 2. Applies a Gaussian blur to these areas
  * 3. Combines the blurred brightness with the original scene
  */
-class ENG_API BloomEffect {
+class ENG_API BloomEffect : public Eng::PostProcessor {
 public:
     BloomEffect();
     ~BloomEffect();
@@ -20,7 +20,7 @@ public:
      * @param height Height of the effect's render target
      * @return true if initialization was successful, false otherwise
      */
-    bool init(int width, int height);
+    bool init(int width, int height) override;
 
     /**
      * @brief Starts rendering the scene to the internal bloom framebuffer
@@ -36,7 +36,7 @@ public:
      * @brief Checks if the bloom effect has been initialized
      * @return true if the effect is initialized, false otherwise
      */
-    bool isInitialized() const;
+    bool isInitialized() const override;
 
     /**
      * @brief Processes an external input texture and outputs the bloom result to another texture
@@ -56,7 +56,20 @@ public:
      * @param width Width of the textures
      * @param height Height of the textures
      */
-    void applyToTexture(unsigned int inputTexture, unsigned int outputTexture, int width, int height);
+    void applyEffect(unsigned int inputTexture, unsigned int outputTexture, int width, int height) override;
+
+    /**
+     * @brief Sets a parameter for the bloom effect
+     * @param name Parameter name (e.g., "intensity", "threshold", "passes")
+     * @param value Parameter value as a float
+     */
+    void setParameter(const std::string& name, float value) override;
+
+    /**
+     * @brief Gets the name of this post-processor
+     * @return The name "BloomEffect"
+     */
+    std::string getName() const override;
 
     /**
      * @brief Analyzes the HDR content of a texture for debugging and diagnostics
@@ -73,7 +86,7 @@ private:
     /** Bloom effect parameters */
     float bloomThreshold = 0.1f;  // Threshold to extract bright areas
     float bloomIntensity = 0.3f;  // Intensity of the bloom effect
-    int blurPasses = 6;           // Number of Gaussian blur passes
+    int blurPasses = 3;           // Number of Gaussian blur passes
 
     /** FBO and textures for scene capture */
     std::shared_ptr<Eng::Fbo> sceneFbo;

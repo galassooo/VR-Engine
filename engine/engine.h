@@ -106,6 +106,8 @@ namespace Eng {
 #include "List.h"
 #include "OvoReader.h"
 #include "CallbackManager.h"
+#include "PostProcessor.h"
+#include "PostProcessorManager.h"
 #include "BloomEffect.h"
 #include "Builder.h"
 #include "ShaderManager.h"
@@ -181,6 +183,13 @@ namespace Eng {
       void setBodyPosition(const glm::mat4& position);
       glm::mat4 getBodyPosition() const;
 
+      //post processing
+      bool addPostProcessor(std::shared_ptr<PostProcessor> postProcessor);
+      bool removePostProcessor(const std::string& name);
+      std::shared_ptr<PostProcessor> getPostProcessor(const std::string& name);
+      void setPostProcessingEnabled(bool enabled);
+      bool isPostProcessingEnabled() const;
+
    private:
       /** @brief Reserved implementation details */
       struct Reserved;
@@ -224,9 +233,8 @@ namespace Eng {
 
       // HeadNode for LeapMotion
 	  std::shared_ptr<Node> headNode;
-
-      std::shared_ptr<BloomEffect> bloomEffect;
-      void initBloomEffect();
+      int stereoRenderWidth = 0;
+      int stereoRenderHeight = 0;
 
       float stereoEyeHeight = STEREO_EYE_HEIGHT;
    };

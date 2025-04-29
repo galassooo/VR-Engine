@@ -58,11 +58,8 @@ private:
    /** @brief Private constructor to enforce singleton pattern */
    CallbackManager() = default;
 
-   static void renderCoordinateAxes();
    static void calculateFPS();
-   static void renderInfoBar();
    void setDefaultCallbacks();
-   void renderHelpMenu();
 
    ///< Primary display callback
    DisplayFunc displayCallback;
