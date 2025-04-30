@@ -62,6 +62,7 @@ private:
 	bool setupShadowMap(int width, int height);
 	void renderPass(bool isAdditive, bool useCulling);
 	void shadowPass(std::shared_ptr <Eng::DirectionalLight>& light);
+	void renderTransparentPass();
 
 	std::shared_ptr<Eng::VertexShader> basicVertexShader;
 	std::shared_ptr<Eng::VertexShader> shadowMapVertexShader;

@@ -122,6 +122,14 @@ std::shared_ptr<Eng::Texture> Eng::Material::getDiffuseTexture() const {
 }
 
 /**
+ * @brief Sets the alpha channel for the material.
+ *
+ * @param new alpha to be set
+ */
+void Eng::Material::setAlpha(const float newAlpha) {
+    albedo = glm::vec4(albedo.r, albedo.g, albedo.b, newAlpha);
+}
+/**
  * @brief Retrieves the albedo (RGB only) of the material.
  *
  * @return glm::vec3 The albedo color (RGB).
@@ -131,6 +139,23 @@ glm::vec3 Eng::Material::getAlbedo() const {
    return glm::vec3(albedo.r, albedo.g, albedo.b);
 }
 
+/**
+ * @brief Retrieves the emission  of the material.
+ *
+ * @return vec3 containing emission values
+ */
+glm::vec3 Eng::Material::getEmission() const {
+    return emission;
+}
+
+/**
+ * @brief Sets the emission for the material.
+ *
+ * @param a vec3 containing the new emissive values
+ */
+void Eng::Material::setEmission(glm::vec3 emissionNew) {
+    emission = emissionNew;
+}
 /**
  * @brief Retrieves the alpha (transparency) of the material.
  *

@@ -11,14 +11,17 @@ class ENG_API Material : Eng::Object {
 public:
    Material(const glm::vec3 &albedo, float alpha, float shininess, const glm::vec3 emission);
 
-   void render() override;
+   virtual void render() override;
 
    void setDiffuseTexture(const std::shared_ptr<Eng::Texture> &texture);
    std::shared_ptr<Eng::Texture> getDiffuseTexture() const;
 
    glm::vec3 getAlbedo() const;
    float getAlpha() const;
+   void setAlpha(const float newAlpha);
    glm::vec4 getAlbedoWithAlpha() const;
+   glm::vec3 getEmission() const;
+   void setEmission(glm::vec3 emissionNew);
 
 private:
    ///> Albedo with RGBA (alpha included)

@@ -138,6 +138,7 @@ void Eng::List::render() {
 
     // Render lights contribution, with blending and with culling
     for (int i = 0; i < lightsCount; ++i) {
+
         auto light = elements[i]->getNode();
         if (std::dynamic_pointer_cast<Eng::SpotLight>(light)) {
             if (!sm.loadProgram(spotLightProgram)) {
@@ -174,11 +175,43 @@ void Eng::List::render() {
 
         light->render();
         renderPass(true, true);
+        renderTransparentPass();
     }
 
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
 }
+
+void Eng::List::renderTransparentPass()
+{
+    auto& sm = ShaderManager::getInstance();
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthMask(GL_FALSE);          // non scriviamo z
+    glDepthFunc(GL_LEQUAL);
+
+    for (int i = lightsCount; i < elements.size(); ++i) {
+        if (elements[i]->getLayer() != RenderLayer::Transparent) continue;
+
+        // === le stesse 6 righe di uniform che usi in renderPass() ===
+        sm.setGlobalLightColor(globalLightColor);
+        sm.setProjectionMatrix(eyeProjectionMatrix);
+
+        glm::mat4 model = elements[i]->getWorldCoordinates();
+        glm::mat4 mv = eyeViewMatrix * model;
+        sm.setModelViewMatrix(mv);
+        sm.setNormalMatrix(glm::inverseTranspose(glm::mat3(mv)));
+        sm.setLightSpaceMatrix(lightSpaceMatrix * model);
+        sm.setEyeFront(-glm::vec3(glm::transpose(glm::mat3(eyeViewMatrix))[2]));
+
+        elements[i]->getNode()->render();
+    }
+
+    glDepthMask(GL_TRUE);
+    glDisable(GL_BLEND);
+}
+
 
 /**
  * @brief Renders the elements in the list.
@@ -222,7 +255,8 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
 
     const int size = elements.size();
     for (int i = lightsCount; i < size; ++i) {
-
+        if (!isAdditive && elements[i]->getLayer() == RenderLayer::Transparent)
+            continue;
 		// TODO: Check if the element is a Mesh and if culling is enabled
 		//// If sphere culling is enabled and the element is a Mesh, check if it is within the culling sphere
 		//if (useCulling) {

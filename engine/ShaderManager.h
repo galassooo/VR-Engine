@@ -89,7 +89,17 @@ public:
 
 	void setEyeFront(const glm::vec3& front);
 
+
+	const glm::mat4& getCachedProjectionMatrix()  const { return cachedProjection; }
+	const glm::mat4& getCachedModelViewMatrix()   const { return cachedModelView; }
+	const glm::mat3& getCachedNormalMatrix()      const { return cachedNormal; }
+	const glm::mat4& getCachedLightSpaceMatrix()  const { return cachedLightSpace; }
+	const glm::vec3& getCachedEyeFront()          const { return cachedEyeFront; }
+	const glm::vec3& getCachedGlobalLightColor()  const { return cachedGlobalLight; }
+
+
 	static std::string preprocessShaderCode(const std::string& source);
+	std::shared_ptr<Eng::Program> getCurrentProgram() const { return currentProgram; }
 
 private:
 	/** @brief Private constructor to enforce singleton pattern */
@@ -134,4 +144,13 @@ private:
 	int globalLightColorLoc;
 
 	int eyeFrontLoc;
+
+	// cache degli ultimi valori inviati agli uniform comuni
+	glm::mat4 cachedProjection = glm::mat4(1.0f);
+	glm::mat4 cachedModelView = glm::mat4(1.0f);
+	glm::mat3 cachedNormal = glm::mat3(1.0f);
+	glm::mat4 cachedLightSpace = glm::mat4(1.0f);
+	glm::vec3 cachedEyeFront = glm::vec3(0.0f);
+	glm::vec3 cachedGlobalLight = glm::vec3(1.0f);
+
 };

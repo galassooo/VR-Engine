@@ -151,20 +151,35 @@ void Eng::Mesh::initBuffers() {
  *
  * @param index The index of the mesh in the render list.
  */
-void Eng::Mesh::render() {
+void Eng::Mesh::render()
+{
     if (!material) {
-        std::cerr << "ERROR: Material is not set for the mesh: " << getName() << " ID: " << getId() << std::endl;
+        std::cerr << "ERROR: Material is not set for the mesh: "
+            << getName() << " ID: " << getId() << std::endl;
         return;
     }
+
+    auto& sm = ShaderManager::getInstance();
+
+    //materials can have other programs, so save the current one
+    auto prevProgram = sm.getCurrentProgram();
+
     material->render();
 
     if (!buffersInitialized)
         initBuffers();
 
     glBindVertexArray(vao);
-    // Use glDrawElements with the index array.
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES,
+        static_cast<GLsizei>(indices.size()),
+        GL_UNSIGNED_INT,
+        nullptr);
     glBindVertexArray(0);
+
+    // restore previous program if changed
+    if (prevProgram && sm.getCurrentProgram() != prevProgram) {
+        sm.loadProgram(prevProgram);
+    }
 
     if (Eng::Base::engIsEnabled(ENG_RENDER_NORMAL))
         renderNormals();

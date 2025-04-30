@@ -112,6 +112,7 @@ namespace Eng {
 #include "Builder.h"
 #include "ShaderManager.h"
 #include "Skybox.h"
+#include "HolographicMaterial.h"
 
 
     ///////////////

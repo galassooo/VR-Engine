@@ -90,7 +90,41 @@ void setUpCameras(Eng::Base &eng);
 bool areHandsTogether();
 void updatePositionFromGesture();
 
+void applyHolographicEffect() {
 
+    auto holoMaterialWhite = std::make_shared<Eng::HolographicMaterial>(
+        glm::vec3(0.2f, 0.3f, 0.7f), //base color
+        0.0f, //alpha
+       200.0f, //frequency
+        1.f //speed
+    );
+    holoMaterialWhite->setSecondaryColor(glm::vec3(0.5f, 0.7f, 1.0f)); //secondary color
+
+    // Materiale olografico per pezzi neri (rosso tenue)
+    auto holoMaterialBlack = std::make_shared<Eng::HolographicMaterial>(
+        glm::vec3(5.f, 0.3f, 0.3f), //base color
+        0.0f, //alpha
+        200.0f, //frequency
+        1.f  //speed
+    );
+    holoMaterialBlack->setSecondaryColor(glm::vec3(2.f, 0.1f, 0.1f)); //secondary color
+
+    for (auto& piece : selectablePieces) {
+        if (piece.mesh) {
+            std::string name = piece.node->getName();
+            if (name.length() >= 2) {
+                if (name.substr(0, 2) == "W_") {
+                    piece.mesh->setMaterial(holoMaterialWhite);
+                    piece.originalMaterial = holoMaterialWhite;
+                }
+                else if (name.substr(0, 2) == "B_") {
+                    piece.mesh->setMaterial(holoMaterialBlack);
+                    piece.originalMaterial = holoMaterialBlack;
+                }
+            }
+        }
+    }
+}
 
 /**
  * @brief Entry point of the client application.
@@ -122,6 +156,7 @@ int main(int argc, char *argv[]) {
 
    setupLeapMotion(eng);
    initChessPieceSelection(eng);
+   applyHolographicEffect();
    eng.engEnable(ENG_STEREO_RENDERING);
 
    setUpCameras(eng);
@@ -597,12 +632,13 @@ void updateChessPieceSelection() {
             // change albedo to glow 
             if (closestPiece->mesh && closestPiece->originalMaterial) {
                 
-                auto highlightMaterial = std::make_shared<Eng::Material>(
-                     glm::vec3(1.f, 0.f, 0.f),
-                    closestPiece->originalMaterial->getAlpha(),
-                    0.5,
-                    glm::vec3(1.0, 0.0,0.0)
+                auto highlightMaterial = std::make_shared<Eng::HolographicMaterial>(
+                    glm::vec3(1.f, 0.f, 0.f),
+                    1.0f,
+                    1.0f,
+                    0.f
                 );
+                highlightMaterial->setSecondaryColor(glm::vec3(1.f, 0.f, .0f));
                 closestPiece->mesh->setMaterial(highlightMaterial);
             }
 
@@ -1025,8 +1061,8 @@ void setUpCameras(Eng::Base &eng) {
 
    // Camera 2
    auto camera2 = std::make_shared<Eng::PerspectiveCamera>(45.0f, initialAspect, 0.1f, 1000000.0f);
-   glm::vec3 cameraPos2(-3.0f, 4.f, 7.f);
-   glm::vec3 lookAtPoint2(0.0f, 0.f, 0.f);
+   glm::vec3 cameraPos2(-.1f, 1.6f, -0.6f);
+   glm::vec3 lookAtPoint2(-6.0f, 0.2f, -0.6f);
    glm::vec3 upVector2(0.0f, 1.0f, 0.0f);
    camera2->setLocalMatrix(glm::lookAt(cameraPos2, lookAtPoint2, upVector2));
    camera2->setName("Second Camera");
@@ -1034,8 +1070,8 @@ void setUpCameras(Eng::Base &eng) {
 
    // Camera 3
    auto camera3 = std::make_shared<Eng::PerspectiveCamera>(45.0f, initialAspect, 0.1f, 1000000.0f);
-   glm::vec3 cameraPos3(-0.0f, 3.f, 17.f);
-   glm::vec3 lookAtPoint3(0.0f, 3.f, 0.f);
+   glm::vec3 cameraPos3(-3.0f, 2.f, -3.f);
+   glm::vec3 lookAtPoint3(2.0f, 3.f, 6.f);
    glm::vec3 upVector3(0.0f, 1.0f, 0.0f);
    camera3->setLocalMatrix(glm::lookAt(cameraPos3, lookAtPoint3, upVector3));
    camera3->setName("Third Camera");

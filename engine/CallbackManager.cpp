@@ -287,11 +287,10 @@ void ENG_API Eng::CallbackManager::calculateFPS() {
    const float currentTime = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
 
    if (const float elapsed = currentTime - lastFpsUpdateTime; elapsed >= 1.0f) {
-       static float last = 0.0f;
-       float now = glutGet(GLUT_ELAPSED_TIME) * 0.001f;
-       float delta = now - last;
-       last = now;
-       printf("[Δt] %.3f ms\n", delta * 1000.0f);
-
+       //each second
+       fps = static_cast<float>(frameCount) / elapsed;
+       frameCount = 0;
+       lastFpsUpdateTime = currentTime;
+       std::cout << "[FPS] " << fps << std::endl;
    }
 }

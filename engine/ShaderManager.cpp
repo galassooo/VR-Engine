@@ -25,6 +25,7 @@ bool ENG_API Eng::ShaderManager::initialize() {
 // MATRICES
 void ENG_API Eng::ShaderManager::setProjectionMatrix(const glm::mat4& matrix)
 {
+	cachedProjection = matrix;
 	if (projectionLocation == -1) {
 		//std::cerr << "[ERROR]ShaderManager: projection location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
@@ -34,6 +35,7 @@ void ENG_API Eng::ShaderManager::setProjectionMatrix(const glm::mat4& matrix)
 
 void ENG_API Eng::ShaderManager::setModelViewMatrix(const glm::mat4& matrix)
 {
+	cachedModelView = matrix;
 	if (modelViewLocation == -1) {
 		//std::cerr << "[ERROR]ShaderManager: model view location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
@@ -61,6 +63,7 @@ void ENG_API Eng::ShaderManager::setViewMatrix(const glm::mat4& matrix)
 
 void ENG_API Eng::ShaderManager::setNormalMatrix(const glm::mat3& matrix)
 {
+	cachedNormal = matrix;
 	if (normalMatrixLocation == -1) {
 		//std::cerr << "[ERROR]ShaderManager: normal matrix location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
@@ -70,6 +73,7 @@ void ENG_API Eng::ShaderManager::setNormalMatrix(const glm::mat3& matrix)
 
 void ENG_API Eng::ShaderManager::setLightSpaceMatrix(const glm::mat4& matrix)
 {
+	cachedLightSpace = matrix;
 	if (lightSpaceMatrixLocation == -1) {
 		//std::cerr << "[ERROR]ShaderManager: light space matrix location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
@@ -199,6 +203,7 @@ void ENG_API Eng::ShaderManager::setTextureSampler(int textureUnit) {
 */
 
 void ENG_API Eng::ShaderManager::setGlobalLightColor(const glm::vec3& color) {
+	cachedGlobalLight = color;
 	if (globalLightColorLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: global light color location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;
@@ -207,6 +212,7 @@ void ENG_API Eng::ShaderManager::setGlobalLightColor(const glm::vec3& color) {
 }
 
 void ENG_API Eng::ShaderManager::setEyeFront(const glm::vec3& front) {
+	cachedEyeFront = front;
 	if (eyeFrontLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: eye front location not found in Program " << currentProgram->getGlId() << std::endl;
 		return;

@@ -159,6 +159,9 @@
     <ClCompile Include="PostProcessorManager.cpp">
       <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
+    <ClCompile Include="HolographicMaterial.cpp">
+      <Filter>Source Files\Light\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -273,6 +276,9 @@
       <Filter>Header Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="PostProcessorManager.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="HolographicMaterial.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
   </ItemGroup>
