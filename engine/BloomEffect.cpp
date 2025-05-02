@@ -606,20 +606,25 @@ void Eng::BloomEffect::applyEffect(unsigned int inputTexture, unsigned int outpu
             std::shared_ptr<Eng::FragmentShader> fs = std::make_shared<Eng::FragmentShader>();
             fs->load(basicFS);
 
-            std::shared_ptr<Eng::Program> copyProgram = std::make_shared<Eng::Program>();
-            copyProgram->bindAttribute(0, "aPos");
-            copyProgram->bindAttribute(1, "aTexCoords");
-            copyProgram->bindSampler(0, "inputTex");
+            if (!copyProgram) {
+                copyProgram = std::make_shared<Eng::Program>();
+                copyProgram->bindAttribute(0, "aPos");
+                copyProgram->bindAttribute(1, "aTexCoords");
+                copyProgram->bindSampler(0, "inputTex");
 
-            if (copyProgram->addShader(vs).addShader(fs).build()) {
-                copyProgram->render();
-                copyProgram->setInt(copyProgram->getParamLocation("inputTex"), 0);
-
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, inputTexture);
-
-                renderQuad();
+                if (!copyProgram->addShader(vs).addShader(fs).build()) {
+					std::cerr << "ERROR: Failed to build copy program" << std::endl;
+                    return;
+                }
             }
+
+            copyProgram->render();
+            copyProgram->setInt(copyProgram->getParamLocation("inputTex"), 0);
+
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, inputTexture);
+
+            renderQuad();
         }
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);

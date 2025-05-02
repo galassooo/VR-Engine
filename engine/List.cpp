@@ -860,17 +860,21 @@ void main() {
 
       // Spot Light intensity
       vec3 spotDir = normalize(-ShaderManager::UNIFORM_LIGHT_DIRECTION);
-      float cosTheta = dot(L, spotDir);
+      float cosTheta = dot(L, spotDir); // Defines how much the fragment is within the light cone
 
       // compare with cosine of cutoff in radians
       float cutoffRadians = radians(ShaderManager::UNIFORM_LIGHT_CUTOFF_ANGLE);
-      float cutoffCos = cos(cutoffRadians);
+      float cutoffCos = cos(cutoffRadians); // Threshold for beginning of light falloff
 
-      // Spotlight falloff (exponential)
-      float intensity = 0.0;
-      if (cosTheta > cutoffCos) {
-        intensity = pow(cosTheta, ShaderManager::UNIFORM_LIGHT_FALLOFF);
-      }
+      // Added for soft spot light
+      // Maximum threshold for the outer cone
+      float outerCutoff = cos(radians(ShaderManager::UNIFORM_LIGHT_CUTOFF_ANGLE + ShaderManager::UNIFORM_LIGHT_FALLOFF));
+
+      float intensity = clamp((cosTheta - outerCutoff) / (cutoffCos - outerCutoff), 0.0, 1.0);
+      // Old formula - Spotlight falloff (exponential)
+      //if (cosTheta > cutoffCos) {
+      //  intensity = pow(cosTheta, ShaderManager::UNIFORM_LIGHT_FALLOFF);
+      //}
 
       // Lambert's cosine term
       float lambert = max(dot(N, L), 0.0);

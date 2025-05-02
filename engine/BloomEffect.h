@@ -102,6 +102,9 @@ private:
     std::shared_ptr<Eng::Program> blurProgram;
     std::shared_ptr<Eng::Program> bloomFinalProgram;
 
+    /** General purpose shaders */
+    std::shared_ptr<Eng::Program> copyProgram;
+
     /** Geometry for full-screen rendering */
     unsigned int quadVAO;
     unsigned int quadVBO;

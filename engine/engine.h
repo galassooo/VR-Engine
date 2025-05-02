@@ -113,6 +113,7 @@ namespace Eng {
 #include "ShaderManager.h"
 #include "Skybox.h"
 #include "HolographicMaterial.h"
+#include "MultipassRenderer.h"
 
 
     ///////////////

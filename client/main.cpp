@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
    setupLeapMotion(eng);
    initChessPieceSelection(eng);
    applyHolographicEffect();
-   eng.engEnable(ENG_STEREO_RENDERING);
+   //eng.engEnable(ENG_STEREO_RENDERING);
 
    setUpCameras(eng);
    setupPositionCycling(eng);

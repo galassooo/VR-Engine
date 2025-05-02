@@ -162,6 +162,9 @@
     <ClCompile Include="HolographicMaterial.cpp">
       <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
+    <ClCompile Include="MultipassRenderer.cpp">
+      <Filter>Source Files\Light\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -279,6 +282,9 @@
       <Filter>Header Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="HolographicMaterial.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="MultipassRenderer.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
   </ItemGroup>
