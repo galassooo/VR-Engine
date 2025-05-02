@@ -114,7 +114,7 @@ namespace Eng {
 #include "Skybox.h"
 #include "HolographicMaterial.h"
 #include "MultipassRenderer.h"
-
+#include "RenderPass.h"
 
     ///////////////
     //// Tests ///
