@@ -5,8 +5,6 @@
 
 #include <GL/freeglut.h>
 
-#define SHADOW_RANGE 100.0f
-
 /**
  * @brief Default constructor for the List class.
  *
@@ -50,6 +48,24 @@ std::shared_ptr<Eng::BoundingBox> Eng::List::getSceneBoundingBox() {
 }
 
 /**
+ * @brief Computes the frustum corners based on the current view and projection matrices.
+ *
+ * The frustum corners are computed in world coordinates.
+ * If they are already computed, they are returned from the cache.
+ *
+ * @param projectionMatrix The projection matrix.
+ * @param viewMatrix The view matrix.
+ * @return A vector of 8 corners representing the frustum.
+ */
+std::vector<glm::vec3> Eng::List::getEyeFrustumCorners() {
+	// The frustum corners are cached once computed
+	if (!currentFrustumCorners) {
+		currentFrustumCorners = std::make_unique<std::vector<glm::vec3>>(computeFrustumCorners(eyeProjectionMatrix, eyeViewMatrix));
+	}
+	return *currentFrustumCorners;
+}
+
+/**
  * @brief Adds a node to the render list.
  *
  * Nodes are categorized based on their type:
@@ -78,10 +94,13 @@ void Eng::List::addNode(const std::shared_ptr<Eng::Node> &node, const glm::mat4 
  * @brief Clears the render list.
  *
  * Removes all nodes from the list, resetting it for the next frame.
+ * It also clears the caches stored during rendering.
+ *
  */
 void Eng::List::clear() {
    elements.clear();
    lightsCount = 0;
+   currentFrustumCorners = nullptr;
 }
 
 bool Eng::List::isWithinCullingSphere(Eng::Mesh* mesh) {
@@ -121,10 +140,19 @@ void Eng::List::render() {
    // Here we do the sphere culling for the virtual environment as it is simpler to work in eye coordinates rather than world coordinates
    // The previous implementation was on the engine traverseAndAdd but it was wrong as we were mixing eye coordinates with world coordinates
 
-    // Virtual Environment culling setup...
-    bool stereo = Eng::Base::engIsEnabled(ENG_STEREO_RENDERING);
-
-    // ... culling setup code remains the same ...
+    // Virtual Environment culling setup
+	Eng::BoundingBox viewBoundingBox = Eng::BoundingBox();
+	// Compute the view bounding box based on the frustum corners
+	//std::cout << "Frustum corners:" << std::endl;
+	for (const auto& corner : getEyeFrustumCorners()) {
+		// Print the corner coordinates for debugging
+		//std::cout << "Corner: (" << corner.x << ", " << corner.y << ", " << corner.z << ")" << std::endl;
+		viewBoundingBox.update(corner);
+	}
+	cullingSphere->center = viewBoundingBox.getCenter();
+	cullingSphere->radius = glm::length(viewBoundingBox.getSize()) * 0.5f;
+	//std::cout << "Culling sphere center: (" << cullingSphere->center.x << ", " << cullingSphere->center.y << ", " << cullingSphere->center.z << ")" << std::endl;
+	//std::cout << "Culling sphere radius: " << cullingSphere->radius << std::endl;
 
     glEnable(GL_DEPTH_TEST);
     auto& sm = ShaderManager::getInstance();
@@ -138,7 +166,6 @@ void Eng::List::render() {
 
     // Render lights contribution, with blending and with culling
     for (int i = 0; i < lightsCount; ++i) {
-
         auto light = elements[i]->getNode();
         if (std::dynamic_pointer_cast<Eng::SpotLight>(light)) {
             if (!sm.loadProgram(spotLightProgram)) {
@@ -254,18 +281,21 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
     }
 
     const int size = elements.size();
+    int skipped = 0;
     for (int i = lightsCount; i < size; ++i) {
         if (!isAdditive && elements[i]->getLayer() == RenderLayer::Transparent)
             continue;
-		// TODO: Check if the element is a Mesh and if culling is enabled
-		//// If sphere culling is enabled and the element is a Mesh, check if it is within the culling sphere
-		//if (useCulling) {
-		//	if (const auto& mesh = dynamic_cast<Eng::Mesh*>(elements[i]->getNode().get())) {
-		//		// If the mesh is not within the culling sphere, skip rendering
-		//		if (!isWithinCullingSphere(mesh))
-		//			continue;
-		//	}
-		//}
+		// Check if the element is a Mesh and if culling is enabled
+		// If sphere culling is enabled and the element is a Mesh, check if it is within the culling sphere
+		if (useCulling) {
+			if (const auto& mesh = dynamic_cast<Eng::Mesh*>(elements[i]->getNode().get())) {
+				// If the mesh is not within the culling sphere, skip rendering
+                if (!isWithinCullingSphere(mesh)) {
+					skipped++;
+                    continue;
+                }
+			}
+		}
 
 		// Load global light color
 		sm.setGlobalLightColor(globalLightColor);
@@ -299,6 +329,11 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
         elements[i]->getNode()->render();
     }
 
+	// Print number of skipped meshes for debug
+	if (skipped > 0) {
+		std::cout << "Skipped " << skipped << " meshes due to culling." << std::endl;
+	}
+
     // Reset previous OpenGL blending state
     if (blendingEnabled) {
         glEnable(GL_BLEND);
@@ -322,7 +357,7 @@ void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
 
     sm.loadProgram(shadowMapProgram);
 
-    std::vector<glm::vec3> cameraFrustumCorners = computeFrustumCorners(eyeProjectionMatrix, eyeViewMatrix);
+    std::vector<glm::vec3> cameraFrustumCorners = getEyeFrustumCorners();
 
     std::vector<glm::vec3> boundingBoxVertices = boundingBox->getVertices();
 

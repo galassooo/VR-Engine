@@ -50,6 +50,9 @@ private:
 	std::unique_ptr<CullingSphere> cullingSphere;
 
 	std::shared_ptr<Eng::BoundingBox> sceneBoundingBox = nullptr;
+	std::unique_ptr<std::vector<glm::vec3>> currentFrustumCorners = nullptr;
+
+	std::vector<glm::vec3> getEyeFrustumCorners();
 
 	std::shared_ptr<Eng::Fbo> shadowMapFbo;
 	unsigned int shadowMapTexture = 0;

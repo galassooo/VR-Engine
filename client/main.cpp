@@ -631,7 +631,7 @@ void updateChessPieceSelection() {
 
             // change albedo to glow 
             if (closestPiece->mesh && closestPiece->originalMaterial) {
-                
+
                 auto highlightMaterial = std::make_shared<Eng::HolographicMaterial>(
                     glm::vec3(1.f, 0.f, 0.f),
                     1.0f,
