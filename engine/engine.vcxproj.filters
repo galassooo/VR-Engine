@@ -46,7 +46,7 @@
     <Filter Include="Header Files\Control">
       <UniqueIdentifier>{5bc73e2e-8391-4689-9eac-6c8d2c3f008c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Light\Render">
+    <Filter Include="Source Files\Render">
       <UniqueIdentifier>{216dad2a-b835-4686-b3c4-a8e29acf0895}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -55,7 +55,7 @@
       <Filter>Source Files\Base</Filter>
     </ClCompile>
     <ClCompile Include="engine.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="Node.cpp">
       <Filter>Source Files\Base</Filter>
@@ -82,25 +82,25 @@
       <Filter>Source Files\Light</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="List.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="ListElement.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="OvoReader.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="Tests\Test_Camera.cpp">
       <Filter>Source Files\Tests</Filter>
@@ -133,34 +133,34 @@
       <Filter>Source Files\Base</Filter>
     </ClCompile>
     <ClCompile Include="Program.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="VertexShader.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="FragmentShader.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="FrameBufferObject.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
-      <Filter>Source Files\Light\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="BoundingBox.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="BloomEffect.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="PostProcessorManager.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="HolographicMaterial.cpp">
-      <Filter>Source Files\Light\Render</Filter>
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox.cpp">
+      <Filter>Source Files\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -384,6 +384,7 @@ void ENG_API Eng::Base::renderScene() {
     GLuint sceneTexture = 0;
     GLuint outputTexture = 0;
     GLuint sceneFBO = 0;
+    GLuint depthRBO = 0;
 
     if (usePostProcessing) {
         // Crea texture e FBO per la scena
@@ -404,7 +405,6 @@ void ENG_API Eng::Base::renderScene() {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture, 0);
 
         // Attach depth buffer
-        GLuint depthRBO;
         glGenRenderbuffers(1, &depthRBO);
         glBindRenderbuffer(GL_RENDERBUFFER, depthRBO);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, APP_WINDOWSIZEX, APP_WINDOWSIZEY);
@@ -530,6 +530,7 @@ void ENG_API Eng::Base::renderScene() {
         glDeleteTextures(1, &sceneTexture);
         glDeleteTextures(1, &outputTexture);
         glDeleteFramebuffers(1, &sceneFBO);
+        glDeleteRenderbuffers(1, &depthRBO);
     }
 
     glutSwapBuffers();
