@@ -81,8 +81,19 @@ void Eng::List::addNode(const std::shared_ptr<Eng::Node> &node, const glm::mat4 
 void Eng::List::clear() {
    elements.clear();
    lightsCount = 0;
+   currentFrustumCorners = nullptr;
+   cullingSphere = nullptr;
 }
 
+/**
+ * @brief Checks if a mesh is within the culling sphere.
+ *
+ * This method computes the distance between the mesh's bounding sphere and the
+ * culling sphere. If the mesh is outside the culling sphere, it will not be rendered.
+ *
+ * @param mesh A shared pointer to the mesh being checked.
+ * @return true if the mesh is within the culling sphere, false otherwise.
+ */
 bool Eng::List::isWithinCullingSphere(const std::shared_ptr<Eng::Mesh>& mesh) {
     // The mesh stores its bounding sphere (in local space).
     glm::vec3 localCenter = mesh->getBoundingSphereCenter();
@@ -108,6 +119,21 @@ bool Eng::List::isWithinCullingSphere(const std::shared_ptr<Eng::Mesh>& mesh) {
         return true;
 }
 
+void Eng::List::updateCullingSphere() {
+    // Virtual Environment
+   // Here we do the sphere culling for the virtual environment as it is simpler to work in eye coordinates rather than world coordinates
+   // The previous implementation was on the engine traverseAndAdd but it was wrong as we were mixing eye coordinates with world coordinates
+    // Culling setup
+    cullingSphere = std::make_unique<Eng::List::CullingSphere>();
+    Eng::BoundingBox viewBoundingBox = Eng::BoundingBox();
+    // Compute the view bounding box based on the frustum corners
+    for (const auto& corner : getEyeFrustumCorners()) {
+        viewBoundingBox.update(corner);
+    }
+    cullingSphere->center = viewBoundingBox.getCenter();
+    cullingSphere->radius = glm::length(viewBoundingBox.getSize()) * 0.5f;
+}
+
 /**
  * @brief Renders all nodes in the render list.
  *
@@ -116,14 +142,6 @@ bool Eng::List::isWithinCullingSphere(const std::shared_ptr<Eng::Mesh>& mesh) {
  *
  */
 void Eng::List::render() {
-    // Virtual Environment
-   // Here we do the sphere culling for the virtual environment as it is simpler to work in eye coordinates rather than world coordinates
-   // The previous implementation was on the engine traverseAndAdd but it was wrong as we were mixing eye coordinates with world coordinates
-
-    // Virtual Environment culling setup...
-    bool stereo = Eng::Base::engIsEnabled(ENG_STEREO_RENDERING);
-
-    // ... culling setup code remains the same ...
 
     glEnable(GL_DEPTH_TEST);
     auto& sm = ShaderManager::getInstance();
@@ -326,35 +344,8 @@ void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
 
 	glm::mat4 lightProjectionMatrix = computeLightProjectionMatrix(lightViewMatrix, boundingBoxVertices);
 
-    /*
-    // Print projection matrix for debug
-    const float* matrixPtr = glm::value_ptr(lightViewMatrix);
 
-    std::cout << "View Matrix (glm::mat4):" << std::endl;
-
-    // Format the matrix in a human-readable form
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            std::cout << std::fixed << std::setprecision(6) << matrixPtr[i * 4 + j] << " ";
-        }
-        std::cout << std::endl;
-    }
-
-    // Print projection matrix for debug
-    matrixPtr = glm::value_ptr(lightProjectionMatrix);
-
-    std::cout << "Projection Matrix (glm::mat4):" << std::endl;
-
-    // Format the matrix in a human-readable form
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            std::cout << std::fixed << std::setprecision(6) << matrixPtr[i * 4 + j] << " ";
-        }
-        std::cout << std::endl;
-    }
-    */
-
-    // calculate and set the lightSpaceMatric for shadow projection
+    // calculate and set the lightSpaceMatrix for shadow projection
     lightSpaceMatrix = lightProjectionMatrix * lightViewMatrix;
 
     // Activate and clean the shadow map FBO
@@ -373,6 +364,24 @@ void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
     // IMPORTANT: Restore the previous FBO and viewport
     glBindFramebuffer(GL_FRAMEBUFFER, currentFBO);
     glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+}
+
+/**
+ * @brief Computes the frustum corners based on the current view and projection matrices.
+ *
+ * The frustum corners are computed in world coordinates.
+ * If they are already computed, they are returned from the cache.
+ *
+ * @param projectionMatrix The projection matrix.
+ * @param viewMatrix The view matrix.
+ * @return A vector of 8 corners representing the frustum.
+ */
+std::vector<glm::vec3> Eng::List::getEyeFrustumCorners() {
+    // The frustum corners are cached once computed
+    if (!currentFrustumCorners) {
+        currentFrustumCorners = std::make_unique<std::vector<glm::vec3>>(computeFrustumCorners(eyeProjectionMatrix, eyeViewMatrix));
+    }
+    return *currentFrustumCorners;
 }
 
 /**
@@ -442,11 +451,13 @@ std::vector<std::shared_ptr<Eng::ListElement> > Eng::List::getElements() const {
 }
 
 /**
-* @brief Set new view matrix in the render list.
-* @param glm::mat4 View matrix.
-*/
+ * @brief Set new eye view matrix in the render list.
+ * @param glm::mat4 Eye view matrix.
+ */
 void Eng::List::setEyeViewMatrix(glm::mat4& viewMatrix) {
     this->eyeViewMatrix = viewMatrix;
+    updateCullingSphere();
+	currentFrustumCorners = nullptr; // Reset the frustum corners cache
 }
 
 /**
@@ -455,6 +466,7 @@ void Eng::List::setEyeViewMatrix(glm::mat4& viewMatrix) {
 */
 void Eng::List::setEyeProjectionMatrix(glm::mat4& eyeProjectionMatrix) {
 	this->eyeProjectionMatrix = eyeProjectionMatrix;
+	currentFrustumCorners = nullptr; // Reset the frustum corners cache
 }
 
 /**

@@ -29,6 +29,8 @@ public:
 
 	std::shared_ptr<Eng::BoundingBox> getSceneBoundingBox();
 
+	std::vector<glm::vec3> getEyeFrustumCorners();
+
 private:
 	/** @brief Sorted collection of renderable nodes with their world coordinates and materials.
 	 *
@@ -50,11 +52,14 @@ private:
 	std::unique_ptr<CullingSphere> cullingSphere;
 
 	std::shared_ptr<Eng::BoundingBox> sceneBoundingBox = nullptr;
+	std::unique_ptr<std::vector<glm::vec3>> currentFrustumCorners = nullptr;
 
 	std::shared_ptr<Eng::Fbo> shadowMapFbo;
 	unsigned int shadowMapTexture = 0;
 
 	bool isWithinCullingSphere(const std::shared_ptr<Eng::Mesh>& mesh);
+
+	void updateCullingSphere();
 
 	std::vector<glm::vec3> computeFrustumCorners(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	glm::mat4 computeLightProjectionMatrix(const glm::mat4& lightViewMatrix, const std::vector<glm::vec3>& boundingBoxCorners);
