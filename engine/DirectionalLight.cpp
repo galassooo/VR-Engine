@@ -43,7 +43,7 @@ void Eng::DirectionalLight::configureLight(const glm::mat4 &viewMatrix) {
 
    auto& sm = ShaderManager::getInstance();
    sm.setLightDirection(eDir);
-   //sm.setLightDirection(direction);
+   sm.setLightCastsShadows(true);
 }
 
 /**
@@ -56,7 +56,12 @@ glm::vec3 Eng::DirectionalLight::getDirection() const {
    return direction;
 }
 
-glm::mat4 Eng::DirectionalLight::getLightViewMatrix(const std::vector<glm::vec3>& frustumCorners, float maxRange) {
+glm::mat4 Eng::DirectionalLight::getLightSpaceMatrix(const std::vector<glm::vec3>& frustumCorners, const std::shared_ptr<Eng::BoundingBox>& boundingBox) {
+    
+    /// Compute current ligth view matrix
+
+    float maxRange = glm::length(boundingBox->getSize());
+
     if (frustumCorners.empty()) {
         std::cerr << "ERROR: Frustum corners array is empty!" << std::endl;
         return glm::mat4(1.0f);
@@ -81,5 +86,29 @@ glm::mat4 Eng::DirectionalLight::getLightViewMatrix(const std::vector<glm::vec3>
 
     glm::mat4 lightView = glm::lookAt(lightPos, center, up);
 
-    return lightView;
+    /// Compute current light projection matrix
+
+    std::vector<glm::vec3> lightSpaceVertices;
+    for (const auto& vertex : boundingBox->getVertices()) {
+        glm::vec4 transformed = lightView * glm::vec4(vertex, 1.0f);
+        lightSpaceVertices.push_back(glm::vec3(transformed));
+    }
+
+    glm::vec3 minLS(FLT_MAX);
+    glm::vec3 maxLS(-FLT_MAX);
+
+    for (const auto& v : lightSpaceVertices) {
+        minLS = glm::min(minLS, v);
+        maxLS = glm::max(maxLS, v);
+    }
+
+    // Build the ortho projection matrix based on the light space bounding box
+    glm::mat4 lightProjection = glm::ortho(
+        minLS.x, maxLS.x,
+        minLS.y, maxLS.y,
+        -maxLS.z, -minLS.z // OpenGL NDC depth goes in the opposite direction -1 to 1
+    );
+
+    /// Obtain the final lightSpaceMatrix
+    return lightProjection * lightView;
 }

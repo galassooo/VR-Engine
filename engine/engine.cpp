@@ -432,21 +432,21 @@ void ENG_API Eng::Base::renderScene() {
     }
 
     // Clear and prepare render list
-    renderList.clear();
+    renderList->clear();
     auto& callbackManager = CallbackManager::getInstance();
     callbackManager.executeRenderCallbacks();
 
     // Build scene
     traverseAndAddToRenderList(rootNode);
     if (!sceneBoundingBox) {
-        sceneBoundingBox = renderList.getSceneBoundingBox();
+        sceneBoundingBox = renderList->getSceneBoundingBox();
         stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
     }
 
     // Render scene
-    renderList.setEyeViewMatrix(viewMatrix);
-    renderList.setEyeProjectionMatrix(projectionMatrix);
-    renderList.render();
+    renderList->setEyeViewMatrix(viewMatrix);
+    renderList->setEyeProjectionMatrix(projectionMatrix);
+    renderer->render(renderList);
 
     // Apply post-processing if enabled
     if (usePostProcessing) {
@@ -547,7 +547,7 @@ void ENG_API Eng::Base::traverseAndAddToRenderList(const std::shared_ptr<Eng::No
     const glm::mat4 worldMatrix = node->getFinalMatrix();
 
     // If the node passed culling (or is not a Mesh), add it.
-    renderList.addNode(node, worldMatrix);
+    renderList->addNode(node, worldMatrix);
 
     // Recursively process children.
     for (auto& child : *node->getChildren())
@@ -604,8 +604,8 @@ void ENG_API Eng::Base::loadScene(const std::string& fileName) {
     auto& shaderManager = ShaderManager::getInstance();
     if (shaderManager.initialize())
         std::cout << "   ShaderManager initialized successfully!" << std::endl;
-    if (renderList.initShaders())
-        std::cout << "   Shaders loaded successfully!" << std::endl;
+    if (renderer->init())
+        std::cout << "   Render pipeline ready!" << std::endl;
 }
 
 /**
@@ -761,20 +761,16 @@ void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& project
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Set up the render list with view matrix and projection matrix
-    renderList.clear();
+    renderList->clear();
     traverseAndAddToRenderList(rootNode);
     if (!sceneBoundingBox) {
-        sceneBoundingBox = renderList.getSceneBoundingBox();
+        sceneBoundingBox = renderList->getSceneBoundingBox();
         stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
     }
-    renderList.setEyeViewMatrix(viewMatrix);
-    renderList.setEyeProjectionMatrix(projectionMatrix);
+    renderList->setEyeViewMatrix(viewMatrix);
+    renderList->setEyeProjectionMatrix(projectionMatrix);
 
-    // Pass the current FBO to the render list
-    renderList.setCurrentFBO(eyeFbo);
-
-    // Call render which handles multi-pass internally
-    renderList.render();
+    renderer->render(renderList);
 }
 void ENG_API Eng::Base::setBodyPosition(const glm::mat4& position) {
 
@@ -877,18 +873,17 @@ void Eng::Base::renderStereoscopic() {
             cbMgr.executeRenderCallbacks();
 
             // Build and render scene list
-            renderList.clear();
+            renderList->clear();
             traverseAndAddToRenderList(rootNode);
 
             if (!sceneBoundingBox) {
-                sceneBoundingBox = renderList.getSceneBoundingBox();
+                sceneBoundingBox = renderList->getSceneBoundingBox();
                 stereoFarClip = glm::length(sceneBoundingBox->getSize()) * 2;
             }
 
-            renderList.setEyeViewMatrix(viewEye);
-            renderList.setEyeProjectionMatrix(projEyeFix);
-            renderList.setCurrentFBO(eyeFbo.get());
-            renderList.render();
+            renderList->setEyeViewMatrix(viewEye);
+            renderList->setEyeProjectionMatrix(projEyeFix);
+            renderer->render(renderList);
 
 
             // Apply post-processing if enabled
@@ -964,7 +959,7 @@ void Eng::Base::registerSkybox(const std::vector<std::string>& faces) {
         skybox.reset();
     }
 
-    renderList.setGlobalLightColor(skybox->getGlobalColor());
+    renderer->setGlobalLightColor(skybox->getGlobalColor());
 }
 
 bool ENG_API Eng::Base::addPostProcessor(std::shared_ptr<PostProcessor> postProcessor) {

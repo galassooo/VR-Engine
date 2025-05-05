@@ -2,82 +2,83 @@
 
 #include <GL/glew.h>
 
-void Eng::RenderPass::render(Eng::ListElement element) {
-    auto& sm = ShaderManager::getInstance();
-    // rembember current OpenGL blendig state
-    bool blendingEnabled = glIsEnabled(GL_BLEND);
-    GLint srcRGB = 0;
-    GLint dstRGB = 0;
-    if (blendingEnabled) {
-        glGetIntegerv(GL_BLEND_SRC_RGB, &srcRGB);
-        glGetIntegerv(GL_BLEND_DST_RGB, &dstRGB);
-    }
+Eng::RenderPass::RenderPass(std::shared_ptr<Eng::Program>& program) : renderProgram{program} {
 
-    if (blendingMode) {
-        // Set additive blending mode
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE);
-        //glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE); // ignores alpha channel in blendind
+}
 
-        // Disable depth writing
-        glDepthMask(GL_FALSE);
-        // Set depth test function to less or equal to allow overlapping
-        glDepthFunc(GL_LEQUAL);
-    }
-    else {
-        // Set default blending mode
-        glDisable(GL_BLEND);
-        // Enable depth writing
-        glDepthMask(GL_TRUE);
-        // Set default depth test function
-        glDepthFunc(GL_LESS);
-    }
+bool Eng::RenderPass::init() {
+	initialized = true;
+	return initialized;
+}
 
-    const int size = elements.size();
-    int skipped = 0;
-    for (int i = lightsCount; i < size; ++i) {
-        if (!isAdditive && elements[i]->getLayer() == RenderLayer::Transparent)
-            continue;
-        // Check if the element is a Mesh and if culling is enabled
-        // If sphere culling is enabled and the element is a Mesh, check if it is within the culling sphere
-        if (useCulling) {
-            if (const auto& mesh = dynamic_cast<Eng::Mesh*>(elements[i]->getNode().get())) {
-                // If the mesh is not within the culling sphere, skip rendering
-                if (!isWithinCullingSphere(mesh)) {
-                    skipped++;
-                    continue;
-                }
-            }
-        }
+void Eng::RenderPass::start(const glm::mat4& eyeProjectionMatrix, const glm::mat4& eyeViewMatrix, const glm::mat4& lightSpaceMatrix) {
+	if (!initialized) {
+		if (!init()) {
+			std::cerr << "ERROR: Render pass failed to initialize." << std::endl;
+			return;
+		}
+	}
 
-        // Load global light color
-        sm.setGlobalLightColor(globalLightColor);
+	if (started) {
+		std::cerr << "ERROR: Render pass already started. Call stop() before start()." << std::endl;
+		return;
+	}
 
-        // Load projection matrix
-        sm.setProjectionMatrix(eyeProjectionMatrix);
+	// rembember current OpenGL blendig state
+	previousState.blendingEnabled = glIsEnabled(GL_BLEND);
+	if (previousState.blendingEnabled) {
+		glGetIntegerv(GL_BLEND_SRC_RGB, &previousState.srcRGB);
+		glGetIntegerv(GL_BLEND_DST_RGB, &previousState.dstRGB);
+	}
 
-        glm::mat4 modelMatrix = elements[i]->getWorldCoordinates();
+	// remeber current writemask option
+	glGetBooleanv(GL_DEPTH_WRITEMASK, &previousState.writeDepthMask);
 
-        // Generate modelView matrix
-        glm::mat4 modelViewMatrix = eyeViewMatrix * modelMatrix;
+	// Store current viewport and FBO
+	glGetIntegerv(GL_VIEWPORT, previousState.viewport);
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousState.FBO);
 
-        // glLoadMatrixf(glm::value_ptr(modelViewMatrix));    unsupported 4.4
+	// Set the eye matrices
+	this->eyeProjectionMatrix = eyeProjectionMatrix;
+	this->eyeViewMatrix = eyeViewMatrix;
+	this->lightSpaceMatrix = lightSpaceMatrix;
 
-        // Send 4x4 modelview matrix
-        sm.setModelViewMatrix(modelViewMatrix);
+	/// Load specific shader and pass level variables
+	configRender();
 
-        // Send 3x3 inverse-transpose for normals
-        glm::mat3 normalMat = glm::inverseTranspose(glm::mat3(modelViewMatrix));
-        sm.setNormalMatrix(normalMat);
+	started = true;
+}
 
-        // Send lightSpaceModel matrix
-        glm::mat4 modelLightMatrix = lightSpaceMatrix * modelMatrix;
-        sm.setLightSpaceMatrix(modelLightMatrix);
+void Eng::RenderPass::render(const std::shared_ptr<Eng::ListElement>& element) {
+	if (!started) {
+		std::cerr << "ERROR: Render pass not started. Call start() before render()." << std::endl;
+		return;
+	}
 
-        // Send eye front vector: this is the camera front vector in world coordinates
-        // which corresponds to the third column of the view matrix
-        glm::vec3 eyeFront = -glm::vec3(glm::transpose(glm::mat3(eyeViewMatrix))[2]);
-        sm.setEyeFront(eyeFront);
+	perElementConfig(element);
 
-        elements[i]->getNode()->render();
+	element->getNode()->render();
+}
+
+void Eng::RenderPass::stop() {
+	if (started) {
+		// Restore previous OpenGL blending state
+		if (previousState.blendingEnabled) {
+			glEnable(GL_BLEND);
+			glBlendFunc(previousState.srcRGB, previousState.dstRGB);
+		}
+		else {
+			glDisable(GL_BLEND);
+		}
+
+		// Restore previous depth mask option
+		glDepthMask(previousState.writeDepthMask);
+
+		// IMPORTANT: Restore the previous FBO and viewport
+		glBindFramebuffer(GL_FRAMEBUFFER, previousState.FBO);
+		glViewport(previousState.viewport[0], previousState.viewport[1], 
+			previousState.viewport[2], previousState.viewport[3]);
+
+		started = false;
+	}
 }

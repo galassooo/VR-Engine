@@ -12,7 +12,8 @@ class ENG_API DirectionalLight final : public Eng::Light {
 public:
 	DirectionalLight(const glm::vec3& color, const glm::vec3& direction);
 	glm::vec3 getDirection() const;
-	glm::mat4 getLightViewMatrix(const std::vector<glm::vec3>& frustumCorners, float maxRange);
+
+	glm::mat4 getLightSpaceMatrix(const std::vector<glm::vec3>& frustumCorners, const std::shared_ptr<Eng::BoundingBox>& boundingBox);
 
 private:
 	void configureLight(const glm::mat4& viewMatrix) override;

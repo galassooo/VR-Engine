@@ -23,11 +23,14 @@ public:
 	void setEyeViewMatrix(glm::mat4& viewMatrix);
 	void setEyeProjectionMatrix(glm::mat4& eyeProjectionMatrix);
 
-	void setGlobalLightColor(const glm::vec3& globalColor);
-
-	void setCurrentFBO(Eng::Fbo* fbo) { currentFBO = std::shared_ptr<Eng::Fbo>(fbo, [](Eng::Fbo*) {}); }
+	glm::mat4 getEyeViewMatrix();
+	glm::mat4 getEyeProjectionMatrix();
 
 	std::shared_ptr<Eng::BoundingBox> getSceneBoundingBox();
+
+	std::vector<glm::vec3> getEyeFrustumCorners();
+
+	void iterateAndRender(const std::shared_ptr<Eng::RenderPass>& renderPass, const std::shared_ptr<Eng::RenderPassContext>& context);
 
 private:
 	/** @brief Sorted collection of renderable nodes with their world coordinates and materials.
@@ -39,10 +42,9 @@ private:
 	///> Maximum number of lights supported by OpenGL
 	static const int MAX_LIGHTS = 8;
 	int lightsCount = 0;
+
 	glm::mat4 eyeViewMatrix;
 	glm::mat4 eyeProjectionMatrix;
-
-	glm::vec3 globalLightColor = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	struct CullingSphere;
 	std::unique_ptr<CullingSphere> cullingSphere;
@@ -50,12 +52,15 @@ private:
 	std::shared_ptr<Eng::BoundingBox> sceneBoundingBox = nullptr;
 	std::unique_ptr<std::vector<glm::vec3>> currentFrustumCorners = nullptr;
 
-	std::vector<glm::vec3> getEyeFrustumCorners();
-
-	bool isWithinCullingSphere(Eng::Mesh* mesh);
+	bool shouldCull(const std::shared_ptr<Eng::ListElement>& element, Eng::CullingMode mode);
+	bool isWithinCullingSphere(const std::shared_ptr<Eng::Mesh>& mesh);
 
 	std::vector<glm::vec3> computeFrustumCorners(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
-	glm::mat4 computeLightProjectionMatrix(const glm::mat4& lightViewMatrix, const std::vector<glm::vec3>& boundingBoxCorners);
+
+	void updateCullingSphere();
+
+	std::shared_ptr<Eng::RenderPass> latestRenderPass = nullptr;
+	std::shared_ptr<Eng::RenderPassContext> latestRenderPassContext = nullptr;
 };
 
 

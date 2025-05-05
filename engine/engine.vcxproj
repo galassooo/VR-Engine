@@ -107,6 +107,7 @@
     <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="HolographicMaterial.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightPass.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="ListElement.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -117,15 +118,18 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="ColorPass.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="OvoReader.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PostProcessorManager.cpp" />
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="ShadowPass.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Tests\Test_CallManager.cpp" />
@@ -145,6 +149,8 @@
     <ClInclude Include="Builder.h" />
     <ClInclude Include="CallbackManager.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="LightPass.h" />
+    <ClInclude Include="CullingMode.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="FragmentShader.h" />
@@ -158,6 +164,7 @@
     <ClInclude Include="MultipassRenderer.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ColorPass.h" />
     <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="OvoReader.h" />
     <ClInclude Include="ovr.h" />
@@ -166,10 +173,13 @@
     <ClInclude Include="PostProcessor.h" />
     <ClInclude Include="PostProcessorManager.h" />
     <ClInclude Include="Program.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderPassContext.h" />
     <ClInclude Include="RenderLayer.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="ShadowPass.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Tests\Test_CallManager.h" />

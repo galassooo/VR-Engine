@@ -49,6 +49,12 @@
     <Filter Include="Source Files\Light\Render">
       <UniqueIdentifier>{216dad2a-b835-4686-b3c4-a8e29acf0895}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Render\Multipass">
+      <UniqueIdentifier>{9a552edb-add9-4e95-9141-425ca62a9012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Light\Render\Multipass">
+      <UniqueIdentifier>{2f06d2cb-ebfb-4a43-848a-5881ad2875b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Object.cpp">
@@ -162,10 +168,22 @@
     <ClCompile Include="HolographicMaterial.cpp">
       <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
-    <ClCompile Include="MultipassRenderer.cpp">
-      <Filter>Source Files\Light\Render</Filter>
-    </ClCompile>
     <ClCompile Include="RenderPass.cpp">
+      <Filter>Source Files\Light\Render\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorPass.cpp">
+      <Filter>Source Files\Light\Render\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowPass.cpp">
+      <Filter>Source Files\Light\Render\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="LightPass.cpp">
+      <Filter>Source Files\Light\Render\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="MultipassRenderer.cpp">
+      <Filter>Source Files\Light\Render\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Light\Render</Filter>
     </ClCompile>
   </ItemGroup>
@@ -287,10 +305,28 @@
     <ClInclude Include="HolographicMaterial.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
-    <ClInclude Include="MultipassRenderer.h">
+    <ClInclude Include="CullingMode.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="RenderPass.h">
+      <Filter>Header Files\Render\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPassContext.h">
+      <Filter>Header Files\Render\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorPass.h">
+      <Filter>Header Files\Render\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowPass.h">
+      <Filter>Header Files\Render\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="LightPass.h">
+      <Filter>Header Files\Render\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="MultipassRenderer.h">
+      <Filter>Header Files\Render\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
   </ItemGroup>

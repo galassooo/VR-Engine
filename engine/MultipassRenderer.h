@@ -1,44 +1,23 @@
 #pragma once
 
-class ENG_API MultipassRenderer {
+class ENG_API MultipassRenderer : public Eng::Renderer {
 public:
-	static MultipassRenderer& getInstance();
-	bool init();
-	void render(Eng::List& renderList);
-
-	void setCurrentFBO(Eng::Fbo* fbo) { currentFBO = std::shared_ptr<Eng::Fbo>(fbo, [](Eng::Fbo*) {}); }
-private:
 	MultipassRenderer() = default;
 	~MultipassRenderer() = default;
-	bool initialized = false;
+	bool init();
+	void render(const std::shared_ptr<Eng::List>& renderList) override;
 
-	void renderPass(bool isAdditive, bool useCulling);
-	void shadowPass(std::shared_ptr <Eng::DirectionalLight>& light);
-	void renderTransparentPass();
+private:
+	void runPass(const std::shared_ptr<Eng::RenderPass>& pass, const std::shared_ptr<Eng::RenderPassContext>& context);
 
-	std::shared_ptr<Eng::Fbo> shadowMapFbo;
-	unsigned int shadowMapTexture = 0;
-
-	bool setupShadowMap(int width, int height);
 	std::shared_ptr<Eng::VertexShader> basicVertexShader;
-	std::shared_ptr<Eng::VertexShader> shadowMapVertexShader;
-	std::shared_ptr<Eng::VertexShader> dirLightVertexShader;
-
 	std::shared_ptr<Eng::FragmentShader> basicFragmentShader;
-	std::shared_ptr<Eng::FragmentShader> directionalFragmentShader;
-	std::shared_ptr<Eng::FragmentShader> pointFragmentShader;
-	std::shared_ptr<Eng::FragmentShader> spotFragmentShader;
-	std::shared_ptr<Eng::FragmentShader> shadowMapFragmentShader;
 
 	std::shared_ptr<Eng::Program> baseColorProgram;
-	std::shared_ptr<Eng::Program> dirLightProgram;
-	std::shared_ptr<Eng::Program> pointLightProgram;
-	std::shared_ptr<Eng::Program> spotLightProgram;
-	std::shared_ptr<Eng::Program> shadowMapProgram;
 
-	std::shared_ptr<Eng::Fbo> currentFBO = nullptr;
+	std::shared_ptr<Eng::ColorPass> baseColorPass;
+	std::shared_ptr<Eng::LightPass> lightingPass;
 
-	// Light matrices caculated during shadow pass
-	glm::mat4 lightProjectionMatrix;
-	glm::mat4 lightSpaceMatrix;
+	const std::shared_ptr<Eng::RenderPassContext> meshContext = std::make_shared<Eng::RenderPassContext>(Eng::CullingMode::Sphere, Eng::RenderLayer::Opaque);
+	const std::shared_ptr<Eng::RenderPassContext> lightContext = std::make_shared<Eng::RenderPassContext>(Eng::CullingMode::Sphere, Eng::RenderLayer::Lights);
 };

@@ -83,6 +83,7 @@ namespace Eng {
     // SceneGraph //
     ///////////////
 #include "FrameBufferObject.h"
+#include "BoundingBox.h"
 #include "Object.h"
 #include "Node.h"
 #include "Camera.h"
@@ -100,9 +101,12 @@ namespace Eng {
 #include "VertexShader.h"
 #include "FragmentShader.h"
 #include "Program.h"
-#include "BoundingBox.h"
+#include "CullingMode.h"
 #include "RenderLayer.h"
+#include "RenderPassContext.h"
+#include "ShaderManager.h"
 #include "ListElement.h"
+#include "RenderPass.h"
 #include "List.h"
 #include "OvoReader.h"
 #include "CallbackManager.h"
@@ -110,11 +114,13 @@ namespace Eng {
 #include "PostProcessorManager.h"
 #include "BloomEffect.h"
 #include "Builder.h"
-#include "ShaderManager.h"
 #include "Skybox.h"
 #include "HolographicMaterial.h"
+#include "Renderer.h"
+#include "ColorPass.h"
+#include "ShadowPass.h"
+#include "LightPass.h"
 #include "MultipassRenderer.h"
-#include "RenderPass.h"
 
     ///////////////
     //// Tests ///
@@ -226,9 +232,12 @@ namespace Eng {
       ///> Currently active camera for rendering
       std::shared_ptr<Camera> activeCamera;
       ///> List of objects to be rendered
-      List renderList;
+      std::shared_ptr<List> renderList = std::make_shared<List>();
       ///>  FreeGLUT window identifier
       int windowId;
+
+      // Renderer
+      std::unique_ptr<Renderer> renderer = std::make_unique<MultipassRenderer>();
 
       // Skybox
       std::shared_ptr<Skybox> skybox;
