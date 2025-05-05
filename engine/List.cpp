@@ -166,6 +166,7 @@ bool Eng::List::isWithinCullingSphere(const std::shared_ptr<Eng::Mesh>& mesh) {
  *
  */
 void Eng::List::render() {
+	std::cerr << "DEBUG: Render called directly on List" << std::endl;
 	if (!latestRenderPass || !latestRenderPassContext) {
 		std::cerr << "ERROR: No render pass or context set for rendering, use iterateAndRender() instead" << std::endl;
 		return;
@@ -175,8 +176,6 @@ void Eng::List::render() {
 }
 
 void Eng::List::iterateAndRender(const std::shared_ptr<Eng::RenderPass>& renderPass, const std::shared_ptr<Eng::RenderPassContext>& context) {
-	
-	updateCullingSphere();
 	
 	for (const auto& element : elements) {
 		if (element->getLayer() != context->renderLayer)
@@ -224,7 +223,9 @@ std::vector<std::shared_ptr<Eng::ListElement> > Eng::List::getElements() const {
 * @param glm::mat4 View matrix.
 */
 void Eng::List::setEyeViewMatrix(glm::mat4& viewMatrix) {
-	this->eyeViewMatrix = viewMatrix;
+	eyeViewMatrix = viewMatrix;
+	currentFrustumCorners.reset();
+	updateCullingSphere();
 }
 
 /**
@@ -240,5 +241,5 @@ glm::mat4 Eng::List::getEyeProjectionMatrix() {
 }
 
 glm::mat4 Eng::List::getEyeViewMatrix() {
-	return eyeProjectionMatrix;
+	return eyeViewMatrix;
 }

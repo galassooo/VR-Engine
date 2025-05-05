@@ -31,8 +31,9 @@ void Eng::RenderPass::start(const glm::mat4& eyeProjectionMatrix, const glm::mat
 		glGetIntegerv(GL_BLEND_DST_RGB, &previousState.dstRGB);
 	}
 
-	// remeber current writemask option
+	// remeber current writemask option and depth function
 	glGetBooleanv(GL_DEPTH_WRITEMASK, &previousState.writeDepthMask);
+	glGetIntegerv(GL_DEPTH_FUNC, &previousState.depthFunc);
 
 	// Store current viewport and FBO
 	glGetIntegerv(GL_VIEWPORT, previousState.viewport);
@@ -71,8 +72,9 @@ void Eng::RenderPass::stop() {
 			glDisable(GL_BLEND);
 		}
 
-		// Restore previous depth mask option
+		// Restore previous depth mask option and depth function
 		glDepthMask(previousState.writeDepthMask);
+		glDepthFunc(previousState.depthFunc);
 
 		// IMPORTANT: Restore the previous FBO and viewport
 		glBindFramebuffer(GL_FRAMEBUFFER, previousState.FBO);

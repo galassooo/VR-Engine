@@ -24,6 +24,7 @@ protected:
 		unsigned char writeDepthMask;
 		int viewport[4];
 		int FBO;
+		int depthFunc;
 	};
 
 	PrevState previousState;

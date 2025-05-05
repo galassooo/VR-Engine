@@ -150,10 +150,8 @@ void Eng::MultipassRenderer::runPass(const std::shared_ptr<Eng::RenderPass>& pas
 void Eng::MultipassRenderer::render(const std::shared_ptr<Eng::List>& renderList) {
     glEnable(GL_DEPTH_TEST);
 
-    if (this->renderList != renderList) {
-        this->renderList = renderList;
-        lightingPass->setRenderList(this->renderList);
-    }
+    this->renderList = renderList;
+    lightingPass->setRenderList(this->renderList);
 
     eyeViewMatrix = renderList->getEyeViewMatrix();
     eyeProjectionMatrix = renderList->getEyeProjectionMatrix();

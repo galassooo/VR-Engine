@@ -42,6 +42,7 @@ void Eng::ColorPass::configRender() {
 
 	if (!shaderManager.loadProgram(renderProgram)) {
 		std::cerr << "ERROR: Failed to load " << typeid(renderProgram).name() << " program" << std::endl;
+		return;
 	}
 
 	/// Set specific shader pass-level variables

@@ -957,6 +957,7 @@ void Eng::Base::registerSkybox(const std::vector<std::string>& faces) {
     if (!skybox->init()) {
         std::cerr << "[Base] Skybox initialization failed." << std::endl;
         skybox.reset();
+        return;
     }
 
     renderer->setGlobalLightColor(skybox->getGlobalColor());
