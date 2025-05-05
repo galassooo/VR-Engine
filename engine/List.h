@@ -54,7 +54,7 @@ private:
 	std::shared_ptr<Eng::Fbo> shadowMapFbo;
 	unsigned int shadowMapTexture = 0;
 
-	bool isWithinCullingSphere(Eng::Mesh* mesh);
+	bool isWithinCullingSphere(const std::shared_ptr<Eng::Mesh>& mesh);
 
 	std::vector<glm::vec3> computeFrustumCorners(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	glm::mat4 computeLightProjectionMatrix(const glm::mat4& lightViewMatrix, const std::vector<glm::vec3>& boundingBoxCorners);

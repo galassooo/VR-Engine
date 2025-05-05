@@ -37,9 +37,8 @@ std::shared_ptr<Eng::BoundingBox> Eng::List::getSceneBoundingBox() {
         for (int i = lightsCount; i < elements.size(); ++i) {
 
             if (const auto& mesh = dynamic_cast<Eng::Mesh*>(elements[i]->getNode().get())) {
-                for (auto& vertex : mesh->getVertices()) {
-                    sceneBoundingBox->update(glm::vec3(mesh->getFinalMatrix() * glm::vec4(vertex.getPosition(), 1.0f)));
-                }
+                sceneBoundingBox->update(glm::vec3(mesh->getFinalMatrix() * glm::vec4(mesh->getBoundingBoxMin(), 1.0f)));
+                sceneBoundingBox->update(glm::vec3(mesh->getFinalMatrix() * glm::vec4(mesh->getBoundingBoxMax(), 1.0f)));
             }
         }
         for (auto& vertex : sceneBoundingBox->getVertices()) {
@@ -84,7 +83,7 @@ void Eng::List::clear() {
    lightsCount = 0;
 }
 
-bool Eng::List::isWithinCullingSphere(Eng::Mesh* mesh) {
+bool Eng::List::isWithinCullingSphere(const std::shared_ptr<Eng::Mesh>& mesh) {
     // The mesh stores its bounding sphere (in local space).
     glm::vec3 localCenter = mesh->getBoundingSphereCenter();
     float localRadius = mesh->getBoundingSphereRadius();
@@ -257,15 +256,12 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
     for (int i = lightsCount; i < size; ++i) {
         if (!isAdditive && elements[i]->getLayer() == RenderLayer::Transparent)
             continue;
-		// TODO: Check if the element is a Mesh and if culling is enabled
-		//// If sphere culling is enabled and the element is a Mesh, check if it is within the culling sphere
-		//if (useCulling) {
-		//	if (const auto& mesh = dynamic_cast<Eng::Mesh*>(elements[i]->getNode().get())) {
-		//		// If the mesh is not within the culling sphere, skip rendering
-		//		if (!isWithinCullingSphere(mesh))
-		//			continue;
-		//	}
-		//}
+        if (useCulling) {
+			if (const auto& mesh = std::dynamic_pointer_cast<Mesh>(elements[i]->getNode())) {
+				if (!isWithinCullingSphere(mesh))
+					continue;
+			}
+        }
 
 		// Load global light color
 		sm.setGlobalLightColor(globalLightColor);
