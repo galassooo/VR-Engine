@@ -119,6 +119,12 @@ bool Eng::List::isWithinCullingSphere(const std::shared_ptr<Eng::Mesh>& mesh) {
         return true;
 }
 
+/**
+ * @brief Updates the culling sphere based on the current view frustum.
+ *
+ * This method computes the culling sphere based on the current view frustum
+ * corners and updates the culling sphere's center and radius.
+ */
 void Eng::List::updateCullingSphere() {
     // Virtual Environment
    // Here we do the sphere culling for the virtual environment as it is simpler to work in eye coordinates rather than world coordinates
@@ -142,6 +148,10 @@ void Eng::List::updateCullingSphere() {
  *
  */
 void Eng::List::render() {
+	
+    if (!cullingSphere) {
+		updateCullingSphere();
+	}
 
     glEnable(GL_DEPTH_TEST);
     auto& sm = ShaderManager::getInstance();
@@ -456,7 +466,7 @@ std::vector<std::shared_ptr<Eng::ListElement> > Eng::List::getElements() const {
  */
 void Eng::List::setEyeViewMatrix(glm::mat4& viewMatrix) {
     this->eyeViewMatrix = viewMatrix;
-    updateCullingSphere();
+	cullingSphere = nullptr; // Reset the culling sphere cache
 	currentFrustumCorners = nullptr; // Reset the frustum corners cache
 }
 
@@ -466,6 +476,7 @@ void Eng::List::setEyeViewMatrix(glm::mat4& viewMatrix) {
 */
 void Eng::List::setEyeProjectionMatrix(glm::mat4& eyeProjectionMatrix) {
 	this->eyeProjectionMatrix = eyeProjectionMatrix;
+    cullingSphere = nullptr; // Reset the culling sphere cache
 	currentFrustumCorners = nullptr; // Reset the frustum corners cache
 }
 

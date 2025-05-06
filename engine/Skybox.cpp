@@ -62,7 +62,8 @@ static const char* skyboxVertShaderSrc = R"(
     void main()
     {
         TexCoords = in_Position;
-        gl_Position = projection * view * vec4(in_Position, 1.0);
+        vec4 pos = projection * view * vec4(in_Position, 1.0);
+        gl_Position = pos.xyww; // per far sì che z sia sempre la profondità massima evitando problemi in stereoscopia
     }
 )";
 
@@ -83,7 +84,7 @@ void main() {
     // Amplify luminance
     float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
     if (luminance > 0.6) {
-        color *= 1.0 + (luminance - 0.6) * 2.0; // Amplifica ancora di pi� aree luminose
+        color *= 1.0 + (luminance - 0.6) * 2.0; // Amplifica ancora di pi� aree luminose
     }
     
     fragColor = vec4(color, 1.0);

@@ -863,15 +863,15 @@ void Eng::Base::renderStereoscopic() {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Eye-specific projection and view matrices
-            glm::mat4 projEye = reserved->ovr->getProjMatrix(eye, stereoNearClip, stereoFarClip);
+			glm::mat4 projEye = reserved->ovr->getProjMatrix(eye, stereoNearClip, stereoFarClip); // This is the projection without the eye offset, correct for the skybox
             glm::mat4 eye2Head = reserved->ovr->getEye2HeadMatrix(eye);
             glm::mat4 viewEye = modelView;
-            glm::mat4 projEyeFix = projEye * glm::inverse(eye2Head);
+			glm::mat4 projEyeFix = projEye * glm::inverse(eye2Head); // This is the projection with the specific eye offset
 
             // Render skybox
             if (skybox) {
                 glm::mat4 skyV = glm::mat4(glm::mat3(viewEye));
-                skybox->render(skyV, projEyeFix);
+				skybox->render(skyV, projEye); // Using projEye for the skybox, so it looks infinitively far away
             }
 
             // Execute registered rendering callbacks

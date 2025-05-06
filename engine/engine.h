@@ -113,6 +113,7 @@ namespace Eng {
 #include "ShaderManager.h"
 #include "Skybox.h"
 #include "HolographicMaterial.h"
+#include "RenderPipeline.h"
 
 
     ///////////////
@@ -197,7 +198,7 @@ namespace Eng {
       std::unique_ptr<Reserved> reserved;
 
 	  std::shared_ptr<Eng::BoundingBox> sceneBoundingBox = nullptr;
-      float stereoNearClip = 0.1f;
+      float stereoNearClip = 0.2f;
 	  float stereoFarClip = 1000000.0f;
 
       std::shared_ptr<Fbo> leftEyeFbo;

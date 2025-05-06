@@ -162,6 +162,9 @@
     <ClCompile Include="BoundingBox.cpp">
       <Filter>Source Files\Render</Filter>
     </ClCompile>
+    <ClCompile Include="RenderPipeline.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -279,6 +282,9 @@
       <Filter>Header Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="HolographicMaterial.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPipeline.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
   </ItemGroup>
