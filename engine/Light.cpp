@@ -22,27 +22,14 @@ Eng::Light::~Light() {
 }
 
 /**
-* @brief Renders the light in OpenGL.
-*
-* Enables the light in OpenGL and sets up its common properties.
-* Derived classes should override this method to add specific functionality.
-*
-* @param index The index of the light (0-7, corresponding to GL_LIGHT0 to GL_LIGHT7).
-*/
+ * @brief Renders the light by uploading its ambient, diffuse, and specular
+ * properties to the shader and configuring any subclass-specific settings.
+ *
+ * Uses the ShaderManager to set common material-like properties, then
+ * calls configureLight() with the inverse of the head node's local matrix
+ * to place the light in world space.
+ */
 void Eng::Light::render() {
-   //if (currentLightId < 0 || currentLightId > GL_LIGHT7)
-   //   return;
-
-   //// Dynamically compute the macro for the light
-   //GLenum lightId = GL_LIGHT0 + currentLightId;
-
-   //// Enable light
-   //glEnable(GL_LIGHTING);
-   //glEnable(lightId);
-
-   //// Call the base setup
-   //setupLightBase(lightId);
-
    auto& sm = ShaderManager::getInstance();
 
    sm.setLightAmbient(color * 0.2f);
@@ -55,14 +42,13 @@ void Eng::Light::render() {
 }
 
 /**
-* @brief Sets the common light properties for OpenGL.
-*
-* This method configures the 
-, diffuse, and specular components for the light
-* using the color provided during initialization.
-*
-* @param lightId The OpenGL light ID
-*/
+ * @brief Configures the OpenGL light parameters for this light.
+ *
+ * Sets the GL_AMBIENT, GL_DIFFUSE, and GL_SPECULAR components on the
+ * specified OpenGL light ID using the stored color.
+ *
+ * @param lightId OpenGL light identifier.
+ */
 void Eng::Light::setupLightBase(const int &lightId) const {
    // Set light properties
    GLfloat lightColor[] = {color.r, color.g, color.b, 1.0f};

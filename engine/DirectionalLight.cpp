@@ -13,49 +13,42 @@ Eng::DirectionalLight::DirectionalLight(const glm::vec3 &color, const glm::vec3 
 }
 
 /**
- * @brief Renders the directional light in OpenGL.
+ * @brief Configures the directional light for rendering.
  *
- * Configures the light's direction and calls the base class to set shared properties.
+ * Transforms the stored direction vector by the view matrix and uploads
+ * the resulting eye-space direction to the ShaderManager.
  *
- * @param index The index of the light (0-7, corresponding to GL_LIGHT0 to GL_LIGHT7).
+ * @param viewMatrix The camera view matrix used to transform world-space direction.
  */
-
 void Eng::DirectionalLight::configureLight(const glm::mat4 &viewMatrix) {
-   // Note that we first negate the light.direction vector.
-   // The lighting calculations we used so far expect the light direction to be
-   // a direction from the fragment towards the light source, but people generally prefer to
-   // specify a directional light as a global direction pointing from the light source.
-   // Therefore we have to negate the global light direction vector to switch its direction;
-   // it's now a direction vector pointing towards the light source. Also,
-   // be sure to normalize the vector since it is unwise to assume the input
-   // vector to be a unit vector.
-
-   // REF: https://learnopengl.com/Lighting/Light-casters
-   // ALTRA REF: SLIDE LIGHTS DEL CORSO -> IL VETTORE L VA DAL PUNTO ILLUMINATO ALLA LUCEEEEEEE
-
-   //glm::vec3 wDir = -this->direction; //MENOOOOOOOOOOO //normalizzato nel costruttore
-   //GLfloat lightDir[] = {direction.x, direction.y, direction.z, 0.0f}; // w=0 for directional
-   //glLightfv(lightId, GL_POSITION, lightDir);
-
    glm::vec3 wDir = glm::normalize(glm::mat3(localMatrix) * direction);
    glm::vec3 eDir = glm::mat3(viewMatrix) * wDir;
    eDir = glm::normalize(eDir);
 
    auto& sm = ShaderManager::getInstance();
    sm.setLightDirection(eDir);
-   //sm.setLightDirection(direction);
 }
 
 /**
- * @brief Gets the current direction of the directional light.
+ * @brief Retrieves the normalized direction of the light.
  *
- * @return glm::vec3 The normalized direction of the light rays.
+ * @return glm::vec3 Normalized world-space direction vector.
  */
-
 glm::vec3 Eng::DirectionalLight::getDirection() const {
    return direction;
 }
 
+
+/**
+ * @brief Computes a view matrix for the light's perspective.
+ *
+ * Calculates a lookAt matrix using the center of the provided frustum
+ * corners and the light's direction at a distance of maxRange.
+ *
+ * @param frustumCorners List of eight world-space corner positions of the camera frustum.
+ * @param maxRange Maximum distance behind the center along the light direction to position the light.
+ * @return glm::mat4 Light-space view matrix, or identity if inputs are invalid.
+ */
 glm::mat4 Eng::DirectionalLight::getLightViewMatrix(const std::vector<glm::vec3>& frustumCorners, float maxRange) {
     if (frustumCorners.empty()) {
         std::cerr << "ERROR: Frustum corners array is empty!" << std::endl;

@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @class Builder
+ * @brief Singleton builder for assembling mesh data and creating Mesh objects.
+ *
+ * Accumulates vertex and index data, material, name, and transformation matrix
+ * through a fluent interface. After configuration, call build() to generate
+ * a Mesh and upload its data to the GPU.
+ */
 class ENG_API Builder {
 public:
 	// Return the singleton instance

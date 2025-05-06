@@ -2,10 +2,12 @@
 
 /**
  * @class Program
- * @brief A class to represent a combination of shaders for rendering
+ * @brief Links and manages a set of shaders into a GPU program for rendering.
  *
- * To Complete
- *
+ * A Program encapsulates the OpenGL shader program object, allowing addition of
+ * compiled shader objects, binding of attribute locations and texture samplers,
+ * and retrieval of uniform locations. After building, it can be activated for
+ * rendering and used to set uniform variables of various types.
  */
 class ENG_API Program : public Eng::Object {
 public:

@@ -2,10 +2,11 @@
 
 /**
  * @class Shader
- * @brief An abstract class to represent any possible Shader
+ * @brief Abstract base class representing a GPU shader.
  *
- * To Complete
- * 
+ * Shader provides a common interface for creating, loading, and
+ * rendering GPU shader programs. Derived classes must implement the
+ * create() method to generate the underlying OpenGL shader object.
  */
 class ENG_API Shader : public Eng::Object {
 public:

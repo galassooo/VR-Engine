@@ -17,7 +17,7 @@ public:
 	ShaderManager& operator=(const ShaderManager&) = delete;
 
 	// LOCATIONS and UNITS
-	static constexpr int POSITION_LOCATION = 0;	//Location bound to position coordinates in the Vertex Shader
+	static constexpr int POSITION_LOCATION = 0;		//Location bound to position coordinates in the Vertex Shader
 	static constexpr int NORMAL_LOCATION = 1;		//Location bound to normal coordinates in the Vertex Shader
 	static constexpr int TEX_COORD_LOCATION = 2;	//Location bound to texture coordinates in the Vertex Shader
 	static constexpr int DIFFUSE_TEXTURE_UNIT = 0;	//Texture Unit bound to the diffuse texture sampler in the Fragment Shader
@@ -39,18 +39,18 @@ public:
 	static constexpr const char* UNIFORM_USE_TEXTURE_DIFFUSE = "useTexture";	//Diffuse texture use flag (bool) - Uniform name
 	//static constexpr const char* UNIFORM_TEXTURE_DIFFUSE = "texSampler";		//(Unused)Diffuse texture sampler - Uniform name
 
-	static constexpr const char* UNIFORM_LIGHT_POSITION = "lightPos";			//Light position - Uniform name
-	static constexpr const char* UNIFORM_LIGHT_DIRECTION = "lightDir";			//Light direction - Uniform name
-	static constexpr const char* UNIFORM_LIGHT_CUTOFF_ANGLE = "lightCutoff";	//Spot Light cutoff angle - Uniform name
-	static constexpr const char* UNIFORM_LIGHT_FALLOFF = "lightFalloff";		//Spot Light falloff - Uniform name
-	static constexpr const char* UNIFORM_LIGHT_AMBIENT = "lightAmbient";		//Light ambient contribution - Uniform name
-	static constexpr const char* UNIFORM_LIGHT_DIFFUSE = "lightDiffuse";		//Light diffuse contribution - Uniform name
-	static constexpr const char* UNIFORM_LIGHT_SPECULAR = "lightSpecular";		//Light specular contribution - Uniform name
-	static constexpr const char* UNIFORM_LIGHT_CASTS_SHADOWS = "useShadowMap";	//Light shadow cast flag (bool) - Uniform name
-	static constexpr const char* UNIFORM_ATTENUATION_CONSTANT = "constAttenuatuion";	//Light attenuation constant - Uniform name
-	static constexpr const char* UNIFORM_ATTENUATION_LINEAR = "linearAttenuation";		//Light attenuation linear - Uniform name
-	static constexpr const char* UNIFORM_ATTENUATION_QUADRATIC = "quadraticAttenuation";//Light attenuation quadratic - Uniform name
-	//static constexpr const char* UNIFORM_TEXTURE_SHADOWS = "shadowMap";				//(Unused)Shadow map texture sampler - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_POSITION = "lightPos";						//Light position - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_DIRECTION = "lightDir";						//Light direction - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_CUTOFF_ANGLE = "lightCutoff";				//Spot Light cutoff angle - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_FALLOFF = "lightFalloff";					//Spot Light falloff - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_AMBIENT = "lightAmbient";					//Light ambient contribution - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_DIFFUSE = "lightDiffuse";					//Light diffuse contribution - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_SPECULAR = "lightSpecular";					//Light specular contribution - Uniform name
+	static constexpr const char* UNIFORM_LIGHT_CASTS_SHADOWS = "useShadowMap";				//Light shadow cast flag (bool) - Uniform name
+	static constexpr const char* UNIFORM_ATTENUATION_CONSTANT = "constAttenuatuion";		//Light attenuation constant - Uniform name
+	static constexpr const char* UNIFORM_ATTENUATION_LINEAR = "linearAttenuation";			//Light attenuation linear - Uniform name
+	static constexpr const char* UNIFORM_ATTENUATION_QUADRATIC = "quadraticAttenuation";	//Light attenuation quadratic - Uniform name
+	//static constexpr const char* UNIFORM_TEXTURE_SHADOWS = "shadowMap";					//(Unused)Shadow map texture sampler - Uniform name
 
 	static constexpr const char* UNIFORM_GLOBAL_LIGHT_COLOR = "globalLightColor";		//Global light color - Uniform name
 

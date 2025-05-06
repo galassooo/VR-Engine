@@ -8,15 +8,26 @@
 #define SHADOW_RANGE 100.0f
 
 /**
- * @brief Default constructor for the List class.
+ * @brief Constructs a new render List with default settings.
  *
- * Initializes the render list and assigns a default name.
+ * Initializes the base Object, creates a culling sphere,
+ * and sets the default list name.
  */
 Eng::List::List() : Object(), cullingSphere(std::make_unique<Eng::List::CullingSphere>()) {
    name = "RenderList";
 }
+
+/**
+ * @brief Default destructor for List.
+ */
 Eng::List::~List() = default;
 
+
+/**
+ * @brief Constructs a culling sphere helper struct.
+ *
+ * Initializes center at origin and a unit radius.
+ */
 struct Eng::List::CullingSphere {
     glm::vec3 center;
     float radius;
@@ -26,9 +37,22 @@ struct Eng::List::CullingSphere {
     */
     CullingSphere() : center{ glm::vec3(0.0f) }, radius{ 1.0f } {
     }
+
+    /**
+     * @brief Destructor for CullingSphere.
+     */
     ~CullingSphere() { }
 };
 
+
+/**
+ * @brief Computes and returns the scene's axis-aligned bounding box.
+ *
+ * On first invocation, iterates over all mesh elements (excluding lights),
+ * updates a BoundingBox, and logs corner coordinates.
+ *
+ * @return Shared pointer to the scene's BoundingBox.
+ */
 std::shared_ptr<Eng::BoundingBox> Eng::List::getSceneBoundingBox() {
     // The scene bounding box is computed only once at first call
 	if (!sceneBoundingBox) {
@@ -120,10 +144,10 @@ bool Eng::List::isWithinCullingSphere(const std::shared_ptr<Eng::Mesh>& mesh) {
 }
 
 /**
- * @brief Updates the culling sphere based on the current view frustum.
+ * @brief Recomputes the culling sphere from the view frustum corners.
  *
- * This method computes the culling sphere based on the current view frustum
- * corners and updates the culling sphere's center and radius.
+ * Builds a BoundingBox in eye-space from frustum corners, then sets
+ * the sphere center and radius to tightly enclose that box.
  */
 void Eng::List::updateCullingSphere() {
     // Virtual Environment
@@ -141,11 +165,10 @@ void Eng::List::updateCullingSphere() {
 }
 
 /**
- * @brief Renders all nodes in the render list.
+ * @brief Performs the full multi-pass rendering of this list.
  *
- * This method iterates through all nodes, computes their model-view matrices,
- * and invokes their render methods.
- *
+ * Renders opaque geometry, then for each light renders its pass including
+ * additive blending or shadow passes for directional lights.
  */
 void Eng::List::render() {
 	
@@ -209,6 +232,9 @@ void Eng::List::render() {
     glDepthFunc(GL_LESS);
 }
 
+/**
+ * @brief Renders transparent objects after lighting contributions.
+ */
 void Eng::List::renderTransparentPass()
 {
     auto& sm = ShaderManager::getInstance();
@@ -264,7 +290,6 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
         // Set additive blending mode
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
-        //glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE); // ignores alpha channel in blendind
 
         // Disable depth writing
         glDepthMask(GL_FALSE);
@@ -333,6 +358,14 @@ void Eng::List::renderPass(bool isAdditive, bool useCulling) {
     }
 }
 
+/**
+ * @brief Performs a depth-only shadow pass for a directional light.
+ *
+ * Sets up shadow map FBO, computes light-space matrices, and renders
+ * scene depth into the shadow map. Restores previous FBO and viewport.
+ *
+ * @param light Shared pointer to the directional light.
+ */
 void Eng::List::shadowPass(std::shared_ptr <Eng::DirectionalLight>& light) {
     auto& sm = ShaderManager::getInstance();
 
@@ -429,6 +462,15 @@ glm::mat4 Eng::List::computeLightProjectionMatrix(const glm::mat4& lightViewMatr
     return lightProjection;
 }
 
+/**
+ * @brief Computes world-space view frustum corners from projection and view matrices.
+ *
+ * Maps NDC corners back through the inverse view-projection transform.
+ *
+ * @param projectionMatrix Current projection matrix.
+ * @param viewMatrix       Current view matrix.
+ * @return Vector of 8 world-space frustum corner positions.
+ */
 std::vector<glm::vec3> Eng::List::computeFrustumCorners(glm::mat4 projectionMatrix, glm::mat4 viewMatrix) {
     std::vector<glm::vec3> corners = {
         glm::vec3(-1, -1, -1),

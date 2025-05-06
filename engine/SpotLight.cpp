@@ -17,32 +17,19 @@ Eng::SpotLight::SpotLight(const glm::vec3 &color, const glm::vec3 &direction, co
 }
 
 /**
- * @brief Renders the spotlight in OpenGL.
+ * @brief Configures the spotlight's parameters for rendering.
  *
- * Configures the spotlight's position, direction, cutoff angle, and attenuation.
+ * Transforms world-space position and direction to eye-space using the
+ * provided view matrix, sets shader uniforms for position, direction,
+ * cutoff angle, falloff, and computes attenuation based on radius.
  *
- * @param index The index of the light (0-7, corresponding to GL_LIGHT0 to GL_LIGHT7).
+ * @param viewMatrix Camera view matrix for converting coordinates.
  */
 void Eng::SpotLight::configureLight(const glm::mat4 &viewMatrix) {
-   // Get position from transformation matrix
-   //const GLfloat lightPosition[] = {0, 0, 0, 1.0f};
-
-   //// Set position and direction
-   //glLightfv(lightId, GL_POSITION, lightPosition);
-   //glLightfv(lightId, GL_SPOT_DIRECTION, glm::value_ptr(direction));
-
-   //// Set spot parameters
-   //glLightf(lightId, GL_SPOT_CUTOFF, cutoffAngle);
-   //glLightf(lightId, GL_SPOT_EXPONENT, falloff);
-
    const float radius = std::max(100.0f, this->radius);
    constexpr float constAttenuation = 1.0f;
    const float linearAttenuation = 2.0f / radius;
    const float quadraticAttenuation = 1.0f / (radius * radius);
-
-   //glLightf(lightId, GL_CONSTANT_ATTENUATION, constAttenuation);
-   //glLightf(lightId, GL_LINEAR_ATTENUATION, linearAttenuation);
-   //glLightf(lightId, GL_QUADRATIC_ATTENUATION, quadraticAttenuation);
 
     glm::vec4 ePos = viewMatrix * glm::vec4(getPosition(), 1.0);
 

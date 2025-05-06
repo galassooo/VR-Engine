@@ -45,11 +45,6 @@ void Eng::CallbackManager::setDefaultCallbacks() {
             perspectiveCamera->setAspect(engine.getWindowAspectRatio());
          }
          glm::mat4 projection = activeCamera->getProjectionMatrix();
-         /* unsupported 4.4
-         glMatrixMode(GL_PROJECTION);
-         glLoadMatrixf(glm::value_ptr(projection));
-         glMatrixMode(GL_MODELVIEW);
-         */
          ShaderManager::getInstance().setProjectionMatrix(projection);
       }
    };

@@ -2,7 +2,12 @@
 
 
 /**
+ * @class Fbo
  * @brief Frame buffer class to deal with OpenGL FBOs.
+ *
+ * Manages creation and configuration of OpenGL frame buffer objects,
+ * including texture and render buffer attachments, binding operations,
+ * and rendering control.
  */
 class ENG_API Fbo
 {

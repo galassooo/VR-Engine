@@ -12,26 +12,15 @@ Eng::PointLight::PointLight(const glm::vec3 &color, const float attenuation) : L
 }
 
 /**
- * @brief Renders the point light in OpenGL.
+ * @brief Configures the point light's position and attenuation in the shader.
  *
- * Configures the light's position and attenuation settings.
+ * Transforms the light's world-space position by the view matrix to eye-space,
+ * updates the ShaderManager with the position, and computes attenuation terms
+ * based on the configured radius derived from the attenuation factor.
  *
- * @param lightId The index of the light
+ * @param viewMatrix Camera view matrix for converting world to eye-space coordinates.
  */
 void Eng::PointLight::configureLight(const glm::mat4 &viewMatrix) {
-   // Set light position, the value is hardcoded to avoid double position when using GL_POSITION 
-   /*GLfloat lightPosition[] = {0, 0, 0, 1.0f};*/
-
-   // Not supported on OpenGl 4.4
-   /*glLightfv(lightId, GL_POSITION, lightPosition);
-
-   glLightf(lightId, GL_SPOT_CUTOFF, 180.0f);
-   glLightf(lightId, GL_SPOT_EXPONENT, 0.0f);*/
-
-   /*glLightf(lightId, GL_CONSTANT_ATTENUATION, constAttenuation);
-   glLightf(lightId, GL_LINEAR_ATTENUATION, linearAttenuation);
-   glLightf(lightId, GL_QUADRATIC_ATTENUATION, quadraticAttenuation);*/
-    
     glm::vec4 wPos(getPosition(), 1.0f);
 
     glm::vec4 ePos = viewMatrix * wPos;

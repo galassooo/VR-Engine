@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @class BoundingBox
+ * @brief Axis-aligned bounding box for 3D objects.
+ *
+ * Maintains minimum and maximum corner points, and provides
+ * methods to update bounds, compute center, size, and retrieve
+ * corner vertices. Automatically expands to include new points.
+ */
 class ENG_API BoundingBox {
 public:
 	BoundingBox() = default;

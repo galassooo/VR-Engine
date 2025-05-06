@@ -3,12 +3,28 @@
 // GLEW
 #include <GL/glew.h>
 
+
+/**
+ * @brief Retrieves the singleton instance of the ShaderManager.
+ *
+ * Ensures only one ShaderManager exists throughout the application.
+ *
+ * @return Reference to the unique ShaderManager instance.
+ */
 ENG_API Eng::ShaderManager& Eng::ShaderManager::getInstance()
 {
 	static Eng::ShaderManager instance;
 	return instance;
 }
 
+
+/**
+ * @brief Initializes the ShaderManager by setting up default shaders.
+ *
+ * If already initialized, logs a message and returns true immediately.
+ *
+ * @return True if initialization succeeded or was already done; false on failure.
+ */
 bool ENG_API Eng::ShaderManager::initialize() {
 	if (initialized) {
 		std::cout << "ShaderManager::initialize() already called. Skipping reinitialization." << std::endl;
@@ -22,7 +38,13 @@ bool ENG_API Eng::ShaderManager::initialize() {
 	return true;
 }
 
-// MATRICES
+// -------- Matrix Setters --------
+
+/**
+ * @brief Sets the projection matrix uniform on the current shader program.
+ *
+ * @param matrix 4x4 projection matrix to use.
+ */
 void ENG_API Eng::ShaderManager::setProjectionMatrix(const glm::mat4& matrix)
 {
 	cachedProjection = matrix;
@@ -33,6 +55,12 @@ void ENG_API Eng::ShaderManager::setProjectionMatrix(const glm::mat4& matrix)
 	currentProgram->setMatrix(projectionLocation, matrix);
 }
 
+
+/**
+ * @brief Sets the model-view matrix uniform on the current shader program.
+ *
+ * @param matrix 4x4 model-view matrix to use.
+ */
 void ENG_API Eng::ShaderManager::setModelViewMatrix(const glm::mat4& matrix)
 {
 	cachedModelView = matrix;
@@ -43,6 +71,12 @@ void ENG_API Eng::ShaderManager::setModelViewMatrix(const glm::mat4& matrix)
 	currentProgram->setMatrix(modelViewLocation, matrix);
 }
 
+
+/**
+ * @brief Sets the model matrix uniform on the current shader program.
+ *
+ * @param matrix 4x4 model transformation matrix.
+ */
 void ENG_API Eng::ShaderManager::setModelMatrix(const glm::mat4& matrix)
 {
 	if (modelLocation == -1) {
@@ -52,6 +86,12 @@ void ENG_API Eng::ShaderManager::setModelMatrix(const glm::mat4& matrix)
 	currentProgram->setMatrix(modelLocation, matrix);
 }
 
+
+/**
+ * @brief Sets the view matrix uniform on the current shader program.
+ *
+ * @param matrix 4x4 camera view matrix.
+ */
 void ENG_API Eng::ShaderManager::setViewMatrix(const glm::mat4& matrix)
 {
 	if (viewLocation == -1) {
@@ -61,6 +101,12 @@ void ENG_API Eng::ShaderManager::setViewMatrix(const glm::mat4& matrix)
 	currentProgram->setMatrix(viewLocation, matrix);
 }
 
+
+/**
+ * @brief Sets the normal matrix uniform on the current shader program.
+ *
+ * @param matrix 3x3 normal transformation matrix.
+ */
 void ENG_API Eng::ShaderManager::setNormalMatrix(const glm::mat3& matrix)
 {
 	cachedNormal = matrix;
@@ -71,6 +117,12 @@ void ENG_API Eng::ShaderManager::setNormalMatrix(const glm::mat3& matrix)
 	currentProgram->setMatrix(normalMatrixLocation, matrix);
 }
 
+
+/**
+ * @brief Sets the light space matrix uniform on the current shader program.
+ *
+ * @param matrix 4x4 light space transformation matrix.
+ */
 void ENG_API Eng::ShaderManager::setLightSpaceMatrix(const glm::mat4& matrix)
 {
 	cachedLightSpace = matrix;
@@ -81,7 +133,13 @@ void ENG_API Eng::ShaderManager::setLightSpaceMatrix(const glm::mat4& matrix)
 	currentProgram->setMatrix(lightSpaceMatrixLocation, matrix);
 }
 
-// MATERIAL
+// -------- Material Setters --------
+
+/**
+ * @brief Sets the material emission color uniform.
+ *
+ * @param emission vec3 emission color.
+ */
 void ENG_API Eng::ShaderManager::setMaterialEmission(const glm::vec3& emission) {
 	if (matEmissionLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: material emission location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -89,6 +147,12 @@ void ENG_API Eng::ShaderManager::setMaterialEmission(const glm::vec3& emission) 
 	}
 	currentProgram->setVec3(matEmissionLoc, emission);
 }
+
+/**
+ * @brief Sets the material ambient color uniform.
+ *
+ * @param ambient vec3 ambient color.
+ */
 void ENG_API Eng::ShaderManager::setMaterialAmbient(const glm::vec3& ambient) {
 	if (matAmbientLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: material ambient location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -96,6 +160,12 @@ void ENG_API Eng::ShaderManager::setMaterialAmbient(const glm::vec3& ambient) {
 	}
 	currentProgram->setVec3(matAmbientLoc, ambient);
 }
+
+/**
+ * @brief Sets the material diffuse color uniform.
+ *
+ * @param diffuse vec3 diffuse color.
+ */
 void ENG_API Eng::ShaderManager::setMaterialDiffuse(const glm::vec3& diffuse) {
 	if (matDiffuseLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: material diffuse location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -103,6 +173,12 @@ void ENG_API Eng::ShaderManager::setMaterialDiffuse(const glm::vec3& diffuse) {
 	}
 	currentProgram->setVec3(matDiffuseLoc, diffuse);
 }
+
+/**
+ * @brief Sets the material specular color uniform.
+ *
+ * @param spec vec3 specular color.
+ */
 void ENG_API Eng::ShaderManager::setMaterialSpecular(const glm::vec3& spec) {
 	if (matSpecularLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: material specular location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -110,6 +186,12 @@ void ENG_API Eng::ShaderManager::setMaterialSpecular(const glm::vec3& spec) {
 	}
 	currentProgram->setVec3(matSpecularLoc, spec);
 }
+
+/**
+ * @brief Sets the material shininess factor uniform.
+ *
+ * @param shininess float specular exponent.
+ */
 void ENG_API Eng::ShaderManager::setMaterialShininess(float shininess) {
 	if (matShininessLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: material shininess location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -118,7 +200,13 @@ void ENG_API Eng::ShaderManager::setMaterialShininess(float shininess) {
 	currentProgram->setFloat(matShininessLoc, shininess);
 }
 
-// LIGHT
+// -------- Light Setters --------
+
+/**
+ * @brief Sets the light position uniform.
+ *
+ * @param pos vec3 world-space light position.
+ */
 void ENG_API Eng::ShaderManager::setLightPosition(const glm::vec3& pos) {
 	if (lightPosLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: light position location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -126,6 +214,12 @@ void ENG_API Eng::ShaderManager::setLightPosition(const glm::vec3& pos) {
 	}
 	currentProgram->setVec3(lightPosLoc, pos);
 }
+
+/**
+ * @brief Sets the light direction uniform.
+ *
+ * @param dir vec3 normalized light direction.
+ */
 void ENG_API Eng::ShaderManager::setLightDirection(const glm::vec3& dir) {
 	if (lightDirLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: light direction location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -133,6 +227,12 @@ void ENG_API Eng::ShaderManager::setLightDirection(const glm::vec3& dir) {
 	}
 	currentProgram->setVec3(lightDirLoc, dir);
 }
+
+/**
+ * @brief Sets the spotlight cutoff angle uniform.
+ *
+ * @param angle float cutoff angle in degrees.
+ */
 void ENG_API Eng::ShaderManager::setLightCutoffAngle(float angle) {
 	if (lightCutoffAngleLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: light cutoff angle location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -140,6 +240,12 @@ void ENG_API Eng::ShaderManager::setLightCutoffAngle(float angle) {
 	}
 	currentProgram->setFloat(lightCutoffAngleLoc, angle);
 }
+
+/**
+ * @brief Sets the light falloff factor uniform.
+ *
+ * @param falloff float falloff exponent.
+ */
 void ENG_API Eng::ShaderManager::setLightFalloff(float falloff) {
 	if (lightFalloffLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: light falloff location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -147,6 +253,12 @@ void ENG_API Eng::ShaderManager::setLightFalloff(float falloff) {
 	}
 	currentProgram->setFloat(lightFalloffLoc, falloff);
 }
+
+/**
+ * @brief Sets the light ambient intensity uniform.
+ *
+ * @param amb vec3 ambient intensity.
+ */
 void ENG_API Eng::ShaderManager::setLightAmbient(const glm::vec3& amb) {
 	if (lightAmbientLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: light ambient location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -154,6 +266,12 @@ void ENG_API Eng::ShaderManager::setLightAmbient(const glm::vec3& amb) {
 	}
 	currentProgram->setVec3(lightAmbientLoc, amb);
 }
+
+/**
+ * @brief Sets the light diffuse intensity uniform.
+ *
+ * @param diff vec3 diffuse intensity.
+ */
 void ENG_API Eng::ShaderManager::setLightDiffuse(const glm::vec3& diff) {
 	if (lightDiffuseLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: light diffuse location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -161,6 +279,12 @@ void ENG_API Eng::ShaderManager::setLightDiffuse(const glm::vec3& diff) {
 	}
 	currentProgram->setVec3(lightDiffuseLoc, diff);
 }
+
+/**
+ * @brief Sets the light specular intensity uniform.
+ *
+ * @param spec vec3 specular intensity.
+ */
 void ENG_API Eng::ShaderManager::setLightSpecular(const glm::vec3& spec) {
 	if (lightSpecularLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: light specular location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -168,6 +292,12 @@ void ENG_API Eng::ShaderManager::setLightSpecular(const glm::vec3& spec) {
 	}
 	currentProgram->setVec3(lightSpecularLoc, spec);
 }
+
+/**
+ * @brief Enables or disables shadow casting for the light.
+ *
+ * @param castsShadows bool true to cast shadows.
+ */
 void ENG_API Eng::ShaderManager::setLightCastsShadows(bool castsShadows) {
 	if (lightCastsShadowsLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: light casts shadow location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -175,6 +305,14 @@ void ENG_API Eng::ShaderManager::setLightCastsShadows(bool castsShadows) {
 	}
 	currentProgram->setInt(lightCastsShadowsLoc, castsShadows ? 1 : 0);
 }
+
+/**
+ * @brief Sets the light attenuation factors.
+ *
+ * @param constant Constant attenuation term.
+ * @param linear Linear attenuation term.
+ * @param quadratic Quadratic attenuation term.
+ */
 void ENG_API Eng::ShaderManager::setLightAttenuation(float constant, float linear, float quadratic) {
 	if (attenuationConstantLoc == -1 || attenuationLinearLoc == -1 || attenuationQuadraticLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: light attenuation location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -185,7 +323,13 @@ void ENG_API Eng::ShaderManager::setLightAttenuation(float constant, float linea
 	currentProgram->setFloat(attenuationQuadraticLoc, quadratic);
 }
 
-//TEXTURES
+// -------- Texture & Global Settings --------
+
+/**
+ * @brief Enables or disables texture usage in the shader.
+ *
+ * @param use bool true to sample textures.
+ */
 void ENG_API Eng::ShaderManager::setUseTexture(bool use) {
 	if (useTextureLoc == -1) {
 		//std::cerr << "[ERROR]ShaderManager: texture use location not found in Program " << currentProgram->getGlId() << std::endl;
@@ -194,14 +338,11 @@ void ENG_API Eng::ShaderManager::setUseTexture(bool use) {
 	currentProgram->setInt(useTextureLoc, use ? 1 : 0);
 }
 
-/* Unused: Texture unit is defined during texture binding
-void ENG_API Eng::ShaderManager::setTextureSampler(int textureUnit) {
-	if (texSamplerLoc == -1)
-		return;
-	program.setInt(texSamplerLoc, textureUnit);
-}
-*/
-
+/**
+ * @brief Sets the global light color uniform.
+ *
+ * @param color vec3 global light color.
+ */
 void ENG_API Eng::ShaderManager::setGlobalLightColor(const glm::vec3& color) {
 	cachedGlobalLight = color;
 	if (globalLightColorLoc == -1) {
@@ -211,6 +352,11 @@ void ENG_API Eng::ShaderManager::setGlobalLightColor(const glm::vec3& color) {
 	currentProgram->setVec3(globalLightColorLoc, color);
 }
 
+/**
+ * @brief Sets the camera forward vector uniform for specular calculations.
+ *
+ * @param front vec3 camera forward direction.
+ */
 void ENG_API Eng::ShaderManager::setEyeFront(const glm::vec3& front) {
 	cachedEyeFront = front;
 	if (eyeFrontLoc == -1) {
@@ -220,6 +366,11 @@ void ENG_API Eng::ShaderManager::setEyeFront(const glm::vec3& front) {
 	currentProgram->setVec3(eyeFrontLoc, front);
 }
 
+/**
+ * @brief Compiles and loads default shaders for basic red color output.
+ *
+ * @return True if default shaders were successfully created and loaded.
+ */
 bool ENG_API Eng::ShaderManager::setDefaultShaders() {
 	// Nel metodo setDefaultShaders() in ShaderManager.cpp
 	const char* vs = R"(
@@ -272,6 +423,15 @@ bool ENG_API Eng::ShaderManager::setDefaultShaders() {
 	return loadProgram(defaultProgram);
 }
 
+/**
+ * @brief Loads a shader program and retrieves uniform locations.
+ *
+ * Skips if the program is already active, then caches uniform locations,
+ * binds the program, and updates currentProgram.
+ *
+ * @param program Shared pointer to the Program to load.
+ * @return True if the program was bound successfully.
+ */
 bool ENG_API Eng::ShaderManager::loadProgram(std::shared_ptr<Eng::Program>& program) {
 	if (!program || !program->getGlId())
 		return false;
@@ -320,6 +480,12 @@ bool ENG_API Eng::ShaderManager::loadProgram(std::shared_ptr<Eng::Program>& prog
 	return true;
 }
 
+/**
+ * @brief Preprocesses shader code by replacing predefined symbols.
+ *
+ * @param source Original GLSL source code.
+ * @return Processed source with symbol substitutions.
+ */
 std::string ENG_API Eng::ShaderManager::preprocessShaderCode(const std::string& source) {
 	auto symbolMap = buildShaderSymbolMap();
 
@@ -340,6 +506,11 @@ std::string ENG_API Eng::ShaderManager::preprocessShaderCode(const std::string& 
 	return result;
 }
 
+/**
+ * @brief Builds a map of shader symbol names to their string values.
+ *
+ * @return Unordered map mapping symbol strings to constant values.
+ */
 std::unordered_map<std::string, std::string> ENG_API Eng::ShaderManager::buildShaderSymbolMap() {
 	return {
 		{"ShaderManager::POSITION_LOCATION", std::to_string(POSITION_LOCATION)},

@@ -67,6 +67,13 @@ std::shared_ptr<Eng::Material> Eng::Mesh::getMaterial() const {
    return material;
 }
 
+/**
+ * @brief Initializes OpenGL buffers (VAO, VBOs, EBO) for this mesh.
+ *
+ * Extracts separate arrays for positions, normals, and texture coordinates
+ * from the vertex list, creates a Vertex Array Object, and allocates
+ * GPU buffers for efficient rendering.
+ */
 void Eng::Mesh::initBuffers() {
     if (buffersInitialized)
         return;
@@ -103,10 +110,6 @@ void Eng::Mesh::initBuffers() {
     glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(float), positions.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(ShaderManager::POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(ShaderManager::POSITION_LOCATION);
-    /* Unsupported 4.4
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, 0);
-    */
 
     // VBO for normals.
     glGenBuffers(1, &normVBO);
@@ -114,10 +117,6 @@ void Eng::Mesh::initBuffers() {
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), normals.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(ShaderManager::NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(ShaderManager::NORMAL_LOCATION);
-    /* Unsupported 4.4
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glNormalPointer(GL_FLOAT, 0, 0);
-    */
 
     // VBO for texture coordinates.
     glGenBuffers(1, &texVBO);
@@ -125,10 +124,6 @@ void Eng::Mesh::initBuffers() {
     glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(float), texCoords.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(ShaderManager::TEX_COORD_LOCATION, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(ShaderManager::TEX_COORD_LOCATION);
-    /* Unsupported 4.4
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glTexCoordPointer(2, GL_FLOAT, 0, 0);
-    */
 
     // EBO for indices.
     glGenBuffers(1, &ebo);
@@ -143,13 +138,10 @@ void Eng::Mesh::initBuffers() {
 }
 
 /**
- * @brief Renders the mesh using the provided model-view matrix.
+ * @brief Renders this mesh using its material and buffers.
  *
- * This method applies the material settings, loads the transformations, and
- * draws the mesh using OpenGL. It iterates through the indices to form triangles,
- * reversing the order of vertices for each triangle.
- *
- * @param index The index of the mesh in the render list.
+ * Binds the material, ensures buffers are initialized, and issues
+ * a glDrawElements call. Restores previous shader program if changed.
  */
 void Eng::Mesh::render()
 {
@@ -231,32 +223,67 @@ void Eng::Mesh::renderNormals() const {
    glEnable(GL_LIGHTING);
 }
 
-// Virtual Environment
+/**
+ * @brief Sets the center of the mesh's bounding sphere.
+ *
+ * @param center World-space center of bounding sphere.
+ */
 void Eng::Mesh::setBoundingSphereCenter(const glm::vec3& center) {
     boundingSphereCenter = center;
 }
 
+/**
+ * @brief Gets the center of the mesh's bounding sphere.
+ *
+ * @return World-space center of bounding sphere.
+ */
 glm::vec3 Eng::Mesh::getBoundingSphereCenter() const {
     return boundingSphereCenter;
 }
 
+/**
+ * @brief Sets the radius of the mesh's bounding sphere.
+ *
+ * @param radius Radius value for sphere culling.
+ */
 void Eng::Mesh::setBoundingSphereRadius(float radius) {
     boundingSphereRadius = radius;
 }
 
+/**
+ * @brief Gets the radius of the mesh's bounding sphere.
+ *
+ * @return Radius used for sphere culling.
+ */
 float Eng::Mesh::getBoundingSphereRadius() const {
     return boundingSphereRadius;
 }
 
+/**
+ * @brief Sets the axis-aligned bounding box for this mesh.
+ *
+ * @param min Minimum corner in local space.
+ * @param max Maximum corner in local space.
+ */
 void Eng::Mesh::setBoundingBox(const glm::vec3& min, const glm::vec3& max) {
     boundingBoxMin = min;
     boundingBoxMax = max;
 }
 
+/**
+ * @brief Gets the minimum corner of the mesh's bounding box.
+ *
+ * @return Local-space minimum corner.
+ */
 glm::vec3 Eng::Mesh::getBoundingBoxMin() const {
     return boundingBoxMin;
 }
 
+/**
+ * @brief Gets the maximum corner of the mesh's bounding box.
+ *
+ * @return Local-space maximum corner.
+ */
 glm::vec3 Eng::Mesh::getBoundingBoxMax() const {
     return boundingBoxMax;
 }

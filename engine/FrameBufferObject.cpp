@@ -3,7 +3,10 @@
 #include <GL/glew.h>
 
 /**
- * Constructor.
+ * @brief Constructs a new Fbo object.
+ *
+ * Initializes internal attachment arrays, MRT cache, and generates
+ * an OpenGL framebuffer object.
  */
 ENG_API Eng::Fbo::Fbo()
 {
@@ -23,7 +26,9 @@ ENG_API Eng::Fbo::Fbo()
 
 	 
 /**
- * Destructor.
+ * @brief Destroys the Fbo object.
+ *
+ * Deletes the MRT cache, render buffers, and the OpenGL framebuffer.
  */
 ENG_API Eng::Fbo::~Fbo()
 {
@@ -38,9 +43,10 @@ ENG_API Eng::Fbo::~Fbo()
 
  
 /**
- * Get texture connected to buffer #.
- * @param textureNumber texture position
- * @return texture glId or 0 if wrong/not available
+ * @brief Retrieves the texture ID attached at the given index.
+ *
+ * @param textureNumber Index of the texture attachment (0..MAX_ATTACHMENTS-1).
+ * @return GLuint texture ID, or 0 if index is out of range or not attached.
  */
 unsigned int ENG_API Eng::Fbo::getTexture(unsigned int textureNumber)
 {
@@ -51,8 +57,12 @@ unsigned int ENG_API Eng::Fbo::getTexture(unsigned int textureNumber)
 }
 	 
 /**
- * Check FBO consistency.
- * @return true on success, false on fail and print error in console
+ * @brief Checks the completeness of the framebuffer.
+ *
+ * Binds the FBO and queries its status. Prints an error message
+ * if the framebuffer is not complete.
+ *
+ * @return True if framebuffer is complete; false otherwise.
  */
 bool ENG_API Eng::Fbo::isOk()
 {
@@ -71,13 +81,17 @@ bool ENG_API Eng::Fbo::isOk()
 }
  
 /**
- * Binds a texture to the framebuffer.
- * @param textureNumber a value between 0 and OvFbo::MAX_ATTACHMENTS to identify texture position
- * @param operation one of the enumerated operations of type OvFbo::BIND_*
- * @param texture pointer to a texture class
- * @param param1 free param 1, according to the operation
- * @param param2 free param 2, according to the operation
- * @return true on success, false on fail
+ * @brief Attaches a texture to the framebuffer.
+ *
+ * Binds the FBO, attaches the specified texture to a color or depth attachment,
+ * and updates the draw buffer and size fields.
+ *
+ * @param textureNumber Index in the internal texture array (0..MAX_ATTACHMENTS-1).
+ * @param operation Attachment operation (BIND_COLORTEXTURE or BIND_DEPTHTEXTURE).
+ * @param texture OpenGL texture ID to bind.
+ * @param param1 Additional parameter (e.g., color attachment index).
+ * @param param2 Additional parameter (unused).
+ * @return True on successful binding; false on failure.
  */
 bool ENG_API Eng::Fbo::bindTexture(unsigned int textureNumber, unsigned int operation, unsigned int texture, int param1, int param2)
 {
@@ -120,12 +134,16 @@ bool ENG_API Eng::Fbo::bindTexture(unsigned int textureNumber, unsigned int oper
 }
 
 /**
- * Initializes and binds a render buffer.
- * @param renderBuffer a value between 0 and Fbo::MAX_ATTACHMENTS to identify a render buffer
- * @param operation one of the enumerated operations of type OvFbo::BIND_*
- * @param sizeX FBO sizes, make sure to have the same for all attachments
- * @param sizeY FBO sizes, make sure to have the same for all attachments
- * @return true on success, false on fail
+ * @brief Attaches and initializes a render buffer.
+ *
+ * Binds the FBO, recreates the specified render buffer, allocates storage,
+ * attaches it as a depth buffer, and updates size fields.
+ *
+ * @param renderBuffer Index of the render buffer (0..MAX_ATTACHMENTS-1).
+ * @param operation Attachment operation (BIND_DEPTHBUFFER).
+ * @param sizeX Width of the buffer.
+ * @param sizeY Height of the buffer.
+ * @return True on successful allocation and binding; false on failure.
  */
 bool ENG_API Eng::Fbo::bindRenderBuffer(unsigned int renderBuffer, unsigned int operation, int sizeX, int sizeY)
 {
@@ -167,8 +185,11 @@ bool ENG_API Eng::Fbo::bindRenderBuffer(unsigned int renderBuffer, unsigned int 
 
 
 /**
- * Update the MRT cache.
- * @return true on success, false on fail
+ * @brief Updates the multiple render targets (MRT) cache.
+ *
+ * Rebuilds the MRT list based on the current drawBuffer array.
+ *
+ * @return True on success.
  */
 bool ENG_API Eng::Fbo::updateMrtCache()
 {
@@ -200,7 +221,9 @@ bool ENG_API Eng::Fbo::updateMrtCache()
 }
 
 /**
- * Revert to rendering to the context buffers.
+ * @brief Reverts rendering to the default framebuffer.
+ *
+ * Binds the context framebuffer and resets read/draw buffers.
  */
 void ENG_API Eng::Fbo::disable()
 {
@@ -210,7 +233,9 @@ void ENG_API Eng::Fbo::disable()
 }
 
 /**
- * Disable color rendering
+ * @brief Sets whether rendering uses depth-only mode.
+ *
+ * @param value True to disable color output; false to enable color.
  */
 void ENG_API Eng::Fbo::setDepthOnly(bool value)
 {
@@ -219,9 +244,13 @@ void ENG_API Eng::Fbo::setDepthOnly(bool value)
 
 
 /**
- * Fbo rendering procedure.
- * @param data generic pointer to instance data
- * @return true on success, false on fail
+ * @brief Binds and configures the framebuffer for rendering.
+ *
+ * Binds the FBO, sets draw buffers and viewport dimensions,
+ * and applies depth-only mode if enabled.
+ *
+ * @param data Optional user data pointer (unused).
+ * @return True if binding succeeded.
  */
 bool ENG_API Eng::Fbo::render(void* data)
 {

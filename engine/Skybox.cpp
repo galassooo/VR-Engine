@@ -91,11 +91,19 @@ void main() {
 }
 )";
 
+/**
+ * @brief Constructs a Skybox with the specified cubemap face file paths.
+ *
+ * @param faces Vector of six image file paths, ordered as +X, -X, +Y, -Y, +Z, -Z.
+ */
 Eng::Skybox::Skybox(const std::vector<std::string>& faces)
     : faces(faces)
 {
 }
 
+/**
+ * @brief Destroys the Skybox, releasing GPU resources.
+ */
 Eng::Skybox::~Skybox()
 {
     if (vao) {
@@ -109,6 +117,11 @@ Eng::Skybox::~Skybox()
     }
 }
 
+/**
+ * @brief Initializes the skybox: loads cubemap, sets up VAO/VBO, and compiles shaders.
+ *
+ * @return True on success, false if any step (texture loading or shader build) fails.
+ */
 bool Eng::Skybox::init()
 {
     // Load the cubemap texture.
@@ -158,6 +171,11 @@ bool Eng::Skybox::init()
     return true;
 }
 
+/**
+ * @brief Loads six images into an OpenGL cubemap texture and computes global ambient color.
+ *
+ * @return True on successful loading of all faces; false on error.
+ */
 bool Eng::Skybox::loadCubemap()
 {
     glGenTextures(1, &cubemapTexture);
@@ -242,7 +260,12 @@ bool Eng::Skybox::loadCubemap()
     return true;
 }
 
-
+/**
+ * @brief Renders the skybox cube using the provided camera matrices.
+ *
+ * @param viewMatrix       Camera view matrix (translation stripped internally).
+ * @param projectionMatrix Camera projection matrix.
+ */
 void Eng::Skybox::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix)
 {
     GLint prevProgram;
@@ -280,11 +303,17 @@ void Eng::Skybox::render(const glm::mat4& viewMatrix, const glm::mat4& projectio
     glDepthMask(prevDepthMask);
 }
 
-/// Calculate the average color of the skybox texture using luminance weighting.
-/// bits: pixel data
-/// width: image width
-/// height: image height
-/// channels: number of color channels (3 for BGR, 4 for BGRA, default 3)
+/**
+ * @brief Computes weighted average color of an LDR image buffer.
+ *
+ * Weights each pixel by luminance to better represent perceived brightness.
+ *
+ * @param bits     Raw pixel data (BGR[A]).
+ * @param width    Image width in pixels.
+ * @param height   Image height in pixels.
+ * @param channels Number of channels (3 or 4).
+ * @return Weighted average RGB color (0–1 range).
+ */
 glm::vec3 Eng::Skybox::calculateWeightedAverageColor(unsigned char* bits, int width, int height, int channels)
 {
     float totalLuminance = 0.0f;
@@ -312,6 +341,18 @@ glm::vec3 Eng::Skybox::calculateWeightedAverageColor(unsigned char* bits, int wi
 
     return weightedColor;
 }
+
+/**
+ * @brief Computes weighted average color for HDR image buffers.
+ *
+ * Performs tone-mapping on high dynamic range values before weighting.
+ *
+ * @param floatBits Raw float pixel data (RGB[A]).
+ * @param width     Image width.
+ * @param height    Image height.
+ * @param channels  Number of channels (3 or 4).
+ * @return Weighted average color after tone mapping.
+ */
 glm::vec3 Eng::Skybox::calculateWeightedAverageColorHDR(float* floatBits, int width, int height, int channels) {
     float totalLuminance = 0.0f;
     glm::vec3 weightedColor(0.0f);
@@ -347,6 +388,11 @@ glm::vec3 Eng::Skybox::calculateWeightedAverageColorHDR(float* floatBits, int wi
     return weightedColor;
 }
 
+/**
+ * @brief Retrieves the precomputed global ambient color from the cubemap.
+ *
+ * @return RGB ambient color (scaled by 0.2 factor during load).
+ */
 glm::vec3 Eng::Skybox::getGlobalColor()
 {
 	return globalColor;

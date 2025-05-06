@@ -2,10 +2,10 @@
 
 /**
  * @class FragmentShader
- * @brief A type of shader that affects the rasterization phase of rendering
+ * @brief Represents a GPU fragment shader, which processes rasterized fragments to determine their final colors.
  *
- * To Complete
- *
+ * FragmentShader compiles and encapsulates fragment-stage GLSL code, used for per-pixel operations such as
+ * lighting, texturing, and color blending. Inherits base loading, compilation, and rendering interface from Shader.
  */
 class ENG_API FragmentShader : public Eng::Shader {
 protected:

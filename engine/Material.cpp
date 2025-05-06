@@ -17,12 +17,13 @@ Eng::Material::Material(const glm::vec3 &albedo, const float alpha, const float 
 }
 
 /**
- * @brief Applies the material properties to OpenGL.
+ * @brief Applies this material's properties to the current shader.
  *
- * Configures the material's ambient, diffuse, and specular properties
- * and sets the shininess for rendering.
+ * Uploads ambient, diffuse, specular, shininess, and emission
+ * parameters to the ShaderManager, binds the diffuse texture if any,
+ * and configures OpenGL blending based on alpha transparency.
  *
- * @param index The index of the material, typically used to identify material order.
+ * @param index Optional material index (unused in this implementation).
  */
 void Eng::Material::render() {
     // Remember previous OpenGL blending state
@@ -44,21 +45,6 @@ void Eng::Material::render() {
    const GLfloat diffuse[] = {albedo.r * 0.6f, albedo.g * 0.6f, albedo.b * 0.6f, albedo.a};
    const GLfloat specular[] = {albedo.r * 0.4f, albedo.g * 0.4f, albedo.b * 0.4f, 1.0f};
    const GLfloat shininess[] = {(1.0f - std::sqrt(this->shininess)) * 128.0f};
-   
-   /*   Unsupported 4.4
-   glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
-   glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
-   glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
-   glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
-   
-
-   if (diffuseTexture) {
-      glEnable(GL_TEXTURE_2D);
-      diffuseTexture->render();
-   } else {
-      glDisable(GL_TEXTURE_2D);
-   }
-   */
 
    ShaderManager& sm = ShaderManager::getInstance();
 
@@ -81,7 +67,7 @@ void Eng::Material::render() {
    //Texture
    if (diffuseTexture) {
        sm.setUseTexture(true);
-       diffuseTexture->render(); //ITA: associa texture automaticamente
+       diffuseTexture->render();
    }
    else {
        sm.setUseTexture(false);

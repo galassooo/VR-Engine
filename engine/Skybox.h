@@ -1,5 +1,14 @@
 #pragma once
 
+/**
+ * @class Skybox
+ * @brief Renders a cubemap background and provides ambient scene color.
+ *
+ * The Skybox class loads six textures into an OpenGL cubemap, sets up a cube
+ * mesh (VAO/VBO), and uses a specialized shader program to draw an infinitely
+ * distant environment. It also calculates a weighted average color from the
+ * cubemap faces to supply a global ambient color for scene lighting.
+ */
 class ENG_API Skybox : public Eng::Node {
 public:
     // faces: list of six image file paths for posx, negx, posy, negy, posz, negz.

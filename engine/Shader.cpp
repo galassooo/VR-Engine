@@ -2,20 +2,41 @@
 // GLEW
 #include <GL/glew.h>
 
+/**
+ * @brief Constructs a new Shader object.
+ *
+ * Initializes the internal shader ID to 0.
+ */
 ENG_API Eng::Shader::Shader() : id(0)
 { }
+
+/**
+ * @brief Destroys the Shader object.
+ *
+ * Deletes the underlying OpenGL shader if it has been created.
+ */
 ENG_API Eng::Shader::~Shader() {
 	glDeleteShader(id);
 }
 
+/**
+ * @brief Retrieves the OpenGL shader identifier.
+ *
+ * @return GLuint representing the shader object ID, or 0 if not created.
+ */
 unsigned int ENG_API Eng::Shader::getGlId() {
 	return id;
 }
 
 /**
- * Loads and compiles a shader from source code stored in memory.
- * @param data pointer to the string containing the source code
- * @return true/false on success/failure
+ * @brief Loads and compiles a shader from source code in memory.
+ *
+ * This method checks the input data, destroys any existing shader,
+ * creates a new shader object via create(), uploads the source,
+ * compiles it, and logs any errors up to MAX_LOGSIZE.
+ *
+ * @param data Pointer to a null-terminated string containing the GLSL source code.
+ * @return True if compilation succeeded; false otherwise.
  */
 bool ENG_API Eng::Shader::load(const char* data) {
 	if (data == nullptr)
@@ -56,6 +77,12 @@ bool ENG_API Eng::Shader::load(const char* data) {
 	return true;
 }
 
+/**
+ * @brief Binds and uses this shader program.
+ *
+ * Derived classes or external systems should ensure appropriate
+ * program linking before calling this method.
+ */
 void ENG_API Eng::Shader::render() {
-
+	// No default behavior; override as needed in derived classes.
 }

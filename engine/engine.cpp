@@ -41,24 +41,31 @@ void __stdcall DebugCallback(GLenum source, GLenum type, GLuint id, GLenum sever
 }
 
 
+// ------------------ Base::Reserved ------------------
 /**
- * @brief Base class reserved structure (using PIMPL/Bridge design pattern https://en.wikipedia.org/wiki/Opaque_pointer).
+ * @brief PIMPL reserved data for Base.
+ *
+ * Holds initialization flags, OpenVR interface, and FBO sizes.
  */
 struct Eng::Base::Reserved {
     // Flags:
-    bool initFlag;
-    bool ovrReady;
+    bool initFlag;          ///< Engine initialized flag
+    bool ovrReady;          ///< OpenVR initialized flag
 
     // OpenVR interface:
-    OvVR* ovr;
-    int fboSizeX;
-    int fboSizeY;
+    OvVR* ovr;              ///< OpenVR interface pointer
+    int fboSizeX;           ///< VR framebuffer width
+    int fboSizeY;           ///< VR framebuffer height
 
     /**
-     * Constructor.
-     */
+    * @brief Constructs Reserved with default flags.
+    */
     Reserved() : initFlag{ false }, ovrReady{ false }, ovr{ nullptr }, fboSizeX{ 0 }, fboSizeY{ 0 } {
     }
+
+    /**
+     * @brief Destructs Reserved, freeing OpenVR.
+     */
     ~Reserved() {
 #ifdef _DEBUG
         std::cout << "[-] " << std::source_location::current().function_name() << " invoked" << std::endl;
@@ -71,8 +78,11 @@ struct Eng::Base::Reserved {
 };
 
 
+// ------------------ Base ------------------
 /**
- * Constructor.
+ * @brief Constructs the graphics engine Base.
+ *
+ * Initializes internal PIMPL and default members.
  */
 ENG_API Eng::Base::Base() : reserved(std::make_unique<Eng::Base::Reserved>()), windowId{ 0 },
 leftEyeFbo(nullptr), rightEyeFbo(nullptr),
@@ -84,7 +94,9 @@ leftEyeTexture(0), rightEyeTexture(0), eyeDistance(0.065f) {
 
 
 /**
- * Destructor.
+ * @brief Destroys the graphics engine Base.
+ *
+ * Cleans up textures and associated resources.
  */
 ENG_API Eng::Base::~Base() {
 #ifdef _DEBUG
@@ -273,9 +285,7 @@ bool ENG_API Eng::Base::initOpenGL() {
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // enable debug notifications
 #endif
 
-    //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);      // 4.4 unsupported
     glm::vec4 ambient = glm::vec4(.6f, .6f, .6f, 1.0f);
-    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, glm::value_ptr(ambient));   // 4.4 unsupported
     glEnable(GL_DEPTH_TEST);     // Enable depth testing
     glDepthFunc(GL_LESS);
 
@@ -359,12 +369,8 @@ std::shared_ptr<Eng::Camera> ENG_API Eng::Base::getActiveCamera() const {
 }
 
 /**
- * @brief Renders the entire scene.
- *
- * This method clears the screen, sets up the camera's view and projection matrices,
- * applies lighting, and renders all nodes in the scene graph.
+ * @brief Renders the entire scene, with optional stereoscopic or post-processing.
  */
-
 void ENG_API Eng::Base::renderScene() {
 
     if (engIsEnabled(ENG_STEREO_RENDERING)) {
@@ -547,7 +553,6 @@ void ENG_API Eng::Base::traverseAndAddToRenderList(const std::shared_ptr<Eng::No
     // Compute the final transformation matrix
     const glm::mat4 worldMatrix = node->getFinalMatrix();
 
-    // If the node passed culling (or is not a Mesh), add it.
     renderList.addNode(node, worldMatrix);
 
     // Recursively process children.
@@ -659,9 +664,11 @@ bool Eng::Base::engIsEnabled(unsigned int cap) {
 }
 
 /**
- * @brief Configura il rendering stereoscopico creando gli FBO necessari
- * @param width Larghezza degli FBO
- * @param height Altezza degli FBO
+ * @brief Configures stereoscopic rendering by creating and binding the required FBOs.
+ *
+ * @param width  Width of the FBOs.
+ * @param height Height of the FBOs.
+ * @return True if both left and right eye FBOs were set up successfully; false on error.
  */
 bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
 
@@ -739,6 +746,16 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
     return true;
 }
 
+/**
+ * @brief Computes an eye-offset view matrix for stereoscopic rendering.
+ *
+ * Takes the camera’s world-space transform, applies a lateral eyeOffset,
+ * and builds a corresponding lookAt matrix.
+ *
+ * @param cameraWorldMatrix  The full camera world-space matrix.
+ * @param eyeOffset          Horizontal offset for this eye (±IPD/2).
+ * @return A view matrix for that eye.
+ */
 glm::mat4 Eng::Base::computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, float eyeOffset) {
     // Extract camera properties from the world matrix
     glm::vec3 cameraPos = glm::vec3(cameraWorldMatrix[3]);
@@ -754,6 +771,16 @@ glm::mat4 Eng::Base::computeEyeViewMatrix(const glm::mat4& cameraWorldMatrix, fl
     return glm::lookAt(eyePos, target, up);
 }
 
+/**
+ * @brief Renders the scene into one eye’s FBO.
+ *
+ * Binds the given FBO, clears it, sets up the render list with the
+ * provided view/projection matrices, and invokes the deferred renderer.
+ *
+ * @param eyeFbo         Pointer to the eye’s FBO.
+ * @param viewMatrix     Eye-space view matrix.
+ * @param projectionMatrix  Eye-space projection matrix.
+ */
 void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& projectionMatrix) {
     eyeFbo->render();
     static const GLenum drawBufs[1] = { GL_COLOR_ATTACHMENT0 };
@@ -777,14 +804,33 @@ void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& project
     // Call render which handles multi-pass internally
     renderList.render();
 }
+
+/**
+ * @brief Sets the initial body/world transform for stereoscopic rendering.
+ *
+ * @param position  4×4 transform matrix of the user’s body in world space.
+ */
 void ENG_API Eng::Base::setBodyPosition(const glm::mat4& position) {
 
     stereoInitialTransform = position;
 }
 
+/**
+ * @brief Retrieves the initial body/world transform.
+ *
+ * @return The 4×4 matrix last set by setBodyPosition().
+ */
 glm::mat4 ENG_API Eng::Base::getBodyPosition() const {
     return stereoInitialTransform;
 }
+
+/**
+ * @brief Renders the scene stereoscopically to both eyes (VR headset).
+ *
+ * Updates VR tracking, computes per-eye view/projection, renders each eye’s FBO,
+ * and then either applies post-processing or submits directly to the HMD. Finally
+ * blits a mirror view to the desktop window.
+ */
 void Eng::Base::renderStereoscopic() {
     // Check FBOs initialization
     if (!leftEyeFbo || !rightEyeFbo) {
@@ -952,10 +998,21 @@ void Eng::Base::renderStereoscopic() {
         prevViewport[2], prevViewport[3]);
 }
 
+/**
+ * @brief Retrieves the currently registered skybox.
+ *
+ * @return Shared pointer to the Skybox, or nullptr if none is registered.
+ */
 std::shared_ptr <Eng::Skybox> Eng::Base::getSkybox() const {
     return skybox;
 }
 
+
+/**
+ * @brief Creates and registers a skybox from 6 face textures.
+ *
+ * @param faces  Filenames (in order) for the 6 cubemap faces.
+ */
 void Eng::Base::registerSkybox(const std::vector<std::string>& faces) {
     // Create a new Skybox instance if one doesn’t already exist,
     skybox = std::make_shared<Skybox>(faces);
@@ -968,27 +1025,61 @@ void Eng::Base::registerSkybox(const std::vector<std::string>& faces) {
     renderList.setGlobalLightColor(skybox->getGlobalColor());
 }
 
+/**
+ * @brief Adds a post-processor to the pipeline.
+ *
+ * @param postProcessor  Shared pointer to a PostProcessor instance.
+ * @return True if successfully added; false on name collision.
+ */
 bool ENG_API Eng::Base::addPostProcessor(std::shared_ptr<PostProcessor> postProcessor) {
     return PostProcessorManager::getInstance().addPostProcessor(postProcessor);
 }
 
+/**
+ * @brief Removes a named post-processor from the pipeline.
+ *
+ * @param name  Unique name of the post-processor to remove.
+ * @return True if found & removed; false if not present.
+ */
 bool ENG_API Eng::Base::removePostProcessor(const std::string& name) {
     return PostProcessorManager::getInstance().removePostProcessor(name);
 }
 
+/**
+ * @brief Retrieves a named post-processor.
+ *
+ * @param name  Unique name of the post-processor.
+ * @return Shared pointer to the PostProcessor, or nullptr if not found.
+ */
 std::shared_ptr<Eng::PostProcessor> ENG_API Eng::Base::getPostProcessor(const std::string& name) {
     return PostProcessorManager::getInstance().getPostProcessor(name);
 }
 
+/**
+ * @brief Enables or disables post-processing in the pipeline.
+ *
+ * @param enabled  True to enable post-processing, false to bypass.
+ */
 void ENG_API Eng::Base::setPostProcessingEnabled(bool enabled) {
     PostProcessorManager::getInstance().setPostProcessingEnabled(enabled);
 }
 
+/**
+ * @brief Queries whether post-processing is currently enabled.
+ *
+ * @return True if enabled, false otherwise.
+ */
 bool ENG_API Eng::Base::isPostProcessingEnabled() const {
     return PostProcessorManager::getInstance().isPostProcessingEnabled();
 }
 
-// HeadNode for LeapMotion
+/**
+ * @brief Retrieves or lazily creates the head node in the scene graph.
+ *
+ * The head node is used as the parent transform for VR/Leap-derived head motion.
+ *
+ * @return Shared pointer to the head node.
+ */
 std::shared_ptr<Eng::Node> Eng::Base::getHeadNode() {
     if (!headNode) {
         // lazily create it and parent under the scene root
