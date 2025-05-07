@@ -103,8 +103,12 @@ void Eng::List::addNode(const std::shared_ptr<Eng::Node> &node, const glm::mat4 
 void Eng::List::clear() {
    elements.clear();
    lightsCount = 0;
+   // Invalidate cached data
    frustumCornersCached = nullptr;
    cullingSphereCached = nullptr;
+   lightsIteratorCached = nullptr;
+   opaqueIteratorCached = nullptr;
+   transparentIteratorCached = nullptr;
 }
 
 /**
