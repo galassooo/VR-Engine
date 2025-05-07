@@ -4,7 +4,7 @@
  * @brief Implementation of a custom material with a holographic shader effect.
  */
 
-#include "engine.h"
+#include "Engine.h"
 #include <GL/glew.h>
 #include <chrono>
 

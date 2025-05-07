@@ -1,4 +1,4 @@
-#include "engine.h"
+#include "Engine.h"
 
 // GLEW
 #include <GL/glew.h>
@@ -295,7 +295,7 @@ Eng::ListIterator Eng::List::getLayerIterator(const Eng::RenderLayer& layer) {
         iterator = transparentIteratorCached.get();
         break;
     }
-    return *iterator;
+    return (iterator!=nullptr) ? *iterator : Eng::ListIterator(std::vector<std::shared_ptr<Eng::ListElement>>());
 }
 
 /**

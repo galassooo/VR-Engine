@@ -1,4 +1,4 @@
-#include "../engine.h"
+#include "../Engine.h"
 
 /**
  * @brief Tests the vertex and index management of the Mesh class.

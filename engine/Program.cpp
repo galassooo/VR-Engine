@@ -1,4 +1,4 @@
-#include "engine.h"
+#include "Engine.h"
 // GLEW
 #include <GL/glew.h>
 
@@ -135,7 +135,7 @@ int ENG_API Eng::Program::getParamLocation(const char* name)
 }
 
 /**
- * @brief Uploads a 4×4 matrix uniform to the shader.
+ * @brief Uploads a 4ï¿½4 matrix uniform to the shader.
  *
  * @param param Uniform location obtained via getParamLocation().
  * @param mat   The matrix to set.
@@ -146,7 +146,7 @@ void ENG_API Eng::Program::setMatrix(int param, const glm::mat4& mat)
 }
 
 /**
- * @brief Uploads a 3×3 matrix uniform to the shader.
+ * @brief Uploads a 3ï¿½3 matrix uniform to the shader.
  *
  * @param param Uniform location obtained via getParamLocation().
  * @param mat   The matrix to set.

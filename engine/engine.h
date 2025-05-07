@@ -1,5 +1,5 @@
 /**
- * @file		engine.h
+ * @file		Engine.h
  * @brief	Graphics engine main include file
  *
  * @author	K. Quarenghi, M. Galasso

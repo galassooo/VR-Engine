@@ -1,12 +1,12 @@
 /**
- * @file		engine.cpp
+ * @file		Engine.cpp
  * @brief	Graphics engine main file
  *
  * @author	Kevin Alexander Quarenghi Escobar, Martina Galasso
  */
 
  // Main include: f
-#include "engine.h"
+#include "Engine.h"
 #include <algorithm>
 // C/C++:
 #include <chrono>

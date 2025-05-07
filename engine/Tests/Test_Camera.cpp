@@ -1,4 +1,4 @@
-#include "../engine.h"
+#include "../Engine.h"
 
 /**
  * @brief Tests the functionality of OrthographicCamera.
