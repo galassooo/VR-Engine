@@ -452,7 +452,7 @@ void ENG_API Eng::Base::renderScene() {
     // Render scene
     renderList.setEyeViewMatrix(viewMatrix);
     renderList.setEyeProjectionMatrix(projectionMatrix);
-    renderList.render();
+    renderPipeline.runOn(&renderList);
 
     // Apply post-processing if enabled
     if (usePostProcessing) {
@@ -610,8 +610,8 @@ void ENG_API Eng::Base::loadScene(const std::string& fileName) {
     auto& shaderManager = ShaderManager::getInstance();
     if (shaderManager.initialize())
         std::cout << "   ShaderManager initialized successfully!" << std::endl;
-    if (renderList.initShaders())
-        std::cout << "   Shaders loaded successfully!" << std::endl;
+    if (renderPipeline.init())
+        std::cout << "   Render pipeline and shaders loaded successfully!" << std::endl;
 }
 
 /**
@@ -801,8 +801,8 @@ void Eng::Base::renderEye(Fbo* eyeFbo, glm::mat4& viewMatrix, glm::mat4& project
     // Pass the current FBO to the render list
     renderList.setCurrentFBO(eyeFbo);
 
-    // Call render which handles multi-pass internally
-    renderList.render();
+	// Run render pipeline on the render list
+    renderPipeline.runOn(&renderList);
 }
 
 /**
@@ -935,7 +935,7 @@ void Eng::Base::renderStereoscopic() {
             renderList.setEyeViewMatrix(viewEye);
             renderList.setEyeProjectionMatrix(projEyeFix);
             renderList.setCurrentFBO(eyeFbo.get());
-            renderList.render();
+            renderPipeline.runOn(&renderList);
 
 
             // Apply post-processing if enabled

@@ -83,6 +83,7 @@ namespace Eng {
     // SceneGraph //
     ///////////////
 #include "FrameBufferObject.h"
+#include "BoundingBox.h"
 #include "Object.h"
 #include "Node.h"
 #include "Camera.h"
@@ -100,9 +101,9 @@ namespace Eng {
 #include "VertexShader.h"
 #include "FragmentShader.h"
 #include "Program.h"
-#include "BoundingBox.h"
 #include "RenderLayer.h"
 #include "ListElement.h"
+#include "ListIterator.h"
 #include "List.h"
 #include "OvoReader.h"
 #include "CallbackManager.h"
@@ -232,6 +233,9 @@ namespace Eng {
 
       // Skybox
       std::shared_ptr<Skybox> skybox;
+
+	  // Render pipeline
+	  RenderPipeline renderPipeline;
 
       // HeadNode for LeapMotion
 	  std::shared_ptr<Node> headNode;

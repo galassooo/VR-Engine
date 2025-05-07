@@ -165,6 +165,9 @@
     <ClCompile Include="RenderPipeline.cpp">
       <Filter>Source Files\Render</Filter>
     </ClCompile>
+    <ClCompile Include="ListIterator.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -285,6 +288,9 @@
       <Filter>Header Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="RenderPipeline.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ListIterator.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
   </ItemGroup>

@@ -109,6 +109,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="ListElement.cpp" />
+    <ClCompile Include="ListIterator.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="ListElement.h" />
+    <ClInclude Include="ListIterator.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Node.h" />
