@@ -4,16 +4,17 @@
 #include <random>
 #include <array>
 #include <chrono>
-
+#include <deque>
 #include "leap.h"
 
-// Extern to request the use of high performance GPUs when available (Nvidia or AMD)
 extern "C" {
     _declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
     _declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
 
-// Skybox
+/*
+* Skybox
+*/ 
 std::vector<std::string> myCubemapFaces = {
     "../resources/right.hdr", // right
     "../resources/left.hdr", // left
@@ -23,42 +24,27 @@ std::vector<std::string> myCubemapFaces = {
     "../resources/back.hdr"  // back
 };
 
-// Leap Motion
+/*
+* Leap Motion
+*/
 Leap* leap = nullptr;
-std::shared_ptr<Eng::Node> handsNode = nullptr; // Root node for hands visualization
+std::shared_ptr<Eng::Node> handsNode = nullptr;
 bool leapVisualizationEnabled = true;
-
 static const int MAX_HANDS = 2;
-static const int JOINTS_PER_HAND = 3 + (5 * 4);  // elbow, wrist, palm + 5 fingers * 4 bones
+static const int JOINTS_PER_HAND = 3 + (5 * 4);
 static std::vector<std::shared_ptr<Eng::Mesh>> jointMeshes;
-
 static std::shared_ptr<Eng::Mesh> cylinderMesh = nullptr;
 static std::vector<std::shared_ptr<Eng::Node>> boneNodes;
 
-// Update hands
+// forward declarations
+void setupLeapMotion(Eng::Base& eng);
 void updateLeapHands();
-
 std::shared_ptr<Eng::Mesh> createSphereMesh(float radius = 5.0f);
 std::shared_ptr<Eng::Mesh> createCylinderMesh(float radius = 0.002f, float height = 1.0f);
 
-// LepMotion setup
-void setupLeapMotion(Eng::Base& eng);
-
-// chess pieces
-
-void updateChessPieceSelection();
-void initChessPieceSelection(Eng::Base& eng);
-void findChessPieces(std::shared_ptr<Eng::Node> node);
-void updateBoundingBoxes(Eng::Base& eng);
-std::shared_ptr<Eng::Mesh> createLineMesh(const glm::vec3& start, const glm::vec3& end, const glm::vec3& color);
-void createBoundingBoxLines(Eng::Base& eng, const glm::vec3& min, const glm::vec3& max, const glm::vec3& color);
-void updateBoundingBoxes(Eng::Base& eng);
-void setupPositionCycling(Eng::Base& eng);
-
-bool showBoundingBoxes = false;
-std::vector<std::shared_ptr<Eng::Mesh>> boundingBoxMeshes;
-
-// Strutture e variabili globali per la gestione del "pinch" e della selezione dei pezzi
+/*
+* Chess pieces
+*/
 struct SelectablePiece {
     std::shared_ptr<Eng::Node> node;
     std::shared_ptr<Eng::Mesh> mesh;
@@ -74,9 +60,25 @@ std::shared_ptr<Eng::Node> selectedPiece = nullptr;
 bool isPinching = false;
 float pinchThreshold = 0.7f;
 glm::vec3 grabOffset;
+bool showBoundingBoxes = false;
+std::vector<std::shared_ptr<Eng::Mesh>> boundingBoxMeshes;
+
+// forward declarations
+void updateChessPieceSelection();
+void initChessPieceSelection(Eng::Base& eng);
+void findChessPieces(std::shared_ptr<Eng::Node> node);
+void updateBoundingBoxes(Eng::Base& eng);
+std::shared_ptr<Eng::Mesh> createLineMesh(const glm::vec3& start, const glm::vec3& end, const glm::vec3& color);
+void createBoundingBoxLines(Eng::Base& eng, const glm::vec3& min, const glm::vec3& max, const glm::vec3& color);
+void updateBoundingBoxes(Eng::Base& eng);
+void applyHolographicEffect();
+bool isPointInBoundingBox(const glm::vec3& point, const SelectablePiece& piece);
 
 
-//position switching
+
+/*
+* Positions
+*/
 
 std::vector<glm::mat4> predefinedPositions;
 int currentPositionIndex = 0;
@@ -84,18 +86,80 @@ bool gestureActive = false;
 float lastGestureTime = 0.0f;
 const float GESTURE_COOLDOWN = 1.0f;
 
-
+// forward declarations
+void setupPositionCycling(Eng::Base& eng);
 void initPredefinedPositions();
 void setUpCameras(Eng::Base &eng);
 bool areHandsTogether();
 void updatePositionFromGesture();
 
+
+/**
+ * @brief Entry point of the application
+ *
+ * Initializes the engine, loads the chess scene, sets up various functionalities
+ * including Leap Motion tracking, chess piece interaction, and camera controls.
+ *
+ * @param argc Argument count
+ * @param argv Argument vector
+ * @return 0 on success, -1 on initialization failure
+ */
+int main(int argc, char *argv[]) {
+   std::cout << "Client application example, K. Quarenghi, M. Galasso, L. Forestieri (C) SUPSI" << std::endl;
+   std::cout << std::endl;
+
+   Eng::Base &eng = Eng::Base::getInstance();
+   if (!eng.init()) {
+      return -1;
+   }
+
+   // Set post processing
+   auto bloom = std::make_shared<Eng::BloomEffect>();
+   Eng::Base::getInstance().addPostProcessor(bloom);
+   Eng::Base::getInstance().setPostProcessingEnabled(true);
+
+   // Load scene
+   eng.loadScene("..\\resources\\Chess.ovo");
+
+   // Setup Motion and piece control
+   setupLeapMotion(eng);
+   initChessPieceSelection(eng);
+   applyHolographicEffect();
+   eng.engEnable(ENG_STEREO_RENDERING);
+
+   // Setup cameras
+   setUpCameras(eng);
+   setupPositionCycling(eng);
+
+   // Register skybox
+   eng.registerSkybox(myCubemapFaces);
+
+   eng.run();
+
+    // Cleanup
+   if (leap) {
+       leap->free();
+       delete leap;
+       leap = nullptr;
+   }
+
+   eng.free();
+
+   return 0;
+}
+
+/**
+ * @brief Applies holographic material effects to all chess pieces
+ *
+ * Creates and assigns holographic materials to chess pieces based on their color
+ * (blue for white pieces, red for black pieces).
+ */
 void applyHolographicEffect() {
 
     auto holoMaterialWhite = std::make_shared<Eng::HolographicMaterial>(
         glm::vec3(0.2f, 0.3f, 0.7f), //base color
         0.0f, //alpha
-       200.0f, //frequency
+        200.0f, //frequency
         1.f //speed
     );
     holoMaterialWhite->setSecondaryColor(glm::vec3(0.5f, 0.7f, 1.0f)); //secondary color
@@ -127,57 +191,13 @@ void applyHolographicEffect() {
 }
 
 /**
- * @brief Entry point of the client application.
+ * @brief Sets up the position cycling system for camera viewpoints
  *
- * This function initializes the engine, loads the scene, and sets up various
- * functionalities including chess movement, mirror effects, light controls,
- * and camera controls.
+ * Initializes predefined positions and registers callbacks for gesture detection
+ * to allow switching between different viewpoints.
  *
- * @param argc Argument count.
- * @param argv Argument vector.
- * @return Returns 0 on success, -1 on initialization failure.
+ * @param eng Reference to the engine instance
  */
-int main(int argc, char *argv[]) {
-   std::cout << "Client application example, K. Quarenghi & M. Galasso (C) SUPSI" << std::endl;
-   std::cout << std::endl;
-
-
-   Eng::Base &eng = Eng::Base::getInstance();
-   if (!eng.init()) {
-      return -1;
-   }
-
-   //set postprocessing
-   auto bloom = std::make_shared<Eng::BloomEffect>();
-   Eng::Base::getInstance().addPostProcessor(bloom);
-   Eng::Base::getInstance().setPostProcessingEnabled(true);
-
-   eng.loadScene("..\\resources\\Chess.ovo");
-
-   setupLeapMotion(eng);
-   initChessPieceSelection(eng);
-   applyHolographicEffect();
-   eng.engEnable(ENG_STEREO_RENDERING);
-
-   setUpCameras(eng);
-   setupPositionCycling(eng);
-
-   eng.registerSkybox(myCubemapFaces);
-
-   eng.run();
-
-   // Clean up Leap Motion before engine cleanup
-   if (leap) {
-       leap->free();
-       delete leap;
-       leap = nullptr;
-   }
-
-   eng.free();
-
-   return 0;
-}
-
 void setupPositionCycling(Eng::Base& eng) {
     // Initialize the predefined positions
     initPredefinedPositions();
@@ -192,6 +212,13 @@ void setupPositionCycling(Eng::Base& eng) {
         });
 }
 
+
+/**
+ * @brief Updates the viewing position based on hand gestures
+ *
+ * Checks for the "hands together" gesture and cycles to the next predefined
+ * viewpoint position when detected, with a cooldown period.
+ */
 void updatePositionFromGesture() {
     if (!leap || !Eng::Base::engIsEnabled(ENG_STEREO_RENDERING)) return;
 
@@ -218,13 +245,21 @@ void updatePositionFromGesture() {
     }
 }
 
+/**
+ * @brief Detects if both hands are positioned close together
+ *
+ * Checks if the distance between the palms of both hands is below
+ * a threshold to trigger the position cycling gesture.
+ *
+ * @return True if hands are detected as being together, false otherwise
+ */
 bool areHandsTogether() {
     if (!leap) return false;
 
     leap->update();
     const LEAP_TRACKING_EVENT* frame = leap->getCurFrame();
 
-    // We need at least two hands for this gesture
+    // At least two hands for this gesture
     if (frame->nHands < 2) return false;
 
     const LEAP_HAND& leftHand = frame->pHands[0];
@@ -245,16 +280,19 @@ bool areHandsTogether() {
     return distance < 0.1f;
 }
 
+/**
+ * @brief Initializes the list of predefined viewpoint positions
+ *
+ * Creates transformation matrices for different viewpoints around the chess board
+ * that the user can cycle through using hand gestures.
+ */
 void initPredefinedPositions() {
-    // Position 1: Default starting position
     glm::mat4 position1 = glm::translate(glm::mat4(1.0f), glm::vec3(-1.4f, -0.f, -0.6f)) *
         glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-    // Position 3: Side view position
     glm::mat4 position2 = glm::translate(glm::mat4(1.0f), glm::vec3(-0.2f, 0.0f, -0.6f)) *
         glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-    // Position 2: Higher viewing position
     glm::mat4 position3 = glm::translate(glm::mat4(1.0f), glm::vec3(-2.3f, 0.5f, -1.2f)) *
         glm::rotate(glm::mat4(1.0f), glm::radians(200.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -264,6 +302,14 @@ void initPredefinedPositions() {
     predefinedPositions = { position1, position2, position3, position4 };
 }
 
+/**
+ * @brief Updates the visual bounding boxes for all chess pieces
+ *
+ * Creates or updates the line meshes that represent the bounding boxes
+ * for all chess pieces when visualization is enabled.
+ *
+ * @param eng Reference to the engine instance
+ */
 void updateBoundingBoxes(Eng::Base& eng) {
     // Clear previous bounding box meshes
     for (auto& mesh : boundingBoxMeshes) {
@@ -304,17 +350,21 @@ void updateBoundingBoxes(Eng::Base& eng) {
         // Create world-space bounding box (green or blue if selected)
         glm::vec3 color = piece.isSelected ? glm::vec3(0.0f, 0.0f, 1.0f) : glm::vec3(0.0f, 1.0f, 0.0f);
         createBoundingBoxLines(eng, bbMinW, bbMaxW, color);
-
-        // For debugging purposes, let's add a margin box (0.1m tolerance)
-        if (piece.isSelected) {
-            glm::vec3 expandedMin = bbMinW - glm::vec3(0.1f);
-            glm::vec3 expandedMax = bbMaxW + glm::vec3(0.1f);
-            createBoundingBoxLines(eng, expandedMin, expandedMax, glm::vec3(1.0f, 1.0f, 0.0f)); // Yellow
-        }
     }
 }
 
-#include <deque>
+
+/**
+ * @brief Creates line meshes representing a bounding box
+ *
+ * Generates 12 line segments to represent the edges of a bounding box
+ * defined by its minimum and maximum coordinates.
+ *
+ * @param eng Reference to the engine instance
+ * @param min The minimum coordinates of the bounding box
+ * @param max The maximum coordinates of the bounding box
+ * @param color The RGB color of the bounding box lines
+ */
 void createBoundingBoxLines(Eng::Base& eng, const glm::vec3& min, const glm::vec3& max, const glm::vec3& color) {
     // Create 12 edges of the box as line segments
     std::vector<std::pair<glm::vec3, glm::vec3>> edges = {
@@ -347,6 +397,17 @@ void createBoundingBoxLines(Eng::Base& eng, const glm::vec3& min, const glm::vec
         }
     }
 }
+/**
+ * @brief Creates a line mesh between two points
+ *
+ * Generates a thin cylinder mesh to represent a line between the specified
+ * points with the given color.
+ *
+ * @param start The starting position of the line
+ * @param end The ending position of the line
+ * @param color The RGB color of the line
+ * @return A shared pointer to the created mesh
+ */
 std::shared_ptr<Eng::Mesh> createLineMesh(const glm::vec3& start, const glm::vec3& end, const glm::vec3& color) {
     // Create a thin cylinder to represent a line
     const float lineRadius = 0.003f; // Thin radius
@@ -370,7 +431,6 @@ std::shared_ptr<Eng::Mesh> createLineMesh(const glm::vec3& start, const glm::vec
     glm::vec3 rotationAxis = glm::cross(zAxis, direction);
 
     float rotationAngle = acos(glm::dot(zAxis, direction));
-
     // Create vertices for a cylinder
     std::vector<Eng::Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -437,6 +497,14 @@ std::shared_ptr<Eng::Mesh> createLineMesh(const glm::vec3& start, const glm::vec
     return mesh;
 }
 
+/**
+ * @brief Recursively finds all chess pieces in the scene graph
+ *
+ * Searches through all nodes in the scene and identifies chess pieces
+ * based on their naming convention ("B_" for black, "W_" for white).
+ *
+ * @param node The current node to check and traverse
+ */
 void findChessPieces(std::shared_ptr<Eng::Node> node) {
     if (!node) return;
     
@@ -461,7 +529,16 @@ void findChessPieces(std::shared_ptr<Eng::Node> node) {
         findChessPieces(child);
     }
 }
-
+/**
+ * @brief Checks if a point is inside a chess piece's bounding box
+ *
+ * Transforms the local bounding box to world space and tests if the
+ * specified point falls within the box, including a small tolerance margin.
+ *
+ * @param point The world-space point to test
+ * @param piece The chess piece with its bounding box information
+ * @return True if the point is inside the bounding box, false otherwise
+ */
 bool isPointInBoundingBox(const glm::vec3& point, const SelectablePiece& piece) {
     // get current final matrix
     glm::mat4 M = piece.node->getFinalMatrix();
@@ -495,10 +572,17 @@ bool isPointInBoundingBox(const glm::vec3& point, const SelectablePiece& piece) 
         );
 }
 
+/**
+ * @brief Initializes the chess piece selection system
+ *
+ * Finds all chess pieces in the scene, sets up callbacks for selection handling,
+ * and registers key bindings for bounding box visualization.
+ *
+ * @param eng Reference to the engine instance
+ */
 void initChessPieceSelection(Eng::Base& eng) {
     // Find all selectable pieces in the scene
     findChessPieces(eng.getRootNode());
-
 
     // Register the callback for selection handling
     auto& callbackManager = Eng::CallbackManager::getInstance();
@@ -507,7 +591,6 @@ void initChessPieceSelection(Eng::Base& eng) {
         });
 
     // Register key binding for bounding box visualization
-    // Using 'v' instead of 'b' which is already used for face culling
     callbackManager.registerKeyBinding('v', "Toggle bounding box visualization", [](unsigned char key, int x, int y) {
         showBoundingBoxes = !showBoundingBoxes;
 
@@ -531,7 +614,12 @@ void initChessPieceSelection(Eng::Base& eng) {
         }
         });
 }
-
+/**
+ * @brief Updates the selection state of chess pieces
+ *
+ * Checks for pinch gestures from Leap Motion and updates the selection
+ * or movement of chess pieces accordingly.
+ */
 void updateChessPieceSelection() {
     if (!leap) return;
 
@@ -576,9 +664,6 @@ void updateChessPieceSelection() {
     if (selectablePieces.size() > 0) {
         auto& piece = selectablePieces[0];
         glm::vec3 piecePos = glm::vec3(piece.node->getFinalMatrix()[3]);
-
-        // debug
-        float distance = glm::distance(pinchPoint, piecePos);
     }
 
     // start pinch
@@ -688,7 +773,7 @@ void updateChessPieceSelection() {
                     newMatrix[3] = glm::vec4(localPos, 1.0f);
                     piece.node->setLocalMatrix(newMatrix);
 
-                    // IMPORTANTE: Aggiorna anche l'originalMatrix per mantenere il riferimento corretto
+                    // IMPORTANT!!!!! UPDATE ORIGINAL MATRIX TO REFLECT CHANGES IN POSITION!!!!
                     piece.originalMatrix = newMatrix;
 
                 }
@@ -698,7 +783,15 @@ void updateChessPieceSelection() {
 }
 }
 
-// Updated setupLeapMotion function with proper mesh reuse
+
+/**
+ * @brief Sets up the Leap Motion controller for hand tracking
+ *
+ * Initializes the Leap Motion hardware, creates necessary scene nodes,
+ * and sets up callback for hand visualization updates.
+ *
+ * @param eng Reference to the engine instance
+ */
 void setupLeapMotion(Eng::Base& eng) {
     // Initialize Leap Motion
     leap = new Leap();
@@ -727,7 +820,7 @@ void setupLeapMotion(Eng::Base& eng) {
     // Create shared sphere mesh only once
     static std::shared_ptr<Eng::Mesh> sphereMesh = nullptr;
     if (!sphereMesh) {
-        sphereMesh = createSphereMesh(0.005f);  // Increase size to 5.0f
+        sphereMesh = createSphereMesh(0.005f);
         auto mat = std::make_shared<Eng::Material>(glm::vec3(1, 0, 0), 1.0f, 0.2f, glm::vec3(0));
         sphereMesh->setMaterial(mat);
         sphereMesh->initBuffers();
@@ -763,8 +856,7 @@ void setupLeapMotion(Eng::Base& eng) {
         }
     }
 
-    // 2) Create one Node-per-bone
-    //    bones per hand = 2 (elbow→wrist, wrist→palm) + 5*4 finger bones = 22
+    // Create one Node-per-bone
     const int bonesPerHand = 2 + 5 * 4;
     if (boneNodes.empty()) {
         boneNodes.reserve(MAX_HANDS * bonesPerHand);
@@ -783,27 +875,14 @@ void setupLeapMotion(Eng::Base& eng) {
             boneNodes.push_back(boneNode);
         }
     }
-
-    // Register update callback for Leap Motion
-    auto& callbackManager = Eng::CallbackManager::getInstance();
-    callbackManager.registerRenderCallback("leapMotionUpdate", []() {
-        updateLeapHands();
-        });
-
-    // Register a key binding to toggle Leap Motion visualization
-    callbackManager.registerKeyBinding('l', "Toggle Leap Motion Visualization", [](unsigned char key, int x, int y) {
-        leapVisualizationEnabled = !leapVisualizationEnabled;
-        if (handsNode) {
-            if (!leapVisualizationEnabled) {
-                // Hide all joint meshes
-                for (auto& jointMesh : jointMeshes) {
-                    jointMesh->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
-                }
-            }
-        }
-        });
 }
 
+/**
+ * @brief Updates the visual representation of hands based on Leap Motion data
+ *
+ * Processes the current frame from Leap Motion and updates the position
+ * and orientation of all joint meshes and bone connections.
+ */
 void updateLeapHands() {
     if (!leap || !handsNode || !leapVisualizationEnabled) return;
 
@@ -814,7 +893,7 @@ void updateLeapHands() {
 
     bool hasActiveHands = (frame->nHands > 0);
 
-    // 1) Position all joint spheres
+    // Position all joint spheres
     for (unsigned h = 0; h < frame->nHands && h < MAX_HANDS; ++h) {
         const LEAP_HAND& hand = frame->pHands[h];
         glm::vec3 handColor = (h == 0) ? glm::vec3(0.2f, 0.8f, 0.2f) : glm::vec3(0.2f, 0.2f, 0.8f);
@@ -827,7 +906,7 @@ void updateLeapHands() {
                 ->setLocalMatrix(glm::translate(glm::mat4(1.0f), pos));
             };
 
-        // Elbow, Wrist, Palm - manteniamo questi punti visibili
+        // Elbow, Wrist, Palm 
         glm::vec3 elbowPos = glm::vec3(hand.arm.prev_joint.x, hand.arm.prev_joint.y, hand.arm.prev_joint.z) * LEAP_TO_WORLD;
         glm::vec3 wristPos = glm::vec3(hand.arm.next_joint.x, hand.arm.next_joint.y, hand.arm.next_joint.z) * LEAP_TO_WORLD;
         glm::vec3 palmPos = glm::vec3(hand.palm.position.x, hand.palm.position.y, hand.palm.position.z) * LEAP_TO_WORLD;
@@ -863,7 +942,7 @@ void updateLeapHands() {
             ->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
     }
 
-    // 2) Build flat list of joint positions
+    // Build flat list of joint positions
     std::vector<glm::vec3> J;
     J.reserve(jointMeshes.size());
     for (auto& jm : jointMeshes) {
@@ -871,10 +950,9 @@ void updateLeapHands() {
         J.push_back(glm::vec3(M[3]));  // extract translation
     }
 
-    // 3) Definire solo le connessioni tra le giunture delle dita
     std::vector<std::pair<int, int>> bonePairs;
 
-    // Nascondi tutti gli ossi se non ci sono mani attive
+    // Hide bones while hands are not visible
     if (!hasActiveHands) {
         for (auto& node : boneNodes) {
             node->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
@@ -884,10 +962,6 @@ void updateLeapHands() {
 
     for (int h = 0; h < MAX_HANDS && h < frame->nHands; ++h) {
         int base = h * JOINTS_PER_HAND;
-
-        // RIMOSSO collegamenti a gomito, polso e palmo
-        // Manteniamo solo le dita
-
         for (int f = 0; f < 5; ++f) {
             int fb = base + 3 + f * 4;  // Base index per questa dita
             for (int b = 0; b < 3; ++b) {
@@ -898,7 +972,7 @@ void updateLeapHands() {
         }
     }
 
-    // 4) Stretch & orient each cylinder‐bone node to match its joint pair
+    // Stretch & orient each cylinder‐bone node to match its joint pair
     for (size_t i = 0; i < bonePairs.size() && i < boneNodes.size(); ++i) {
         auto [a, b] = bonePairs[i];
         glm::vec3 A = J[a], B = J[b];
@@ -911,17 +985,16 @@ void updateLeapHands() {
             continue;
         }
 
-        // 1) Translate to the midpoint
+        // Translate to the midpoint
         glm::vec3 mid = 0.5f * (A + B);
         glm::mat4 T = glm::translate(glm::mat4(1.0f), mid);
 
-        // 2) Compute the axis & angle from +Z to our bone direction
+        // Compute the axis & angle from +Z to our bone direction
         glm::vec3 up = glm::vec3(0, 0, 1);
         glm::vec3 ndir = glm::normalize(dir);
 
-        // Evita problemi se ndir è parallelo a up
+        // Avoid problems if ndir is parallel to up vector
         if (glm::abs(glm::dot(up, ndir)) > 0.999f) {
-            // Usiamo un vettore diverso se sono paralleli
             if (glm::dot(up, ndir) > 0) {
                 node->setLocalMatrix(glm::translate(glm::mat4(1.0f), mid) *
                     glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, len)));
@@ -938,32 +1011,39 @@ void updateLeapHands() {
         float cosA = glm::clamp(glm::dot(up, ndir), -1.0f, 1.0f);
         float angle = acos(cosA);
 
-        // 3) Build a rotation matrix around that axis
+        // Build a rotation matrix around that axis
         glm::mat4 R = glm::rotate(glm::mat4(1.0f), angle, axis);
 
-        // 4) Scale so our unit‐height cylinder stretches to 'len'
+        // Scale so our unit‐height cylinder stretches to 'len'
         glm::mat4 S = glm::scale(glm::mat4(1.0f),
             glm::vec3(1.0f, 1.0f, len));
 
-        // 5) Combine: T * R * S
+        // Combine: T * R * S
         node->setLocalMatrix(T * R * S);
     }
 
-    // Nascondi gli ossi rimanenti
+    // Hide extra bones
     for (size_t i = bonePairs.size(); i < boneNodes.size(); ++i) {
         boneNodes[i]->setLocalMatrix(glm::scale(glm::mat4(1.0f), glm::vec3(0.0f)));
     }
 }
 
-
-// Create the sphere mesh (same as before but with optimized parameters)
+/**
+ * @brief Creates a sphere mesh for joint visualization
+ *
+ * Generates a sphere with the specified radius for representing hand joints
+ * in the Leap Motion visualization.
+ *
+ * @param radius The radius of the sphere in meters
+ * @return A shared pointer to the created mesh
+ */
 std::shared_ptr<Eng::Mesh> createSphereMesh(float radius) {
     std::vector<Eng::Vertex> vertices;
     std::vector<unsigned int> indices;
 
-    int gradation = 10;  // Same as your teacher's implementation
+    int gradation = 10;
 
-    // Create sphere vertices (same as teacher's implementation)
+    // Create sphere vertices
     for (int lat = 0; lat <= gradation; lat++) {
         float theta = lat * glm::pi<float>() / gradation;
         float sinTheta = sin(theta);
@@ -1011,6 +1091,16 @@ std::shared_ptr<Eng::Mesh> createSphereMesh(float radius) {
         .build();
 }
 
+/**
+ * @brief Creates a cylinder mesh for bone visualization
+ *
+ * Generates a cylinder with the specified radius and height for representing
+ * bone connections between joints in the Leap Motion visualization.
+ *
+ * @param radius The radius of the cylinder in meters
+ * @param height The height of the cylinder in meters
+ * @return A shared pointer to the created mesh
+ */
 std::shared_ptr<Eng::Mesh> createCylinderMesh(float radius, float height) {
     // build a vertical cylinder (centered at origin, from z=0 to z=height)
     const int slices = 12;
@@ -1032,7 +1122,6 @@ std::shared_ptr<Eng::Mesh> createCylinderMesh(float radius, float height) {
     for (int i = 0; i < slices; ++i) {
         unsigned int b0 = 2 * i, t0 = 2 * i + 1;
         unsigned int b1 = 2 * (i + 1), t1 = 2 * (i + 1) + 1;
-        // quad: b0,t0,b1  and  t0,t1,b1
         idx.insert(idx.end(), { b0, t0, b1,  t0, t1, b1 });
     }
 
@@ -1043,7 +1132,14 @@ std::shared_ptr<Eng::Mesh> createCylinderMesh(float radius, float height) {
         .build();
 }
 
-
+/**
+ * @brief Sets up multiple cameras with different viewpoints
+ *
+ * Creates and configures several camera objects with different positions and orientations,
+ * and registers key bindings for camera control and switching.
+ *
+ * @param eng Reference to the engine instance
+ */
 void setUpCameras(Eng::Base &eng) {
    static std::vector<std::shared_ptr<Eng::PerspectiveCamera> > cameras;
    auto &callbackManager = Eng::CallbackManager::getInstance();
