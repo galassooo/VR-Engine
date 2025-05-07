@@ -1,8 +1,6 @@
 ﻿#include "engine.h"
 #include <iostream>
 #include <functional>
-#include <random>
-#include <array>
 #include <chrono>
 #include <deque>
 #include "leap.h"
@@ -70,7 +68,6 @@ void findChessPieces(std::shared_ptr<Eng::Node> node);
 void updateBoundingBoxes(Eng::Base& eng);
 std::shared_ptr<Eng::Mesh> createLineMesh(const glm::vec3& start, const glm::vec3& end, const glm::vec3& color);
 void createBoundingBoxLines(Eng::Base& eng, const glm::vec3& min, const glm::vec3& max, const glm::vec3& color);
-void updateBoundingBoxes(Eng::Base& eng);
 void applyHolographicEffect();
 bool isPointInBoundingBox(const glm::vec3& point, const SelectablePiece& piece);
 
