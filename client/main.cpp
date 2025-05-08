@@ -872,6 +872,10 @@ void setupLeapMotion(Eng::Base& eng) {
             boneNodes.push_back(boneNode);
         }
     }
+    auto& callbackManager = Eng::CallbackManager::getInstance();
+    callbackManager.registerRenderCallback("updateLeapHands", []() {
+        updateLeapHands();
+        });
 }
 
 /**
