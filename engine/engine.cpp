@@ -103,6 +103,9 @@ ENG_API Eng::Base::~Base() {
     std::cout << "[-] " << std::source_location::current().function_name() << " invoked" << std::endl;
 #endif
 
+    // Clean up all textures
+    cleanupTextures();
+
     if (leftEyeTexture != 0) {
         glDeleteTextures(1, &leftEyeTexture);
     }
@@ -119,6 +122,112 @@ ENG_API Eng::Base::~Base() {
 Eng::Base ENG_API& Eng::Base::getInstance() {
     static Base instance;
     return instance;
+}
+/*
+*@brief Initializes textures used for post - processing effects.
+*
+*Creates and configures the textures and framebuffers used for post - processing
+* in both regular and stereoscopic rendering paths, using the Fbo class.
+*
+* @param width Width of the textures to create
+* @param height Height of the textures to create
+* @return True if initialization was successful, false otherwise
+*/
+bool ENG_API Eng::Base::initializePostProcessingTextures(int width, int height) {
+    // Create scene FBO and texture
+    sceneFbo = std::make_shared<Eng::Fbo>();
+
+    // Create texture for scene
+    glGenTextures(1, &sceneTexture);
+    glBindTexture(GL_TEXTURE_2D, sceneTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    // Bind the texture to the FBO
+    sceneFbo->bindTexture(0, Eng::Fbo::BIND_COLORTEXTURE, sceneTexture);
+    sceneFbo->bindRenderBuffer(1, Eng::Fbo::BIND_DEPTHBUFFER, width, height);
+
+    if (!sceneFbo->isOk()) {
+        std::cerr << "ERROR: Scene FBO setup failed" << std::endl;
+        cleanupTextures();
+        return false;
+    }
+
+    // Create output FBO and texture
+    outputFbo = std::make_shared<Eng::Fbo>();
+
+    // Create texture for output
+    glGenTextures(1, &outputTexture);
+    glBindTexture(GL_TEXTURE_2D, outputTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    // Bind the texture to the FBO
+    outputFbo->bindTexture(0, Eng::Fbo::BIND_COLORTEXTURE, outputTexture);
+
+    if (!outputFbo->isOk()) {
+        std::cerr << "ERROR: Output FBO setup failed" << std::endl;
+        cleanupTextures();
+        return false;
+    }
+
+    // Create textures for stereoscopic rendering post-processing
+    glGenTextures(1, &leftEyePostTexture);
+    glBindTexture(GL_TEXTURE_2D, leftEyePostTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, stereoRenderWidth, stereoRenderHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glGenTextures(1, &rightEyePostTexture);
+    glBindTexture(GL_TEXTURE_2D, rightEyePostTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, stereoRenderWidth, stereoRenderHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    // Unbind FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    return true;
+}
+
+/**
+ * @brief Cleans up all textures and FBOs created for post-processing
+ */
+void ENG_API Eng::Base::cleanupTextures() {
+    // The Fbo destructor will handle cleaning up the FBO
+    sceneFbo.reset();
+    outputFbo.reset();
+
+    // Manually clean up textures
+    if (sceneTexture != 0) {
+        glDeleteTextures(1, &sceneTexture);
+        sceneTexture = 0;
+    }
+
+    if (outputTexture != 0) {
+        glDeleteTextures(1, &outputTexture);
+        outputTexture = 0;
+    }
+
+    if (leftEyePostTexture != 0) {
+        glDeleteTextures(1, &leftEyePostTexture);
+        leftEyePostTexture = 0;
+    }
+
+    if (rightEyePostTexture != 0) {
+        glDeleteTextures(1, &rightEyePostTexture);
+        rightEyePostTexture = 0;
+    }
 }
 
 
@@ -372,7 +481,6 @@ std::shared_ptr<Eng::Camera> ENG_API Eng::Base::getActiveCamera() const {
  * @brief Renders the entire scene, with optional stereoscopic or post-processing.
  */
 void ENG_API Eng::Base::renderScene() {
-
     if (engIsEnabled(ENG_STEREO_RENDERING)) {
         renderStereoscopic();
         return;
@@ -383,41 +491,13 @@ void ENG_API Eng::Base::renderScene() {
         return;
     }
 
-    // Se ci sono post-processor attivi, dobbiamo renderizzare su un FBO
+    // Check if post-processing is enabled and we have post-processors
     bool usePostProcessing = isPostProcessingEnabled() &&
         PostProcessorManager::getInstance().getPostProcessorCount() > 0;
 
-    GLuint sceneTexture = 0;
-    GLuint outputTexture = 0;
-    GLuint sceneFBO = 0;
-    GLuint depthRBO = 0;
-
     if (usePostProcessing) {
-        // Crea texture e FBO per la scena
-        glGenTextures(1, &sceneTexture);
-        glBindTexture(GL_TEXTURE_2D, sceneTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, APP_WINDOWSIZEX, APP_WINDOWSIZEY, 0, GL_RGBA, GL_FLOAT, nullptr);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        glGenTextures(1, &outputTexture);
-        glBindTexture(GL_TEXTURE_2D, outputTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, APP_WINDOWSIZEX, APP_WINDOWSIZEY, 0, GL_RGBA, GL_FLOAT, nullptr);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        glGenFramebuffers(1, &sceneFBO);
-        glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture, 0);
-
-        // Attach depth buffer
-        glGenRenderbuffers(1, &depthRBO);
-        glBindRenderbuffer(GL_RENDERBUFFER, depthRBO);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, APP_WINDOWSIZEX, APP_WINDOWSIZEY);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRBO);
-
-        // Render to FBO
-        glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO);
+        // Use the pre-created scene FBO
+        sceneFbo->render();
     }
 
     // Clear the buffer
@@ -456,11 +536,11 @@ void ENG_API Eng::Base::renderScene() {
 
     // Apply post-processing if enabled
     if (usePostProcessing) {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        Eng::Fbo::disable(); // Unbind the scene FBO
         PostProcessorManager::getInstance().applyPostProcessing(sceneTexture, outputTexture, APP_WINDOWSIZEX, APP_WINDOWSIZEY);
 
         // Render the final result to the screen
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        Eng::Fbo::disable();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Simple fullscreen quad rendering
@@ -531,12 +611,6 @@ void ENG_API Eng::Base::renderScene() {
         glBindTexture(GL_TEXTURE_2D, outputTexture);
         glBindVertexArray(quadVAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        // Cleanup
-        glDeleteTextures(1, &sceneTexture);
-        glDeleteTextures(1, &outputTexture);
-        glDeleteFramebuffers(1, &sceneFBO);
-        glDeleteRenderbuffers(1, &depthRBO);
     }
 
     glutSwapBuffers();
@@ -573,26 +647,29 @@ void ENG_API Eng::Base::run() {
         if (!reserved->ovrReady)
         {
             engDisable(ENG_STEREO_RENDERING);
+            initializePostProcessingTextures(APP_WINDOWSIZEX, APP_WINDOWSIZEY);
             PostProcessorManager::getInstance()
                 .initializeAll(APP_WINDOWSIZEX, APP_WINDOWSIZEY);
         }
         else
         {
             setupStereoscopicRendering(reserved->fboSizeX, reserved->fboSizeY);
+            // Post-processor textures are created in setupStereoscopicRendering
             PostProcessorManager::getInstance()
                 .initializeAll(stereoRenderWidth, stereoRenderHeight);
         }
     }
     else
     {
+        initializePostProcessingTextures(APP_WINDOWSIZEX, APP_WINDOWSIZEY);
         PostProcessorManager::getInstance()
             .initializeAll(APP_WINDOWSIZEX, APP_WINDOWSIZEY);
     }
 
-
     // Enter FreeGLUT main loop
     glutMainLoop();
 }
+
 
 
 /**
@@ -704,7 +781,6 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-
     // Bind texture to left FBO
     leftEyeFbo->bindTexture(0, Fbo::BIND_COLORTEXTURE, leftEyeTexture);
     leftEyeFbo->bindRenderBuffer(1, Fbo::BIND_DEPTHBUFFER, width, height);
@@ -723,7 +799,6 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-
     // Bind texture to right FBO
     rightEyeFbo->bindTexture(0, Fbo::BIND_COLORTEXTURE, rightEyeTexture);
     rightEyeFbo->bindRenderBuffer(1, Fbo::BIND_DEPTHBUFFER, width, height);
@@ -732,6 +807,33 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
         std::cerr << "ERROR: Right eye FBO setup failed" << std::endl;
         return false;
     }
+
+    // Also initialize post-processing textures
+    if (leftEyePostTexture != 0) {
+        glDeleteTextures(1, &leftEyePostTexture);
+        leftEyePostTexture = 0;
+    }
+    if (rightEyePostTexture != 0) {
+        glDeleteTextures(1, &rightEyePostTexture);
+        rightEyePostTexture = 0;
+    }
+
+    // Create post-processing textures for stereo rendering
+    glGenTextures(1, &leftEyePostTexture);
+    glBindTexture(GL_TEXTURE_2D, leftEyePostTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glGenTextures(1, &rightEyePostTexture);
+    glBindTexture(GL_TEXTURE_2D, rightEyePostTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     // Set default eye distance
     eyeDistance = 0.065f; // 6.5 cm is the average human interpupillary distance
@@ -745,6 +847,7 @@ bool ENG_API Eng::Base::setupStereoscopicRendering(int width, int height) {
 
     return true;
 }
+
 
 /**
  * @brief Computes an eye-offset view matrix for stereoscopic rendering.
@@ -896,8 +999,6 @@ void Eng::Base::renderStereoscopic() {
     // Ensure post-processing textures exist with correct dimensions
     leftEyePostTex = ensureTexture(leftEyePostTex, stereoRenderWidth, stereoRenderHeight);
     rightEyePostTex = ensureTexture(rightEyePostTex, stereoRenderWidth, stereoRenderHeight);
-
-    // Render a single eye
     auto renderEye = [&](OvVR::OvEye eye,
         std::shared_ptr<Fbo>& eyeFbo,
         GLuint eyeTexture,
@@ -909,15 +1010,15 @@ void Eng::Base::renderStereoscopic() {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Eye-specific projection and view matrices
-			glm::mat4 projEye = reserved->ovr->getProjMatrix(eye, stereoNearClip, stereoFarClip); // This is the projection without the eye offset, correct for the skybox
+            glm::mat4 projEye = reserved->ovr->getProjMatrix(eye, stereoNearClip, stereoFarClip);
             glm::mat4 eye2Head = reserved->ovr->getEye2HeadMatrix(eye);
             glm::mat4 viewEye = modelView;
-			glm::mat4 projEyeFix = projEye * glm::inverse(eye2Head); // This is the projection with the specific eye offset
+            glm::mat4 projEyeFix = projEye * glm::inverse(eye2Head);
 
             // Render skybox
             if (skybox) {
                 glm::mat4 skyV = glm::mat4(glm::mat3(viewEye));
-				skybox->render(skyV, projEye); // Using projEye for the skybox, so it looks infinitively far away
+                skybox->render(skyV, projEye);
             }
 
             // Execute registered rendering callbacks
@@ -937,12 +1038,11 @@ void Eng::Base::renderStereoscopic() {
             renderList.setCurrentFBO(eyeFbo.get());
             renderPipeline.runOn(&renderList);
 
-
             // Apply post-processing if enabled
             if (PostProcessorManager::getInstance().isPostProcessingEnabled() &&
                 PostProcessorManager::getInstance().getPostProcessorCount() > 0) {
 
-                // Pass the ACTUAL FBO dimensions
+                // Use the pre-created post-processing textures
                 PostProcessorManager::getInstance().applyPostProcessing(eyeTexture, postTexture,
                     stereoRenderWidth, stereoRenderHeight);
 
@@ -950,15 +1050,14 @@ void Eng::Base::renderStereoscopic() {
                 reserved->ovr->pass(eye, postTexture);
             }
             else {
-
                 // Submit unprocessed frame to VR headset
                 reserved->ovr->pass(eye, eyeTexture);
             }
         };
 
-    // Render left and right eye
-    renderEye(eyeLeft, leftEyeFbo, leftEyeTexture, leftEyePostTex);
-    renderEye(eyeRight, rightEyeFbo, rightEyeTexture, rightEyePostTex);
+    // Render left and right eye using pre-created textures
+    renderEye(eyeLeft, leftEyeFbo, leftEyeTexture, leftEyePostTexture);
+    renderEye(eyeRight, rightEyeFbo, rightEyeTexture, rightEyePostTexture);
 
     // Submit frames to VR runtime
     reserved->ovr->render();
@@ -971,9 +1070,8 @@ void Eng::Base::renderStereoscopic() {
     static GLuint mirrorFbo = 0;
     if (mirrorFbo == 0) glGenFramebuffers(1, &mirrorFbo);
 
-    // Select the appropriate texture based on post-processing
-    GLuint leftDisplayTex = PostProcessorManager::getInstance().isPostProcessingEnabled() ? leftEyePostTex : leftEyeTexture;
-    GLuint rightDisplayTex = PostProcessorManager::getInstance().isPostProcessingEnabled() ? rightEyePostTex : rightEyeTexture;
+    renderEye(eyeLeft, leftEyeFbo, leftEyeTexture, leftEyePostTexture);
+    renderEye(eyeRight, rightEyeFbo, rightEyeTexture, rightEyePostTexture);
 
 
     auto blitToScreen = [&](GLuint tex, int x0, int x1) {
@@ -987,8 +1085,8 @@ void Eng::Base::renderStereoscopic() {
             GL_COLOR_BUFFER_BIT, GL_LINEAR);
         };
 
-    blitToScreen(leftDisplayTex, 0, APP_FBOSIZEX);
-    blitToScreen(rightDisplayTex, APP_FBOSIZEX, APP_WINDOWSIZEX);
+    blitToScreen(leftEyePostTexture, 0, APP_FBOSIZEX);
+    blitToScreen(rightEyePostTexture, APP_FBOSIZEX, APP_WINDOWSIZEX);
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
     glutSwapBuffers();

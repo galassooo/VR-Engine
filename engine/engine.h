@@ -192,6 +192,8 @@ namespace Eng {
       std::shared_ptr<PostProcessor> getPostProcessor(const std::string& name);
       void setPostProcessingEnabled(bool enabled);
       bool isPostProcessingEnabled() const;
+      bool initializePostProcessingTextures(int width, int height);
+      void cleanupTextures();
 
    private:
       /** @brief Reserved implementation details */
@@ -241,6 +243,15 @@ namespace Eng {
 	  std::shared_ptr<Node> headNode;
       int stereoRenderWidth = 0;
       int stereoRenderHeight = 0;
+
+      std::shared_ptr<Eng::Fbo> sceneFbo;
+      std::shared_ptr<Eng::Fbo> outputFbo;
+      unsigned int sceneTexture = 0;
+      unsigned int outputTexture = 0;
+
+      // Post-processing textures for stereoscopic rendering
+      unsigned int leftEyePostTexture = 0;
+      unsigned int rightEyePostTexture = 0;
 
       float stereoEyeHeight = STEREO_EYE_HEIGHT;
    };
