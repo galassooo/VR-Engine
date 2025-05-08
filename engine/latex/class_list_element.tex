@@ -1,0 +1,36 @@
+\doxysection{List\+Element Class Reference}
+\hypertarget{class_list_element}{}\label{class_list_element}\index{ListElement@{ListElement}}
+
+
+Represents an element in the render list.  
+
+
+
+
+{\ttfamily \#include $<$List\+Element.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_list_element_a559f20ea2666c0252006e0fa15e45027}\label{class_list_element_a559f20ea2666c0252006e0fa15e45027} 
+{\bfseries List\+Element} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ \&node, const glm\+::mat4 \&world\+Coordinates)
+\item 
+\Hypertarget{class_list_element_a6c22de6c9d5ad2072a58637aea05ec4d}\label{class_list_element_a6c22de6c9d5ad2072a58637aea05ec4d} 
+\mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Eng\+::\+Render\+Layer}} {\bfseries get\+Layer} () const
+\item 
+\Hypertarget{class_list_element_ab587f56c4b377121d50ea32fc7a4c10e}\label{class_list_element_ab587f56c4b377121d50ea32fc7a4c10e} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ {\bfseries get\+Node} () const
+\item 
+\Hypertarget{class_list_element_a1c4bc0c55f649f93526b1ccead43b7ab}\label{class_list_element_a1c4bc0c55f649f93526b1ccead43b7ab} 
+glm\+::mat4 {\bfseries get\+World\+Coordinates} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents an element in the render list. 
+
+A \doxylink{class_list_element}{List\+Element} stores a reference to a scene graph node, its transformation matrix in world coordinates, and its associated material properties. It is used to organize and render nodes in the scene. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+List\+Element.\+h\end{DoxyCompactItemize}

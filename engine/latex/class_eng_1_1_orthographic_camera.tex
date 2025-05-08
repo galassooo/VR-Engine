@@ -1,0 +1,143 @@
+\doxysection{Eng\+::Orthographic\+Camera Class Reference}
+\hypertarget{class_eng_1_1_orthographic_camera}{}\label{class_eng_1_1_orthographic_camera}\index{Eng::OrthographicCamera@{Eng::OrthographicCamera}}
+
+
+Represents a camera using an orthographic projection.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+Inheritance diagram for Eng\+::Orthographic\+Camera\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_eng_1_1_orthographic_camera}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_orthographic_camera_a3c6aeb6f25d634fe2365a1fa2d885602}{Orthographic\+Camera}} (float left, float right, float bottom, float top, float near\+Clip, float far\+Clip)
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_eng_1_1_orthographic_camera}{Orthographic\+Camera}. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_orthographic_camera_a22cd04b2fa05736ddf45d9ae86552d86}{get\+Projection\+Matrix}} () const override
+\begin{DoxyCompactList}\small\item\em Computes the orthographic projection matrix. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_camera}{Eng\+::\+Camera}}}
+\begin{DoxyCompactItemize}
+\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_camera_a2f90e661a78172675ca06ea69667b531}{get\+View\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Gets the view matrix of the camera. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_camera_a9313f512a82790068f4721a1cbba8e81}{look\+At}} (const glm\+::vec3 \&target, const glm\+::vec3 \&custom\+Up=glm\+::vec3(0, 1, 0)) const
+\begin{DoxyCompactList}\small\item\em Computes a Look\+At matrix for the camera. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_node_aa40fb59cc7ed94005b70ffae74c74c78}{Node}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_node}{Node} class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a1bf04bccde0ec7e57015290989c29ebc}{set\+Parent}} (\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*}p)
+\begin{DoxyCompactList}\small\item\em Sets the parent of the node. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a5971d7af616f9df233236b9c1989e7a0}{get\+Parent}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the parent of the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a435f8d7bb208a7716aac311647d686b7}{add\+Child}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ child)
+\begin{DoxyCompactList}\small\item\em Adds a child node to the list of current node\textquotesingle{}s children. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_ac8387fae8472200c0c17a06d8dcc94a3}{get\+Children}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the list of children for the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a4239997371524dbfed52ff157eac1ffe}{set\+Local\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+const glm\+::mat4 \& \mbox{\hyperlink{class_eng_1_1_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}{get\+Local\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_ac834ce5ba6cff3c02665adb3237a3f82}{get\+Final\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Computes the final transformation matrix of the node. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_eng_1_1_node_aa1e81be36e7e0e12af730a5f8e655ac7}{render}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a8adf99ef92cc40ccf96442eed1f1407d}{parent}}
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \mbox{\hyperlink{class_eng_1_1_node_a595aa4342bed14825742645b747fd622}{children}}
+\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_aca4efea05f8cbcf29913366ad6222eb7}{local\+Matrix}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a camera using an orthographic projection. 
+
+The \doxylink{class_eng_1_1_orthographic_camera}{Orthographic\+Camera} generates a projection matrix based on user-\/defined orthographic bounds and clipping planes. It inherits from the \doxylink{class_eng_1_1_camera}{Camera} class 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_orthographic_camera_a3c6aeb6f25d634fe2365a1fa2d885602}\index{Eng::OrthographicCamera@{Eng::OrthographicCamera}!OrthographicCamera@{OrthographicCamera}}
+\index{OrthographicCamera@{OrthographicCamera}!Eng::OrthographicCamera@{Eng::OrthographicCamera}}
+\doxysubsubsection{\texorpdfstring{OrthographicCamera()}{OrthographicCamera()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_orthographic_camera_a3c6aeb6f25d634fe2365a1fa2d885602} 
+Orthographic\+Camera\+::\+Orthographic\+Camera (\begin{DoxyParamCaption}\item[{float}]{left}{, }\item[{float}]{right}{, }\item[{float}]{bottom}{, }\item[{float}]{top}{, }\item[{float}]{near\+Clip}{, }\item[{float}]{far\+Clip}{}\end{DoxyParamCaption})}
+
+
+
+Constructor for \doxylink{class_eng_1_1_orthographic_camera}{Orthographic\+Camera}. 
+
+Initializes an orthographic projection camera with the specified clipping planes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em left} & The left vertical clipping plane. \\
+\hline
+{\em right} & The right vertical clipping plane. \\
+\hline
+{\em bottom} & The bottom horizontal clipping plane. \\
+\hline
+{\em top} & The top horizontal clipping plane. \\
+\hline
+{\em near\+Clip} & The near depth clipping plane. \\
+\hline
+{\em far\+Clip} & The far depth clipping plane. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_orthographic_camera_a22cd04b2fa05736ddf45d9ae86552d86}\index{Eng::OrthographicCamera@{Eng::OrthographicCamera}!getProjectionMatrix@{getProjectionMatrix}}
+\index{getProjectionMatrix@{getProjectionMatrix}!Eng::OrthographicCamera@{Eng::OrthographicCamera}}
+\doxysubsubsection{\texorpdfstring{getProjectionMatrix()}{getProjectionMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_orthographic_camera_a22cd04b2fa05736ddf45d9ae86552d86} 
+glm\+::mat4 Orthographic\+Camera\+::get\+Projection\+Matrix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Computes the orthographic projection matrix. 
+
+This method calculates a projection matrix for rendering a scene using orthographic projection.
+
+\begin{DoxyReturn}{Returns}
+glm\+::mat4 The orthographic projection matrix. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_eng_1_1_camera}{Eng\+::\+Camera}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Orthographic\+Camera.\+cpp\end{DoxyCompactItemize}

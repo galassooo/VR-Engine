@@ -5,7 +5,7 @@
 %%For: 
 %Magnification: 1.00
 %%Orientation: Portrait
-%%BoundingBox: 0 0 500 1066.666626
+%%BoundingBox: 0 0 500 941.176453
 %%Pages: 0
 %%BeginSetup
 %%EndSetup
@@ -19,7 +19,7 @@
 /marginwidth 10 def
 /distx 20 def
 /disty 40 def
-/boundaspect 0.468750 def  % aspect ratio of the BoundingBox (width/height)
+/boundaspect 0.531250 def  % aspect ratio of the BoundingBox (width/height)
 /boundx 500 def
 /boundy boundx boundaspect div def
 /xspacing 0 def
@@ -174,9 +174,9 @@
 boxfont setfont
 1 boundaspect scale
 (PointLight) cw
-(Light) cw
-(Node) cw
-(Object) cw
+(Eng::Light) cw
+(Eng::Node) cw
+(Eng::Object) cw
 /boxwidth boxwidth marginwidth 2 mul add def
 /xspacing boxwidth distx add def
 /yspacing boxheight disty add def
@@ -189,9 +189,9 @@ boundx scalefactor div boundy scalefactor div scale
 % ----- classes -----
 
  (PointLight) 0.000000 0.000000 box
- (Light) 0.000000 1.000000 box
- (Node) 0.000000 2.000000 box
- (Object) 0.000000 3.000000 box
+ (Eng::Light) 0.000000 1.000000 box
+ (Eng::Node) 0.000000 2.000000 box
+ (Eng::Object) 0.000000 3.000000 box
 
 % ----- relations -----
 

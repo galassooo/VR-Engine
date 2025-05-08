@@ -1,0 +1,232 @@
+\doxysection{Shader\+Manager Class Reference}
+\hypertarget{class_shader_manager}{}\label{class_shader_manager}\index{ShaderManager@{ShaderManager}}
+
+
+Manages Shaders to be built into the GPU \doxylink{class_program}{Program} for the graphics engine.  
+
+
+
+
+{\ttfamily \#include $<$Shader\+Manager.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_shader_manager_a14934c5f31a9ed12d5d6ce876f37e4bf}\label{class_shader_manager_a14934c5f31a9ed12d5d6ce876f37e4bf} 
+bool {\bfseries initialize} ()
+\item 
+\Hypertarget{class_shader_manager_a7107f141de4148e9870d3870027337cd}\label{class_shader_manager_a7107f141de4148e9870d3870027337cd} 
+{\bfseries Shader\+Manager} (const \mbox{\hyperlink{class_shader_manager}{Shader\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_shader_manager_a689b404424a09269cfb39e8c931bfd18}\label{class_shader_manager_a689b404424a09269cfb39e8c931bfd18} 
+\mbox{\hyperlink{class_shader_manager}{Shader\+Manager}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_shader_manager}{Shader\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_shader_manager_a834ba47cdfb42389157fbc38fa167e86}\label{class_shader_manager_a834ba47cdfb42389157fbc38fa167e86} 
+bool {\bfseries load\+Program} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_program}{Eng\+::\+Program}} $>$ \&program)
+\item 
+\Hypertarget{class_shader_manager_ab9fe79506ddc21c5667fcad6f6c8fb70}\label{class_shader_manager_ab9fe79506ddc21c5667fcad6f6c8fb70} 
+void {\bfseries set\+Projection\+Matrix} (const glm\+::mat4 \&matrix)
+\item 
+\Hypertarget{class_shader_manager_a36146e3f4599dc4f0c8967a06bc943d0}\label{class_shader_manager_a36146e3f4599dc4f0c8967a06bc943d0} 
+void {\bfseries set\+Model\+View\+Matrix} (const glm\+::mat4 \&matrix)
+\item 
+\Hypertarget{class_shader_manager_aee19f3b8d42706b4c60f2b82f096dc49}\label{class_shader_manager_aee19f3b8d42706b4c60f2b82f096dc49} 
+void {\bfseries set\+Model\+Matrix} (const glm\+::mat4 \&matrix)
+\item 
+\Hypertarget{class_shader_manager_a33e62d241cbf022a91df7b513c7fb3b7}\label{class_shader_manager_a33e62d241cbf022a91df7b513c7fb3b7} 
+void {\bfseries set\+View\+Matrix} (const glm\+::mat4 \&matrix)
+\item 
+\Hypertarget{class_shader_manager_aa050a40b116bea10b95a9c56a904b13f}\label{class_shader_manager_aa050a40b116bea10b95a9c56a904b13f} 
+void {\bfseries set\+Normal\+Matrix} (const glm\+::mat3 \&matrix)
+\item 
+\Hypertarget{class_shader_manager_a8c024d4c9c13c80fd1d467373cd6f0d5}\label{class_shader_manager_a8c024d4c9c13c80fd1d467373cd6f0d5} 
+void {\bfseries set\+Light\+Space\+Matrix} (const glm\+::mat4 \&matrix)
+\item 
+\Hypertarget{class_shader_manager_a62a696af27d884eb04646adb17b3cd34}\label{class_shader_manager_a62a696af27d884eb04646adb17b3cd34} 
+void {\bfseries set\+Material\+Emission} (const glm\+::vec3 \&emission)
+\item 
+\Hypertarget{class_shader_manager_aec21864d0fffdbc5e9ca54319c8c3940}\label{class_shader_manager_aec21864d0fffdbc5e9ca54319c8c3940} 
+void {\bfseries set\+Material\+Ambient} (const glm\+::vec3 \&ambient)
+\item 
+\Hypertarget{class_shader_manager_ab20d50edb0384f43fc8b9a680809e4ff}\label{class_shader_manager_ab20d50edb0384f43fc8b9a680809e4ff} 
+void {\bfseries set\+Material\+Diffuse} (const glm\+::vec3 \&diffuse)
+\item 
+\Hypertarget{class_shader_manager_ac120aafdc0eda712f1df025a149ea4e1}\label{class_shader_manager_ac120aafdc0eda712f1df025a149ea4e1} 
+void {\bfseries set\+Material\+Specular} (const glm\+::vec3 \&spec)
+\item 
+\Hypertarget{class_shader_manager_ac73ddca20bdc38636c117019d829cb35}\label{class_shader_manager_ac73ddca20bdc38636c117019d829cb35} 
+void {\bfseries set\+Material\+Shininess} (float shininess)
+\item 
+\Hypertarget{class_shader_manager_a9a4b0c07dbaa99f7074c480f0adf01b3}\label{class_shader_manager_a9a4b0c07dbaa99f7074c480f0adf01b3} 
+void {\bfseries set\+Light\+Position} (const glm\+::vec3 \&pos)
+\item 
+\Hypertarget{class_shader_manager_a40ce368d499d384d1a60ef56ef813600}\label{class_shader_manager_a40ce368d499d384d1a60ef56ef813600} 
+void {\bfseries set\+Light\+Direction} (const glm\+::vec3 \&pos)
+\item 
+\Hypertarget{class_shader_manager_a5ecc17bd25a95a63471cd328bffdb911}\label{class_shader_manager_a5ecc17bd25a95a63471cd328bffdb911} 
+void {\bfseries set\+Light\+Cutoff\+Angle} (float angle)
+\item 
+\Hypertarget{class_shader_manager_a833a5c5364cf47d6e0b7469ff6f28262}\label{class_shader_manager_a833a5c5364cf47d6e0b7469ff6f28262} 
+void {\bfseries set\+Light\+Falloff} (float falloff)
+\item 
+\Hypertarget{class_shader_manager_a984baa0321143875d0a5ad9590c42b95}\label{class_shader_manager_a984baa0321143875d0a5ad9590c42b95} 
+void {\bfseries set\+Light\+Ambient} (const glm\+::vec3 \&amb)
+\item 
+\Hypertarget{class_shader_manager_ab98b4a7cd45a728dc91845b83f3105ff}\label{class_shader_manager_ab98b4a7cd45a728dc91845b83f3105ff} 
+void {\bfseries set\+Light\+Diffuse} (const glm\+::vec3 \&diff)
+\item 
+\Hypertarget{class_shader_manager_ad23e2ef3edadf720c56e96c5d226489c}\label{class_shader_manager_ad23e2ef3edadf720c56e96c5d226489c} 
+void {\bfseries set\+Light\+Specular} (const glm\+::vec3 \&spec)
+\item 
+\Hypertarget{class_shader_manager_a1bd00da3393393d2986c3e773504714b}\label{class_shader_manager_a1bd00da3393393d2986c3e773504714b} 
+void {\bfseries set\+Light\+Casts\+Shadows} (bool casts\+Shadows)
+\item 
+\Hypertarget{class_shader_manager_aa04174c38943062f713091dc9ca6cc03}\label{class_shader_manager_aa04174c38943062f713091dc9ca6cc03} 
+void {\bfseries set\+Light\+Attenuation} (float constant, float linear, float quadratic)
+\item 
+\Hypertarget{class_shader_manager_a5294758bd31a669809410bbe862603aa}\label{class_shader_manager_a5294758bd31a669809410bbe862603aa} 
+void {\bfseries set\+Use\+Texture} (bool use)
+\item 
+\Hypertarget{class_shader_manager_a388358e7de285994d93cd0081c11a1fb}\label{class_shader_manager_a388358e7de285994d93cd0081c11a1fb} 
+void {\bfseries set\+Global\+Light\+Color} (const glm\+::vec3 \&color)
+\item 
+\Hypertarget{class_shader_manager_a475ac6d1dbc72d32529022917f3f405d}\label{class_shader_manager_a475ac6d1dbc72d32529022917f3f405d} 
+void {\bfseries set\+Eye\+Front} (const glm\+::vec3 \&front)
+\item 
+\Hypertarget{class_shader_manager_aca6a3437250bcd102624ae36a0aa912c}\label{class_shader_manager_aca6a3437250bcd102624ae36a0aa912c} 
+const glm\+::mat4 \& {\bfseries get\+Cached\+Projection\+Matrix} () const
+\item 
+\Hypertarget{class_shader_manager_a93ad2e5140f0d1d7f28369940983ac98}\label{class_shader_manager_a93ad2e5140f0d1d7f28369940983ac98} 
+const glm\+::mat4 \& {\bfseries get\+Cached\+Model\+View\+Matrix} () const
+\item 
+\Hypertarget{class_shader_manager_a1557e965c08bcf55945a4c3074d9efd4}\label{class_shader_manager_a1557e965c08bcf55945a4c3074d9efd4} 
+const glm\+::mat3 \& {\bfseries get\+Cached\+Normal\+Matrix} () const
+\item 
+\Hypertarget{class_shader_manager_a53601de163d2d29ff873165fb82ddd68}\label{class_shader_manager_a53601de163d2d29ff873165fb82ddd68} 
+const glm\+::mat4 \& {\bfseries get\+Cached\+Light\+Space\+Matrix} () const
+\item 
+\Hypertarget{class_shader_manager_a605cfe06db66f46da954ab0fdec28244}\label{class_shader_manager_a605cfe06db66f46da954ab0fdec28244} 
+const glm\+::vec3 \& {\bfseries get\+Cached\+Eye\+Front} () const
+\item 
+\Hypertarget{class_shader_manager_a416f58dbf790aeff2e3a6cadd220556c}\label{class_shader_manager_a416f58dbf790aeff2e3a6cadd220556c} 
+const glm\+::vec3 \& {\bfseries get\+Cached\+Global\+Light\+Color} () const
+\item 
+\Hypertarget{class_shader_manager_a5b65e0ef6a090fba823ab2113043a247}\label{class_shader_manager_a5b65e0ef6a090fba823ab2113043a247} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_program}{Eng\+::\+Program}} $>$ {\bfseries get\+Current\+Program} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_shader_manager_a92b32928fd67c48cdaf32c625ed42ad2}\label{class_shader_manager_a92b32928fd67c48cdaf32c625ed42ad2} 
+static \mbox{\hyperlink{class_shader_manager}{Shader\+Manager}} \& {\bfseries get\+Instance} ()
+\item 
+\Hypertarget{class_shader_manager_af5c0132bbae6c0c3e68e3ce391f198e8}\label{class_shader_manager_af5c0132bbae6c0c3e68e3ce391f198e8} 
+static std\+::string {\bfseries preprocess\+Shader\+Code} (const std\+::string \&source)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_shader_manager_ab7bc86c85f6a4192f93eec74de793f44}\label{class_shader_manager_ab7bc86c85f6a4192f93eec74de793f44} 
+static constexpr int {\bfseries POSITION\+\_\+\+LOCATION} = 0
+\item 
+\Hypertarget{class_shader_manager_a434df6d6fc2334a2bc1a2029b7d52c2d}\label{class_shader_manager_a434df6d6fc2334a2bc1a2029b7d52c2d} 
+static constexpr int {\bfseries NORMAL\+\_\+\+LOCATION} = 1
+\item 
+\Hypertarget{class_shader_manager_a8d09403968a7d2a9bd85bbbb90700f34}\label{class_shader_manager_a8d09403968a7d2a9bd85bbbb90700f34} 
+static constexpr int {\bfseries TEX\+\_\+\+COORD\+\_\+\+LOCATION} = 2
+\item 
+\Hypertarget{class_shader_manager_ab214f46a9d15c38d18b931c8bb4d85d5}\label{class_shader_manager_ab214f46a9d15c38d18b931c8bb4d85d5} 
+static constexpr int {\bfseries DIFFUSE\+\_\+\+TEXTURE\+\_\+\+UNIT} = 0
+\item 
+\Hypertarget{class_shader_manager_a3f3f5b76dff8592c6afc32ea204ef7b6}\label{class_shader_manager_a3f3f5b76dff8592c6afc32ea204ef7b6} 
+static constexpr int {\bfseries SHADOW\+\_\+\+MAP\+\_\+\+UNIT} = 1
+\item 
+\Hypertarget{class_shader_manager_a7467937c6f9dff627a5e69f7350a3425}\label{class_shader_manager_a7467937c6f9dff627a5e69f7350a3425} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+PROJECTION\+\_\+\+MATRIX} = "{}projection"{}
+\item 
+\Hypertarget{class_shader_manager_a1065b156ea561158d96c90046f82a828}\label{class_shader_manager_a1065b156ea561158d96c90046f82a828} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MODEL\+\_\+\+MATRIX} = "{}model"{}
+\item 
+\Hypertarget{class_shader_manager_aa0b4f4e55cc45897c4c1807afa2d8083}\label{class_shader_manager_aa0b4f4e55cc45897c4c1807afa2d8083} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+VIEW\+\_\+\+MATRIX} = "{}view"{}
+\item 
+\Hypertarget{class_shader_manager_a5d13cb0353057baab69594d9522b46e7}\label{class_shader_manager_a5d13cb0353057baab69594d9522b46e7} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MODELVIEW\+\_\+\+MATRIX} = "{}modelview"{}
+\item 
+\Hypertarget{class_shader_manager_a88bad7e217b798c429a7d58c7935a662}\label{class_shader_manager_a88bad7e217b798c429a7d58c7935a662} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+NORMAL\+\_\+\+MATRIX} = "{}normal\+Matrix"{}
+\item 
+\Hypertarget{class_shader_manager_aa599bf728b9ecd2bc0f724d9f376535e}\label{class_shader_manager_aa599bf728b9ecd2bc0f724d9f376535e} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHTSPACE\+\_\+\+MATRIX} = "{}lightspace\+Matrix"{}
+\item 
+\Hypertarget{class_shader_manager_ae07e2ade90978001c59b80729f69ad14}\label{class_shader_manager_ae07e2ade90978001c59b80729f69ad14} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MATERIAL\+\_\+\+EMISSION} = "{}mat\+Emission"{}
+\item 
+\Hypertarget{class_shader_manager_ab36f3602e91416423e4b9a71e7ed4cac}\label{class_shader_manager_ab36f3602e91416423e4b9a71e7ed4cac} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MATERIAL\+\_\+\+AMBIENT} = "{}mat\+Ambient"{}
+\item 
+\Hypertarget{class_shader_manager_a2cd0401b39291c0710a1e9d0c2b5f958}\label{class_shader_manager_a2cd0401b39291c0710a1e9d0c2b5f958} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MATERIAL\+\_\+\+DIFFUSE} = "{}mat\+Diffuse"{}
+\item 
+\Hypertarget{class_shader_manager_a79d48956a2fb319b6ef93d1b5906b633}\label{class_shader_manager_a79d48956a2fb319b6ef93d1b5906b633} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MATERIAL\+\_\+\+SPECULAR} = "{}mat\+Specular"{}
+\item 
+\Hypertarget{class_shader_manager_a18e61ad3a5eeefbabbecc889de2b90c7}\label{class_shader_manager_a18e61ad3a5eeefbabbecc889de2b90c7} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MATERIAL\+\_\+\+SHININESS} = "{}mat\+Shininess"{}
+\item 
+\Hypertarget{class_shader_manager_a025ebd07667ce902747958e5a30e734f}\label{class_shader_manager_a025ebd07667ce902747958e5a30e734f} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+USE\+\_\+\+TEXTURE\+\_\+\+DIFFUSE} = "{}use\+Texture"{}
+\item 
+\Hypertarget{class_shader_manager_a38fe9b0d3554a4834e94fa8608d68ee4}\label{class_shader_manager_a38fe9b0d3554a4834e94fa8608d68ee4} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+POSITION} = "{}light\+Pos"{}
+\item 
+\Hypertarget{class_shader_manager_a23d4b6d8265c1fc7bc8148cccadcfefa}\label{class_shader_manager_a23d4b6d8265c1fc7bc8148cccadcfefa} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+DIRECTION} = "{}light\+Dir"{}
+\item 
+\Hypertarget{class_shader_manager_a25fd1defd6f4184081bdde59790cc7c1}\label{class_shader_manager_a25fd1defd6f4184081bdde59790cc7c1} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+CUTOFF\+\_\+\+ANGLE} = "{}light\+Cutoff"{}
+\item 
+\Hypertarget{class_shader_manager_a5332c9ea499e1de9a12947cbec9a5d3a}\label{class_shader_manager_a5332c9ea499e1de9a12947cbec9a5d3a} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+FALLOFF} = "{}light\+Falloff"{}
+\item 
+\Hypertarget{class_shader_manager_a3b5562b9edbe4c3e0d4af16eb3f7c240}\label{class_shader_manager_a3b5562b9edbe4c3e0d4af16eb3f7c240} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+AMBIENT} = "{}light\+Ambient"{}
+\item 
+\Hypertarget{class_shader_manager_a2e4fa7ff37e7a07ab8aae0e7247825f4}\label{class_shader_manager_a2e4fa7ff37e7a07ab8aae0e7247825f4} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+DIFFUSE} = "{}light\+Diffuse"{}
+\item 
+\Hypertarget{class_shader_manager_a4bf534cb54181daeb965fd8405f65184}\label{class_shader_manager_a4bf534cb54181daeb965fd8405f65184} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+SPECULAR} = "{}light\+Specular"{}
+\item 
+\Hypertarget{class_shader_manager_ac0eb60e3a50353e2df5c74ad9fe155e0}\label{class_shader_manager_ac0eb60e3a50353e2df5c74ad9fe155e0} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+CASTS\+\_\+\+SHADOWS} = "{}use\+Shadow\+Map"{}
+\item 
+\Hypertarget{class_shader_manager_a27ae0f73411e1191a2e5766314dca8a7}\label{class_shader_manager_a27ae0f73411e1191a2e5766314dca8a7} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+ATTENUATION\+\_\+\+CONSTANT} = "{}const\+Attenuatuion"{}
+\item 
+\Hypertarget{class_shader_manager_abb9ee32386036db7222b6a9a63b346ee}\label{class_shader_manager_abb9ee32386036db7222b6a9a63b346ee} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+ATTENUATION\+\_\+\+LINEAR} = "{}linear\+Attenuation"{}
+\item 
+\Hypertarget{class_shader_manager_a990867cbb70a7f483cfb5840e736c4bd}\label{class_shader_manager_a990867cbb70a7f483cfb5840e736c4bd} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+ATTENUATION\+\_\+\+QUADRATIC} = "{}quadratic\+Attenuation"{}
+\item 
+\Hypertarget{class_shader_manager_a44315a47ff69e3f3f526eb30f85a6098}\label{class_shader_manager_a44315a47ff69e3f3f526eb30f85a6098} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+GLOBAL\+\_\+\+LIGHT\+\_\+\+COLOR} = "{}global\+Light\+Color"{}
+\item 
+\Hypertarget{class_shader_manager_a1bea28e4970692a2f0767f9abc9cbefa}\label{class_shader_manager_a1bea28e4970692a2f0767f9abc9cbefa} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+EYE\+\_\+\+FRONT} = "{}eye\+Front"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages Shaders to be built into the GPU \doxylink{class_program}{Program} for the graphics engine. 
+
+The \doxylink{class_shader_manager}{Shader\+Manager} implements the Singleton pattern to provide centralized management of all shaders and programs. It handles\+:
+\begin{DoxyItemize}
+\item Registration and binding of default shaders
+\item Management of custom shaders that can be dynamically added/removed from the rendering cycle 
+\end{DoxyItemize}
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Shader\+Manager.\+h\end{DoxyCompactItemize}

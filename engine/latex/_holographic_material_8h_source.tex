@@ -1,0 +1,45 @@
+\doxysection{Holographic\+Material.\+h}
+\hypertarget{_holographic_material_8h_source}{}\label{_holographic_material_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }ENG\_API\ \mbox{\hyperlink{class_holographic_material_a3019a059bbe8d97f80c1bdc960853dd5}{HolographicMaterial}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_eng_1_1_material}{Eng::Material}}\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{class_holographic_material_a3019a059bbe8d97f80c1bdc960853dd5}{HolographicMaterial}}(\textcolor{keyword}{const}\ glm::vec3\&\ baseColor\ =\ glm::vec3(0.2f,\ 0.8f,\ 1.0f),}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ alpha\ =\ 0.7f,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ bandFrequency\ =\ 20.0f,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ bandSpeed\ =\ 1.0f);}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{class_holographic_material_a3019a059bbe8d97f80c1bdc960853dd5}{\string~HolographicMaterial}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_holographic_material_a9d3d7939cf106a4b1a1448dd2c34f959}{render}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_holographic_material_a0b567db41b3f0369ae12cf6bcb9863ed}{setBaseColor}}(\textcolor{keyword}{const}\ glm::vec3\&\ color);}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00044\ \ \ \ \ glm::vec3\ \mbox{\hyperlink{class_holographic_material_a4297fffb5ab3b986fbfda3df2a1b2ccd}{getBaseColor}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_holographic_material_a2ec72d418257ceeb1bd37cbafed826b3}{setBandFrequency}}(\textcolor{keywordtype}{float}\ frequency);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_holographic_material_a393cdbe06c408dbf19c1ab2c9b08efba}{getBandFrequency}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_holographic_material_a7c2ef1c345fe36a3b229b327ac44eb56}{setBandSpeed}}(\textcolor{keywordtype}{float}\ speed);}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_holographic_material_a1765c23b710ed88f85084c9e32d760bf}{getBandSpeed}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_holographic_material_a7fd81e2f7ae2881c198554bb54291c96}{setSecondaryColor}}(\textcolor{keyword}{const}\ glm::vec3\&\ color);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00080\ \ \ \ \ glm::vec3\ \mbox{\hyperlink{class_holographic_material_a6a279a3fbe454fa55d31fbb858e230ad}{getSecondaryColor}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_holographic_material_ae50255b0700fe38722ec9204588fe8df}{initShader}}();}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00089\ \ \ \ \ glm::vec3\ baseColor;}
+\DoxyCodeLine{00090\ \ \ \ \ glm::vec3\ secondaryColor;}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{float}\ bandFrequency;}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{float}\ bandSpeed;}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{float}\ startTime;}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Eng::Program>\ holographicShader;}
+\DoxyCodeLine{00096\ \};}
+
+\end{DoxyCode}

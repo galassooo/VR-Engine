@@ -1,0 +1,328 @@
+\doxysection{Eng\+::Mesh Class Reference}
+\hypertarget{class_eng_1_1_mesh}{}\label{class_eng_1_1_mesh}\index{Eng::Mesh@{Eng::Mesh}}
+
+
+Represents a 3D mesh with vertices, indices, and material data.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+Inheritance diagram for Eng\+::Mesh\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_eng_1_1_mesh}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_mesh_a2af137f1571af89172b9c102302c416b}{Mesh}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_mesh}{Mesh} class. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_mesh_a7188b0009975f3eaeeba1b170a8c83e4}\label{class_eng_1_1_mesh_a7188b0009975f3eaeeba1b170a8c83e4} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Mesh} () override
+\begin{DoxyCompactList}\small\item\em Default destructor for the \doxylink{class_eng_1_1_mesh}{Mesh} class. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_mesh_a6e0641f6f1ad1d6fe67df2e432cf6109}\label{class_eng_1_1_mesh_a6e0641f6f1ad1d6fe67df2e432cf6109} 
+void {\bfseries set\+Vertices} (const std\+::vector$<$ \mbox{\hyperlink{class_eng_1_1_vertex}{Eng\+::\+Vertex}} $>$ \&vertices)
+\item 
+void \mbox{\hyperlink{class_eng_1_1_mesh_a3c8a507c933246c63e3b555a77769ca6}{set\+Indices}} (const std\+::vector$<$ unsigned int $>$ \&indices)
+\begin{DoxyCompactList}\small\item\em Sets the indices for defining the mesh\textquotesingle{}s faces. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_eng_1_1_vertex}{Eng\+::\+Vertex}} $>$ \& \mbox{\hyperlink{class_eng_1_1_mesh_a17522f2afa4de296e3884e7985b53a36}{get\+Vertices}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the vertices of the mesh. \end{DoxyCompactList}\item 
+std\+::vector$<$ unsigned int $>$ \& \mbox{\hyperlink{class_eng_1_1_mesh_a50a108e6944ebe80b499c2bff4eb4c69}{get\+Indices}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the indices of the mesh. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_mesh_a97708e8c9f56402108387ccc82a2d875}{set\+Material}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_material}{Eng\+::\+Material}} $>$ \&material)
+\begin{DoxyCompactList}\small\item\em Sets the material for the mesh. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_material}{Eng\+::\+Material}} $>$ \mbox{\hyperlink{class_eng_1_1_mesh_a02c6e1236db537941fd4b55715316534}{get\+Material}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the material associated with the mesh. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_mesh_a0e4c32b72cf08edd59bba250135352f2}{render}} () override
+\begin{DoxyCompactList}\small\item\em Renders this mesh using its material and buffers. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_mesh_aeb7d63b0d2b1d3815e5923068a8c3d8c}{init\+Buffers}} ()
+\begin{DoxyCompactList}\small\item\em Initializes Open\+GL buffers (VAO, VBOs, EBO) for this mesh. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_mesh_aac274fa3f68ae82cc9517386f33eb319}{set\+Bounding\+Sphere\+Center}} (const glm\+::vec3 \&center)
+\begin{DoxyCompactList}\small\item\em Sets the center of the mesh\textquotesingle{}s bounding sphere. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_mesh_a37367babce15b5df0b5d4fe7adb7879d}{get\+Bounding\+Sphere\+Center}} () const
+\begin{DoxyCompactList}\small\item\em Gets the center of the mesh\textquotesingle{}s bounding sphere. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_mesh_ad1a9653c14a7ef453ee801e17cc5a08a}{set\+Bounding\+Sphere\+Radius}} (float radius)
+\begin{DoxyCompactList}\small\item\em Sets the radius of the mesh\textquotesingle{}s bounding sphere. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_eng_1_1_mesh_a71ed33afd99c749344651b30a187270e}{get\+Bounding\+Sphere\+Radius}} () const
+\begin{DoxyCompactList}\small\item\em Gets the radius of the mesh\textquotesingle{}s bounding sphere. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_mesh_a93ad614a188f2dace814889cdcff223b}{set\+Bounding\+Box}} (const glm\+::vec3 \&min, const glm\+::vec3 \&max)
+\begin{DoxyCompactList}\small\item\em Sets the axis-\/aligned bounding box for this mesh. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_mesh_a392d7ef36ad0e6260b0be02abfd864a3}{get\+Bounding\+Box\+Min}} () const
+\begin{DoxyCompactList}\small\item\em Gets the minimum corner of the mesh\textquotesingle{}s bounding box. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_mesh_a5eb138024ca1b3d9d3b042c60130d87a}{get\+Bounding\+Box\+Max}} () const
+\begin{DoxyCompactList}\small\item\em Gets the maximum corner of the mesh\textquotesingle{}s bounding box. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_node_aa40fb59cc7ed94005b70ffae74c74c78}{Node}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_node}{Node} class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a1bf04bccde0ec7e57015290989c29ebc}{set\+Parent}} (\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*}p)
+\begin{DoxyCompactList}\small\item\em Sets the parent of the node. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a5971d7af616f9df233236b9c1989e7a0}{get\+Parent}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the parent of the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a435f8d7bb208a7716aac311647d686b7}{add\+Child}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ child)
+\begin{DoxyCompactList}\small\item\em Adds a child node to the list of current node\textquotesingle{}s children. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_ac8387fae8472200c0c17a06d8dcc94a3}{get\+Children}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the list of children for the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a4239997371524dbfed52ff157eac1ffe}{set\+Local\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+const glm\+::mat4 \& \mbox{\hyperlink{class_eng_1_1_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}{get\+Local\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_ac834ce5ba6cff3c02665adb3237a3f82}{get\+Final\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Computes the final transformation matrix of the node. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a8adf99ef92cc40ccf96442eed1f1407d}{parent}}
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \mbox{\hyperlink{class_eng_1_1_node_a595aa4342bed14825742645b747fd622}{children}}
+\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_aca4efea05f8cbcf29913366ad6222eb7}{local\+Matrix}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a 3D mesh with vertices, indices, and material data. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_mesh_a2af137f1571af89172b9c102302c416b}\index{Eng::Mesh@{Eng::Mesh}!Mesh@{Mesh}}
+\index{Mesh@{Mesh}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{Mesh()}{Mesh()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a2af137f1571af89172b9c102302c416b} 
+Mesh\+::\+Mesh (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+Default constructor for the \doxylink{class_eng_1_1_mesh}{Mesh} class. 
+
+Initializes an empty mesh with no vertices, indices, or material. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_mesh_a5eb138024ca1b3d9d3b042c60130d87a}\index{Eng::Mesh@{Eng::Mesh}!getBoundingBoxMax@{getBoundingBoxMax}}
+\index{getBoundingBoxMax@{getBoundingBoxMax}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{getBoundingBoxMax()}{getBoundingBoxMax()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a5eb138024ca1b3d9d3b042c60130d87a} 
+glm\+::vec3 Mesh\+::get\+Bounding\+Box\+Max (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the maximum corner of the mesh\textquotesingle{}s bounding box. 
+
+\begin{DoxyReturn}{Returns}
+Local-\/space maximum corner. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_mesh_a392d7ef36ad0e6260b0be02abfd864a3}\index{Eng::Mesh@{Eng::Mesh}!getBoundingBoxMin@{getBoundingBoxMin}}
+\index{getBoundingBoxMin@{getBoundingBoxMin}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{getBoundingBoxMin()}{getBoundingBoxMin()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a392d7ef36ad0e6260b0be02abfd864a3} 
+glm\+::vec3 Mesh\+::get\+Bounding\+Box\+Min (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the minimum corner of the mesh\textquotesingle{}s bounding box. 
+
+\begin{DoxyReturn}{Returns}
+Local-\/space minimum corner. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_mesh_a37367babce15b5df0b5d4fe7adb7879d}\index{Eng::Mesh@{Eng::Mesh}!getBoundingSphereCenter@{getBoundingSphereCenter}}
+\index{getBoundingSphereCenter@{getBoundingSphereCenter}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{getBoundingSphereCenter()}{getBoundingSphereCenter()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a37367babce15b5df0b5d4fe7adb7879d} 
+glm\+::vec3 Mesh\+::get\+Bounding\+Sphere\+Center (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the center of the mesh\textquotesingle{}s bounding sphere. 
+
+\begin{DoxyReturn}{Returns}
+World-\/space center of bounding sphere. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_mesh_a71ed33afd99c749344651b30a187270e}\index{Eng::Mesh@{Eng::Mesh}!getBoundingSphereRadius@{getBoundingSphereRadius}}
+\index{getBoundingSphereRadius@{getBoundingSphereRadius}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{getBoundingSphereRadius()}{getBoundingSphereRadius()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a71ed33afd99c749344651b30a187270e} 
+float Mesh\+::get\+Bounding\+Sphere\+Radius (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the radius of the mesh\textquotesingle{}s bounding sphere. 
+
+\begin{DoxyReturn}{Returns}
+Radius used for sphere culling. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_mesh_a50a108e6944ebe80b499c2bff4eb4c69}\index{Eng::Mesh@{Eng::Mesh}!getIndices@{getIndices}}
+\index{getIndices@{getIndices}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{getIndices()}{getIndices()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a50a108e6944ebe80b499c2bff4eb4c69} 
+std\+::vector$<$ unsigned int $>$ \& Mesh\+::get\+Indices (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the indices of the mesh. 
+
+The indices define how the vertices are connected to form triangles in the mesh. These are essential for rendering the mesh efficiently.
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$unsigned int$>$\& A reference to the vector of indices. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_mesh_a02c6e1236db537941fd4b55715316534}\index{Eng::Mesh@{Eng::Mesh}!getMaterial@{getMaterial}}
+\index{getMaterial@{getMaterial}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{getMaterial()}{getMaterial()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a02c6e1236db537941fd4b55715316534} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_material}{Eng\+::\+Material}} $>$ Mesh\+::get\+Material (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the material associated with the mesh. 
+
+\begin{DoxyReturn}{Returns}
+std\+::shared\+\_\+ptr$<$\+Eng\+::\+Material$>$ A shared pointer to the current material. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_mesh_a17522f2afa4de296e3884e7985b53a36}\index{Eng::Mesh@{Eng::Mesh}!getVertices@{getVertices}}
+\index{getVertices@{getVertices}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{getVertices()}{getVertices()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a17522f2afa4de296e3884e7985b53a36} 
+std\+::vector$<$ \mbox{\hyperlink{class_eng_1_1_vertex}{Eng\+::\+Vertex}} $>$ \& Mesh\+::get\+Vertices (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the vertices of the mesh. 
+
+Provides access to the list of vertices that define the geometry of the mesh.
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$\+Eng\+::\+Vertex$>$\& A reference to the vector of vertices. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_mesh_aeb7d63b0d2b1d3815e5923068a8c3d8c}\index{Eng::Mesh@{Eng::Mesh}!initBuffers@{initBuffers}}
+\index{initBuffers@{initBuffers}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{initBuffers()}{initBuffers()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_aeb7d63b0d2b1d3815e5923068a8c3d8c} 
+void Mesh\+::init\+Buffers (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes Open\+GL buffers (VAO, VBOs, EBO) for this mesh. 
+
+Extracts separate arrays for positions, normals, and texture coordinates from the vertex list, creates a \doxylink{class_eng_1_1_vertex}{Vertex} Array \doxylink{class_eng_1_1_object}{Object}, and allocates GPU buffers for efficient rendering. \Hypertarget{class_eng_1_1_mesh_a0e4c32b72cf08edd59bba250135352f2}\index{Eng::Mesh@{Eng::Mesh}!render@{render}}
+\index{render@{render}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a0e4c32b72cf08edd59bba250135352f2} 
+void Mesh\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Renders this mesh using its material and buffers. 
+
+Binds the material, ensures buffers are initialized, and issues a gl\+Draw\+Elements call. Restores previous shader program if changed. 
+
+Reimplemented from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}.
+
+\Hypertarget{class_eng_1_1_mesh_a93ad614a188f2dace814889cdcff223b}\index{Eng::Mesh@{Eng::Mesh}!setBoundingBox@{setBoundingBox}}
+\index{setBoundingBox@{setBoundingBox}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{setBoundingBox()}{setBoundingBox()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a93ad614a188f2dace814889cdcff223b} 
+void Mesh\+::set\+Bounding\+Box (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{min}{, }\item[{const glm\+::vec3 \&}]{max}{}\end{DoxyParamCaption})}
+
+
+
+Sets the axis-\/aligned bounding box for this mesh. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em min} & Minimum corner in local space. \\
+\hline
+{\em max} & Maximum corner in local space. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_mesh_aac274fa3f68ae82cc9517386f33eb319}\index{Eng::Mesh@{Eng::Mesh}!setBoundingSphereCenter@{setBoundingSphereCenter}}
+\index{setBoundingSphereCenter@{setBoundingSphereCenter}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{setBoundingSphereCenter()}{setBoundingSphereCenter()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_aac274fa3f68ae82cc9517386f33eb319} 
+void Mesh\+::set\+Bounding\+Sphere\+Center (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{center}{}\end{DoxyParamCaption})}
+
+
+
+Sets the center of the mesh\textquotesingle{}s bounding sphere. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em center} & World-\/space center of bounding sphere. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_mesh_ad1a9653c14a7ef453ee801e17cc5a08a}\index{Eng::Mesh@{Eng::Mesh}!setBoundingSphereRadius@{setBoundingSphereRadius}}
+\index{setBoundingSphereRadius@{setBoundingSphereRadius}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{setBoundingSphereRadius()}{setBoundingSphereRadius()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_ad1a9653c14a7ef453ee801e17cc5a08a} 
+void Mesh\+::set\+Bounding\+Sphere\+Radius (\begin{DoxyParamCaption}\item[{float}]{radius}{}\end{DoxyParamCaption})}
+
+
+
+Sets the radius of the mesh\textquotesingle{}s bounding sphere. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em radius} & Radius value for sphere culling. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_mesh_a3c8a507c933246c63e3b555a77769ca6}\index{Eng::Mesh@{Eng::Mesh}!setIndices@{setIndices}}
+\index{setIndices@{setIndices}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{setIndices()}{setIndices()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a3c8a507c933246c63e3b555a77769ca6} 
+void Mesh\+::set\+Indices (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ unsigned int $>$ \&}]{inds}{}\end{DoxyParamCaption})}
+
+
+
+Sets the indices for defining the mesh\textquotesingle{}s faces. 
+
+The indices define the order in which vertices are combined into triangles for rendering. Each set of three indices forms one triangle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em inds} & A vector of unsigned integers representing the triangle vertex order. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_mesh_a97708e8c9f56402108387ccc82a2d875}\index{Eng::Mesh@{Eng::Mesh}!setMaterial@{setMaterial}}
+\index{setMaterial@{setMaterial}!Eng::Mesh@{Eng::Mesh}}
+\doxysubsubsection{\texorpdfstring{setMaterial()}{setMaterial()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_mesh_a97708e8c9f56402108387ccc82a2d875} 
+void Mesh\+::set\+Material (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_material}{Eng\+::\+Material}} $>$ \&}]{mat}{}\end{DoxyParamCaption})}
+
+
+
+Sets the material for the mesh. 
+
+The material defines the appearance of the mesh, including its color, shininess, and optional texture.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mat} & A shared pointer to the \doxylink{class_eng_1_1_material}{Material} object to be applied to the mesh. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Mesh.\+cpp\end{DoxyCompactItemize}

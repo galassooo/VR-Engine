@@ -1,0 +1,231 @@
+\doxysection{Eng\+::Fbo Class Reference}
+\hypertarget{class_eng_1_1_fbo}{}\label{class_eng_1_1_fbo}\index{Eng::Fbo@{Eng::Fbo}}
+
+
+Frame buffer class to deal with Open\+GL FBOs.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_eng_1_1_fbo_a80a373213d3355a5cd0c01668083f43a}\label{class_eng_1_1_fbo_a80a373213d3355a5cd0c01668083f43a} 
+enum \+: unsigned int \{ {\bfseries BIND\+\_\+\+DEPTHBUFFER} = 0
+, {\bfseries BIND\+\_\+\+COLORTEXTURE}
+, {\bfseries BIND\+\_\+\+DEPTHTEXTURE}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_fbo_aa4ff17c7ca6478b4226015a76bb371a7}{Fbo}} ()
+\begin{DoxyCompactList}\small\item\em Constructs a new \doxylink{class_eng_1_1_fbo}{Fbo} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_fbo_aec0431b9355082f6dbade0c9de0cb784}{\texorpdfstring{$\sim$}{\string~}\+Fbo}} ()
+\begin{DoxyCompactList}\small\item\em Destroys the \doxylink{class_eng_1_1_fbo}{Fbo} object. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_fbo_a8dddc9904f455e3873f58d44cd29d198}{get\+Texture}} (unsigned int texture\+Number)
+\begin{DoxyCompactList}\small\item\em Retrieves the texture ID attached at the given index. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_fbo_ab47f3502a55fac69f2a36a7f0f6f9c85}\label{class_eng_1_1_fbo_ab47f3502a55fac69f2a36a7f0f6f9c85} 
+int {\bfseries get\+SizeX} ()
+\item 
+\Hypertarget{class_eng_1_1_fbo_a3655cd5ff2e395eeefc9356b33de1b83}\label{class_eng_1_1_fbo_a3655cd5ff2e395eeefc9356b33de1b83} 
+int {\bfseries get\+SizeY} ()
+\item 
+\Hypertarget{class_eng_1_1_fbo_a25adb076e8815088fc7e8d350381412e}\label{class_eng_1_1_fbo_a25adb076e8815088fc7e8d350381412e} 
+int {\bfseries get\+SizeZ} ()
+\item 
+\Hypertarget{class_eng_1_1_fbo_aee112cf42c1b6178fa1f9203a4d83e7f}\label{class_eng_1_1_fbo_aee112cf42c1b6178fa1f9203a4d83e7f} 
+unsigned int {\bfseries get\+Handle} ()
+\item 
+bool \mbox{\hyperlink{class_eng_1_1_fbo_a4de974b1b84be4ca998cd8cbcf518036}{is\+Ok}} ()
+\begin{DoxyCompactList}\small\item\em Checks the completeness of the framebuffer. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_fbo_a0177646d0459abebbbf140de5e1de68d}{bind\+Texture}} (unsigned int texture\+Number, unsigned int operation, unsigned int texture, int param1=0, int param2=0)
+\begin{DoxyCompactList}\small\item\em Attaches a texture to the framebuffer. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_fbo_ace9e5b720375f778d21a80e5f7a48841}{bind\+Render\+Buffer}} (unsigned int render\+Buffer, unsigned int operation, int sizeX, int sizeY)
+\begin{DoxyCompactList}\small\item\em Attaches and initializes a render buffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_fbo_ab9de57c27928aaaf32d4f9e912192671}{set\+Depth\+Only}} (bool value)
+\begin{DoxyCompactList}\small\item\em Sets whether rendering uses depth-\/only mode. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_fbo_a20ae91f3b65faa8fe60f1c3355842141}{render}} (void \texorpdfstring{$\ast$}{*}data=nullptr)
+\begin{DoxyCompactList}\small\item\em Binds and configures the framebuffer for rendering. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_eng_1_1_fbo_a02697bca90c9ddf30d825151649408fd}{disable}} ()
+\begin{DoxyCompactList}\small\item\em Reverts rendering to the default framebuffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_eng_1_1_fbo_a8a7a270c7f377e40815c83c400e19d4b}\label{class_eng_1_1_fbo_a8a7a270c7f377e40815c83c400e19d4b} 
+static const unsigned int {\bfseries MAX\+\_\+\+ATTACHMENTS} = 8
+\begin{DoxyCompactList}\small\item\em Maximum number of available render buffers or textures per FBO. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Frame buffer class to deal with Open\+GL FBOs. 
+
+Manages creation and configuration of Open\+GL frame buffer objects, including texture and render buffer attachments, binding operations, and rendering control. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_fbo_aa4ff17c7ca6478b4226015a76bb371a7}\index{Eng::Fbo@{Eng::Fbo}!Fbo@{Fbo}}
+\index{Fbo@{Fbo}!Eng::Fbo@{Eng::Fbo}}
+\doxysubsubsection{\texorpdfstring{Fbo()}{Fbo()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_fbo_aa4ff17c7ca6478b4226015a76bb371a7} 
+ENG\+\_\+\+API Fbo\+::\+Fbo (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a new \doxylink{class_eng_1_1_fbo}{Fbo} object. 
+
+Initializes internal attachment arrays, MRT cache, and generates an Open\+GL framebuffer object. \Hypertarget{class_eng_1_1_fbo_aec0431b9355082f6dbade0c9de0cb784}\index{Eng::Fbo@{Eng::Fbo}!````~Fbo@{\texorpdfstring{$\sim$}{\string~}Fbo}}
+\index{````~Fbo@{\texorpdfstring{$\sim$}{\string~}Fbo}!Eng::Fbo@{Eng::Fbo}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Fbo()}{\string~Fbo()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_fbo_aec0431b9355082f6dbade0c9de0cb784} 
+ENG\+\_\+\+API Fbo\+::\texorpdfstring{$\sim$}{\string~}\+Fbo (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Destroys the \doxylink{class_eng_1_1_fbo}{Fbo} object. 
+
+Deletes the MRT cache, render buffers, and the Open\+GL framebuffer. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_fbo_ace9e5b720375f778d21a80e5f7a48841}\index{Eng::Fbo@{Eng::Fbo}!bindRenderBuffer@{bindRenderBuffer}}
+\index{bindRenderBuffer@{bindRenderBuffer}!Eng::Fbo@{Eng::Fbo}}
+\doxysubsubsection{\texorpdfstring{bindRenderBuffer()}{bindRenderBuffer()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_fbo_ace9e5b720375f778d21a80e5f7a48841} 
+bool ENG\+\_\+\+API Fbo\+::bind\+Render\+Buffer (\begin{DoxyParamCaption}\item[{unsigned int}]{render\+Buffer}{, }\item[{unsigned int}]{operation}{, }\item[{int}]{sizeX}{, }\item[{int}]{sizeY}{}\end{DoxyParamCaption})}
+
+
+
+Attaches and initializes a render buffer. 
+
+Binds the FBO, recreates the specified render buffer, allocates storage, attaches it as a depth buffer, and updates size fields.
+
+
+\begin{DoxyParams}{Parameters}
+{\em render\+Buffer} & Index of the render buffer (0..MAX\+\_\+\+ATTACHMENTS-\/1). \\
+\hline
+{\em operation} & Attachment operation (BIND\+\_\+\+DEPTHBUFFER). \\
+\hline
+{\em sizeX} & Width of the buffer. \\
+\hline
+{\em sizeY} & Height of the buffer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True on successful allocation and binding; false on failure. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_fbo_a0177646d0459abebbbf140de5e1de68d}\index{Eng::Fbo@{Eng::Fbo}!bindTexture@{bindTexture}}
+\index{bindTexture@{bindTexture}!Eng::Fbo@{Eng::Fbo}}
+\doxysubsubsection{\texorpdfstring{bindTexture()}{bindTexture()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_fbo_a0177646d0459abebbbf140de5e1de68d} 
+bool ENG\+\_\+\+API Fbo\+::bind\+Texture (\begin{DoxyParamCaption}\item[{unsigned int}]{texture\+Number}{, }\item[{unsigned int}]{operation}{, }\item[{unsigned int}]{texture}{, }\item[{int}]{param1}{ = {\ttfamily 0}, }\item[{int}]{param2}{ = {\ttfamily 0}}\end{DoxyParamCaption})}
+
+
+
+Attaches a texture to the framebuffer. 
+
+Binds the FBO, attaches the specified texture to a color or depth attachment, and updates the draw buffer and size fields.
+
+
+\begin{DoxyParams}{Parameters}
+{\em texture\+Number} & Index in the internal texture array (0..MAX\+\_\+\+ATTACHMENTS-\/1). \\
+\hline
+{\em operation} & Attachment operation (BIND\+\_\+\+COLORTEXTURE or BIND\+\_\+\+DEPTHTEXTURE). \\
+\hline
+{\em texture} & Open\+GL texture ID to bind. \\
+\hline
+{\em param1} & Additional parameter (e.\+g., color attachment index). \\
+\hline
+{\em param2} & Additional parameter (unused). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True on successful binding; false on failure. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_fbo_a02697bca90c9ddf30d825151649408fd}\index{Eng::Fbo@{Eng::Fbo}!disable@{disable}}
+\index{disable@{disable}!Eng::Fbo@{Eng::Fbo}}
+\doxysubsubsection{\texorpdfstring{disable()}{disable()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_fbo_a02697bca90c9ddf30d825151649408fd} 
+void ENG\+\_\+\+API Fbo\+::disable (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Reverts rendering to the default framebuffer. 
+
+Binds the context framebuffer and resets read/draw buffers. \Hypertarget{class_eng_1_1_fbo_a8dddc9904f455e3873f58d44cd29d198}\index{Eng::Fbo@{Eng::Fbo}!getTexture@{getTexture}}
+\index{getTexture@{getTexture}!Eng::Fbo@{Eng::Fbo}}
+\doxysubsubsection{\texorpdfstring{getTexture()}{getTexture()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_fbo_a8dddc9904f455e3873f58d44cd29d198} 
+unsigned int ENG\+\_\+\+API Fbo\+::get\+Texture (\begin{DoxyParamCaption}\item[{unsigned int}]{texture\+Number}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the texture ID attached at the given index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em texture\+Number} & Index of the texture attachment (0..MAX\+\_\+\+ATTACHMENTS-\/1). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+GLuint texture ID, or 0 if index is out of range or not attached. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_fbo_a4de974b1b84be4ca998cd8cbcf518036}\index{Eng::Fbo@{Eng::Fbo}!isOk@{isOk}}
+\index{isOk@{isOk}!Eng::Fbo@{Eng::Fbo}}
+\doxysubsubsection{\texorpdfstring{isOk()}{isOk()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_fbo_a4de974b1b84be4ca998cd8cbcf518036} 
+bool ENG\+\_\+\+API Fbo\+::is\+Ok (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Checks the completeness of the framebuffer. 
+
+Binds the FBO and queries its status. Prints an error message if the framebuffer is not complete.
+
+\begin{DoxyReturn}{Returns}
+True if framebuffer is complete; false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_fbo_a20ae91f3b65faa8fe60f1c3355842141}\index{Eng::Fbo@{Eng::Fbo}!render@{render}}
+\index{render@{render}!Eng::Fbo@{Eng::Fbo}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_fbo_a20ae91f3b65faa8fe60f1c3355842141} 
+bool ENG\+\_\+\+API Fbo\+::render (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{data}{ = {\ttfamily nullptr}}\end{DoxyParamCaption})}
+
+
+
+Binds and configures the framebuffer for rendering. 
+
+Binds the FBO, sets draw buffers and viewport dimensions, and applies depth-\/only mode if enabled.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Optional user data pointer (unused). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if binding succeeded. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_fbo_ab9de57c27928aaaf32d4f9e912192671}\index{Eng::Fbo@{Eng::Fbo}!setDepthOnly@{setDepthOnly}}
+\index{setDepthOnly@{setDepthOnly}!Eng::Fbo@{Eng::Fbo}}
+\doxysubsubsection{\texorpdfstring{setDepthOnly()}{setDepthOnly()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_fbo_ab9de57c27928aaaf32d4f9e912192671} 
+void ENG\+\_\+\+API Fbo\+::set\+Depth\+Only (\begin{DoxyParamCaption}\item[{bool}]{value}{}\end{DoxyParamCaption})}
+
+
+
+Sets whether rendering uses depth-\/only mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & True to disable color output; false to enable color. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Frame\+Buffer\+Object.\+cpp\end{DoxyCompactItemize}

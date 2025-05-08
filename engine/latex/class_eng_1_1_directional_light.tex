@@ -1,0 +1,194 @@
+\doxysection{Eng\+::Directional\+Light Class Reference}
+\hypertarget{class_eng_1_1_directional_light}{}\label{class_eng_1_1_directional_light}\index{Eng::DirectionalLight@{Eng::DirectionalLight}}
+
+
+Represents a light source that emits light in a specific direction.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+Inheritance diagram for Eng\+::Directional\+Light\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_eng_1_1_directional_light}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_directional_light_aac11977d8b31c430c5fb1cd27231cc17}{Directional\+Light}} (const glm\+::vec3 \&\mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}}, const glm\+::vec3 \&direction)
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_eng_1_1_directional_light}{Directional\+Light}. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_directional_light_a429267972f6e3255e5bd7d1e070a3aa3}{get\+Direction}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the normalized direction of the light. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_directional_light_a88f13181276d18c38cc23b58362bd03a}{get\+Light\+View\+Matrix}} (const std\+::vector$<$ glm\+::vec3 $>$ \&frustum\+Corners, float max\+Range)
+\begin{DoxyCompactList}\small\item\em Computes a view matrix for the light\textquotesingle{}s perspective. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_directional_light_ad44954929ac37089bff9cd4eaa4232b2}{get\+Light\+Space\+Matrix}} (const std\+::vector$<$ glm\+::vec3 $>$ \&frustum\+Corners, const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_bounding_box}{Eng\+::\+Bounding\+Box}} $>$ \&bounding\+Box)
+\begin{DoxyCompactList}\small\item\em Computes the light space matrix for shadow mapping. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_light_aad66dc4b16fd701b316f38eedadd6e26}{Light}} (const glm\+::vec3 \&\mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}})
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_eng_1_1_light}{Light}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_light_aef3f7a76f9685584401ffbc0b07d5a20}{set\+Color}} (const glm\+::vec3 \&\mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}})
+\begin{DoxyCompactList}\small\item\em Sets the color of the light source. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_light_ad11747595250cede2c4c7948d1aa3d83}{render}} () override
+\begin{DoxyCompactList}\small\item\em Renders the light by uploading its ambient, diffuse, and specular properties to the shader and configuring any subclass-\/specific settings. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_node_aa40fb59cc7ed94005b70ffae74c74c78}{Node}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_node}{Node} class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a1bf04bccde0ec7e57015290989c29ebc}{set\+Parent}} (\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*}p)
+\begin{DoxyCompactList}\small\item\em Sets the parent of the node. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a5971d7af616f9df233236b9c1989e7a0}{get\+Parent}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the parent of the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a435f8d7bb208a7716aac311647d686b7}{add\+Child}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ child)
+\begin{DoxyCompactList}\small\item\em Adds a child node to the list of current node\textquotesingle{}s children. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_ac8387fae8472200c0c17a06d8dcc94a3}{get\+Children}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the list of children for the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a4239997371524dbfed52ff157eac1ffe}{set\+Local\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+const glm\+::mat4 \& \mbox{\hyperlink{class_eng_1_1_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}{get\+Local\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_ac834ce5ba6cff3c02665adb3237a3f82}{get\+Final\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Computes the final transformation matrix of the node. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_light_ad0e59fad13bb6cfadc25b2c477e9ddc7}{\texorpdfstring{$\sim$}{\string~}\+Light}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{class_eng_1_1_light}{Light}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
+\begin{DoxyCompactItemize}
+\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a8adf99ef92cc40ccf96442eed1f1407d}{parent}}
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \mbox{\hyperlink{class_eng_1_1_node_a595aa4342bed14825742645b747fd622}{children}}
+\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_aca4efea05f8cbcf29913366ad6222eb7}{local\+Matrix}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
+\begin{DoxyCompactItemize}
+\item 
+static int {\bfseries light\+ID} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a light source that emits light in a specific direction. 
+
+The {\ttfamily \doxylink{class_eng_1_1_directional_light}{Directional\+Light}} simulates a distant light source, such as the sun, where all light rays are parallel. It inherits from the {\ttfamily \doxylink{class_eng_1_1_light}{Light}} base class and includes additional properties and methods for managing the light\textquotesingle{}s direction. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_directional_light_aac11977d8b31c430c5fb1cd27231cc17}\index{Eng::DirectionalLight@{Eng::DirectionalLight}!DirectionalLight@{DirectionalLight}}
+\index{DirectionalLight@{DirectionalLight}!Eng::DirectionalLight@{Eng::DirectionalLight}}
+\doxysubsubsection{\texorpdfstring{DirectionalLight()}{DirectionalLight()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_directional_light_aac11977d8b31c430c5fb1cd27231cc17} 
+Directional\+Light\+::\+Directional\+Light (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{color}{, }\item[{const glm\+::vec3 \&}]{direction}{}\end{DoxyParamCaption})}
+
+
+
+Constructor for \doxylink{class_eng_1_1_directional_light}{Directional\+Light}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em color} & The base color of the light (affects ambient, diffuse, and specular). \\
+\hline
+{\em direction} & The direction of the light rays. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_directional_light_a429267972f6e3255e5bd7d1e070a3aa3}\index{Eng::DirectionalLight@{Eng::DirectionalLight}!getDirection@{getDirection}}
+\index{getDirection@{getDirection}!Eng::DirectionalLight@{Eng::DirectionalLight}}
+\doxysubsubsection{\texorpdfstring{getDirection()}{getDirection()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_directional_light_a429267972f6e3255e5bd7d1e070a3aa3} 
+glm\+::vec3 Directional\+Light\+::get\+Direction (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the normalized direction of the light. 
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec3 Normalized world-\/space direction vector. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_directional_light_ad44954929ac37089bff9cd4eaa4232b2}\index{Eng::DirectionalLight@{Eng::DirectionalLight}!getLightSpaceMatrix@{getLightSpaceMatrix}}
+\index{getLightSpaceMatrix@{getLightSpaceMatrix}!Eng::DirectionalLight@{Eng::DirectionalLight}}
+\doxysubsubsection{\texorpdfstring{getLightSpaceMatrix()}{getLightSpaceMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_directional_light_ad44954929ac37089bff9cd4eaa4232b2} 
+glm\+::mat4 Directional\+Light\+::get\+Light\+Space\+Matrix (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ glm\+::vec3 $>$ \&}]{frustum\+Corners}{, }\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_bounding_box}{Eng\+::\+Bounding\+Box}} $>$ \&}]{bounding\+Box}{}\end{DoxyParamCaption})}
+
+
+
+Computes the light space matrix for shadow mapping. 
+
+Calculates the light space matrix based on the provided frustum corners and the bounding box of the scene. The light space matrix is used for shadow mapping to transform vertices into light space.
+
+
+\begin{DoxyParams}{Parameters}
+{\em frustum\+Corners} & \doxylink{class_eng_1_1_list}{List} of eight world-\/space corner positions of the camera frustum. \\
+\hline
+{\em bounding\+Box} & Shared pointer to the bounding box of the scene. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+glm\+::mat4 \doxylink{class_eng_1_1_light}{Light} space matrix for shadow mapping. 
+\end{DoxyReturn}
+Compute current ligth view matrix
+
+Compute current light projection matrix
+
+Obtain the final light\+Space\+Matrix\Hypertarget{class_eng_1_1_directional_light_a88f13181276d18c38cc23b58362bd03a}\index{Eng::DirectionalLight@{Eng::DirectionalLight}!getLightViewMatrix@{getLightViewMatrix}}
+\index{getLightViewMatrix@{getLightViewMatrix}!Eng::DirectionalLight@{Eng::DirectionalLight}}
+\doxysubsubsection{\texorpdfstring{getLightViewMatrix()}{getLightViewMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_directional_light_a88f13181276d18c38cc23b58362bd03a} 
+glm\+::mat4 Directional\+Light\+::get\+Light\+View\+Matrix (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ glm\+::vec3 $>$ \&}]{frustum\+Corners}{, }\item[{float}]{max\+Range}{}\end{DoxyParamCaption})}
+
+
+
+Computes a view matrix for the light\textquotesingle{}s perspective. 
+
+Calculates a look\+At matrix using the center of the provided frustum corners and the light\textquotesingle{}s direction at a distance of max\+Range.
+
+
+\begin{DoxyParams}{Parameters}
+{\em frustum\+Corners} & \doxylink{class_eng_1_1_list}{List} of eight world-\/space corner positions of the camera frustum. \\
+\hline
+{\em max\+Range} & Maximum distance behind the center along the light direction to position the light. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+glm\+::mat4 Light-\/space view matrix, or identity if inputs are invalid. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Directional\+Light.\+cpp\end{DoxyCompactItemize}

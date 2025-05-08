@@ -1,17 +1,19 @@
 \doxysection{Orthographic\+Camera.\+h}
 \hypertarget{_orthographic_camera_8h_source}{}\label{_orthographic_camera_8h_source}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
-\DoxyCodeLine{00002\ }
-\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Camera.h"{}}}
-\DoxyCodeLine{00004\ }
-\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_orthographic_camera}{OrthographicCamera}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_camera}{Camera}}\ \{}
-\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{class_orthographic_camera_a3c6aeb6f25d634fe2365a1fa2d885602}{OrthographicCamera}}(\textcolor{keywordtype}{float}\ left,\ \textcolor{keywordtype}{float}\ right,\ \textcolor{keywordtype}{float}\ bottom,\ \textcolor{keywordtype}{float}\ top,\ \textcolor{keywordtype}{float}\ nearClip,\ \textcolor{keywordtype}{float}\ farClip);}
-\DoxyCodeLine{00015\ \ \ \ \ glm::mat4\ \mbox{\hyperlink{class_orthographic_camera_a22cd04b2fa05736ddf45d9ae86552d86}{getProjectionMatrix}}()\ \textcolor{keyword}{const\ override};}
-\DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{float}\ left,\ right,\ bottom,\ top,\ nearClip,\ farClip;}
-\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }ENG\_API\ OrthographicCamera\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_eng_1_1_camera}{Eng::Camera}}\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \ \ OrthographicCamera(\textcolor{keywordtype}{float}\ left,\ \textcolor{keywordtype}{float}\ right,\ \textcolor{keywordtype}{float}\ bottom,\ \textcolor{keywordtype}{float}\ top,\ \textcolor{keywordtype}{float}\ nearClip,\ \textcolor{keywordtype}{float}\ farClip);}
+\DoxyCodeLine{00012\ \ \ \ \ glm::mat4\ getProjectionMatrix()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{float}\ left;}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{float}\ right;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{float}\ bottom;}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{float}\ top;}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{float}\ nearClip;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{float}\ farClip;}
+\DoxyCodeLine{00027\ \};}
 
 \end{DoxyCode}

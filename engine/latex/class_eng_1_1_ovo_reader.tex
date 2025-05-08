@@ -1,0 +1,51 @@
+\doxysection{Eng\+::Ovo\+Reader Class Reference}
+\hypertarget{class_eng_1_1_ovo_reader}{}\label{class_eng_1_1_ovo_reader}\index{Eng::OvoReader@{Eng::OvoReader}}
+
+
+A class responsible for parsing and loading 3D scene data from OVO format files.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ \mbox{\hyperlink{class_eng_1_1_ovo_reader_a0fbbcce7746e653df6f16550c8572a4b}{parse\+Ovo\+File}} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Parses an OVO file and constructs the scene graph. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_ovo_reader_aff7c9d9dfbdf286f03d47904644ccda8}\label{class_eng_1_1_ovo_reader_aff7c9d9dfbdf286f03d47904644ccda8} 
+void {\bfseries print\+Graph} () const
+\begin{DoxyCompactList}\small\item\em Prints the current scene graph structure to standard output. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A class responsible for parsing and loading 3D scene data from OVO format files. 
+
+The \doxylink{class_eng_1_1_ovo_reader}{Ovo\+Reader} class provides functionality to read and parse OVO format files, constructing a scene graph with meshes, materials, lights, and other 3D scene elements. It maintains internal state about the scene hierarchy and manages the relationships between different scene elements during the parsing process. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_ovo_reader_a0fbbcce7746e653df6f16550c8572a4b}\index{Eng::OvoReader@{Eng::OvoReader}!parseOvoFile@{parseOvoFile}}
+\index{parseOvoFile@{parseOvoFile}!Eng::OvoReader@{Eng::OvoReader}}
+\doxysubsubsection{\texorpdfstring{parseOvoFile()}{parseOvoFile()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_ovo_reader_a0fbbcce7746e653df6f16550c8572a4b} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ Ovo\+Reader\+::parse\+Ovo\+File (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename}{}\end{DoxyParamCaption})}
+
+
+
+Parses an OVO file and constructs the scene graph. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The path to the OVO file to be parsed. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the root node of the constructed scene graph. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Ovo\+Reader.\+cpp\end{DoxyCompactItemize}

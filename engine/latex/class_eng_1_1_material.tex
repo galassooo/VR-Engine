@@ -1,0 +1,215 @@
+\doxysection{Eng\+::Material Class Reference}
+\hypertarget{class_eng_1_1_material}{}\label{class_eng_1_1_material}\index{Eng::Material@{Eng::Material}}
+
+
+Represents the material properties of a 3D object, including color, shininess, and optional textures.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+Inheritance diagram for Eng\+::Material\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_eng_1_1_material}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_material_ab06d6998936d612cc010fb68ac6707f8}{Material}} (const glm\+::vec3 \&albedo, float alpha, float shininess, const glm\+::vec3 emission)
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_eng_1_1_material}{Material} class with RGBA albedo and shininess. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_eng_1_1_material_ab2328e122f3a9ba58c209226926b7624}{render}} () override
+\begin{DoxyCompactList}\small\item\em Applies this material\textquotesingle{}s properties to the current shader. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_material_a2e50a6b9a9e33c2cda31b64fd7143dd1}{set\+Diffuse\+Texture}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_texture}{Eng\+::\+Texture}} $>$ \&texture)
+\begin{DoxyCompactList}\small\item\em Sets the diffuse texture for the material. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_texture}{Eng\+::\+Texture}} $>$ \mbox{\hyperlink{class_eng_1_1_material_a9890b5bff35e6713026595aff1dbd544}{get\+Diffuse\+Texture}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the diffuse texture of the material. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_material_a2d9a88027c8270bdb517f5720ce5b411}{get\+Albedo}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the albedo (RGB only) of the material. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_eng_1_1_material_a85d93ae12ca34b523b6913ed259581bb}{get\+Alpha}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the alpha (transparency) of the material. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_material_a637e561d0cb973e3a16164be2a140237}{set\+Alpha}} (const float new\+Alpha)
+\begin{DoxyCompactList}\small\item\em Sets the alpha channel for the material. \end{DoxyCompactList}\item 
+glm\+::vec4 \mbox{\hyperlink{class_eng_1_1_material_a54102823ca7d4573021d7a17ef35079f}{get\+Albedo\+With\+Alpha}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the albedo with alpha (RGBA) of the material. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_material_a5f811653808d852240ea21c44b94b88a}{get\+Emission}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the emission of the material. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_material_ad1d61007fb84b063ae6ea2b82f49deba}{set\+Emission}} (glm\+::vec3 emission\+New)
+\begin{DoxyCompactList}\small\item\em Sets the emission for the material. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents the material properties of a 3D object, including color, shininess, and optional textures. 
+
+The {\ttfamily \doxylink{class_eng_1_1_material}{Material}} class encapsulates visual properties used in rendering, such as color, shininess for specular highlights, and an optional diffuse texture. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_material_ab06d6998936d612cc010fb68ac6707f8}\index{Eng::Material@{Eng::Material}!Material@{Material}}
+\index{Material@{Material}!Eng::Material@{Eng::Material}}
+\doxysubsubsection{\texorpdfstring{Material()}{Material()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_material_ab06d6998936d612cc010fb68ac6707f8} 
+Material\+::\+Material (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{albedo}{, }\item[{float}]{alpha}{, }\item[{float}]{shininess}{, }\item[{const glm\+::vec3}]{emission}{}\end{DoxyParamCaption})}
+
+
+
+Constructor for \doxylink{class_eng_1_1_material}{Material} class with RGBA albedo and shininess. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em albedo} & The diffuse color of the material (RGB). \\
+\hline
+{\em alpha} & Transparency value (0.\+0 = fully transparent, 1.\+0 = fully opaque). \\
+\hline
+{\em shininess} & The shininess factor for specular highlights. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_material_a2d9a88027c8270bdb517f5720ce5b411}\index{Eng::Material@{Eng::Material}!getAlbedo@{getAlbedo}}
+\index{getAlbedo@{getAlbedo}!Eng::Material@{Eng::Material}}
+\doxysubsubsection{\texorpdfstring{getAlbedo()}{getAlbedo()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_material_a2d9a88027c8270bdb517f5720ce5b411} 
+glm\+::vec3 Material\+::get\+Albedo (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the albedo (RGB only) of the material. 
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec3 The albedo color (RGB). 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_material_a54102823ca7d4573021d7a17ef35079f}\index{Eng::Material@{Eng::Material}!getAlbedoWithAlpha@{getAlbedoWithAlpha}}
+\index{getAlbedoWithAlpha@{getAlbedoWithAlpha}!Eng::Material@{Eng::Material}}
+\doxysubsubsection{\texorpdfstring{getAlbedoWithAlpha()}{getAlbedoWithAlpha()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_material_a54102823ca7d4573021d7a17ef35079f} 
+glm\+::vec4 Material\+::get\+Albedo\+With\+Alpha (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the albedo with alpha (RGBA) of the material. 
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec4 The albedo color with transparency. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_material_a85d93ae12ca34b523b6913ed259581bb}\index{Eng::Material@{Eng::Material}!getAlpha@{getAlpha}}
+\index{getAlpha@{getAlpha}!Eng::Material@{Eng::Material}}
+\doxysubsubsection{\texorpdfstring{getAlpha()}{getAlpha()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_material_a85d93ae12ca34b523b6913ed259581bb} 
+float Material\+::get\+Alpha (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the alpha (transparency) of the material. 
+
+\begin{DoxyReturn}{Returns}
+float The alpha value (0.\+0 = fully transparent, 1.\+0 = fully opaque). 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_material_a9890b5bff35e6713026595aff1dbd544}\index{Eng::Material@{Eng::Material}!getDiffuseTexture@{getDiffuseTexture}}
+\index{getDiffuseTexture@{getDiffuseTexture}!Eng::Material@{Eng::Material}}
+\doxysubsubsection{\texorpdfstring{getDiffuseTexture()}{getDiffuseTexture()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_material_a9890b5bff35e6713026595aff1dbd544} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_texture}{Eng\+::\+Texture}} $>$ Material\+::get\+Diffuse\+Texture (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the diffuse texture of the material. 
+
+Returns the texture associated with the material, if any.
+
+\begin{DoxyReturn}{Returns}
+std\+::shared\+\_\+ptr$<$\+Eng\+::\+Texture$>$ A shared pointer to the diffuse texture, or nullptr if no texture is set. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_material_a5f811653808d852240ea21c44b94b88a}\index{Eng::Material@{Eng::Material}!getEmission@{getEmission}}
+\index{getEmission@{getEmission}!Eng::Material@{Eng::Material}}
+\doxysubsubsection{\texorpdfstring{getEmission()}{getEmission()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_material_a5f811653808d852240ea21c44b94b88a} 
+glm\+::vec3 Material\+::get\+Emission (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the emission of the material. 
+
+\begin{DoxyReturn}{Returns}
+vec3 containing emission values 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_material_ab2328e122f3a9ba58c209226926b7624}\index{Eng::Material@{Eng::Material}!render@{render}}
+\index{render@{render}!Eng::Material@{Eng::Material}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_material_ab2328e122f3a9ba58c209226926b7624} 
+void Material\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Applies this material\textquotesingle{}s properties to the current shader. 
+
+Uploads ambient, diffuse, specular, shininess, and emission parameters to the \doxylink{class_eng_1_1_shader_manager}{Shader\+Manager}, binds the diffuse texture if any, and configures Open\+GL blending based on alpha transparency.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & Optional material index (unused in this implementation). \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{class_eng_1_1_holographic_material_a9d3d7939cf106a4b1a1448dd2c34f959}{Eng\+::\+Holographic\+Material}}, and \mbox{\hyperlink{class_holographic_material_a9d3d7939cf106a4b1a1448dd2c34f959}{Holographic\+Material}}.
+
+\Hypertarget{class_eng_1_1_material_a637e561d0cb973e3a16164be2a140237}\index{Eng::Material@{Eng::Material}!setAlpha@{setAlpha}}
+\index{setAlpha@{setAlpha}!Eng::Material@{Eng::Material}}
+\doxysubsubsection{\texorpdfstring{setAlpha()}{setAlpha()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_material_a637e561d0cb973e3a16164be2a140237} 
+void Material\+::set\+Alpha (\begin{DoxyParamCaption}\item[{const float}]{new\+Alpha}{}\end{DoxyParamCaption})}
+
+
+
+Sets the alpha channel for the material. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em new} & alpha to be set \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_material_a2e50a6b9a9e33c2cda31b64fd7143dd1}\index{Eng::Material@{Eng::Material}!setDiffuseTexture@{setDiffuseTexture}}
+\index{setDiffuseTexture@{setDiffuseTexture}!Eng::Material@{Eng::Material}}
+\doxysubsubsection{\texorpdfstring{setDiffuseTexture()}{setDiffuseTexture()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_material_a2e50a6b9a9e33c2cda31b64fd7143dd1} 
+void Material\+::set\+Diffuse\+Texture (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_texture}{Eng\+::\+Texture}} $>$ \&}]{texture}{}\end{DoxyParamCaption})}
+
+
+
+Sets the diffuse texture for the material. 
+
+Associates a texture with the material to define its surface appearance.
+
+
+\begin{DoxyParams}{Parameters}
+{\em texture} & A shared pointer to the texture to be applied. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_material_ad1d61007fb84b063ae6ea2b82f49deba}\index{Eng::Material@{Eng::Material}!setEmission@{setEmission}}
+\index{setEmission@{setEmission}!Eng::Material@{Eng::Material}}
+\doxysubsubsection{\texorpdfstring{setEmission()}{setEmission()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_material_ad1d61007fb84b063ae6ea2b82f49deba} 
+void Material\+::set\+Emission (\begin{DoxyParamCaption}\item[{glm\+::vec3}]{emission\+New}{}\end{DoxyParamCaption})}
+
+
+
+Sets the emission for the material. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & vec3 containing the new emissive values \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Material.\+cpp\end{DoxyCompactItemize}

@@ -3,15 +3,22 @@
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
 \DoxyCodeLine{00002\ }
-\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Camera.h"{}}}
-\DoxyCodeLine{00004\ }
-\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_perspective_camera}{PerspectiveCamera}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_camera}{Camera}}\ \{}
-\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{class_perspective_camera_aa15a4507083f41ed52a53604c37e4d1d}{PerspectiveCamera}}(\textcolor{keywordtype}{float}\ fov,\ \textcolor{keywordtype}{float}\ aspect,\ \textcolor{keywordtype}{float}\ nearClip,\ \textcolor{keywordtype}{float}\ farClip);}
-\DoxyCodeLine{00016\ \ \ \ \ glm::mat4\ \mbox{\hyperlink{class_perspective_camera_a3cd21c08c2f28cd67e69af62e0cebdb9}{getProjectionMatrix}}()\ \textcolor{keyword}{const\ override};}
-\DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{float}\ fov,\ aspect,\ nearClip,\ farClip;}
-\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }ENG\_API\ PerspectiveCamera\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_eng_1_1_camera}{Eng::Camera}}\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ PerspectiveCamera(\textcolor{keywordtype}{float}\ fov,\ \textcolor{keywordtype}{float}\ aspect,\ \textcolor{keywordtype}{float}\ nearClip,\ \textcolor{keywordtype}{float}\ farClip);}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ glm::mat4\ getProjectionMatrix()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \textcolor{keywordtype}{void}\ setAspect(\textcolor{keywordtype}{float}\ newAspect);\ \textcolor{comment}{//-\/>\ when\ reshaping\ the\ window}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \textcolor{keywordtype}{float}\ getNearClip()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00020\ \ \ \ \textcolor{keywordtype}{float}\ getFarClip()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00024\ \ \ \ \textcolor{keywordtype}{float}\ fov;}
+\DoxyCodeLine{00026\ \ \ \ \textcolor{keywordtype}{float}\ aspect;}
+\DoxyCodeLine{00028\ \ \ \ \textcolor{keywordtype}{float}\ nearClip;}
+\DoxyCodeLine{00030\ \ \ \ \textcolor{keywordtype}{float}\ farClip;}
+\DoxyCodeLine{00031\ \};}
 
 \end{DoxyCode}

@@ -1,0 +1,292 @@
+\doxysection{Eng\+::Holographic\+Material Class Reference}
+\hypertarget{class_eng_1_1_holographic_material}{}\label{class_eng_1_1_holographic_material}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+
+
+Represents a material with a holographic effect.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+Inheritance diagram for Eng\+::Holographic\+Material\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_eng_1_1_holographic_material}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_holographic_material_a3019a059bbe8d97f80c1bdc960853dd5}{Holographic\+Material}} (const glm\+::vec3 \&base\+Color=glm\+::vec3(0.\+2f, 0.\+8f, 1.\+0f), float alpha=0.\+7f, float band\+Frequency=20.\+0f, float band\+Speed=1.\+0f)
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_eng_1_1_holographic_material}{Holographic\+Material}. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_holographic_material_a6e23d61fa4400e42e96e2ef6baa94979}\label{class_eng_1_1_holographic_material_a6e23d61fa4400e42e96e2ef6baa94979} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Holographic\+Material} () override
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{class_eng_1_1_holographic_material}{Holographic\+Material}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_holographic_material_a9d3d7939cf106a4b1a1448dd2c34f959}{render}} () override
+\begin{DoxyCompactList}\small\item\em Renders the holographic material. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_holographic_material_a0b567db41b3f0369ae12cf6bcb9863ed}{set\+Base\+Color}} (const glm\+::vec3 \&color)
+\begin{DoxyCompactList}\small\item\em Sets the base color of the holographic effect. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_holographic_material_a4297fffb5ab3b986fbfda3df2a1b2ccd}{get\+Base\+Color}} () const
+\begin{DoxyCompactList}\small\item\em Gets the base color of the holographic effect. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_holographic_material_a2ec72d418257ceeb1bd37cbafed826b3}{set\+Band\+Frequency}} (float frequency)
+\begin{DoxyCompactList}\small\item\em Sets the band frequency. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_eng_1_1_holographic_material_a393cdbe06c408dbf19c1ab2c9b08efba}{get\+Band\+Frequency}} () const
+\begin{DoxyCompactList}\small\item\em Gets the band frequency. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_holographic_material_a7c2ef1c345fe36a3b229b327ac44eb56}{set\+Band\+Speed}} (float speed)
+\begin{DoxyCompactList}\small\item\em Sets the band animation speed. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_eng_1_1_holographic_material_a1765c23b710ed88f85084c9e32d760bf}{get\+Band\+Speed}} () const
+\begin{DoxyCompactList}\small\item\em Gets the band animation speed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_holographic_material_a7fd81e2f7ae2881c198554bb54291c96}{set\+Secondary\+Color}} (const glm\+::vec3 \&color)
+\begin{DoxyCompactList}\small\item\em Sets the secondary color for the holographic effect. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_holographic_material_a6a279a3fbe454fa55d31fbb858e230ad}{get\+Secondary\+Color}} () const
+\begin{DoxyCompactList}\small\item\em Gets the secondary color. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_material}{Eng\+::\+Material}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_material_ab06d6998936d612cc010fb68ac6707f8}{Material}} (const glm\+::vec3 \&albedo, float alpha, float shininess, const glm\+::vec3 emission)
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_eng_1_1_material}{Material} class with RGBA albedo and shininess. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_material_a2e50a6b9a9e33c2cda31b64fd7143dd1}{set\+Diffuse\+Texture}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_texture}{Eng\+::\+Texture}} $>$ \&texture)
+\begin{DoxyCompactList}\small\item\em Sets the diffuse texture for the material. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_texture}{Eng\+::\+Texture}} $>$ \mbox{\hyperlink{class_eng_1_1_material_a9890b5bff35e6713026595aff1dbd544}{get\+Diffuse\+Texture}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the diffuse texture of the material. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_material_a2d9a88027c8270bdb517f5720ce5b411}{get\+Albedo}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the albedo (RGB only) of the material. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_eng_1_1_material_a85d93ae12ca34b523b6913ed259581bb}{get\+Alpha}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the alpha (transparency) of the material. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_material_a637e561d0cb973e3a16164be2a140237}{set\+Alpha}} (const float new\+Alpha)
+\begin{DoxyCompactList}\small\item\em Sets the alpha channel for the material. \end{DoxyCompactList}\item 
+glm\+::vec4 \mbox{\hyperlink{class_eng_1_1_material_a54102823ca7d4573021d7a17ef35079f}{get\+Albedo\+With\+Alpha}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the albedo with alpha (RGBA) of the material. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_material_a5f811653808d852240ea21c44b94b88a}{get\+Emission}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the emission of the material. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_material_ad1d61007fb84b063ae6ea2b82f49deba}{set\+Emission}} (glm\+::vec3 emission\+New)
+\begin{DoxyCompactList}\small\item\em Sets the emission for the material. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{class_eng_1_1_holographic_material_a33a13d1154b7069398af5a8d7f7913fe}{init\+Shader}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the holographic shader if needed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a material with a holographic effect. 
+
+This material creates a holographic appearance with animated bands, color shifting, and transparency effects. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_holographic_material_a3019a059bbe8d97f80c1bdc960853dd5}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!HolographicMaterial@{HolographicMaterial}}
+\index{HolographicMaterial@{HolographicMaterial}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{HolographicMaterial()}{HolographicMaterial()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a3019a059bbe8d97f80c1bdc960853dd5} 
+Holographic\+Material\+::\+Holographic\+Material (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{base\+Color}{ = {\ttfamily glm\+:\+:vec3(0.2f,~0.8f,~1.0f)}, }\item[{float}]{alpha}{ = {\ttfamily 0.7f}, }\item[{float}]{band\+Frequency}{ = {\ttfamily 20.0f}, }\item[{float}]{band\+Speed}{ = {\ttfamily 1.0f}}\end{DoxyParamCaption})}
+
+
+
+Constructor for \doxylink{class_eng_1_1_holographic_material}{Holographic\+Material}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em base\+Color} & The base color of the holographic effect. \\
+\hline
+{\em alpha} & Transparency value (0.\+0 = fully transparent, 1.\+0 = opaque). \\
+\hline
+{\em band\+Frequency} & The frequency of holographic bands (higher = more bands). \\
+\hline
+{\em band\+Speed} & The speed of band animation.\\
+\hline
+{\em base\+Color} & The base RGB color of the material. \\
+\hline
+{\em alpha} & Maximum opacity of the material (0.\+0 -\/ 1.\+0). \\
+\hline
+{\em band\+Frequency} & Frequency of horizontal scanlines (cycles per unit). \\
+\hline
+{\em band\+Speed} & Speed of band movement over time. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_holographic_material_a393cdbe06c408dbf19c1ab2c9b08efba}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!getBandFrequency@{getBandFrequency}}
+\index{getBandFrequency@{getBandFrequency}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{getBandFrequency()}{getBandFrequency()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a393cdbe06c408dbf19c1ab2c9b08efba} 
+float Holographic\+Material\+::get\+Band\+Frequency (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the band frequency. 
+
+Gets the frequency of the animated horizontal bands.
+
+\begin{DoxyReturn}{Returns}
+float The band frequency.
+
+The band frequency. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_holographic_material_a1765c23b710ed88f85084c9e32d760bf}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!getBandSpeed@{getBandSpeed}}
+\index{getBandSpeed@{getBandSpeed}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{getBandSpeed()}{getBandSpeed()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a1765c23b710ed88f85084c9e32d760bf} 
+float Holographic\+Material\+::get\+Band\+Speed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the band animation speed. 
+
+Gets the scrolling speed of the bands.
+
+\begin{DoxyReturn}{Returns}
+float The band speed.
+
+The band speed. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_holographic_material_a4297fffb5ab3b986fbfda3df2a1b2ccd}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!getBaseColor@{getBaseColor}}
+\index{getBaseColor@{getBaseColor}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{getBaseColor()}{getBaseColor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a4297fffb5ab3b986fbfda3df2a1b2ccd} 
+glm\+::vec3 Holographic\+Material\+::get\+Base\+Color (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the base color of the holographic effect. 
+
+Retrieves the current base color of the material.
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec3 The base color.
+
+The current base color. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_holographic_material_a6a279a3fbe454fa55d31fbb858e230ad}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!getSecondaryColor@{getSecondaryColor}}
+\index{getSecondaryColor@{getSecondaryColor}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{getSecondaryColor()}{getSecondaryColor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a6a279a3fbe454fa55d31fbb858e230ad} 
+glm\+::vec3 Holographic\+Material\+::get\+Secondary\+Color (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the secondary color. 
+
+Gets the current secondary color.
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec3 The secondary color.
+
+The secondary color used for band highlights. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_holographic_material_a33a13d1154b7069398af5a8d7f7913fe}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!initShader@{initShader}}
+\index{initShader@{initShader}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{initShader()}{initShader()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a33a13d1154b7069398af5a8d7f7913fe} 
+bool Holographic\+Material\+::init\+Shader (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Initializes the holographic shader if needed. 
+
+Initializes and compiles the holographic shader.
+
+\begin{DoxyReturn}{Returns}
+true if successful, false otherwise.
+
+True if compilation and linking succeed, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_holographic_material_a9d3d7939cf106a4b1a1448dd2c34f959}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!render@{render}}
+\index{render@{render}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a9d3d7939cf106a4b1a1448dd2c34f959} 
+void Holographic\+Material\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Renders the holographic material. 
+
+Applies the holographic material during rendering. Binds shader and sets all uniforms for visual effect.
+
+Applies the holographic shader and sets its uniforms. 
+
+Reimplemented from \mbox{\hyperlink{class_eng_1_1_material_ab2328e122f3a9ba58c209226926b7624}{Eng\+::\+Material}}.
+
+\Hypertarget{class_eng_1_1_holographic_material_a2ec72d418257ceeb1bd37cbafed826b3}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!setBandFrequency@{setBandFrequency}}
+\index{setBandFrequency@{setBandFrequency}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{setBandFrequency()}{setBandFrequency()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a2ec72d418257ceeb1bd37cbafed826b3} 
+void Holographic\+Material\+::set\+Band\+Frequency (\begin{DoxyParamCaption}\item[{float}]{frequency}{}\end{DoxyParamCaption})}
+
+
+
+Sets the band frequency. 
+
+Sets the frequency of the animated horizontal bands.
+
+
+\begin{DoxyParams}{Parameters}
+{\em frequency} & The new frequency value.\\
+\hline
+{\em frequency} & Number of cycles per unit. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_holographic_material_a7c2ef1c345fe36a3b229b327ac44eb56}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!setBandSpeed@{setBandSpeed}}
+\index{setBandSpeed@{setBandSpeed}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{setBandSpeed()}{setBandSpeed()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a7c2ef1c345fe36a3b229b327ac44eb56} 
+void Holographic\+Material\+::set\+Band\+Speed (\begin{DoxyParamCaption}\item[{float}]{speed}{}\end{DoxyParamCaption})}
+
+
+
+Sets the band animation speed. 
+
+Sets the vertical scrolling speed of the bands.
+
+
+\begin{DoxyParams}{Parameters}
+{\em speed} & The new speed value.\\
+\hline
+{\em speed} & Scrolling speed multiplier. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_holographic_material_a0b567db41b3f0369ae12cf6bcb9863ed}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!setBaseColor@{setBaseColor}}
+\index{setBaseColor@{setBaseColor}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{setBaseColor()}{setBaseColor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a0b567db41b3f0369ae12cf6bcb9863ed} 
+void Holographic\+Material\+::set\+Base\+Color (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{color}{}\end{DoxyParamCaption})}
+
+
+
+Sets the base color of the holographic effect. 
+
+Sets the base color of the holographic material.
+
+
+\begin{DoxyParams}{Parameters}
+{\em color} & The new base color.\\
+\hline
+{\em color} & New base color. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_holographic_material_a7fd81e2f7ae2881c198554bb54291c96}\index{Eng::HolographicMaterial@{Eng::HolographicMaterial}!setSecondaryColor@{setSecondaryColor}}
+\index{setSecondaryColor@{setSecondaryColor}!Eng::HolographicMaterial@{Eng::HolographicMaterial}}
+\doxysubsubsection{\texorpdfstring{setSecondaryColor()}{setSecondaryColor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_holographic_material_a7fd81e2f7ae2881c198554bb54291c96} 
+void Holographic\+Material\+::set\+Secondary\+Color (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{color}{}\end{DoxyParamCaption})}
+
+
+
+Sets the secondary color for the holographic effect. 
+
+Sets the secondary color used in the band pattern.
+
+
+\begin{DoxyParams}{Parameters}
+{\em color} & The new secondary color.\\
+\hline
+{\em color} & New secondary color. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+\mbox{\hyperlink{_holographic_material_8cpp}{Holographic\+Material.\+cpp}}\end{DoxyCompactItemize}

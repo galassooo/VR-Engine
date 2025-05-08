@@ -1,0 +1,82 @@
+\doxysection{Shader Class Reference}
+\hypertarget{class_shader}{}\label{class_shader}\index{Shader@{Shader}}
+
+
+Abstract base class representing a GPU shader.  
+
+
+
+
+{\ttfamily \#include $<$Shader.\+h$>$}
+
+Inheritance diagram for Shader\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_shader}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_shader_a5659f507f97e4490e2254af851c8a159}\label{class_shader_a5659f507f97e4490e2254af851c8a159} 
+bool {\bfseries load} (const char \texorpdfstring{$\ast$}{*}data)
+\item 
+void \mbox{\hyperlink{class_shader_a96352ad17cb560af9bf71728f73bab93}{render}} () override
+\item 
+\Hypertarget{class_shader_a0592c4dd022ac5b1f293f69fd55a5441}\label{class_shader_a0592c4dd022ac5b1f293f69fd55a5441} 
+unsigned int {\bfseries get\+Gl\+Id} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_shader_af710c6f8f3cb6c499d44f6a8f47ed570}\label{class_shader_af710c6f8f3cb6c499d44f6a8f47ed570} 
+static const unsigned int {\bfseries MAX\+\_\+\+LOGSIZE} = 4096
+\begin{DoxyCompactList}\small\item\em Max output size in char for a shader log. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_shader_a3fb802475707720bf14662b5c4332f43}\label{class_shader_a3fb802475707720bf14662b5c4332f43} 
+virtual unsigned int {\bfseries create} ()=0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract base class representing a GPU shader. 
+
+\doxylink{class_shader}{Shader} provides a common interface for creating, loading, and rendering GPU shader programs. Derived classes must implement the create() method to generate the underlying Open\+GL shader object. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_shader_a96352ad17cb560af9bf71728f73bab93}\index{Shader@{Shader}!render@{render}}
+\index{render@{render}!Shader@{Shader}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_shader_a96352ad17cb560af9bf71728f73bab93} 
+void Shader\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Shader.\+h\end{DoxyCompactItemize}

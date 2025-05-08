@@ -1,0 +1,626 @@
+\doxysection{Eng\+::Shader\+Manager Class Reference}
+\hypertarget{class_eng_1_1_shader_manager}{}\label{class_eng_1_1_shader_manager}\index{Eng::ShaderManager@{Eng::ShaderManager}}
+
+
+Manages Shaders to be built into the GPU \doxylink{class_eng_1_1_program}{Program} for the graphics engine.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_eng_1_1_shader_manager_a4086bb20bc95809c98562472a6729409}{initialize}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the \doxylink{class_eng_1_1_shader_manager}{Shader\+Manager} by setting up default shaders. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_shader_manager_af88fb5462904f44d93d5c62ed735801f}\label{class_eng_1_1_shader_manager_af88fb5462904f44d93d5c62ed735801f} 
+{\bfseries Shader\+Manager} (const \mbox{\hyperlink{class_eng_1_1_shader_manager}{Shader\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_ab5e79435663da7c0f59c48e145bd198d}\label{class_eng_1_1_shader_manager_ab5e79435663da7c0f59c48e145bd198d} 
+\mbox{\hyperlink{class_eng_1_1_shader_manager}{Shader\+Manager}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_eng_1_1_shader_manager}{Shader\+Manager}} \&)=delete
+\item 
+bool \mbox{\hyperlink{class_eng_1_1_shader_manager_aca2c13a6a1eacaba4f363e2d9a58f499}{load\+Program}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_program}{Eng\+::\+Program}} $>$ \&program)
+\begin{DoxyCompactList}\small\item\em Loads a shader program and retrieves uniform locations. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a738720bd52c363d8a6ea879ffbba5947}{set\+Projection\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the projection matrix uniform on the current shader program. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a3f1f97c1a92d14b2a3e87f8beb2c666d}{set\+Model\+View\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the model-\/view matrix uniform on the current shader program. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_ad7cbabf4f1f9ea2c329ec0c768093af5}{set\+Model\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the model matrix uniform on the current shader program. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_aeb90b303d60c9299e1c18964de15f26c}{set\+View\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the view matrix uniform on the current shader program. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a04561cd1d5e0f34624babc05ef3accea}{set\+Normal\+Matrix}} (const glm\+::mat3 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the normal matrix uniform on the current shader program. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_ab80e9b4d2cea46d1566bb5fd0b524bf3}{set\+Light\+Space\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the light space matrix uniform on the current shader program. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_ab1297363d7b427489f90c0d7e544803b}{set\+Material\+Emission}} (const glm\+::vec3 \&emission)
+\begin{DoxyCompactList}\small\item\em Sets the material emission color uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_ab454e83044a2550cb3964ac7178ce9b6}{set\+Material\+Ambient}} (const glm\+::vec3 \&ambient)
+\begin{DoxyCompactList}\small\item\em Sets the material ambient color uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a62c8ba48338623b0ddcb2db0b196e82c}{set\+Material\+Diffuse}} (const glm\+::vec3 \&diffuse)
+\begin{DoxyCompactList}\small\item\em Sets the material diffuse color uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a0bdbf77d51ea9c22aa1bce9dd55bb39a}{set\+Material\+Specular}} (const glm\+::vec3 \&spec)
+\begin{DoxyCompactList}\small\item\em Sets the material specular color uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_af2b5b1a6b30ce1afce3b3aaf93221d5f}{set\+Material\+Shininess}} (float shininess)
+\begin{DoxyCompactList}\small\item\em Sets the material shininess factor uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_aa634ea95eec15701316614516daeac82}{set\+Light\+Position}} (const glm\+::vec3 \&pos)
+\begin{DoxyCompactList}\small\item\em Sets the light position uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a6b9635f37cee9862889f6d8665637d7a}{set\+Light\+Direction}} (const glm\+::vec3 \&pos)
+\begin{DoxyCompactList}\small\item\em Sets the light direction uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a1ad740a4924281670cd381599b1da1e8}{set\+Light\+Cutoff\+Angle}} (float angle)
+\begin{DoxyCompactList}\small\item\em Sets the spotlight cutoff angle uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a1096fb4e0086ca8e0400aa703f9d6af3}{set\+Light\+Falloff}} (float falloff)
+\begin{DoxyCompactList}\small\item\em Sets the light falloff factor uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_ab2ecda23abea2ed405ef8c60ae972f65}{set\+Light\+Ambient}} (const glm\+::vec3 \&amb)
+\begin{DoxyCompactList}\small\item\em Sets the light ambient intensity uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a2bcc3e9a730671f931b6304da11b36e9}{set\+Light\+Diffuse}} (const glm\+::vec3 \&diff)
+\begin{DoxyCompactList}\small\item\em Sets the light diffuse intensity uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a8389ed25db7d539089239b52b7932fe2}{set\+Light\+Specular}} (const glm\+::vec3 \&spec)
+\begin{DoxyCompactList}\small\item\em Sets the light specular intensity uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a727a918e2eab3bdf12bb9ffd71dacf65}{set\+Light\+Casts\+Shadows}} (bool casts\+Shadows)
+\begin{DoxyCompactList}\small\item\em Enables or disables shadow casting for the light. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a2435719a2f6b125c25d8e3019477e8f9}{set\+Light\+Attenuation}} (float constant, float linear, float quadratic)
+\begin{DoxyCompactList}\small\item\em Sets the light attenuation factors. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_af40b77ad9ca462ae7672d89245505dc1}{set\+Use\+Texture}} (bool use)
+\begin{DoxyCompactList}\small\item\em Enables or disables texture usage in the shader. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_afb5bb60f67769f459bdb08eacbcd444e}{set\+Global\+Light\+Color}} (const glm\+::vec3 \&color)
+\begin{DoxyCompactList}\small\item\em Sets the global light color uniform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_manager_a93992ee2abec3bf98c44f3e8519144ce}{set\+Eye\+Front}} (const glm\+::vec3 \&front)
+\begin{DoxyCompactList}\small\item\em Sets the camera forward vector uniform for specular calculations. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_shader_manager_aa4924b36527970a1e0e2c21306efe221}\label{class_eng_1_1_shader_manager_aa4924b36527970a1e0e2c21306efe221} 
+const glm\+::mat4 \& {\bfseries get\+Cached\+Projection\+Matrix} () const
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a4816172a10ae620fbd36cc3b8ada6ed4}\label{class_eng_1_1_shader_manager_a4816172a10ae620fbd36cc3b8ada6ed4} 
+const glm\+::mat4 \& {\bfseries get\+Cached\+Model\+View\+Matrix} () const
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a6447ba90e11fc74400a868a7d8b3d1de}\label{class_eng_1_1_shader_manager_a6447ba90e11fc74400a868a7d8b3d1de} 
+const glm\+::mat3 \& {\bfseries get\+Cached\+Normal\+Matrix} () const
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_abf3e5aebe5d823ce7b30d6ba09624c74}\label{class_eng_1_1_shader_manager_abf3e5aebe5d823ce7b30d6ba09624c74} 
+const glm\+::mat4 \& {\bfseries get\+Cached\+Light\+Space\+Matrix} () const
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a524d327bd45a6e75538e4db62aabafd4}\label{class_eng_1_1_shader_manager_a524d327bd45a6e75538e4db62aabafd4} 
+const glm\+::vec3 \& {\bfseries get\+Cached\+Eye\+Front} () const
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a2087c8cd1c6100f5bf48b01d5975cff4}\label{class_eng_1_1_shader_manager_a2087c8cd1c6100f5bf48b01d5975cff4} 
+const glm\+::vec3 \& {\bfseries get\+Cached\+Global\+Light\+Color} () const
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_aff55ebd731558fe592ea3250e71e6e2d}\label{class_eng_1_1_shader_manager_aff55ebd731558fe592ea3250e71e6e2d} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_program}{Eng\+::\+Program}} $>$ {\bfseries get\+Current\+Program} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_eng_1_1_shader_manager}{Shader\+Manager}} \& \mbox{\hyperlink{class_eng_1_1_shader_manager_ae7b2cb534a57d63545fd3d3692cc8699}{get\+Instance}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the singleton instance of the \doxylink{class_eng_1_1_shader_manager}{Shader\+Manager}. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{class_eng_1_1_shader_manager_ab1a6d87451c3d243a897aa750ca6c855}{preprocess\+Shader\+Code}} (const std\+::string \&source)
+\begin{DoxyCompactList}\small\item\em Preprocesses shader code by replacing predefined symbols. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_abed3d750f97a3f4e96101642ba5e83b4}\label{class_eng_1_1_shader_manager_abed3d750f97a3f4e96101642ba5e83b4} 
+static constexpr int {\bfseries POSITION\+\_\+\+LOCATION} = 0
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a1cea7f71b870689d4106dcf0cda5492b}\label{class_eng_1_1_shader_manager_a1cea7f71b870689d4106dcf0cda5492b} 
+static constexpr int {\bfseries NORMAL\+\_\+\+LOCATION} = 1
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a825a00ecf3c6f63d4a4b721139a89f80}\label{class_eng_1_1_shader_manager_a825a00ecf3c6f63d4a4b721139a89f80} 
+static constexpr int {\bfseries TEX\+\_\+\+COORD\+\_\+\+LOCATION} = 2
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a00297f613b7deb9be27ba7b78e0c7886}\label{class_eng_1_1_shader_manager_a00297f613b7deb9be27ba7b78e0c7886} 
+static constexpr int {\bfseries DIFFUSE\+\_\+\+TEXTURE\+\_\+\+UNIT} = 0
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a88b39a46f3e70f8429a0067dcbed2646}\label{class_eng_1_1_shader_manager_a88b39a46f3e70f8429a0067dcbed2646} 
+static constexpr int {\bfseries SHADOW\+\_\+\+MAP\+\_\+\+UNIT} = 1
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a64eb9ab5eeb869bfa3e6e81a0a612805}\label{class_eng_1_1_shader_manager_a64eb9ab5eeb869bfa3e6e81a0a612805} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+PROJECTION\+\_\+\+MATRIX} = "{}projection"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_ab93b5c89631d9ff5b1366033e1158cf8}\label{class_eng_1_1_shader_manager_ab93b5c89631d9ff5b1366033e1158cf8} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MODEL\+\_\+\+MATRIX} = "{}model"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a965c848b764d5a48c13c3f7f9db24e25}\label{class_eng_1_1_shader_manager_a965c848b764d5a48c13c3f7f9db24e25} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+VIEW\+\_\+\+MATRIX} = "{}view"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_ac377404ec13b1f33c36b2f99e6904195}\label{class_eng_1_1_shader_manager_ac377404ec13b1f33c36b2f99e6904195} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MODELVIEW\+\_\+\+MATRIX} = "{}modelview"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a0004d19bfc30ea95d7c494b27ef154c6}\label{class_eng_1_1_shader_manager_a0004d19bfc30ea95d7c494b27ef154c6} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+NORMAL\+\_\+\+MATRIX} = "{}normal\+Matrix"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_ab6ad616883ce9acb44ca6909a1df9935}\label{class_eng_1_1_shader_manager_ab6ad616883ce9acb44ca6909a1df9935} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHTSPACE\+\_\+\+MATRIX} = "{}lightspace\+Matrix"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_ab7d0d4b6f2543d262dc58172f0e1db89}\label{class_eng_1_1_shader_manager_ab7d0d4b6f2543d262dc58172f0e1db89} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MATERIAL\+\_\+\+EMISSION} = "{}mat\+Emission"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_aeea720feedc427acee483fb0ea3e97be}\label{class_eng_1_1_shader_manager_aeea720feedc427acee483fb0ea3e97be} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MATERIAL\+\_\+\+AMBIENT} = "{}mat\+Ambient"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_af0a573ff43fc79009324bcbb0d3e9cbf}\label{class_eng_1_1_shader_manager_af0a573ff43fc79009324bcbb0d3e9cbf} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MATERIAL\+\_\+\+DIFFUSE} = "{}mat\+Diffuse"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_ab0ac98cb6e6417e37cffd21d35e8bfd7}\label{class_eng_1_1_shader_manager_ab0ac98cb6e6417e37cffd21d35e8bfd7} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MATERIAL\+\_\+\+SPECULAR} = "{}mat\+Specular"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_ac21baf37850b5697c1fc24147b2873be}\label{class_eng_1_1_shader_manager_ac21baf37850b5697c1fc24147b2873be} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+MATERIAL\+\_\+\+SHININESS} = "{}mat\+Shininess"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a042d27e0aa4afd10b2f6a1f43c5840a6}\label{class_eng_1_1_shader_manager_a042d27e0aa4afd10b2f6a1f43c5840a6} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+USE\+\_\+\+TEXTURE\+\_\+\+DIFFUSE} = "{}use\+Texture"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_ae14128a9a6c8c8b6806e8714d25d2f31}\label{class_eng_1_1_shader_manager_ae14128a9a6c8c8b6806e8714d25d2f31} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+POSITION} = "{}light\+Pos"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a74b01d8d64ea5348402719cb156714d1}\label{class_eng_1_1_shader_manager_a74b01d8d64ea5348402719cb156714d1} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+DIRECTION} = "{}light\+Dir"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a07425ac85634a3d28f6f902df7c6bc18}\label{class_eng_1_1_shader_manager_a07425ac85634a3d28f6f902df7c6bc18} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+CUTOFF\+\_\+\+ANGLE} = "{}light\+Cutoff"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a11f40025a3402b04c660da022e26b096}\label{class_eng_1_1_shader_manager_a11f40025a3402b04c660da022e26b096} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+FALLOFF} = "{}light\+Falloff"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a21148926b53c241d4402fce0be4524e4}\label{class_eng_1_1_shader_manager_a21148926b53c241d4402fce0be4524e4} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+AMBIENT} = "{}light\+Ambient"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_af4fbc9b49007be79383ac95fb1a6a518}\label{class_eng_1_1_shader_manager_af4fbc9b49007be79383ac95fb1a6a518} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+DIFFUSE} = "{}light\+Diffuse"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_ad2ba5b30fecbf392c2ca7ee881fe0f67}\label{class_eng_1_1_shader_manager_ad2ba5b30fecbf392c2ca7ee881fe0f67} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+SPECULAR} = "{}light\+Specular"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a922200d5495d9c9d8d261b1470bf8dd7}\label{class_eng_1_1_shader_manager_a922200d5495d9c9d8d261b1470bf8dd7} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+LIGHT\+\_\+\+CASTS\+\_\+\+SHADOWS} = "{}use\+Shadow\+Map"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_ad21ebfa32c3686f27db408d063aa1471}\label{class_eng_1_1_shader_manager_ad21ebfa32c3686f27db408d063aa1471} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+ATTENUATION\+\_\+\+CONSTANT} = "{}const\+Attenuatuion"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a4178832622a46d343ec7c55f1c912513}\label{class_eng_1_1_shader_manager_a4178832622a46d343ec7c55f1c912513} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+ATTENUATION\+\_\+\+LINEAR} = "{}linear\+Attenuation"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_a1f3766ce346235c0ebfb88a4d300272a}\label{class_eng_1_1_shader_manager_a1f3766ce346235c0ebfb88a4d300272a} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+ATTENUATION\+\_\+\+QUADRATIC} = "{}quadratic\+Attenuation"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_afde45c9cd2432744a83a14a3e0e43670}\label{class_eng_1_1_shader_manager_afde45c9cd2432744a83a14a3e0e43670} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+GLOBAL\+\_\+\+LIGHT\+\_\+\+COLOR} = "{}global\+Light\+Color"{}
+\item 
+\Hypertarget{class_eng_1_1_shader_manager_aacf4d3ea2dbd36a6b04c9c740bcdc820}\label{class_eng_1_1_shader_manager_aacf4d3ea2dbd36a6b04c9c740bcdc820} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries UNIFORM\+\_\+\+EYE\+\_\+\+FRONT} = "{}eye\+Front"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages Shaders to be built into the GPU \doxylink{class_eng_1_1_program}{Program} for the graphics engine. 
+
+The \doxylink{class_eng_1_1_shader_manager}{Shader\+Manager} implements the Singleton pattern to provide centralized management of all shaders and programs. It handles\+:
+\begin{DoxyItemize}
+\item Registration and binding of default shaders
+\item Management of custom shaders that can be dynamically added/removed from the rendering cycle 
+\end{DoxyItemize}
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_shader_manager_ae7b2cb534a57d63545fd3d3692cc8699}\index{Eng::ShaderManager@{Eng::ShaderManager}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_ae7b2cb534a57d63545fd3d3692cc8699} 
+ENG\+\_\+\+API \mbox{\hyperlink{class_eng_1_1_shader_manager}{Eng\+::\+Shader\+Manager}} \& Shader\+Manager\+::get\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Retrieves the singleton instance of the \doxylink{class_eng_1_1_shader_manager}{Shader\+Manager}. 
+
+Ensures only one \doxylink{class_eng_1_1_shader_manager}{Shader\+Manager} exists throughout the application.
+
+\begin{DoxyReturn}{Returns}
+Reference to the unique \doxylink{class_eng_1_1_shader_manager}{Shader\+Manager} instance. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_shader_manager_a4086bb20bc95809c98562472a6729409}\index{Eng::ShaderManager@{Eng::ShaderManager}!initialize@{initialize}}
+\index{initialize@{initialize}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a4086bb20bc95809c98562472a6729409} 
+bool ENG\+\_\+\+API Shader\+Manager\+::initialize (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes the \doxylink{class_eng_1_1_shader_manager}{Shader\+Manager} by setting up default shaders. 
+
+If already initialized, logs a message and returns true immediately.
+
+\begin{DoxyReturn}{Returns}
+True if initialization succeeded or was already done; false on failure. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_shader_manager_aca2c13a6a1eacaba4f363e2d9a58f499}\index{Eng::ShaderManager@{Eng::ShaderManager}!loadProgram@{loadProgram}}
+\index{loadProgram@{loadProgram}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{loadProgram()}{loadProgram()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_aca2c13a6a1eacaba4f363e2d9a58f499} 
+bool ENG\+\_\+\+API Shader\+Manager\+::load\+Program (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_program}{Eng\+::\+Program}} $>$ \&}]{program}{}\end{DoxyParamCaption})}
+
+
+
+Loads a shader program and retrieves uniform locations. 
+
+Skips if the program is already active, then caches uniform locations, binds the program, and updates current\+Program.
+
+
+\begin{DoxyParams}{Parameters}
+{\em program} & Shared pointer to the \doxylink{class_eng_1_1_program}{Program} to load. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the program was bound successfully. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_shader_manager_ab1a6d87451c3d243a897aa750ca6c855}\index{Eng::ShaderManager@{Eng::ShaderManager}!preprocessShaderCode@{preprocessShaderCode}}
+\index{preprocessShaderCode@{preprocessShaderCode}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{preprocessShaderCode()}{preprocessShaderCode()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_ab1a6d87451c3d243a897aa750ca6c855} 
+std\+::string ENG\+\_\+\+API Shader\+Manager\+::preprocess\+Shader\+Code (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{source}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Preprocesses shader code by replacing predefined symbols. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & Original GLSL source code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Processed source with symbol substitutions. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_shader_manager_a93992ee2abec3bf98c44f3e8519144ce}\index{Eng::ShaderManager@{Eng::ShaderManager}!setEyeFront@{setEyeFront}}
+\index{setEyeFront@{setEyeFront}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setEyeFront()}{setEyeFront()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a93992ee2abec3bf98c44f3e8519144ce} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Eye\+Front (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{front}{}\end{DoxyParamCaption})}
+
+
+
+Sets the camera forward vector uniform for specular calculations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front} & vec3 camera forward direction. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_afb5bb60f67769f459bdb08eacbcd444e}\index{Eng::ShaderManager@{Eng::ShaderManager}!setGlobalLightColor@{setGlobalLightColor}}
+\index{setGlobalLightColor@{setGlobalLightColor}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setGlobalLightColor()}{setGlobalLightColor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_afb5bb60f67769f459bdb08eacbcd444e} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Global\+Light\+Color (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{color}{}\end{DoxyParamCaption})}
+
+
+
+Sets the global light color uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em color} & vec3 global light color. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_ab2ecda23abea2ed405ef8c60ae972f65}\index{Eng::ShaderManager@{Eng::ShaderManager}!setLightAmbient@{setLightAmbient}}
+\index{setLightAmbient@{setLightAmbient}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setLightAmbient()}{setLightAmbient()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_ab2ecda23abea2ed405ef8c60ae972f65} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Light\+Ambient (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{amb}{}\end{DoxyParamCaption})}
+
+
+
+Sets the light ambient intensity uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em amb} & vec3 ambient intensity. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a2435719a2f6b125c25d8e3019477e8f9}\index{Eng::ShaderManager@{Eng::ShaderManager}!setLightAttenuation@{setLightAttenuation}}
+\index{setLightAttenuation@{setLightAttenuation}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setLightAttenuation()}{setLightAttenuation()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a2435719a2f6b125c25d8e3019477e8f9} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Light\+Attenuation (\begin{DoxyParamCaption}\item[{float}]{constant}{, }\item[{float}]{linear}{, }\item[{float}]{quadratic}{}\end{DoxyParamCaption})}
+
+
+
+Sets the light attenuation factors. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em constant} & Constant attenuation term. \\
+\hline
+{\em linear} & Linear attenuation term. \\
+\hline
+{\em quadratic} & Quadratic attenuation term. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a727a918e2eab3bdf12bb9ffd71dacf65}\index{Eng::ShaderManager@{Eng::ShaderManager}!setLightCastsShadows@{setLightCastsShadows}}
+\index{setLightCastsShadows@{setLightCastsShadows}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setLightCastsShadows()}{setLightCastsShadows()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a727a918e2eab3bdf12bb9ffd71dacf65} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Light\+Casts\+Shadows (\begin{DoxyParamCaption}\item[{bool}]{casts\+Shadows}{}\end{DoxyParamCaption})}
+
+
+
+Enables or disables shadow casting for the light. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em casts\+Shadows} & bool true to cast shadows. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a1ad740a4924281670cd381599b1da1e8}\index{Eng::ShaderManager@{Eng::ShaderManager}!setLightCutoffAngle@{setLightCutoffAngle}}
+\index{setLightCutoffAngle@{setLightCutoffAngle}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setLightCutoffAngle()}{setLightCutoffAngle()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a1ad740a4924281670cd381599b1da1e8} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Light\+Cutoff\+Angle (\begin{DoxyParamCaption}\item[{float}]{angle}{}\end{DoxyParamCaption})}
+
+
+
+Sets the spotlight cutoff angle uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em angle} & float cutoff angle in degrees. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a2bcc3e9a730671f931b6304da11b36e9}\index{Eng::ShaderManager@{Eng::ShaderManager}!setLightDiffuse@{setLightDiffuse}}
+\index{setLightDiffuse@{setLightDiffuse}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setLightDiffuse()}{setLightDiffuse()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a2bcc3e9a730671f931b6304da11b36e9} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Light\+Diffuse (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{diff}{}\end{DoxyParamCaption})}
+
+
+
+Sets the light diffuse intensity uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em diff} & vec3 diffuse intensity. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a6b9635f37cee9862889f6d8665637d7a}\index{Eng::ShaderManager@{Eng::ShaderManager}!setLightDirection@{setLightDirection}}
+\index{setLightDirection@{setLightDirection}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setLightDirection()}{setLightDirection()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a6b9635f37cee9862889f6d8665637d7a} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Light\+Direction (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{dir}{}\end{DoxyParamCaption})}
+
+
+
+Sets the light direction uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dir} & vec3 normalized light direction. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a1096fb4e0086ca8e0400aa703f9d6af3}\index{Eng::ShaderManager@{Eng::ShaderManager}!setLightFalloff@{setLightFalloff}}
+\index{setLightFalloff@{setLightFalloff}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setLightFalloff()}{setLightFalloff()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a1096fb4e0086ca8e0400aa703f9d6af3} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Light\+Falloff (\begin{DoxyParamCaption}\item[{float}]{falloff}{}\end{DoxyParamCaption})}
+
+
+
+Sets the light falloff factor uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em falloff} & float falloff exponent. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_aa634ea95eec15701316614516daeac82}\index{Eng::ShaderManager@{Eng::ShaderManager}!setLightPosition@{setLightPosition}}
+\index{setLightPosition@{setLightPosition}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setLightPosition()}{setLightPosition()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_aa634ea95eec15701316614516daeac82} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Light\+Position (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{pos}{}\end{DoxyParamCaption})}
+
+
+
+Sets the light position uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & vec3 world-\/space light position. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_ab80e9b4d2cea46d1566bb5fd0b524bf3}\index{Eng::ShaderManager@{Eng::ShaderManager}!setLightSpaceMatrix@{setLightSpaceMatrix}}
+\index{setLightSpaceMatrix@{setLightSpaceMatrix}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setLightSpaceMatrix()}{setLightSpaceMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_ab80e9b4d2cea46d1566bb5fd0b524bf3} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Light\+Space\+Matrix (\begin{DoxyParamCaption}\item[{const glm\+::mat4 \&}]{matrix}{}\end{DoxyParamCaption})}
+
+
+
+Sets the light space matrix uniform on the current shader program. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrix} & 4x4 light space transformation matrix. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a8389ed25db7d539089239b52b7932fe2}\index{Eng::ShaderManager@{Eng::ShaderManager}!setLightSpecular@{setLightSpecular}}
+\index{setLightSpecular@{setLightSpecular}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setLightSpecular()}{setLightSpecular()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a8389ed25db7d539089239b52b7932fe2} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Light\+Specular (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{spec}{}\end{DoxyParamCaption})}
+
+
+
+Sets the light specular intensity uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em spec} & vec3 specular intensity. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_ab454e83044a2550cb3964ac7178ce9b6}\index{Eng::ShaderManager@{Eng::ShaderManager}!setMaterialAmbient@{setMaterialAmbient}}
+\index{setMaterialAmbient@{setMaterialAmbient}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setMaterialAmbient()}{setMaterialAmbient()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_ab454e83044a2550cb3964ac7178ce9b6} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Material\+Ambient (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{ambient}{}\end{DoxyParamCaption})}
+
+
+
+Sets the material ambient color uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ambient} & vec3 ambient color. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a62c8ba48338623b0ddcb2db0b196e82c}\index{Eng::ShaderManager@{Eng::ShaderManager}!setMaterialDiffuse@{setMaterialDiffuse}}
+\index{setMaterialDiffuse@{setMaterialDiffuse}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setMaterialDiffuse()}{setMaterialDiffuse()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a62c8ba48338623b0ddcb2db0b196e82c} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Material\+Diffuse (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{diffuse}{}\end{DoxyParamCaption})}
+
+
+
+Sets the material diffuse color uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em diffuse} & vec3 diffuse color. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_ab1297363d7b427489f90c0d7e544803b}\index{Eng::ShaderManager@{Eng::ShaderManager}!setMaterialEmission@{setMaterialEmission}}
+\index{setMaterialEmission@{setMaterialEmission}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setMaterialEmission()}{setMaterialEmission()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_ab1297363d7b427489f90c0d7e544803b} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Material\+Emission (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{emission}{}\end{DoxyParamCaption})}
+
+
+
+Sets the material emission color uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em emission} & vec3 emission color. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_af2b5b1a6b30ce1afce3b3aaf93221d5f}\index{Eng::ShaderManager@{Eng::ShaderManager}!setMaterialShininess@{setMaterialShininess}}
+\index{setMaterialShininess@{setMaterialShininess}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setMaterialShininess()}{setMaterialShininess()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_af2b5b1a6b30ce1afce3b3aaf93221d5f} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Material\+Shininess (\begin{DoxyParamCaption}\item[{float}]{shininess}{}\end{DoxyParamCaption})}
+
+
+
+Sets the material shininess factor uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em shininess} & float specular exponent. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a0bdbf77d51ea9c22aa1bce9dd55bb39a}\index{Eng::ShaderManager@{Eng::ShaderManager}!setMaterialSpecular@{setMaterialSpecular}}
+\index{setMaterialSpecular@{setMaterialSpecular}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setMaterialSpecular()}{setMaterialSpecular()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a0bdbf77d51ea9c22aa1bce9dd55bb39a} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Material\+Specular (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{spec}{}\end{DoxyParamCaption})}
+
+
+
+Sets the material specular color uniform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em spec} & vec3 specular color. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_ad7cbabf4f1f9ea2c329ec0c768093af5}\index{Eng::ShaderManager@{Eng::ShaderManager}!setModelMatrix@{setModelMatrix}}
+\index{setModelMatrix@{setModelMatrix}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setModelMatrix()}{setModelMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_ad7cbabf4f1f9ea2c329ec0c768093af5} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Model\+Matrix (\begin{DoxyParamCaption}\item[{const glm\+::mat4 \&}]{matrix}{}\end{DoxyParamCaption})}
+
+
+
+Sets the model matrix uniform on the current shader program. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrix} & 4x4 model transformation matrix. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a3f1f97c1a92d14b2a3e87f8beb2c666d}\index{Eng::ShaderManager@{Eng::ShaderManager}!setModelViewMatrix@{setModelViewMatrix}}
+\index{setModelViewMatrix@{setModelViewMatrix}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setModelViewMatrix()}{setModelViewMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a3f1f97c1a92d14b2a3e87f8beb2c666d} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Model\+View\+Matrix (\begin{DoxyParamCaption}\item[{const glm\+::mat4 \&}]{matrix}{}\end{DoxyParamCaption})}
+
+
+
+Sets the model-\/view matrix uniform on the current shader program. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrix} & 4x4 model-\/view matrix to use. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a04561cd1d5e0f34624babc05ef3accea}\index{Eng::ShaderManager@{Eng::ShaderManager}!setNormalMatrix@{setNormalMatrix}}
+\index{setNormalMatrix@{setNormalMatrix}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setNormalMatrix()}{setNormalMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a04561cd1d5e0f34624babc05ef3accea} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Normal\+Matrix (\begin{DoxyParamCaption}\item[{const glm\+::mat3 \&}]{matrix}{}\end{DoxyParamCaption})}
+
+
+
+Sets the normal matrix uniform on the current shader program. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrix} & 3x3 normal transformation matrix. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_a738720bd52c363d8a6ea879ffbba5947}\index{Eng::ShaderManager@{Eng::ShaderManager}!setProjectionMatrix@{setProjectionMatrix}}
+\index{setProjectionMatrix@{setProjectionMatrix}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setProjectionMatrix()}{setProjectionMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_a738720bd52c363d8a6ea879ffbba5947} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Projection\+Matrix (\begin{DoxyParamCaption}\item[{const glm\+::mat4 \&}]{matrix}{}\end{DoxyParamCaption})}
+
+
+
+Sets the projection matrix uniform on the current shader program. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrix} & 4x4 projection matrix to use. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_af40b77ad9ca462ae7672d89245505dc1}\index{Eng::ShaderManager@{Eng::ShaderManager}!setUseTexture@{setUseTexture}}
+\index{setUseTexture@{setUseTexture}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setUseTexture()}{setUseTexture()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_af40b77ad9ca462ae7672d89245505dc1} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+Use\+Texture (\begin{DoxyParamCaption}\item[{bool}]{use}{}\end{DoxyParamCaption})}
+
+
+
+Enables or disables texture usage in the shader. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em use} & bool true to sample textures. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_shader_manager_aeb90b303d60c9299e1c18964de15f26c}\index{Eng::ShaderManager@{Eng::ShaderManager}!setViewMatrix@{setViewMatrix}}
+\index{setViewMatrix@{setViewMatrix}!Eng::ShaderManager@{Eng::ShaderManager}}
+\doxysubsubsection{\texorpdfstring{setViewMatrix()}{setViewMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_manager_aeb90b303d60c9299e1c18964de15f26c} 
+void ENG\+\_\+\+API Shader\+Manager\+::set\+View\+Matrix (\begin{DoxyParamCaption}\item[{const glm\+::mat4 \&}]{matrix}{}\end{DoxyParamCaption})}
+
+
+
+Sets the view matrix uniform on the current shader program. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrix} & 4x4 camera view matrix. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Shader\+Manager.\+cpp\end{DoxyCompactItemize}

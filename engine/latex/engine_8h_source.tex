@@ -8,107 +8,221 @@
 \DoxyCodeLine{00011\ \textcolor{comment}{//\ \#INCLUDE\ //}}
 \DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <iostream>}}
 \DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <memory>}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}Node.h"{}}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}Camera.h"{}}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}List.h"{}}}
-\DoxyCodeLine{00018\ }
-\DoxyCodeLine{00019\ \ \ \ \textcolor{comment}{//\ C/C++:}}
-\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#ifdef\ \_WINDOWS}}
-\DoxyCodeLine{00021\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}glm/glm.hpp"{}}}
-\DoxyCodeLine{00022\ \textcolor{preprocessor}{\ \ \ \ \#include\ <glm/gtc/type\_ptr.hpp>}}
-\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#elif\ defined(\_\_APPLE\_\_)}}
-\DoxyCodeLine{00024\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../dependencies/glm/include/glm/glm.hpp"{}}}
-\DoxyCodeLine{00025\ \textcolor{preprocessor}{\ \ \ \ \#include\ <OpenGL/gl.h>}}
-\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \#include\ <OpenGL/glu.h>}}
-\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#include\ <OpenGL/glext.h>}}
-\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \#include\ <GLUT/glut.h>}}
-\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#else\ \ }\textcolor{comment}{//\ Linux}}
-\DoxyCodeLine{00030\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../dependencies/glm/include/glm/glm.hpp"{}}}
-\DoxyCodeLine{00031\ \textcolor{preprocessor}{\ \ \ \ \#include\ <GL/gl.h>}}
-\DoxyCodeLine{00032\ \textcolor{preprocessor}{\ \ \ \ \#include\ <GL/glu.h>}}
-\DoxyCodeLine{00033\ \textcolor{preprocessor}{\ \ \ \ \#include\ <GL/glext.h>}}
-\DoxyCodeLine{00034\ \textcolor{preprocessor}{\ \ \ \ \#include\ <GL/glut.h>}}
-\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{00036\ }
-\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <stack>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ <cstdio>}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ GLM\_ENABLE\_EXPERIMENTAL}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#ifdef\ \_WINDOWS}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}glm/glm.hpp"{}}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#include\ <glm/gtc/type\_ptr.hpp>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \#include\ <glm/gtc/matrix\_transform.hpp>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\ \ \ \ \#include\ <glm/gtx/string\_cast.hpp>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\ \ \ \ \#include\ <glm/gtc/matrix\_inverse.hpp>}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#else\ \ }\textcolor{comment}{//\ sia\ Mac\ che\ Linux}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ "{}../dependencies/glm/include/glm/glm.hpp"{}}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ "{}../dependencies/glm/include/glm/gtc/type\_ptr.hpp"{}}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ "{}../dependencies/glm/include/glm/gtc/matrix\_transform.hpp"{}}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ "{}../dependencies/glm/include/glm/gtx/string\_cast.hpp"{}}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ "{}../dependencies/glm/include/glm/gtc/matrix\_inverse.hpp"{}}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#endif}}
 \DoxyCodeLine{00038\ }
-\DoxyCodeLine{00040\ \textcolor{comment}{//\ VERSION\ //}}
-\DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \ \ \ \textcolor{comment}{//\ Generic\ info:}}
-\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#ifdef\ \_DEBUG}}
-\DoxyCodeLine{00045\ \textcolor{preprocessor}{\ \ \ \#define\ LIB\_NAME\ \ \ \ \ \ "{}My\ Graphics\ Engine\ v0.1a\ (debug)"{}\ \ \ }}
-\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#else}}
-\DoxyCodeLine{00047\ \textcolor{preprocessor}{\ \ \ \#define\ LIB\_NAME\ \ \ \ \ \ "{}My\ Graphics\ Engine\ v0.1a"{}\ \ \ }}
-\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{00049\ \textcolor{preprocessor}{\ \ \ \#define\ LIB\_VERSION\ \ \ 10\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
-\DoxyCodeLine{00050\ }
-\DoxyCodeLine{00051\ \ \ \ \textcolor{comment}{//\ Export\ API:}}
-\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#ifdef\ \_WINDOWS}}
-\DoxyCodeLine{00053\ \textcolor{preprocessor}{\ \ \ \#ifdef\ ENGINE\_EXPORTS}}
-\DoxyCodeLine{00054\ \textcolor{preprocessor}{\ \ \ \ \ \ \#define\ ENG\_API\ \_\_declspec(dllexport)}}
-\DoxyCodeLine{00055\ \textcolor{preprocessor}{\ \ \ \#else}}
-\DoxyCodeLine{00056\ \textcolor{preprocessor}{\ \ \ \ \ \ \#define\ ENG\_API\ \_\_declspec(dllimport)}}
-\DoxyCodeLine{00057\ \textcolor{preprocessor}{\ \ \ \#endif}}
-\DoxyCodeLine{00058\ \textcolor{preprocessor}{\ \ \ \#pragma\ warning(disable\ :\ 4251)}}
-\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#else}}
-\DoxyCodeLine{00060\ \textcolor{preprocessor}{\ \ \ \#define\ ENG\_API}}
-\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{00062\ }
-\DoxyCodeLine{00064\ \textcolor{comment}{//\ NAMESPACE\ //}}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \textcolor{keyword}{namespace\ }Eng\ \{}
-\DoxyCodeLine{00068\ }
-\DoxyCodeLine{00070\ \textcolor{comment}{//\ MAIN\ ENGINE\ CLASS\ //}}
-\DoxyCodeLine{00072\ }
-\DoxyCodeLine{00076\ \textcolor{keyword}{class\ }ENG\_API\ \mbox{\hyperlink{class_eng_1_1_base}{Base}}\ final}
-\DoxyCodeLine{00077\ \{}
-\DoxyCodeLine{00079\ \textcolor{keyword}{public}:\ \textcolor{comment}{//}}
-\DoxyCodeLine{00081\ }
-\DoxyCodeLine{00082\ \ \ \ \textcolor{comment}{//\ Singleton\ control:}}
-\DoxyCodeLine{00083\ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_eng_1_1_base}{Base}}\ \&getInstance();}
-\DoxyCodeLine{00084\ \ \ \ \mbox{\hyperlink{class_eng_1_1_base}{Base}}(\mbox{\hyperlink{class_eng_1_1_base}{Base}}\ \textcolor{keyword}{const}\ \&)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00085\ \ \ \ \textcolor{keywordtype}{void}\ operator=(\mbox{\hyperlink{class_eng_1_1_base}{Base}}\ \textcolor{keyword}{const}\ \&)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00086\ }
-\DoxyCodeLine{00087\ }
-\DoxyCodeLine{00088\ \ \ \ \textcolor{comment}{//\ Init/free:}}
-\DoxyCodeLine{00089\ \ \ \ \textcolor{keywordtype}{bool}\ init();}
-\DoxyCodeLine{00090\ \ \ \ \textcolor{keywordtype}{bool}\ free();}
-\DoxyCodeLine{00091\ }
-\DoxyCodeLine{00092\ \ \ \ \textcolor{comment}{//\ Scene\ management}}
-\DoxyCodeLine{00093\ \ \ \ \textcolor{keywordtype}{void}\ renderScene();}
-\DoxyCodeLine{00094\ \ \ \ \textcolor{keywordtype}{void}\ SetActiveCamera(std::shared\_ptr<Camera>\ camera);}
-\DoxyCodeLine{00095\ }
-\DoxyCodeLine{00096\ \ \ \ \textcolor{comment}{//\ Scene\ Graph}}
-\DoxyCodeLine{00097\ \ \ \ \textcolor{keywordtype}{void}\ addRootNode(std::shared\_ptr<Node>\ node);}
-\DoxyCodeLine{00098\ \ \ \ \textcolor{keywordtype}{void}\ removeRootNode(std::shared\_ptr<Node>\ node);}
-\DoxyCodeLine{00099\ }
-\DoxyCodeLine{00101\ \textcolor{keyword}{private}:\ \textcolor{comment}{//}}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \ \ \ \textcolor{comment}{//\ Reserved:}}
-\DoxyCodeLine{00105\ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_eng_1_1_base_1_1_reserved}{Reserved}};}
-\DoxyCodeLine{00106\ \ \ \ std::unique\_ptr<Reserved>\ reserved;}
-\DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ \ \ \ \textcolor{comment}{//\ Const/dest:}}
-\DoxyCodeLine{00109\ \ \ \ \mbox{\hyperlink{class_eng_1_1_base}{Base}}();}
-\DoxyCodeLine{00110\ \ \ \ \mbox{\hyperlink{class_eng_1_1_base}{\string~Base}}();}
-\DoxyCodeLine{00111\ }
-\DoxyCodeLine{00112\ \ \ \ \textcolor{comment}{//\ Helper\ functions\ for\ OpenGL\ context\ management}}
-\DoxyCodeLine{00113\ \ \ \ \textcolor{keywordtype}{bool}\ initOpenGL();}
-\DoxyCodeLine{00114\ \ \ \ \textcolor{keywordtype}{void}\ freeOpenGL();}
-\DoxyCodeLine{00115\ }
-\DoxyCodeLine{00116\ \ \ \ \textcolor{comment}{//\ Root\ nodes}}
-\DoxyCodeLine{00117\ \ \ \ std::vector<std::shared\_ptr<Node>>\ rootNodes;}
+\DoxyCodeLine{00039\ \textcolor{comment}{//\ Generic\ info:}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#ifdef\ \_DEBUG}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\ \ \ \#define\ LIB\_NAME\ \ \ \ \ \ "{}Kevin\ Quarenghi\ \&\ Martina\ Galasso's\ Graphics\ Engine\ v1.0"{}\ \ \ }}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ LIB\_NAME\ \ \ \ \ \ "{}Kevin\ Quarenghi\ \&\ Martina\ Galasso's\ Graphics\ Engine\ v1.0"{}\ \ \ }}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ LIB\_VERSION\ \ \ 10\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{comment}{//\ Export\ API:}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#ifdef\ \_WINDOWS}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#ifdef\ ENGINE\_EXPORTS}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\ \ \ \ \ \ \#define\ ENG\_API\ \_\_declspec(dllexport)}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\ \ \ \ \ \ \#define\ ENG\_API\ \_\_declspec(dllimport)}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\ \ \ \#pragma\ warning(disable\ :\ 4251)}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#define\ ENG\_API}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{comment}{//\ Engine\ capability\ flags}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ ENG\_RENDER\_NORMAL\ \ \ 0x0001}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#define\ ENG\_STEREO\_RENDERING\ \ 0x0002}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{comment}{//\ Window\ and\ FBO\ size\ constants}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#define\ APP\_WINDOWSIZEX\ \ \ 1024}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#define\ APP\_WINDOWSIZEY\ \ \ 512}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ APP\_FBOSIZEX\ \ \ \ \ \ (APP\_WINDOWSIZEX\ /\ 2)}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#define\ APP\_FBOSIZEY\ \ \ \ \ \ APP\_WINDOWSIZEY}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{comment}{//\ Stereo\ camera\ constants}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#define\ STEREO\_NEAR\_CLIP\ \ \ \ 0.1f}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ STEREO\_FAR\_CLIP\ \ \ \ \ 1000000.0f}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#define\ STEREO\_EYE\_HEIGHT\ \ \ -\/0.1f}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespace_eng}{Eng}}\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//\ SceneGraph\ //}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#include\ "{}FrameBufferObject.h"{}}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#include\ "{}BoundingBox.h"{}}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#include\ "{}Object.h"{}}}
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#include\ "{}Node.h"{}}}
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#include\ "{}Camera.h"{}}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#include\ "{}OrthographicCamera.h"{}}}
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#include\ "{}PerspectiveCamera.h"{}}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#include\ "{}Light.h"{}}}
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#include\ "{}PointLight.h"{}}}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#include\ "{}SpotLight.h"{}}}
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#include\ "{}DirectionalLight.h"{}}}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#include\ "{}Texture.h"{}}}
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#include\ "{}Material.h"{}}}
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#include\ "{}Vertex.h"{}}}
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#include\ "{}Mesh.h"{}}}
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\#include\ "{}Shader.h"{}}}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#include\ "{}VertexShader.h"{}}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#include\ "{}FragmentShader.h"{}}}
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#include\ "{}Program.h"{}}}
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#include\ "{}RenderLayer.h"{}}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#include\ "{}ListElement.h"{}}}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#include\ "{}ListIterator.h"{}}}
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#include\ "{}List.h"{}}}
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#include\ "{}OvoReader.h"{}}}
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#include\ "{}CallbackManager.h"{}}}
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#include\ "{}PostProcessor.h"{}}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#include\ "{}PostProcessorManager.h"{}}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#include\ "{}BloomEffect.h"{}}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#include\ "{}Builder.h"{}}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#include\ "{}ShaderManager.h"{}}}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#include\ "{}Skybox.h"{}}}
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#include\ "{}HolographicMaterial.h"{}}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#include\ "{}RenderPipeline.h"{}}}
 \DoxyCodeLine{00118\ }
-\DoxyCodeLine{00119\ \ \ \ \textcolor{comment}{//\ Traverse\ Root\ nodes}}
-\DoxyCodeLine{00120\ \ \ \ \textcolor{keywordtype}{void}\ traverseAndAddToRenderList(\textcolor{keyword}{const}\ std::shared\_ptr<Node>\&\ node);}
-\DoxyCodeLine{00121\ }
-\DoxyCodeLine{00122\ \ \ \ \textcolor{comment}{//\ Currently\ active\ camera}}
-\DoxyCodeLine{00123\ \ \ \ std::shared\_ptr<Camera>\ activeCamera;}
-\DoxyCodeLine{00124\ }
-\DoxyCodeLine{00125\ \ \ \ \textcolor{comment}{//RenderList}}
-\DoxyCodeLine{00126\ \ \ \ \mbox{\hyperlink{class_list}{List}}\ renderList;}
-\DoxyCodeLine{00127\ \};}
-\DoxyCodeLine{00128\ }
-\DoxyCodeLine{00129\ \};\ \textcolor{comment}{//\ end\ of\ namespace\ Eng::}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#include\ "{}Tests/Test\_Camera.h"{}}}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#include\ "{}Tests/Test\_Light.h"{}}}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#include\ "{}Tests/Test\_Node.h"{}}}
+\DoxyCodeLine{00127\ \textcolor{preprocessor}{\#include\ "{}Tests/Test\_List.h"{}}}
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#include\ "{}Tests/Test\_Mesh.h"{}}}
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#include\ "{}Tests/Test\_CallManager.h"{}}\ }
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00145\ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ engineState\ =\ 0;}
+\DoxyCodeLine{00146\ \ \ \ \textcolor{keyword}{class\ }ENG\_API\ Base\ final\ \{}
+\DoxyCodeLine{00147\ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \textcolor{keyword}{static}\ Base\ \&\mbox{\hyperlink{class_eng_1_1_base_a3c21bcd7bace09d5913ced6de5b15518}{getInstance}}();}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ Base(Base\ \textcolor{keyword}{const}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(Base\ \textcolor{keyword}{const}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_a37a1bd8e2a713f00a05624d1c02a0be2}{engEnable}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ cap);}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_a4f36a876f5ea731d19f70cb3f9144a64}{engDisable}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ cap);}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_eng_1_1_base_a7ef5e524072e1786c7690da3ae08909d}{engIsEnabled}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ cap);}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_a914ead4a241338bbac104ce7186de2bb}{run}}();}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_eng_1_1_base_a90edbcc7768cba11d81687bdcf7c10f5}{init}}();}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_eng_1_1_base_afd7e1923deb411907695c0b27114f62a}{free}}();}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_a4684cbf08ccc9f08cd073977697b4103}{renderScene}}();}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_a74772257b8f5857231d3de2a1480488d}{loadScene}}(\textcolor{keyword}{const}\ std::string\ \&fileName);}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ std::shared\_ptr<Node>\ \mbox{\hyperlink{class_eng_1_1_base_abbe8d53f1f7994dd6a29bcc1a3f48d6f}{getRootNode}}();}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_aa8c86687b7d3aa69d7170b1441c0ef0f}{SetActiveCamera}}(std::shared\_ptr<Camera>\ camera);}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ std::shared\_ptr<Camera>\ \mbox{\hyperlink{class_eng_1_1_base_ab7afa74aa12ee0176f880275602002d5}{getActiveCamera}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_eng_1_1_base_a37830747b9addbe79a88e2a5a237f072}{getWindowAspectRatio}}()\ ;}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_eng_1_1_base_a781e6bca1708c544c407ed3076d902d9}{setupStereoscopicRendering}}(\textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_a8ac518f05ed2c7a08083deb7a7a339a5}{renderStereoscopic}}();}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setEyeDistance(\textcolor{keywordtype}{float}\ distance)\ \{\ eyeDistance\ =\ distance;\ \}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ getEyeDistance()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ eyeDistance;\ \}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \textcolor{comment}{//\ Skybox}}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_ac5a97e71d05a7f044da3fcf226a8c37e}{registerSkybox}}(\textcolor{keyword}{const}\ std::vector<std::string>\&\ faces);}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ std::shared\_ptr<Skybox>\ \mbox{\hyperlink{class_eng_1_1_base_ac72f31a4cbb5dc8d5a2b4d955ce57552}{getSkybox}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \textcolor{comment}{//\ HeadNode\ for\ LeapMotion}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ std::shared\_ptr<Node>\ \mbox{\hyperlink{class_eng_1_1_base_a179e44284ce35bc90b6a8822ef868202}{getHeadNode}}();}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setStereoEyeHeight(\textcolor{keywordtype}{float}\ height)\ \{\ stereoEyeHeight\ =\ height;\ \}}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ getStereoEyeHeight()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ stereoEyeHeight;\ \}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_ae317011d81a11c5b10a58b389e45417a}{setBodyPosition}}(\textcolor{keyword}{const}\ glm::mat4\&\ position);}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ glm::mat4\ \mbox{\hyperlink{class_eng_1_1_base_a6b141f48d7b690d53e255d56c833ad84}{getBodyPosition}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \textcolor{comment}{//post\ processing}}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_eng_1_1_base_adec1db510ba5fe10d88b160ee75c9772}{addPostProcessor}}(std::shared\_ptr<PostProcessor>\ postProcessor);}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_eng_1_1_base_ac1e7663805c44d396821ec04be570d4f}{removePostProcessor}}(\textcolor{keyword}{const}\ std::string\&\ name);}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ std::shared\_ptr<PostProcessor>\ \mbox{\hyperlink{class_eng_1_1_base_ad59862c374ca6a89ba18de39e385c39f}{getPostProcessor}}(\textcolor{keyword}{const}\ std::string\&\ name);}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_a9b3aae17bc7a5fe435a788b5523a1238}{setPostProcessingEnabled}}(\textcolor{keywordtype}{bool}\ enabled);}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_eng_1_1_base_a125d9bc8caa221e29bb54bb6ab8a6dff}{isPostProcessingEnabled}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ initializePostProcessingTextures(\textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_eng_1_1_base_a9206880e8864e51e80d9f638e885f341}{cleanupTextures}}();}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_eng_1_1_base_1_1_reserved}{Reserved}};}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ std::unique\_ptr<Reserved>\ reserved;}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \ \ std::shared\_ptr<Eng::BoundingBox>\ sceneBoundingBox\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ stereoNearClip\ =\ 0.2f;}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ stereoFarClip\ =\ 1000000.0f;}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \ \ std::shared\_ptr<Fbo>\ leftEyeFbo;}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ std::shared\_ptr<Fbo>\ rightEyeFbo;}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ leftEyeTexture;}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ rightEyeTexture;}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ glm::mat4\ stereoInitialTransform\ =\ glm::translate(glm::mat4(1.0f),\ glm::vec3(-\/1.4f,\ -\/0.1f,\ -\/0.6f))\ *}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ glm::rotate(glm::mat4(1.0f),\ glm::radians(270.0f),\ glm::vec3(0.0f,\ 1.0f,\ 0.0f));}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ eyeDistance;}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ glm::mat4\ computeEyeViewMatrix(\textcolor{keyword}{const}\ glm::mat4\&\ cameraWorldMatrix,\ \textcolor{keywordtype}{float}\ eyeOffset);}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ renderEye(\mbox{\hyperlink{class_eng_1_1_fbo}{Fbo}}*\ eyeFbo,\ glm::mat4\&\ viewMatrix,\ glm::mat4\&\ projectionMatrix);}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ \ \ Base();}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \string~Base();}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ initOpenGL();}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ initOpenVR();}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ freeOpenGL();}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ traverseAndAddToRenderList(\textcolor{keyword}{const}\ std::shared\_ptr<Node>\ \&node);}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00228\ \ \ \ \ \ \ std::shared\_ptr<Node>\ rootNode;}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ std::shared\_ptr<Camera>\ activeCamera;}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \mbox{\hyperlink{class_eng_1_1_list}{List}}\ renderList;}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ windowId;}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \textcolor{comment}{//\ Skybox}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ std::shared\_ptr<Skybox>\ skybox;}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \textcolor{comment}{//\ Render\ pipeline}}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \mbox{\hyperlink{class_eng_1_1_render_pipeline}{RenderPipeline}}\ renderPipeline;}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \textcolor{comment}{//\ HeadNode\ for\ LeapMotion}}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ std::shared\_ptr<Node>\ headNode;}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ stereoRenderWidth\ =\ 0;}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ stereoRenderHeight\ =\ 0;}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \ \ std::shared\_ptr<Eng::Fbo>\ sceneFbo;}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ std::shared\_ptr<Eng::Fbo>\ outputFbo;}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ sceneTexture\ =\ 0;}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ outputTexture\ =\ 0;}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \textcolor{comment}{//\ Post-\/processing\ textures\ for\ stereoscopic\ rendering}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ leftEyePostTexture\ =\ 0;}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ rightEyePostTexture\ =\ 0;}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ stereoEyeHeight\ =\ STEREO\_EYE\_HEIGHT;}
+\DoxyCodeLine{00257\ \ \ \ \};}
+\DoxyCodeLine{00258\ \};\ \textcolor{comment}{//\ end\ of\ namespace\ Eng::}}
 
 \end{DoxyCode}

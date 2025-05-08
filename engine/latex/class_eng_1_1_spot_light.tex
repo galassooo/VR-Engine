@@ -1,0 +1,165 @@
+\doxysection{Eng\+::Spot\+Light Class Reference}
+\hypertarget{class_eng_1_1_spot_light}{}\label{class_eng_1_1_spot_light}\index{Eng::SpotLight@{Eng::SpotLight}}
+
+
+Represents a light source that emits light in a specific direction with a cone-\/shaped area of effect.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+Inheritance diagram for Eng\+::Spot\+Light\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_eng_1_1_spot_light}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_spot_light_ad3a01375e31a571354e9274caead1b36}{Spot\+Light}} (const glm\+::vec3 \&\mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}}, const glm\+::vec3 \&direction, float cutoff\+Angle, float fall\+Off, float radius)
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_eng_1_1_spot_light}{Spot\+Light}. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_spot_light_a7728903c155eda1e0304be6de04609d7}{get\+Direction}} () const
+\begin{DoxyCompactList}\small\item\em Gets the current direction of the spotlight. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_spot_light_a54daa32f1c0b086fbf2f2098934da021}{get\+Position}} () const
+\begin{DoxyCompactList}\small\item\em Gets the current position of the spotlight. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_light_aad66dc4b16fd701b316f38eedadd6e26}{Light}} (const glm\+::vec3 \&\mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}})
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_eng_1_1_light}{Light}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_light_aef3f7a76f9685584401ffbc0b07d5a20}{set\+Color}} (const glm\+::vec3 \&\mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}})
+\begin{DoxyCompactList}\small\item\em Sets the color of the light source. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_light_ad11747595250cede2c4c7948d1aa3d83}{render}} () override
+\begin{DoxyCompactList}\small\item\em Renders the light by uploading its ambient, diffuse, and specular properties to the shader and configuring any subclass-\/specific settings. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_node_aa40fb59cc7ed94005b70ffae74c74c78}{Node}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_node}{Node} class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a1bf04bccde0ec7e57015290989c29ebc}{set\+Parent}} (\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*}p)
+\begin{DoxyCompactList}\small\item\em Sets the parent of the node. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a5971d7af616f9df233236b9c1989e7a0}{get\+Parent}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the parent of the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a435f8d7bb208a7716aac311647d686b7}{add\+Child}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ child)
+\begin{DoxyCompactList}\small\item\em Adds a child node to the list of current node\textquotesingle{}s children. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_ac8387fae8472200c0c17a06d8dcc94a3}{get\+Children}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the list of children for the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a4239997371524dbfed52ff157eac1ffe}{set\+Local\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+const glm\+::mat4 \& \mbox{\hyperlink{class_eng_1_1_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}{get\+Local\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_ac834ce5ba6cff3c02665adb3237a3f82}{get\+Final\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Computes the final transformation matrix of the node. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_light_ad0e59fad13bb6cfadc25b2c477e9ddc7}{\texorpdfstring{$\sim$}{\string~}\+Light}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{class_eng_1_1_light}{Light}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
+\begin{DoxyCompactItemize}
+\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a8adf99ef92cc40ccf96442eed1f1407d}{parent}}
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \mbox{\hyperlink{class_eng_1_1_node_a595aa4342bed14825742645b747fd622}{children}}
+\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_aca4efea05f8cbcf29913366ad6222eb7}{local\+Matrix}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
+\begin{DoxyCompactItemize}
+\item 
+static int {\bfseries light\+ID} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a light source that emits light in a specific direction with a cone-\/shaped area of effect. 
+
+The {\ttfamily \doxylink{class_eng_1_1_spot_light}{Spot\+Light}} simulates a focused light source, such as a flashlight or stage light. It is characterized by its direction, cutoff angle, and falloff factor, which define the shape and intensity distribution of the light beam. It inherits common properties from the {\ttfamily \doxylink{class_eng_1_1_light}{Light}} base class. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_spot_light_ad3a01375e31a571354e9274caead1b36}\index{Eng::SpotLight@{Eng::SpotLight}!SpotLight@{SpotLight}}
+\index{SpotLight@{SpotLight}!Eng::SpotLight@{Eng::SpotLight}}
+\doxysubsubsection{\texorpdfstring{SpotLight()}{SpotLight()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_spot_light_ad3a01375e31a571354e9274caead1b36} 
+Spot\+Light\+::\+Spot\+Light (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{color}{, }\item[{const glm\+::vec3 \&}]{direction}{, }\item[{float}]{cutoff\+Angle}{, }\item[{float}]{fall\+Off}{, }\item[{float}]{radius}{}\end{DoxyParamCaption})}
+
+
+
+Constructor for \doxylink{class_eng_1_1_spot_light}{Spot\+Light}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em color} & The base color of the light (affects ambient, diffuse, and specular). \\
+\hline
+{\em direction} & The direction of the spotlight. \\
+\hline
+{\em cutoff\+Angle} & The cone angle of the spotlight. \\
+\hline
+{\em fall\+Off} & The intensity falloff exponent within the spotlight cone. \\
+\hline
+{\em radius} & The radius of influence for attenuation. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_spot_light_a7728903c155eda1e0304be6de04609d7}\index{Eng::SpotLight@{Eng::SpotLight}!getDirection@{getDirection}}
+\index{getDirection@{getDirection}!Eng::SpotLight@{Eng::SpotLight}}
+\doxysubsubsection{\texorpdfstring{getDirection()}{getDirection()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_spot_light_a7728903c155eda1e0304be6de04609d7} 
+glm\+::vec3 Spot\+Light\+::get\+Direction (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the current direction of the spotlight. 
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec3 The normalized direction of the spotlight. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_spot_light_a54daa32f1c0b086fbf2f2098934da021}\index{Eng::SpotLight@{Eng::SpotLight}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!Eng::SpotLight@{Eng::SpotLight}}
+\doxysubsubsection{\texorpdfstring{getPosition()}{getPosition()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_spot_light_a54daa32f1c0b086fbf2f2098934da021} 
+glm\+::vec3 Spot\+Light\+::get\+Position (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the current position of the spotlight. 
+
+The position is derived from the light\textquotesingle{}s final transformation matrix in the scene graph.
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec3 The position of the light in world coordinates. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Spot\+Light.\+cpp\end{DoxyCompactItemize}

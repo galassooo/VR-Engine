@@ -1,0 +1,106 @@
+\doxysection{Program Class Reference}
+\hypertarget{class_program}{}\label{class_program}\index{Program@{Program}}
+
+
+Links and manages a set of shaders into a GPU program for rendering.  
+
+
+
+
+{\ttfamily \#include $<$Program.\+h$>$}
+
+Inheritance diagram for Program\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_program}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_program_a9a832e44fe855dcf6f84d65c72f4d7eb}\label{class_program_a9a832e44fe855dcf6f84d65c72f4d7eb} 
+\mbox{\hyperlink{class_program}{Program}} \& {\bfseries add\+Shader} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_shader}{Eng\+::\+Shader}} $>$ \&shader)
+\item 
+\Hypertarget{class_program_a629eceea1f81aa50a6d0c1cfdb023df5}\label{class_program_a629eceea1f81aa50a6d0c1cfdb023df5} 
+bool {\bfseries build} ()
+\item 
+void \mbox{\hyperlink{class_program_a14ca8e8eb0d412b185e58ae17a93d728}{render}} () override
+\item 
+\Hypertarget{class_program_a6e3862eee359bfc1b1d272911432d022}\label{class_program_a6e3862eee359bfc1b1d272911432d022} 
+unsigned int {\bfseries get\+Gl\+Id} ()
+\item 
+\Hypertarget{class_program_a3ffa4dc843bca7ed09cfafc84bebbe0e}\label{class_program_a3ffa4dc843bca7ed09cfafc84bebbe0e} 
+\mbox{\hyperlink{class_program}{Program}} \& {\bfseries bind\+Attribute} (int location, const char \texorpdfstring{$\ast$}{*}attrib\+Name)
+\item 
+\Hypertarget{class_program_ae5d1326ee6985d192cf8718007737631}\label{class_program_ae5d1326ee6985d192cf8718007737631} 
+\mbox{\hyperlink{class_program}{Program}} \& {\bfseries bind\+Sampler} (int unit\+Index, const char \texorpdfstring{$\ast$}{*}sampler\+Name)
+\item 
+\Hypertarget{class_program_a47b518aabbe248ccbd82ec625ef57fbb}\label{class_program_a47b518aabbe248ccbd82ec625ef57fbb} 
+int {\bfseries get\+Param\+Location} (const char \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}})
+\item 
+\Hypertarget{class_program_ade56c311ea3bd6f11005b9377d3b1134}\label{class_program_ade56c311ea3bd6f11005b9377d3b1134} 
+void {\bfseries set\+Matrix} (int param, const glm\+::mat4 \&mat)
+\item 
+\Hypertarget{class_program_a4017c5d0643b57079221e1c221897f2f}\label{class_program_a4017c5d0643b57079221e1c221897f2f} 
+void {\bfseries set\+Matrix} (int param, const glm\+::mat3 \&mat)
+\item 
+\Hypertarget{class_program_a995d490ceca3e1d537aad69953940249}\label{class_program_a995d490ceca3e1d537aad69953940249} 
+void {\bfseries set\+Float} (int param, float value)
+\item 
+\Hypertarget{class_program_af0f70a91196e65ae710d6056be260ce6}\label{class_program_af0f70a91196e65ae710d6056be260ce6} 
+void {\bfseries set\+Int} (int param, int value)
+\item 
+\Hypertarget{class_program_a1d18994731e7774a6e5bf2a4d1e34e11}\label{class_program_a1d18994731e7774a6e5bf2a4d1e34e11} 
+void {\bfseries set\+Vec3} (int param, const glm\+::vec3 \&vect)
+\item 
+\Hypertarget{class_program_a0595f47939f6979100cd45d3c74ba190}\label{class_program_a0595f47939f6979100cd45d3c74ba190} 
+void {\bfseries set\+Vec4} (int param, const glm\+::vec4 \&vect)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_program_a475dbcdeb24419d807c93c7fca47dc69}\label{class_program_a475dbcdeb24419d807c93c7fca47dc69} 
+static const unsigned int {\bfseries MAX\+\_\+\+LOGSIZE} = 4096
+\begin{DoxyCompactList}\small\item\em Max output size in char for a shader log. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Links and manages a set of shaders into a GPU program for rendering. 
+
+A \doxylink{class_program}{Program} encapsulates the Open\+GL shader program object, allowing addition of compiled shader objects, binding of attribute locations and texture samplers, and retrieval of uniform locations. After building, it can be activated for rendering and used to set uniform variables of various types. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_program_a14ca8e8eb0d412b185e58ae17a93d728}\index{Program@{Program}!render@{render}}
+\index{render@{render}!Program@{Program}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_program_a14ca8e8eb0d412b185e58ae17a93d728} 
+void Program\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Program.\+h\end{DoxyCompactItemize}

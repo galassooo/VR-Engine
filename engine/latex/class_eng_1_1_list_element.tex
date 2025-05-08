@@ -1,0 +1,99 @@
+\doxysection{Eng\+::List\+Element Class Reference}
+\hypertarget{class_eng_1_1_list_element}{}\label{class_eng_1_1_list_element}\index{Eng::ListElement@{Eng::ListElement}}
+
+
+Represents an element in the render list.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_list_element_a559f20ea2666c0252006e0fa15e45027}{List\+Element}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ \&node, const glm\+::mat4 \&world\+Coordinates)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_eng_1_1_list_element}{List\+Element} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Eng\+::\+Render\+Layer}} \mbox{\hyperlink{class_eng_1_1_list_element_a6c22de6c9d5ad2072a58637aea05ec4d}{get\+Layer}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the render layer of this \doxylink{class_eng_1_1_list_element}{List\+Element}. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ \mbox{\hyperlink{class_eng_1_1_list_element_ab587f56c4b377121d50ea32fc7a4c10e}{get\+Node}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the node associated with this \doxylink{class_eng_1_1_list_element}{List\+Element}. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_list_element_a1c4bc0c55f649f93526b1ccead43b7ab}{get\+World\+Coordinates}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the world coordinates of this \doxylink{class_eng_1_1_list_element}{List\+Element}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents an element in the render list. 
+
+A \doxylink{class_eng_1_1_list_element}{List\+Element} stores a reference to a scene graph node, its transformation matrix in world coordinates, and its associated material properties. It is used to organize and render nodes in the scene. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_list_element_a559f20ea2666c0252006e0fa15e45027}\index{Eng::ListElement@{Eng::ListElement}!ListElement@{ListElement}}
+\index{ListElement@{ListElement}!Eng::ListElement@{Eng::ListElement}}
+\doxysubsubsection{\texorpdfstring{ListElement()}{ListElement()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_element_a559f20ea2666c0252006e0fa15e45027} 
+List\+Element\+::\+List\+Element (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ \&}]{node}{, }\item[{const glm\+::mat4 \&}]{world\+Coordinates}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_eng_1_1_list_element}{List\+Element} object. 
+
+This constructor initializes a \doxylink{class_eng_1_1_list_element}{List\+Element} with a reference to a scene graph node and its transformation matrix in world space. It also determines the render layer of the node based on its type and material properties.
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & A shared pointer to the node being added to the render list. \\
+\hline
+{\em world\+Coordinates} & The transformation matrix in world space for the node. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_list_element_a6c22de6c9d5ad2072a58637aea05ec4d}\index{Eng::ListElement@{Eng::ListElement}!getLayer@{getLayer}}
+\index{getLayer@{getLayer}!Eng::ListElement@{Eng::ListElement}}
+\doxysubsubsection{\texorpdfstring{getLayer()}{getLayer()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_element_a6c22de6c9d5ad2072a58637aea05ec4d} 
+\mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Eng\+::\+Render\+Layer}} List\+Element\+::get\+Layer (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the render layer of this \doxylink{class_eng_1_1_list_element}{List\+Element}. 
+
+\begin{DoxyReturn}{Returns}
+\doxylink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Eng\+::\+Render\+Layer} The render layer (Lights, Opaque, Transparent). 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_list_element_ab587f56c4b377121d50ea32fc7a4c10e}\index{Eng::ListElement@{Eng::ListElement}!getNode@{getNode}}
+\index{getNode@{getNode}!Eng::ListElement@{Eng::ListElement}}
+\doxysubsubsection{\texorpdfstring{getNode()}{getNode()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_element_ab587f56c4b377121d50ea32fc7a4c10e} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ List\+Element\+::get\+Node (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the node associated with this \doxylink{class_eng_1_1_list_element}{List\+Element}. 
+
+\begin{DoxyReturn}{Returns}
+std\+::shared\+\_\+ptr$<$\+Eng\+::\+Node$>$ A shared pointer to the node. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_list_element_a1c4bc0c55f649f93526b1ccead43b7ab}\index{Eng::ListElement@{Eng::ListElement}!getWorldCoordinates@{getWorldCoordinates}}
+\index{getWorldCoordinates@{getWorldCoordinates}!Eng::ListElement@{Eng::ListElement}}
+\doxysubsubsection{\texorpdfstring{getWorldCoordinates()}{getWorldCoordinates()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_element_a1c4bc0c55f649f93526b1ccead43b7ab} 
+glm\+::mat4 List\+Element\+::get\+World\+Coordinates (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the world coordinates of this \doxylink{class_eng_1_1_list_element}{List\+Element}. 
+
+The world coordinates represent the transformation matrix of the node in world space, including any parent transformations.
+
+\begin{DoxyReturn}{Returns}
+glm\+::mat4 The world transformation matrix. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+List\+Element.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,123 @@
+\doxysection{Post\+Processor Class Reference}
+\hypertarget{class_post_processor}{}\label{class_post_processor}\index{PostProcessor@{PostProcessor}}
+
+
+Abstract base class for post-\/processing effects.  
+
+
+
+
+{\ttfamily \#include $<$Post\+Processor.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool \mbox{\hyperlink{class_post_processor_a270998d242fda16ccecc86169f48a748}{init}} (int width, int height)=0
+\begin{DoxyCompactList}\small\item\em Initializes the post-\/processor with the specified dimensions. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_post_processor_a7794e721fce1dc6da9dadfa2eae6713a}{is\+Initialized}} () const =0
+\begin{DoxyCompactList}\small\item\em Checks if the post-\/processor has been initialized. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_post_processor_aaaee17617c47173aab8148b457971796}{apply\+Effect}} (unsigned int input\+Texture, unsigned int output\+Texture, int width, int height)=0
+\begin{DoxyCompactList}\small\item\em Applies the post-\/processing effect to the input texture and writes to the output texture. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_post_processor_a1147b0c1d66897c74e0ea5364ecd624c}{set\+Parameter}} (const std\+::string \&name, float value)=0
+\begin{DoxyCompactList}\small\item\em Sets a named parameter for the post-\/processor. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{class_post_processor_a21d6525580cec18bc2ae57d108639511}{get\+Name}} () const =0
+\begin{DoxyCompactList}\small\item\em Gets the name of the post-\/processor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract base class for post-\/processing effects. 
+
+This class defines the interface for all post-\/processing effects in the engine. Derived classes should implement the specific post-\/processing algorithms. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_post_processor_aaaee17617c47173aab8148b457971796}\index{PostProcessor@{PostProcessor}!applyEffect@{applyEffect}}
+\index{applyEffect@{applyEffect}!PostProcessor@{PostProcessor}}
+\doxysubsubsection{\texorpdfstring{applyEffect()}{applyEffect()}}
+{\footnotesize\ttfamily \label{class_post_processor_aaaee17617c47173aab8148b457971796} 
+virtual void Post\+Processor\+::apply\+Effect (\begin{DoxyParamCaption}\item[{unsigned int}]{input\+Texture}{, }\item[{unsigned int}]{output\+Texture}{, }\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Applies the post-\/processing effect to the input texture and writes to the output texture. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+Texture} & Open\+GL texture ID containing the input image. \\
+\hline
+{\em output\+Texture} & Open\+GL texture ID where the result will be written. \\
+\hline
+{\em width} & Width of the textures. \\
+\hline
+{\em height} & Height of the textures. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_post_processor_a21d6525580cec18bc2ae57d108639511}\index{PostProcessor@{PostProcessor}!getName@{getName}}
+\index{getName@{getName}!PostProcessor@{PostProcessor}}
+\doxysubsubsection{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily \label{class_post_processor_a21d6525580cec18bc2ae57d108639511} 
+virtual std\+::string Post\+Processor\+::get\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Gets the name of the post-\/processor. 
+
+\begin{DoxyReturn}{Returns}
+The name of the post-\/processor. 
+\end{DoxyReturn}
+\Hypertarget{class_post_processor_a270998d242fda16ccecc86169f48a748}\index{PostProcessor@{PostProcessor}!init@{init}}
+\index{init@{init}!PostProcessor@{PostProcessor}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{class_post_processor_a270998d242fda16ccecc86169f48a748} 
+virtual bool Post\+Processor\+::init (\begin{DoxyParamCaption}\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Initializes the post-\/processor with the specified dimensions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & Width of the effect\textquotesingle{}s render target. \\
+\hline
+{\em height} & Height of the effect\textquotesingle{}s render target. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if initialization was successful, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_post_processor_a7794e721fce1dc6da9dadfa2eae6713a}\index{PostProcessor@{PostProcessor}!isInitialized@{isInitialized}}
+\index{isInitialized@{isInitialized}!PostProcessor@{PostProcessor}}
+\doxysubsubsection{\texorpdfstring{isInitialized()}{isInitialized()}}
+{\footnotesize\ttfamily \label{class_post_processor_a7794e721fce1dc6da9dadfa2eae6713a} 
+virtual bool Post\+Processor\+::is\+Initialized (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Checks if the post-\/processor has been initialized. 
+
+\begin{DoxyReturn}{Returns}
+true if initialized, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_post_processor_a1147b0c1d66897c74e0ea5364ecd624c}\index{PostProcessor@{PostProcessor}!setParameter@{setParameter}}
+\index{setParameter@{setParameter}!PostProcessor@{PostProcessor}}
+\doxysubsubsection{\texorpdfstring{setParameter()}{setParameter()}}
+{\footnotesize\ttfamily \label{class_post_processor_a1147b0c1d66897c74e0ea5364ecd624c} 
+virtual void Post\+Processor\+::set\+Parameter (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{float}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Sets a named parameter for the post-\/processor. 
+
+This allows for generic parameter setting without having to know the specific post-\/processor implementation. Each derived class should interpret the parameters it recognizes and ignore the others.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Parameter name. \\
+\hline
+{\em value} & Parameter value as a float. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Post\+Processor.\+h\end{DoxyCompactItemize}

@@ -12,112 +12,75 @@ Represents a camera in the scene graph, responsible for providing view and proje
 Inheritance diagram for Camera\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[height=4.000000cm]{class_camera}
+\includegraphics[height=3.000000cm]{class_camera}
 \end{center}
 \end{figure}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-virtual glm\+::mat4 \mbox{\hyperlink{class_camera_a1734d5310819d773409584e4777fd49b}{get\+Projection\+Matrix}} () const =0
+\Hypertarget{class_camera_a1734d5310819d773409584e4777fd49b}\label{class_camera_a1734d5310819d773409584e4777fd49b} 
+virtual glm\+::mat4 {\bfseries get\+Projection\+Matrix} () const =0
 \item 
-glm\+::mat4 \mbox{\hyperlink{class_camera_a2f90e661a78172675ca06ea69667b531}{get\+View\+Matrix}} () const
-\begin{DoxyCompactList}\small\item\em Get View Matrix. \end{DoxyCompactList}\item 
-glm\+::mat4 \mbox{\hyperlink{class_camera_a9313f512a82790068f4721a1cbba8e81}{look\+At}} (const glm\+::vec3 \&target, const glm\+::vec3 \&custom\+Up=glm\+::vec3(0, 1, 0)) const
-\begin{DoxyCompactList}\small\item\em Look\+At method for the current camera. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_node}{Node}}}
-\begin{DoxyCompactItemize}
+\Hypertarget{class_camera_a2f90e661a78172675ca06ea69667b531}\label{class_camera_a2f90e661a78172675ca06ea69667b531} 
+glm\+::mat4 {\bfseries get\+View\+Matrix} () const
 \item 
-{\bfseries Node} ()
-\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{class_node}{Node} Class. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_node_a0bc6344f1418f4b780025ca6839d0acc}{set\+Parent}} (\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*}p)
-\begin{DoxyCompactList}\small\item\em Set parent of the \doxylink{class_node}{Node}. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_node_a36ab59d094fe2dd2b2d8087c7fe3c955}{add\+Child}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ child)
-\begin{DoxyCompactList}\small\item\em Add child to the list of current \doxylink{class_node}{Node}\textquotesingle{}s children. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_node_a3cad655320d50751c43c5cec9356dcf3}{get\+Parent}} () const
-\begin{DoxyCompactList}\small\item\em Get current \doxylink{class_node}{Node}\textquotesingle{}s parent. \end{DoxyCompactList}\item 
-glm\+::mat4 \mbox{\hyperlink{class_node_a89f137ff4d4853bdc509397063bdfbec}{get\+Final\+Matrix}} () const
-\begin{DoxyCompactList}\small\item\em Get final Matrix of current \doxylink{class_node}{Node} based on the position in the Scene Graph. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_node_a15ee91cac4a2f0700cd080e0377a6843}{set\+Local\+Matrix}} (const glm\+::mat4 \&matrix)
-\begin{DoxyCompactList}\small\item\em Set current \doxylink{class_node}{Node}\textquotesingle{}s Local Matrix. \end{DoxyCompactList}\item 
-const glm\+::mat4 \& \mbox{\hyperlink{class_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}{get\+Local\+Matrix}} () const
-\begin{DoxyCompactList}\small\item\em Get current \doxylink{class_node}{Node}\textquotesingle{}s Local Matrix. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_node_ab93a6f41e02422a21c44227c0355382a}{render}} ()
-\item 
-std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ $>$ \mbox{\hyperlink{class_node_adf8763eeea4302a3680aa71af3085727}{get\+Children}} () const
+\Hypertarget{class_camera_a9313f512a82790068f4721a1cbba8e81}\label{class_camera_a9313f512a82790068f4721a1cbba8e81} 
+glm\+::mat4 {\bfseries look\+At} (const glm\+::vec3 \&target, const glm\+::vec3 \&custom\+Up=glm\+::vec3(0, 1, 0)) const
 \end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_object}{Object}}}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Object} ()
-\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_object}{Object} class. \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{class_object_af3558f9e2b46d677f0ac4d6d3c97b118}{get\+Id}} () const
-\begin{DoxyCompactList}\small\item\em Returns the unique ID of the \doxylink{class_object}{Object} Class. \end{DoxyCompactList}\item 
-std\+::string \mbox{\hyperlink{class_object_acb9b466607cb80beaaa30ece2f7f570a}{get\+Name}} () const
-\begin{DoxyCompactList}\small\item\em Returns the name of the current \doxylink{class_object}{Object}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{class_eng_1_1_node_aa40fb59cc7ed94005b70ffae74c74c78}{Node}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_node}{Node} class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a1bf04bccde0ec7e57015290989c29ebc}{set\+Parent}} (\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*}p)
+\begin{DoxyCompactList}\small\item\em Sets the parent of the node. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a5971d7af616f9df233236b9c1989e7a0}{get\+Parent}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the parent of the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a435f8d7bb208a7716aac311647d686b7}{add\+Child}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ child)
+\begin{DoxyCompactList}\small\item\em Adds a child node to the list of current node\textquotesingle{}s children. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_ac8387fae8472200c0c17a06d8dcc94a3}{get\+Children}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the list of children for the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a4239997371524dbfed52ff157eac1ffe}{set\+Local\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+const glm\+::mat4 \& \mbox{\hyperlink{class_eng_1_1_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}{get\+Local\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_ac834ce5ba6cff3c02665adb3237a3f82}{get\+Final\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Computes the final transformation matrix of the node. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_eng_1_1_node_aa1e81be36e7e0e12af730a5f8e655ac7}{render}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
-\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_node}{Node}}}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries parent}
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a8adf99ef92cc40ccf96442eed1f1407d}{parent}}
 \item 
-std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ $>$ {\bfseries children}
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \mbox{\hyperlink{class_eng_1_1_node_a595aa4342bed14825742645b747fd622}{children}}
 \item 
-glm\+::mat4 {\bfseries local\+Matrix}
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_aca4efea05f8cbcf29913366ad6222eb7}{local\+Matrix}}
 \end{DoxyCompactItemize}
-\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_object}{Object}}}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
 \begin{DoxyCompactItemize}
 \item 
-unsigned int {\bfseries id}
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
 \item 
-std\+::string {\bfseries name}
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Represents a camera in the scene graph, responsible for providing view and projection matrices. 
 
-\doxysubsection{Member Function Documentation}
-\Hypertarget{class_camera_a1734d5310819d773409584e4777fd49b}\index{Camera@{Camera}!getProjectionMatrix@{getProjectionMatrix}}
-\index{getProjectionMatrix@{getProjectionMatrix}!Camera@{Camera}}
-\doxysubsubsection{\texorpdfstring{getProjectionMatrix()}{getProjectionMatrix()}}
-{\footnotesize\ttfamily \label{class_camera_a1734d5310819d773409584e4777fd49b} 
-virtual glm\+::mat4 Camera\+::get\+Projection\+Matrix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
-
-
-
-Implemented in \mbox{\hyperlink{class_orthographic_camera_a22cd04b2fa05736ddf45d9ae86552d86}{Orthographic\+Camera}}, and \mbox{\hyperlink{class_perspective_camera_a3cd21c08c2f28cd67e69af62e0cebdb9}{Perspective\+Camera}}.
-
-\Hypertarget{class_camera_a2f90e661a78172675ca06ea69667b531}\index{Camera@{Camera}!getViewMatrix@{getViewMatrix}}
-\index{getViewMatrix@{getViewMatrix}!Camera@{Camera}}
-\doxysubsubsection{\texorpdfstring{getViewMatrix()}{getViewMatrix()}}
-{\footnotesize\ttfamily \label{class_camera_a2f90e661a78172675ca06ea69667b531} 
-glm\+::mat4 Camera\+::get\+View\+Matrix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
-
-
-
-Get View Matrix. 
-
-\begin{DoxyReturn}{Returns}
-glm\+::mat4 View Matrix already inverted 
-\end{DoxyReturn}
-\Hypertarget{class_camera_a9313f512a82790068f4721a1cbba8e81}\index{Camera@{Camera}!lookAt@{lookAt}}
-\index{lookAt@{lookAt}!Camera@{Camera}}
-\doxysubsubsection{\texorpdfstring{lookAt()}{lookAt()}}
-{\footnotesize\ttfamily \label{class_camera_a9313f512a82790068f4721a1cbba8e81} 
-glm\+::mat4 Camera\+::look\+At (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{target}{, }\item[{const glm\+::vec3 \&}]{custom\+Up}{ = {\ttfamily glm\+:\+:vec3(0,~1,~0)}}\end{DoxyParamCaption}) const}
-
-
-
-Look\+At method for the current camera. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em glm\+::vec3} & target of the current camera \\
-\hline
-\end{DoxyParams}
-
-
-The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-Camera.\+h\item 
-Camera.\+cpp\end{DoxyCompactItemize}
+Camera.\+h\end{DoxyCompactItemize}

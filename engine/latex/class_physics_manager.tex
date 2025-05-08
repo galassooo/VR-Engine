@@ -1,0 +1,286 @@
+\doxysection{Physics\+Manager Class Reference}
+\hypertarget{class_physics_manager}{}\label{class_physics_manager}\index{PhysicsManager@{PhysicsManager}}
+
+
+Gestisce la simulazione fisica.  
+
+
+
+
+{\ttfamily \#include $<$Physics\+Manager.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_physics_manager_1_1_debug_options}{Debug\+Options}}
+\begin{DoxyCompactList}\small\item\em Struttura per le opzioni di debug fisico. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_physics_manager_aab262ac40685486b71bdacb6c4d41250}\label{class_physics_manager_aab262ac40685486b71bdacb6c4d41250} 
+{\bfseries Physics\+Manager} (const \mbox{\hyperlink{class_physics_manager}{Physics\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_physics_manager_a8ccca15acc8c7e4efcf92abd047e8edc}\label{class_physics_manager_a8ccca15acc8c7e4efcf92abd047e8edc} 
+\mbox{\hyperlink{class_physics_manager}{Physics\+Manager}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_physics_manager}{Physics\+Manager}} \&)=delete
+\item 
+bool \mbox{\hyperlink{class_physics_manager_a3d7884be032b4dd19afd6ab9eb1b3b93}{initialize}} ()
+\begin{DoxyCompactList}\small\item\em Inizializza il sistema fisico. \end{DoxyCompactList}\item 
+\Hypertarget{class_physics_manager_a07fb35b32db5bd7f78f0ea2fc2e72bc5}\label{class_physics_manager_a07fb35b32db5bd7f78f0ea2fc2e72bc5} 
+void {\bfseries cleanup} ()
+\begin{DoxyCompactList}\small\item\em Rilascia le risorse del sistema fisico. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_physics_manager_a3194bb39c4b55f7c217e60ae8edcfcfa}{update}} (float delta\+Time)
+\begin{DoxyCompactList}\small\item\em Aggiorna la simulazione fisica. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ Physics\+Component $>$ \mbox{\hyperlink{class_physics_manager_a28177da64ba056ded5cc8c23c1328695}{create\+Component}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ node)
+\begin{DoxyCompactList}\small\item\em Crea un componente fisico per un nodo. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_physics_manager_a10da953119b4f4b297f529fbb40ac6e0}{remove\+Component}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ node)
+\begin{DoxyCompactList}\small\item\em Rimuove un componente fisico da un nodo. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ Physics\+Component $>$ \mbox{\hyperlink{class_physics_manager_a23dc3f050df010ae6560447a51b4256c}{get\+Component}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ node)
+\begin{DoxyCompactList}\small\item\em Ottiene il componente fisico associato a un nodo. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ Physics\+Component $>$ \mbox{\hyperlink{class_physics_manager_a21017bd9a612b91a84f609cbf9a14cb7}{create\+Chess\+Board\+Collider}} (const glm\+::vec3 \&min, const glm\+::vec3 \&max)
+\begin{DoxyCompactList}\small\item\em Crea un collider statico per la scacchiera. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_physics_manager_aa226260081a2225e3d376051e9b500ba}{set\+Gravity}} (const glm\+::vec3 \&gravity)
+\begin{DoxyCompactList}\small\item\em Imposta la gravità globale. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_physics_manager_ae9b1e3901ec906d45163425d02e9f118}{get\+Gravity}} () const
+\begin{DoxyCompactList}\small\item\em Ottiene la gravità globale corrente. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_physics_manager_a46ef40cefcd4b2a32dd7cbdc932ea39e}{set\+Debug\+Mode}} (bool enabled)
+\begin{DoxyCompactList}\small\item\em Abilita/disabilita il debug della fisica. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_physics_manager_ae8b5fd2a1e4f1f376113b24a6f789e3b}{is\+Debug\+Enabled}} () const
+\begin{DoxyCompactList}\small\item\em Controlla se il debug è abilitato. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_physics_manager_ad7b3720083cfbf8bfaffcad62fee7afb}{set\+Debug\+Options}} (const \mbox{\hyperlink{struct_physics_manager_1_1_debug_options}{Debug\+Options}} \&options)
+\begin{DoxyCompactList}\small\item\em Imposta le opzioni di debug. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{struct_physics_manager_1_1_debug_options}{Debug\+Options}} \& \mbox{\hyperlink{class_physics_manager_a0a53a1f24d640a510c8d1fd9d07e3f8e}{get\+Debug\+Options}} () const
+\begin{DoxyCompactList}\small\item\em Ottiene le opzioni di debug correnti. \end{DoxyCompactList}\item 
+\Hypertarget{class_physics_manager_a15484980c501ad72c1c8f6679c71f322}\label{class_physics_manager_a15484980c501ad72c1c8f6679c71f322} 
+void {\bfseries debug\+Draw\+World} ()
+\begin{DoxyCompactList}\small\item\em Disegna gli elementi di debug nella scena. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ \mbox{\hyperlink{class_physics_manager_a7af42bf702ec13d4f8a437fa93ea7b8e}{ray\+Test}} (const glm\+::vec3 \&from, const glm\+::vec3 \&to, glm\+::vec3 \texorpdfstring{$\ast$}{*}hit\+Point=nullptr, glm\+::vec3 \texorpdfstring{$\ast$}{*}hit\+Normal=nullptr)
+\begin{DoxyCompactList}\small\item\em Esegue ray casting nella scena fisica. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_physics_manager_ac9cbae53b1b627880a5c83ae896f1db9}\label{class_physics_manager_ac9cbae53b1b627880a5c83ae896f1db9} 
+static \mbox{\hyperlink{class_physics_manager}{Physics\+Manager}} \& {\bfseries get\+Instance} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Gestisce la simulazione fisica. 
+
+Implementa il pattern Singleton per fornire un accesso centralizzato al sistema fisico. Gestisce collisioni, gravità e altre proprietà fisiche degli oggetti nella scena. Nasconde i dettagli dell\textquotesingle{}implementazione di Bullet Physics. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_physics_manager_a21017bd9a612b91a84f609cbf9a14cb7}\index{PhysicsManager@{PhysicsManager}!createChessBoardCollider@{createChessBoardCollider}}
+\index{createChessBoardCollider@{createChessBoardCollider}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{createChessBoardCollider()}{createChessBoardCollider()}}
+{\footnotesize\ttfamily \label{class_physics_manager_a21017bd9a612b91a84f609cbf9a14cb7} 
+std\+::shared\+\_\+ptr$<$ Physics\+Component $>$ Physics\+Manager\+::create\+Chess\+Board\+Collider (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{min}{, }\item[{const glm\+::vec3 \&}]{max}{}\end{DoxyParamCaption})}
+
+
+
+Crea un collider statico per la scacchiera. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em min} & Punto minimo del box di collisione \\
+\hline
+{\em max} & Punto massimo del box di collisione \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Puntatore al componente fisico creato 
+\end{DoxyReturn}
+\Hypertarget{class_physics_manager_a28177da64ba056ded5cc8c23c1328695}\index{PhysicsManager@{PhysicsManager}!createComponent@{createComponent}}
+\index{createComponent@{createComponent}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{createComponent()}{createComponent()}}
+{\footnotesize\ttfamily \label{class_physics_manager_a28177da64ba056ded5cc8c23c1328695} 
+std\+::shared\+\_\+ptr$<$ Physics\+Component $>$ Physics\+Manager\+::create\+Component (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$}]{node}{}\end{DoxyParamCaption})}
+
+
+
+Crea un componente fisico per un nodo. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Nodo a cui aggiungere la fisica \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Puntatore al componente fisico creato 
+\end{DoxyReturn}
+\Hypertarget{class_physics_manager_a23dc3f050df010ae6560447a51b4256c}\index{PhysicsManager@{PhysicsManager}!getComponent@{getComponent}}
+\index{getComponent@{getComponent}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{getComponent()}{getComponent()}}
+{\footnotesize\ttfamily \label{class_physics_manager_a23dc3f050df010ae6560447a51b4256c} 
+std\+::shared\+\_\+ptr$<$ Physics\+Component $>$ Physics\+Manager\+::get\+Component (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$}]{node}{}\end{DoxyParamCaption})}
+
+
+
+Ottiene il componente fisico associato a un nodo. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Nodo di cui ottenere il componente \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Puntatore al componente fisico, nullptr se non esiste 
+\end{DoxyReturn}
+\Hypertarget{class_physics_manager_a0a53a1f24d640a510c8d1fd9d07e3f8e}\index{PhysicsManager@{PhysicsManager}!getDebugOptions@{getDebugOptions}}
+\index{getDebugOptions@{getDebugOptions}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{getDebugOptions()}{getDebugOptions()}}
+{\footnotesize\ttfamily \label{class_physics_manager_a0a53a1f24d640a510c8d1fd9d07e3f8e} 
+const \mbox{\hyperlink{struct_physics_manager_1_1_debug_options}{Debug\+Options}} \& Physics\+Manager\+::get\+Debug\+Options (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Ottiene le opzioni di debug correnti. 
+
+\begin{DoxyReturn}{Returns}
+Opzioni di debug 
+\end{DoxyReturn}
+\Hypertarget{class_physics_manager_ae9b1e3901ec906d45163425d02e9f118}\index{PhysicsManager@{PhysicsManager}!getGravity@{getGravity}}
+\index{getGravity@{getGravity}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{getGravity()}{getGravity()}}
+{\footnotesize\ttfamily \label{class_physics_manager_ae9b1e3901ec906d45163425d02e9f118} 
+glm\+::vec3 Physics\+Manager\+::get\+Gravity (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Ottiene la gravità globale corrente. 
+
+\begin{DoxyReturn}{Returns}
+Vettore gravità 
+\end{DoxyReturn}
+\Hypertarget{class_physics_manager_a3d7884be032b4dd19afd6ab9eb1b3b93}\index{PhysicsManager@{PhysicsManager}!initialize@{initialize}}
+\index{initialize@{initialize}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily \label{class_physics_manager_a3d7884be032b4dd19afd6ab9eb1b3b93} 
+bool Physics\+Manager\+::initialize (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Inizializza il sistema fisico. 
+
+\begin{DoxyReturn}{Returns}
+True se l\textquotesingle{}inizializzazione ha successo 
+\end{DoxyReturn}
+\Hypertarget{class_physics_manager_ae8b5fd2a1e4f1f376113b24a6f789e3b}\index{PhysicsManager@{PhysicsManager}!isDebugEnabled@{isDebugEnabled}}
+\index{isDebugEnabled@{isDebugEnabled}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{isDebugEnabled()}{isDebugEnabled()}}
+{\footnotesize\ttfamily \label{class_physics_manager_ae8b5fd2a1e4f1f376113b24a6f789e3b} 
+bool Physics\+Manager\+::is\+Debug\+Enabled (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Controlla se il debug è abilitato. 
+
+\begin{DoxyReturn}{Returns}
+True se il debug è abilitato 
+\end{DoxyReturn}
+\Hypertarget{class_physics_manager_a7af42bf702ec13d4f8a437fa93ea7b8e}\index{PhysicsManager@{PhysicsManager}!rayTest@{rayTest}}
+\index{rayTest@{rayTest}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{rayTest()}{rayTest()}}
+{\footnotesize\ttfamily \label{class_physics_manager_a7af42bf702ec13d4f8a437fa93ea7b8e} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ Physics\+Manager\+::ray\+Test (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{from}{, }\item[{const glm\+::vec3 \&}]{to}{, }\item[{glm\+::vec3 \texorpdfstring{$\ast$}{*}}]{hit\+Point}{ = {\ttfamily nullptr}, }\item[{glm\+::vec3 \texorpdfstring{$\ast$}{*}}]{hit\+Normal}{ = {\ttfamily nullptr}}\end{DoxyParamCaption})}
+
+
+
+Esegue ray casting nella scena fisica. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em from} & Punto di partenza del raggio \\
+\hline
+{\em to} & Punto di arrivo del raggio \\
+\hline
+{\em hit\+Point} & Se non nullptr, conterrà il punto di collisione \\
+\hline
+{\em hit\+Normal} & Se non nullptr, conterrà la normale al punto di collisione \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Nodo colpito dal raggio, nullptr se nessun oggetto è stato colpito 
+\end{DoxyReturn}
+\Hypertarget{class_physics_manager_a10da953119b4f4b297f529fbb40ac6e0}\index{PhysicsManager@{PhysicsManager}!removeComponent@{removeComponent}}
+\index{removeComponent@{removeComponent}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{removeComponent()}{removeComponent()}}
+{\footnotesize\ttfamily \label{class_physics_manager_a10da953119b4f4b297f529fbb40ac6e0} 
+bool Physics\+Manager\+::remove\+Component (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$}]{node}{}\end{DoxyParamCaption})}
+
+
+
+Rimuove un componente fisico da un nodo. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Nodo da cui rimuovere la fisica \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True se il componente è stato rimosso con successo 
+\end{DoxyReturn}
+\Hypertarget{class_physics_manager_a46ef40cefcd4b2a32dd7cbdc932ea39e}\index{PhysicsManager@{PhysicsManager}!setDebugMode@{setDebugMode}}
+\index{setDebugMode@{setDebugMode}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{setDebugMode()}{setDebugMode()}}
+{\footnotesize\ttfamily \label{class_physics_manager_a46ef40cefcd4b2a32dd7cbdc932ea39e} 
+void Physics\+Manager\+::set\+Debug\+Mode (\begin{DoxyParamCaption}\item[{bool}]{enabled}{}\end{DoxyParamCaption})}
+
+
+
+Abilita/disabilita il debug della fisica. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em enabled} & True per abilitare, false per disabilitare \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_physics_manager_ad7b3720083cfbf8bfaffcad62fee7afb}\index{PhysicsManager@{PhysicsManager}!setDebugOptions@{setDebugOptions}}
+\index{setDebugOptions@{setDebugOptions}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{setDebugOptions()}{setDebugOptions()}}
+{\footnotesize\ttfamily \label{class_physics_manager_ad7b3720083cfbf8bfaffcad62fee7afb} 
+void Physics\+Manager\+::set\+Debug\+Options (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_physics_manager_1_1_debug_options}{Debug\+Options}} \&}]{options}{}\end{DoxyParamCaption})}
+
+
+
+Imposta le opzioni di debug. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em options} & Opzioni di debug \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_physics_manager_aa226260081a2225e3d376051e9b500ba}\index{PhysicsManager@{PhysicsManager}!setGravity@{setGravity}}
+\index{setGravity@{setGravity}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{setGravity()}{setGravity()}}
+{\footnotesize\ttfamily \label{class_physics_manager_aa226260081a2225e3d376051e9b500ba} 
+void Physics\+Manager\+::set\+Gravity (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{gravity}{}\end{DoxyParamCaption})}
+
+
+
+Imposta la gravità globale. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gravity} & Vettore gravità (default\+: \{0, -\/9.\+81, 0\}) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_physics_manager_a3194bb39c4b55f7c217e60ae8edcfcfa}\index{PhysicsManager@{PhysicsManager}!update@{update}}
+\index{update@{update}!PhysicsManager@{PhysicsManager}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_physics_manager_a3194bb39c4b55f7c217e60ae8edcfcfa} 
+void Physics\+Manager\+::update (\begin{DoxyParamCaption}\item[{float}]{delta\+Time}{}\end{DoxyParamCaption})}
+
+
+
+Aggiorna la simulazione fisica. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta\+Time} & Tempo trascorso dall\textquotesingle{}ultimo aggiornamento (secondi) \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Physics\+Manager.\+h\end{DoxyCompactItemize}

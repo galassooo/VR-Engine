@@ -1,0 +1,96 @@
+\doxysection{Callback\+Manager Class Reference}
+\hypertarget{class_callback_manager}{}\label{class_callback_manager}\index{CallbackManager@{CallbackManager}}
+
+
+Manages Free\+GLUT callbacks and keyboard bindings for the graphics engine.  
+
+
+
+
+{\ttfamily \#include $<$Callback\+Manager.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_callback_manager_a3ab25c8c727f692c4ac714290d0f8524}\label{class_callback_manager_a3ab25c8c727f692c4ac714290d0f8524} 
+using {\bfseries Display\+Func} = std\+::function$<$void()$>$
+\begin{DoxyCompactList}\small\item\em Function type for display/render callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_callback_manager_a7329e6903ca8626041207420c703bbc3}\label{class_callback_manager_a7329e6903ca8626041207420c703bbc3} 
+using {\bfseries Reshape\+Func} = std\+::function$<$void(int, int)$>$
+\begin{DoxyCompactList}\small\item\em Function type for window reshape callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_callback_manager_ae7aa54b200809d16e4fe3c7cab3de757}\label{class_callback_manager_ae7aa54b200809d16e4fe3c7cab3de757} 
+using {\bfseries Keyboard\+Func} = std\+::function$<$void(unsigned char, int, int)$>$
+\begin{DoxyCompactList}\small\item\em Function type for keyboard input callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_callback_manager_a85c1624bdac83b1b56e686df62734ee9}\label{class_callback_manager_a85c1624bdac83b1b56e686df62734ee9} 
+using {\bfseries Special\+Func} = std\+::function$<$void(int, int, int)$>$
+\begin{DoxyCompactList}\small\item\em Function type for special key callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_callback_manager_a104d04f731287f9289390d1549b798f8}\label{class_callback_manager_a104d04f731287f9289390d1549b798f8} 
+using {\bfseries Close\+Func} = std\+::function$<$void()$>$
+\begin{DoxyCompactList}\small\item\em Function type for application cleanup callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_callback_manager_a36aae85e3b9835030105a46d1d27ab56}\label{class_callback_manager_a36aae85e3b9835030105a46d1d27ab56} 
+using {\bfseries Render\+Call\+Back} = std\+::function$<$void()$>$
+\begin{DoxyCompactList}\small\item\em Function type for optional render callbacks. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_callback_manager_ae48245dc7cfaae632e48f4449857f898}\label{class_callback_manager_ae48245dc7cfaae632e48f4449857f898} 
+bool {\bfseries initialize} ()
+\item 
+\Hypertarget{class_callback_manager_a4818a2a00426cd93d39b3544c3f761eb}\label{class_callback_manager_a4818a2a00426cd93d39b3544c3f761eb} 
+{\bfseries Callback\+Manager} (const \mbox{\hyperlink{class_callback_manager}{Callback\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_callback_manager_a2c1629cc759d12b6b6f83b525cc0b860}\label{class_callback_manager_a2c1629cc759d12b6b6f83b525cc0b860} 
+\mbox{\hyperlink{class_callback_manager}{Callback\+Manager}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_callback_manager}{Callback\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_callback_manager_a137419fafe7ed8b485c87a3ef4518228}\label{class_callback_manager_a137419fafe7ed8b485c87a3ef4518228} 
+void {\bfseries set\+Display\+Callback} (\mbox{\hyperlink{class_callback_manager_a3ab25c8c727f692c4ac714290d0f8524}{Display\+Func}} func)
+\item 
+\Hypertarget{class_callback_manager_a04010e9a421e9b40128550a7c5f8174e}\label{class_callback_manager_a04010e9a421e9b40128550a7c5f8174e} 
+void {\bfseries set\+Reshape\+Callback} (\mbox{\hyperlink{class_callback_manager_a7329e6903ca8626041207420c703bbc3}{Reshape\+Func}} func)
+\item 
+\Hypertarget{class_callback_manager_a8942a71aebb1107189b364cbb0aa825c}\label{class_callback_manager_a8942a71aebb1107189b364cbb0aa825c} 
+void {\bfseries register\+Key\+Binding} (char key, const std\+::string \&description, \mbox{\hyperlink{class_callback_manager_ae7aa54b200809d16e4fe3c7cab3de757}{Keyboard\+Func}} func)
+\item 
+\Hypertarget{class_callback_manager_aba95cf18db7c6ff2d192ed63dbde5516}\label{class_callback_manager_aba95cf18db7c6ff2d192ed63dbde5516} 
+void {\bfseries set\+Special\+Callback} (\mbox{\hyperlink{class_callback_manager_a85c1624bdac83b1b56e686df62734ee9}{Special\+Func}} func)
+\item 
+\Hypertarget{class_callback_manager_a2f95875098751a738aaac619b56bc9ab}\label{class_callback_manager_a2f95875098751a738aaac619b56bc9ab} 
+void {\bfseries set\+Close\+Callback} (\mbox{\hyperlink{class_callback_manager_a104d04f731287f9289390d1549b798f8}{Close\+Func}} func)
+\item 
+\Hypertarget{class_callback_manager_ad81e366ec99c2ce87088419962fd4ff5}\label{class_callback_manager_ad81e366ec99c2ce87088419962fd4ff5} 
+void {\bfseries register\+Render\+Callback} (std\+::string id, const \mbox{\hyperlink{class_callback_manager_a36aae85e3b9835030105a46d1d27ab56}{Render\+Call\+Back}} \&func)
+\item 
+\Hypertarget{class_callback_manager_a3d69bc6a61532c6e9b3770eba026789e}\label{class_callback_manager_a3d69bc6a61532c6e9b3770eba026789e} 
+void {\bfseries deregister\+Callback} (const std\+::string \&id)
+\item 
+\Hypertarget{class_callback_manager_a53a13957965bbee5ba8cf5e2d1f455d2}\label{class_callback_manager_a53a13957965bbee5ba8cf5e2d1f455d2} 
+void {\bfseries execute\+Render\+Callbacks} () const
+\item 
+\Hypertarget{class_callback_manager_aab84d9849e8d89387ce77f3211c6b191}\label{class_callback_manager_aab84d9849e8d89387ce77f3211c6b191} 
+bool {\bfseries is\+Help\+Menu\+Visible} () const
+\item 
+\Hypertarget{class_callback_manager_a183c1331150586007b1075f79eed2aaf}\label{class_callback_manager_a183c1331150586007b1075f79eed2aaf} 
+const std\+::unordered\+\_\+map$<$ char, \mbox{\hyperlink{struct_key_info}{Key\+Info}} $>$ \& {\bfseries get\+Key\+Bindings} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_callback_manager_aaa8d88eddc89682aa222dfe9be8ec852}\label{class_callback_manager_aaa8d88eddc89682aa222dfe9be8ec852} 
+static \mbox{\hyperlink{class_callback_manager}{Callback\+Manager}} \& {\bfseries get\+Instance} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages Free\+GLUT callbacks and keyboard bindings for the graphics engine. 
+
+The \doxylink{class_callback_manager}{Callback\+Manager} implements the Singleton pattern to provide centralized management of all input and rendering callbacks. It handles\+:
+\begin{DoxyItemize}
+\item Registration and execution of display, reshape, keyboard, and special key callbacks
+\item Management of custom render callbacks that can be dynamically added/removed
+\item Maintenance of a help menu system showing available keyboard shortcuts
+\item Coordination of core engine functionality like FPS display and coordinate axes 
+\end{DoxyItemize}
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Callback\+Manager.\+h\end{DoxyCompactItemize}

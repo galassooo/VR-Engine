@@ -1,0 +1,45 @@
+\doxysection{Program.\+h}
+\hypertarget{_program_8h_source}{}\label{_program_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }ENG\_API\ Program\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_eng_1_1_object}{Eng::Object}}\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_program_a475dbcdeb24419d807c93c7fca47dc69}{MAX\_LOGSIZE}}\ =\ 4096;\ \ }
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ Program();}
+\DoxyCodeLine{00017\ \ \ \ \ \string~Program();}
+\DoxyCodeLine{00018\ \ \ \ \ Program\&\ addShader(\textcolor{keyword}{const}\ std::shared\_ptr<Eng::Shader>\&\ shader);}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{bool}\ build();}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ render()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ getGlId();}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ Program\&\ bindAttribute(\textcolor{keywordtype}{int}\ location,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ attribName);}
+\DoxyCodeLine{00025\ \ \ \ \ Program\&\ bindSampler(\textcolor{keywordtype}{int}\ unitIndex,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ samplerName);}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//\ Get/set:}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{int}\ getParamLocation(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}});}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ setMatrix(\textcolor{keywordtype}{int}\ param,\ \textcolor{keyword}{const}\ glm::mat4\&\ mat);}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{//\ Helper\ function\ for\ 3x3\ matrices\ for\ the\ per-\/pixel\ lighting}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ setMatrix(\textcolor{keywordtype}{int}\ param,\ \textcolor{keyword}{const}\ glm::mat3\&\ mat);}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ setFloat(\textcolor{keywordtype}{int}\ param,\ \textcolor{keywordtype}{float}\ value);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ setInt(\textcolor{keywordtype}{int}\ param,\ \textcolor{keywordtype}{int}\ value);}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ setVec3(\textcolor{keywordtype}{int}\ param,\ \textcolor{keyword}{const}\ glm::vec3\&\ vect);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ setVec4(\textcolor{keywordtype}{int}\ param,\ \textcolor{keyword}{const}\ glm::vec4\&\ vect);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ OGL\ id:}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ id;}
+\DoxyCodeLine{00046\ \ \ \ \ std::vector<std::shared\_ptr<Eng::Shader>>\ shaders;}
+\DoxyCodeLine{00047\ \ \ \ \ std::unordered\_map<int,\ std::string>\ attributeBindings;}
+\DoxyCodeLine{00048\ \ \ \ \ std::unordered\_map<int,\ std::string>\ samplerBindings;}
+\DoxyCodeLine{00049\ \};}
+
+\end{DoxyCode}

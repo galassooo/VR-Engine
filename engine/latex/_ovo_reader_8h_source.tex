@@ -1,0 +1,47 @@
+\doxysection{Ovo\+Reader.\+h}
+\hypertarget{_ovo_reader_8h_source}{}\label{_ovo_reader_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Martina\ ♛\ on\ 06/12/24.}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }ENG\_API\ \mbox{\hyperlink{class_ovo_reader}{OvoReader}}\ final\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ std::shared\_ptr<Eng::Node>\ parseOvoFile(\textcolor{keyword}{const}\ std::string\ \&filename);}
+\DoxyCodeLine{00020\ \ \ \ \textcolor{keywordtype}{void}\ printGraph()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00031\ \ \ \ \textcolor{keyword}{class\ }ENG\_API\ NodeInfo\ final\ \{}
+\DoxyCodeLine{00032\ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ NodeInfo(\textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ children,\ \textcolor{keyword}{const}\ std::shared\_ptr<Eng::Node>\ \&node)}
+\DoxyCodeLine{00034\ \ \ \ \ :\ remainingChildren(children),\ node(node)\ \{\}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ remainingChildren;\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ std::shared\_ptr<Eng::Node>\ node;\ }
+\DoxyCodeLine{00038\ \ \ \ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ parseBone(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \&position,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *data);}
+\DoxyCodeLine{00041\ \ \ \ \textcolor{keyword}{static}\ glm::vec3\ \ decompressNormal(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ packedNormal);}
+\DoxyCodeLine{00042\ \ \ \ \textcolor{keyword}{static}\ glm::vec2\ decompressTexCoords(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ packedTexCoords);}
+\DoxyCodeLine{00043\ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Eng::Node>\ parseLight(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \&position,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *data);}
+\DoxyCodeLine{00044\ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ analyzeObject(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \&position,\ \textcolor{keywordtype}{char}\ *data);}
+\DoxyCodeLine{00045\ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Eng::Node>\ analyzeNode(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \&position,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *data,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \&children);}
+\DoxyCodeLine{00046\ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ printGraphHelper(\textcolor{keyword}{const}\ std::shared\_ptr<Eng::Node>\ \&node,\ \textcolor{keywordtype}{int}\ depth);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \textcolor{keywordtype}{void}\ manageSceneGraph(std::shared\_ptr<Eng::Node>\ \&node,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ children);}
+\DoxyCodeLine{00049\ \ \ \ \textcolor{keywordtype}{void}\ parseMaterial(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \&position,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *data);}
+\DoxyCodeLine{00050\ \ \ \ std::shared\_ptr<Eng::Node>\ parseMesh(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \&position,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ chunkId,\ \textcolor{keywordtype}{char}\ *data,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \&children);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00053\ \ \ \ std::stack<NodeInfo>\ nodeStack;}
+\DoxyCodeLine{00055\ \ \ \ std::shared\_ptr<Eng::Node>\ root;}
+\DoxyCodeLine{00057\ \ \ \ std::unordered\_map<std::string,\ std::shared\_ptr<Eng::Material>>\ materials;}
+\DoxyCodeLine{00059\ \ \ \ std::string\ basePath;}
+\DoxyCodeLine{00060\ \};}
+\DoxyCodeLine{00061\ }
+
+\end{DoxyCode}

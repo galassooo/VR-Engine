@@ -18,32 +18,68 @@ Inheritance diagram for List\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{class_list_a64d878a92d11f7c63c70cbe4e7dd4176}\label{class_list_a64d878a92d11f7c63c70cbe4e7dd4176} 
-{\bfseries List} ()
-\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_list_a24a3265d516e8f44e3e79926bdee881b}{add\+Node}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_object}{Object}} $>$ \&node)
-\begin{DoxyCompactList}\small\item\em Add a node to the list based on its type. Lights are added to the front, while other nodes are added to the back. \end{DoxyCompactList}\item 
+\Hypertarget{class_list_ad0e7351eb5005ed878d25d230ece1534}\label{class_list_ad0e7351eb5005ed878d25d230ece1534} 
+void {\bfseries add\+Node} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ \&node, const glm\+::mat4 \&final\+Matrix)
+\item 
+void \mbox{\hyperlink{class_list_a819f0efb82263b15326e610b13623174}{render}} () override
+\item 
 \Hypertarget{class_list_a3fad6292bd5126eeb437317383338cea}\label{class_list_a3fad6292bd5126eeb437317383338cea} 
 void {\bfseries clear} ()
-\begin{DoxyCompactList}\small\item\em Clear the list. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_list_a819f0efb82263b15326e610b13623174}{render}} () override
-\begin{DoxyCompactList}\small\item\em Render all nodes in the list. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_object}{Object}}}
+\item 
+\Hypertarget{class_list_aaf651459010237f20ccdfc0bdce0f74c}\label{class_list_aaf651459010237f20ccdfc0bdce0f74c} 
+bool {\bfseries is\+Within\+Culling\+Sphere} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_mesh}{Eng\+::\+Mesh}} $>$ \&mesh)
+\item 
+\Hypertarget{class_list_a652d767217922b4f1071d92704465ea5}\label{class_list_a652d767217922b4f1071d92704465ea5} 
+void {\bfseries set\+Eye\+View\+Matrix} (glm\+::mat4 \&view\+Matrix)
+\item 
+\Hypertarget{class_list_a90420135cad20f81f8919c6108b1bfa4}\label{class_list_a90420135cad20f81f8919c6108b1bfa4} 
+void {\bfseries set\+Eye\+Projection\+Matrix} (glm\+::mat4 \&eye\+Projection\+Matrix)
+\item 
+\Hypertarget{class_list_a661acc72c10cb21e4a50eac9728613d1}\label{class_list_a661acc72c10cb21e4a50eac9728613d1} 
+void {\bfseries set\+Global\+Light\+Color} (const glm\+::vec3 \&global\+Color)
+\item 
+\Hypertarget{class_list_a905f7b68eb2eb2cea1e2afbfb4fce5f1}\label{class_list_a905f7b68eb2eb2cea1e2afbfb4fce5f1} 
+void {\bfseries set\+Current\+FBO} (\mbox{\hyperlink{class_eng_1_1_fbo}{Eng\+::\+Fbo}} \texorpdfstring{$\ast$}{*}fbo)
+\item 
+\Hypertarget{class_list_a97e726ce036d3f0cf812f84136ddb60c}\label{class_list_a97e726ce036d3f0cf812f84136ddb60c} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_list_element}{Eng\+::\+List\+Element}} $>$ $>$ {\bfseries get\+Elements} () const
+\item 
+\Hypertarget{class_list_a3a31b39ee19f17116eed8dd8a48fc73d}\label{class_list_a3a31b39ee19f17116eed8dd8a48fc73d} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_bounding_box}{Eng\+::\+Bounding\+Box}} $>$ {\bfseries get\+Scene\+Bounding\+Box} ()
+\item 
+\Hypertarget{class_list_af087e684853766eedd21378050499166}\label{class_list_af087e684853766eedd21378050499166} 
+std\+::vector$<$ glm\+::vec3 $>$ {\bfseries get\+Eye\+Frustum\+Corners} ()
+\item 
+\Hypertarget{class_list_acad1e6145715e43cdcad6e786288fdf6}\label{class_list_acad1e6145715e43cdcad6e786288fdf6} 
+\mbox{\hyperlink{class_eng_1_1_list_iterator}{Eng\+::\+List\+Iterator}} {\bfseries get\+Layer\+Iterator} (const \mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Eng\+::\+Render\+Layer}} \&layer)
+\item 
+\Hypertarget{class_list_a4444f9c17381c456e1eec9607b2098a1}\label{class_list_a4444f9c17381c456e1eec9607b2098a1} 
+glm\+::vec3 {\bfseries get\+Global\+Light\+Color} () const
+\item 
+\Hypertarget{class_list_a24f39d5c36d6101d3e5022a30a8eee69}\label{class_list_a24f39d5c36d6101d3e5022a30a8eee69} 
+glm\+::mat4 {\bfseries get\+Eye\+View\+Matrix} () const
+\item 
+\Hypertarget{class_list_ac4857fe99e287203f60c5d06e943ab62}\label{class_list_ac4857fe99e287203f60c5d06e943ab62} 
+glm\+::mat4 {\bfseries get\+Eye\+Projection\+Matrix} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Object} ()
-\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_object}{Object} class. \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{class_object_af3558f9e2b46d677f0ac4d6d3c97b118}{get\+Id}} () const
-\begin{DoxyCompactList}\small\item\em Returns the unique ID of the \doxylink{class_object}{Object} Class. \end{DoxyCompactList}\item 
-std\+::string \mbox{\hyperlink{class_object_acb9b466607cb80beaaa30ece2f7f570a}{get\+Name}} () const
-\begin{DoxyCompactList}\small\item\em Returns the name of the current \doxylink{class_object}{Object}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
-\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_object}{Object}}}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
 \begin{DoxyCompactItemize}
 \item 
-unsigned int {\bfseries id}
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
 \item 
-std\+::string {\bfseries name}
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
 \end{DoxyCompactItemize}
 
 
@@ -53,21 +89,6 @@ A render list that extends \doxylink{class_object}{Object} to integrate with the
 The \doxylink{class_list}{List} class stores a collection of nodes in the correct rendering order\+: lights are pushed to the front, and other nodes are pushed to the back. 
 
 \doxysubsection{Member Function Documentation}
-\Hypertarget{class_list_a24a3265d516e8f44e3e79926bdee881b}\index{List@{List}!addNode@{addNode}}
-\index{addNode@{addNode}!List@{List}}
-\doxysubsubsection{\texorpdfstring{addNode()}{addNode()}}
-{\footnotesize\ttfamily \label{class_list_a24a3265d516e8f44e3e79926bdee881b} 
-void List\+::add\+Node (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_object}{Object}} $>$ \&}]{node}{}\end{DoxyParamCaption})}
-
-
-
-Add a node to the list based on its type. Lights are added to the front, while other nodes are added to the back. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em node} & A shared pointer to the node. \\
-\hline
-\end{DoxyParams}
 \Hypertarget{class_list_a819f0efb82263b15326e610b13623174}\index{List@{List}!render@{render}}
 \index{render@{render}!List@{List}}
 \doxysubsubsection{\texorpdfstring{render()}{render()}}
@@ -76,15 +97,10 @@ void List\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{
 
 
 
-Render all nodes in the list. 
+Implements \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}.
 
 
 
-Implements \mbox{\hyperlink{class_object}{Object}}.
-
-
-
-The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-List.\+h\item 
-List.\+cpp\end{DoxyCompactItemize}
+List.\+h\end{DoxyCompactItemize}

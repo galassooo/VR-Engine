@@ -1,0 +1,44 @@
+\doxysection{Bloom\+Renderer.\+h}
+\hypertarget{_bloom_renderer_8h_source}{}\label{_bloom_renderer_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{keyword}{class\ }ENG\_API\ BloomRenderer\ \{}
+\DoxyCodeLine{00004\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00005\ \ \ \ \ BloomRenderer();}
+\DoxyCodeLine{00006\ \ \ \ \ \string~BloomRenderer();}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keywordtype}{bool}\ init(\textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keywordtype}{void}\ render(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ inputTexture);}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ getBloomTexture()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ bloomTexture;\ \}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\ FBOs\ for\ the\ bloom\ effect}}
+\DoxyCodeLine{00014\ \ \ \ \ std::shared\_ptr<Eng::Fbo>\ brightPassFbo;}
+\DoxyCodeLine{00015\ \ \ \ \ std::shared\_ptr<Eng::Fbo>\ horizontalBlurFbo;}
+\DoxyCodeLine{00016\ \ \ \ \ std::shared\_ptr<Eng::Fbo>\ verticalBlurFbo;}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//\ Textures}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ brightPassTexture;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ horizontalBlurTexture;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ bloomTexture;\ \ \textcolor{comment}{//\ Final\ bloom\ texture}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{//\ Shader\ programs}}
+\DoxyCodeLine{00024\ \ \ \ \ std::shared\_ptr<Eng::Program>\ brightPassProgram;}
+\DoxyCodeLine{00025\ \ \ \ \ std::shared\_ptr<Eng::Program>\ blurProgram;}
+\DoxyCodeLine{00026\ \ \ \ \ std::shared\_ptr<Eng::Program>\ finalBlendProgram;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ VAO\ and\ VBO\ for\ a\ fullscreen\ quad}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ quadVAO;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ quadVBO;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{//\ Screen\ dimensions}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{int}\ width;}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{int}\ height;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ setupQuad();}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ renderQuad();}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{bool}\ setupShaders();}
+\DoxyCodeLine{00039\ \};}
+
+\end{DoxyCode}

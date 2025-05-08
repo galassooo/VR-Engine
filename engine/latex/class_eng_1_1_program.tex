@@ -1,0 +1,321 @@
+\doxysection{Eng\+::Program Class Reference}
+\hypertarget{class_eng_1_1_program}{}\label{class_eng_1_1_program}\index{Eng::Program@{Eng::Program}}
+
+
+Links and manages a set of shaders into a GPU program for rendering.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+Inheritance diagram for Eng\+::Program\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_eng_1_1_program}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_program_a1609bdf1caed760a36325f76d6f8f242}{Program}} ()
+\begin{DoxyCompactList}\small\item\em Constructs an empty \doxylink{class_eng_1_1_program}{Program}. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_program_a85bf734c05d5989708ce610939c3adad}\label{class_eng_1_1_program_a85bf734c05d5989708ce610939c3adad} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Program} ()
+\begin{DoxyCompactList}\small\item\em Destroys the \doxylink{class_eng_1_1_program}{Program}, deleting the Open\+GL program object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_program}{Program}} \& \mbox{\hyperlink{class_eng_1_1_program_a221cf72d7820ad0e4af53927a123deb3}{add\+Shader}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_shader}{Eng\+::\+Shader}} $>$ \&shader)
+\begin{DoxyCompactList}\small\item\em Attaches a compiled \doxylink{class_eng_1_1_shader}{Shader} object to this \doxylink{class_eng_1_1_program}{Program}. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_program_ad157d02c4c432672e0cfb5e947b1fe77}{build}} ()
+\begin{DoxyCompactList}\small\item\em Creates and links the Open\+GL shader program. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_program_afe473b4b0ec24a48c2240dcb82634aa9}{render}} () override
+\begin{DoxyCompactList}\small\item\em Activates this \doxylink{class_eng_1_1_program}{Program} for rendering. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_program_acb14da525fc48d7877546775e1366067}{get\+Gl\+Id}} ()
+\begin{DoxyCompactList}\small\item\em Returns the internal Open\+GL program handle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_program}{Program}} \& \mbox{\hyperlink{class_eng_1_1_program_a5be87b923776e823a316649a8033db11}{bind\+Attribute}} (int location, const char \texorpdfstring{$\ast$}{*}attrib\+Name)
+\begin{DoxyCompactList}\small\item\em Binds a vertex attribute location for linking. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_program}{Program}} \& \mbox{\hyperlink{class_eng_1_1_program_adee29e5ecc3a65ee82fda9c32d16efd7}{bind\+Sampler}} (int unit\+Index, const char \texorpdfstring{$\ast$}{*}sampler\+Name)
+\begin{DoxyCompactList}\small\item\em Binds a texture sampler uniform to a texture unit. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_program_a4fc9886d357c2d7f242fbe0baeb2c987}{get\+Param\+Location}} (const char \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}})
+\begin{DoxyCompactList}\small\item\em Retrieves the location of a uniform variable by name. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_program_a084c021b48594e724009beecc3922ab1}{set\+Matrix}} (int param, const glm\+::mat4 \&mat)
+\begin{DoxyCompactList}\small\item\em Uploads a 4{\ucr}4 matrix uniform to the shader. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_program_a04876b428a56035e7ba0ff9e597f830b}{set\+Matrix}} (int param, const glm\+::mat3 \&mat)
+\begin{DoxyCompactList}\small\item\em Uploads a 3{\ucr}3 matrix uniform to the shader. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_program_a946276f381231e39104e5b754c6cf01f}{set\+Float}} (int param, float value)
+\begin{DoxyCompactList}\small\item\em Uploads a float uniform to the shader. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_program_afe0431acb6738b1683d5221c35ba9b85}{set\+Int}} (int param, int value)
+\begin{DoxyCompactList}\small\item\em Uploads an int uniform to the shader. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_program_a7aa1baa8cf0e067380547a4e5cd4a725}{set\+Vec3}} (int param, const glm\+::vec3 \&vect)
+\begin{DoxyCompactList}\small\item\em Uploads a vec3 uniform to the shader. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_program_ac49f974190c7460f2d7bb88efcbdd988}{set\+Vec4}} (int param, const glm\+::vec4 \&vect)
+\begin{DoxyCompactList}\small\item\em Uploads a vec4 uniform to the shader. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_eng_1_1_program_aac78d5efc6cc5300cc8b1110605b40f9}\label{class_eng_1_1_program_aac78d5efc6cc5300cc8b1110605b40f9} 
+static const unsigned int {\bfseries MAX\+\_\+\+LOGSIZE} = 4096
+\begin{DoxyCompactList}\small\item\em Max output size in char for a shader log. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Links and manages a set of shaders into a GPU program for rendering. 
+
+A \doxylink{class_eng_1_1_program}{Program} encapsulates the Open\+GL shader program object, allowing addition of compiled shader objects, binding of attribute locations and texture samplers, and retrieval of uniform locations. After building, it can be activated for rendering and used to set uniform variables of various types. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_program_a1609bdf1caed760a36325f76d6f8f242}\index{Eng::Program@{Eng::Program}!Program@{Program}}
+\index{Program@{Program}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{Program()}{Program()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_a1609bdf1caed760a36325f76d6f8f242} 
+ENG\+\_\+\+API Program\+::\+Program (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Constructs an empty \doxylink{class_eng_1_1_program}{Program}. 
+
+Initializes the internal program ID to zero. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_program_a221cf72d7820ad0e4af53927a123deb3}\index{Eng::Program@{Eng::Program}!addShader@{addShader}}
+\index{addShader@{addShader}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{addShader()}{addShader()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_a221cf72d7820ad0e4af53927a123deb3} 
+ENG\+\_\+\+API \mbox{\hyperlink{class_eng_1_1_program}{Eng\+::\+Program}} \& Program\+::add\+Shader (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_shader}{Eng\+::\+Shader}} $>$ \&}]{shader}{}\end{DoxyParamCaption})}
+
+
+
+Attaches a compiled \doxylink{class_eng_1_1_shader}{Shader} object to this \doxylink{class_eng_1_1_program}{Program}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em shader} & Shared pointer to the \doxylink{class_eng_1_1_shader}{Shader} to attach. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to this \doxylink{class_eng_1_1_program}{Program} for method chaining. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_program_a5be87b923776e823a316649a8033db11}\index{Eng::Program@{Eng::Program}!bindAttribute@{bindAttribute}}
+\index{bindAttribute@{bindAttribute}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{bindAttribute()}{bindAttribute()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_a5be87b923776e823a316649a8033db11} 
+ENG\+\_\+\+API \mbox{\hyperlink{class_eng_1_1_program}{Eng\+::\+Program}} \& Program\+::bind\+Attribute (\begin{DoxyParamCaption}\item[{int}]{location}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{attrib\+Name}{}\end{DoxyParamCaption})}
+
+
+
+Binds a vertex attribute location for linking. 
+
+Must be called before \doxylink{class_eng_1_1_program_ad157d02c4c432672e0cfb5e947b1fe77}{build()}. 
+\begin{DoxyParams}{Parameters}
+{\em location} & Explicit attribute index. \\
+\hline
+{\em attrib\+Name} & Name of the attribute in the shader. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to this \doxylink{class_eng_1_1_program}{Program}. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_program_adee29e5ecc3a65ee82fda9c32d16efd7}\index{Eng::Program@{Eng::Program}!bindSampler@{bindSampler}}
+\index{bindSampler@{bindSampler}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{bindSampler()}{bindSampler()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_adee29e5ecc3a65ee82fda9c32d16efd7} 
+ENG\+\_\+\+API \mbox{\hyperlink{class_eng_1_1_program}{Eng\+::\+Program}} \& Program\+::bind\+Sampler (\begin{DoxyParamCaption}\item[{int}]{unit\+Index}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{sampler\+Name}{}\end{DoxyParamCaption})}
+
+
+
+Binds a texture sampler uniform to a texture unit. 
+
+Must be called before \doxylink{class_eng_1_1_program_afe473b4b0ec24a48c2240dcb82634aa9}{render()}. 
+\begin{DoxyParams}{Parameters}
+{\em unit\+Index} & \doxylink{class_eng_1_1_texture}{Texture} unit index (0-\/based). \\
+\hline
+{\em sampler\+Name} & Name of the sampler uniform. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to this \doxylink{class_eng_1_1_program}{Program}. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_program_ad157d02c4c432672e0cfb5e947b1fe77}\index{Eng::Program@{Eng::Program}!build@{build}}
+\index{build@{build}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{build()}{build()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_ad157d02c4c432672e0cfb5e947b1fe77} 
+bool ENG\+\_\+\+API Program\+::build (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Creates and links the Open\+GL shader program. 
+
+Deletes any existing program, recreates it, attaches all shaders, links and validates the program, and applies attribute bindings. \begin{DoxyReturn}{Returns}
+True on successful link and validation; false on failure. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_program_acb14da525fc48d7877546775e1366067}\index{Eng::Program@{Eng::Program}!getGlId@{getGlId}}
+\index{getGlId@{getGlId}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{getGlId()}{getGlId()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_acb14da525fc48d7877546775e1366067} 
+unsigned int ENG\+\_\+\+API Program\+::get\+Gl\+Id (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Returns the internal Open\+GL program handle. 
+
+\begin{DoxyReturn}{Returns}
+GLuint program ID. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_program_a4fc9886d357c2d7f242fbe0baeb2c987}\index{Eng::Program@{Eng::Program}!getParamLocation@{getParamLocation}}
+\index{getParamLocation@{getParamLocation}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{getParamLocation()}{getParamLocation()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_a4fc9886d357c2d7f242fbe0baeb2c987} 
+int ENG\+\_\+\+API Program\+::get\+Param\+Location (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{name}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the location of a uniform variable by name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name of the uniform variable. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Location ID, or -\/1 if not found. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_program_afe473b4b0ec24a48c2240dcb82634aa9}\index{Eng::Program@{Eng::Program}!render@{render}}
+\index{render@{render}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_afe473b4b0ec24a48c2240dcb82634aa9} 
+void ENG\+\_\+\+API Program\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Activates this \doxylink{class_eng_1_1_program}{Program} for rendering. 
+
+Calls gl\+Use\+Program and sets sampler uniforms to their bound units. 
+
+Implements \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}.
+
+\Hypertarget{class_eng_1_1_program_a946276f381231e39104e5b754c6cf01f}\index{Eng::Program@{Eng::Program}!setFloat@{setFloat}}
+\index{setFloat@{setFloat}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{setFloat()}{setFloat()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_a946276f381231e39104e5b754c6cf01f} 
+void ENG\+\_\+\+API Program\+::set\+Float (\begin{DoxyParamCaption}\item[{int}]{param}{, }\item[{float}]{value}{}\end{DoxyParamCaption})}
+
+
+
+Uploads a float uniform to the shader. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param} & Uniform location. \\
+\hline
+{\em value} & Float value to upload. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_program_afe0431acb6738b1683d5221c35ba9b85}\index{Eng::Program@{Eng::Program}!setInt@{setInt}}
+\index{setInt@{setInt}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{setInt()}{setInt()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_afe0431acb6738b1683d5221c35ba9b85} 
+void ENG\+\_\+\+API Program\+::set\+Int (\begin{DoxyParamCaption}\item[{int}]{param}{, }\item[{int}]{value}{}\end{DoxyParamCaption})}
+
+
+
+Uploads an int uniform to the shader. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param} & Uniform location. \\
+\hline
+{\em value} & Integer value to upload. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_program_a04876b428a56035e7ba0ff9e597f830b}\index{Eng::Program@{Eng::Program}!setMatrix@{setMatrix}}
+\index{setMatrix@{setMatrix}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{setMatrix()}{setMatrix()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_a04876b428a56035e7ba0ff9e597f830b} 
+void ENG\+\_\+\+API Program\+::set\+Matrix (\begin{DoxyParamCaption}\item[{int}]{param}{, }\item[{const glm\+::mat3 \&}]{mat}{}\end{DoxyParamCaption})}
+
+
+
+Uploads a 3{\ucr}3 matrix uniform to the shader. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param} & Uniform location obtained via \doxylink{class_eng_1_1_program_a4fc9886d357c2d7f242fbe0baeb2c987}{get\+Param\+Location()}. \\
+\hline
+{\em mat} & The matrix to set. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_program_a084c021b48594e724009beecc3922ab1}\index{Eng::Program@{Eng::Program}!setMatrix@{setMatrix}}
+\index{setMatrix@{setMatrix}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{setMatrix()}{setMatrix()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_a084c021b48594e724009beecc3922ab1} 
+void ENG\+\_\+\+API Program\+::set\+Matrix (\begin{DoxyParamCaption}\item[{int}]{param}{, }\item[{const glm\+::mat4 \&}]{mat}{}\end{DoxyParamCaption})}
+
+
+
+Uploads a 4{\ucr}4 matrix uniform to the shader. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param} & Uniform location obtained via \doxylink{class_eng_1_1_program_a4fc9886d357c2d7f242fbe0baeb2c987}{get\+Param\+Location()}. \\
+\hline
+{\em mat} & The matrix to set. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_program_a7aa1baa8cf0e067380547a4e5cd4a725}\index{Eng::Program@{Eng::Program}!setVec3@{setVec3}}
+\index{setVec3@{setVec3}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{setVec3()}{setVec3()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_a7aa1baa8cf0e067380547a4e5cd4a725} 
+void ENG\+\_\+\+API Program\+::set\+Vec3 (\begin{DoxyParamCaption}\item[{int}]{param}{, }\item[{const glm\+::vec3 \&}]{vect}{}\end{DoxyParamCaption})}
+
+
+
+Uploads a vec3 uniform to the shader. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param} & Uniform location. \\
+\hline
+{\em vect} & glm\+::vec3 value to upload. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_program_ac49f974190c7460f2d7bb88efcbdd988}\index{Eng::Program@{Eng::Program}!setVec4@{setVec4}}
+\index{setVec4@{setVec4}!Eng::Program@{Eng::Program}}
+\doxysubsubsection{\texorpdfstring{setVec4()}{setVec4()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_program_ac49f974190c7460f2d7bb88efcbdd988} 
+void ENG\+\_\+\+API Program\+::set\+Vec4 (\begin{DoxyParamCaption}\item[{int}]{param}{, }\item[{const glm\+::vec4 \&}]{vect}{}\end{DoxyParamCaption})}
+
+
+
+Uploads a vec4 uniform to the shader. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param} & Uniform location. \\
+\hline
+{\em vect} & glm\+::vec4 value to upload. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Program.\+cpp\end{DoxyCompactItemize}

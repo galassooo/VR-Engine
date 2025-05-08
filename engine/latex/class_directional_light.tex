@@ -18,71 +18,88 @@ Inheritance diagram for Directional\+Light\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{class_directional_light_a01dd908ba8f77806ae1ef23f96d79ac8}\label{class_directional_light_a01dd908ba8f77806ae1ef23f96d79ac8} 
-{\bfseries Directional\+Light} (const glm\+::vec3 \&color, float intensity, const glm\+::vec3 \&direction)
-\begin{DoxyCompactList}\small\item\em Directional \doxylink{class_light}{Light} Constructor. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_directional_light_a249c6001576b37ca22af078a44a01c29}{apply\+Lighting}} () const override
-\begin{DoxyCompactList}\small\item\em Apply current Lighting. \end{DoxyCompactList}\item 
-glm\+::vec3 \mbox{\hyperlink{class_directional_light_a429267972f6e3255e5bd7d1e070a3aa3}{get\+Direction}} () const
-\begin{DoxyCompactList}\small\item\em Get current light direction. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_light}{Light}}}
-\begin{DoxyCompactItemize}
+\Hypertarget{class_directional_light_aac11977d8b31c430c5fb1cd27231cc17}\label{class_directional_light_aac11977d8b31c430c5fb1cd27231cc17} 
+{\bfseries Directional\+Light} (const glm\+::vec3 \&\mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}}, const glm\+::vec3 \&direction)
 \item 
-{\bfseries Light} (const glm\+::vec3 \&color, float intensity)
-\begin{DoxyCompactList}\small\item\em \doxylink{class_light}{Light} Constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_node}{Node}}}
-\begin{DoxyCompactItemize}
+\Hypertarget{class_directional_light_a429267972f6e3255e5bd7d1e070a3aa3}\label{class_directional_light_a429267972f6e3255e5bd7d1e070a3aa3} 
+glm\+::vec3 {\bfseries get\+Direction} () const
 \item 
-{\bfseries Node} ()
-\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{class_node}{Node} Class. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_node_a0bc6344f1418f4b780025ca6839d0acc}{set\+Parent}} (\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*}p)
-\begin{DoxyCompactList}\small\item\em Set parent of the \doxylink{class_node}{Node}. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_node_a36ab59d094fe2dd2b2d8087c7fe3c955}{add\+Child}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ child)
-\begin{DoxyCompactList}\small\item\em Add child to the list of current \doxylink{class_node}{Node}\textquotesingle{}s children. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_node_a3cad655320d50751c43c5cec9356dcf3}{get\+Parent}} () const
-\begin{DoxyCompactList}\small\item\em Get current \doxylink{class_node}{Node}\textquotesingle{}s parent. \end{DoxyCompactList}\item 
-glm\+::mat4 \mbox{\hyperlink{class_node_a89f137ff4d4853bdc509397063bdfbec}{get\+Final\+Matrix}} () const
-\begin{DoxyCompactList}\small\item\em Get final Matrix of current \doxylink{class_node}{Node} based on the position in the Scene Graph. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_node_a15ee91cac4a2f0700cd080e0377a6843}{set\+Local\+Matrix}} (const glm\+::mat4 \&matrix)
-\begin{DoxyCompactList}\small\item\em Set current \doxylink{class_node}{Node}\textquotesingle{}s Local Matrix. \end{DoxyCompactList}\item 
-const glm\+::mat4 \& \mbox{\hyperlink{class_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}{get\+Local\+Matrix}} () const
-\begin{DoxyCompactList}\small\item\em Get current \doxylink{class_node}{Node}\textquotesingle{}s Local Matrix. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_node_ab93a6f41e02422a21c44227c0355382a}{render}} ()
+\Hypertarget{class_directional_light_a88f13181276d18c38cc23b58362bd03a}\label{class_directional_light_a88f13181276d18c38cc23b58362bd03a} 
+glm\+::mat4 {\bfseries get\+Light\+View\+Matrix} (const std\+::vector$<$ glm\+::vec3 $>$ \&frustum\+Corners, float max\+Range)
 \item 
-std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ $>$ \mbox{\hyperlink{class_node_adf8763eeea4302a3680aa71af3085727}{get\+Children}} () const
+\Hypertarget{class_directional_light_ad44954929ac37089bff9cd4eaa4232b2}\label{class_directional_light_ad44954929ac37089bff9cd4eaa4232b2} 
+glm\+::mat4 {\bfseries get\+Light\+Space\+Matrix} (const std\+::vector$<$ glm\+::vec3 $>$ \&frustum\+Corners, const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_bounding_box}{Eng\+::\+Bounding\+Box}} $>$ \&bounding\+Box)
 \end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_object}{Object}}}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Object} ()
-\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_object}{Object} class. \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{class_object_af3558f9e2b46d677f0ac4d6d3c97b118}{get\+Id}} () const
-\begin{DoxyCompactList}\small\item\em Returns the unique ID of the \doxylink{class_object}{Object} Class. \end{DoxyCompactList}\item 
-std\+::string \mbox{\hyperlink{class_object_acb9b466607cb80beaaa30ece2f7f570a}{get\+Name}} () const
-\begin{DoxyCompactList}\small\item\em Returns the name of the current \doxylink{class_object}{Object}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{class_eng_1_1_light_aad66dc4b16fd701b316f38eedadd6e26}{Light}} (const glm\+::vec3 \&\mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}})
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_eng_1_1_light}{Light}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_light_aef3f7a76f9685584401ffbc0b07d5a20}{set\+Color}} (const glm\+::vec3 \&\mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}})
+\begin{DoxyCompactList}\small\item\em Sets the color of the light source. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_light_ad11747595250cede2c4c7948d1aa3d83}{render}} () override
+\begin{DoxyCompactList}\small\item\em Renders the light by uploading its ambient, diffuse, and specular properties to the shader and configuring any subclass-\/specific settings. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_node_aa40fb59cc7ed94005b70ffae74c74c78}{Node}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_node}{Node} class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a1bf04bccde0ec7e57015290989c29ebc}{set\+Parent}} (\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*}p)
+\begin{DoxyCompactList}\small\item\em Sets the parent of the node. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a5971d7af616f9df233236b9c1989e7a0}{get\+Parent}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the parent of the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a435f8d7bb208a7716aac311647d686b7}{add\+Child}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ child)
+\begin{DoxyCompactList}\small\item\em Adds a child node to the list of current node\textquotesingle{}s children. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_ac8387fae8472200c0c17a06d8dcc94a3}{get\+Children}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the list of children for the current node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_node_a4239997371524dbfed52ff157eac1ffe}{set\+Local\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+const glm\+::mat4 \& \mbox{\hyperlink{class_eng_1_1_node_ac66285ef6b3adc1e6cb5b1e58ccc70f2}{get\+Local\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the local transformation matrix of the current node. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_ac834ce5ba6cff3c02665adb3237a3f82}{get\+Final\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em Computes the final transformation matrix of the node. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
-\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_light}{Light}}}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
 \begin{DoxyCompactItemize}
 \item 
-glm\+::vec3 {\bfseries color}
+\mbox{\hyperlink{class_eng_1_1_light_ad0e59fad13bb6cfadc25b2c477e9ddc7}{\texorpdfstring{$\sim$}{\string~}\+Light}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{class_eng_1_1_light}{Light}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
+\begin{DoxyCompactItemize}
 \item 
-float {\bfseries intensity}
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}}
 \end{DoxyCompactItemize}
-\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_node}{Node}}}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}}}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_node}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries parent}
+\mbox{\hyperlink{class_eng_1_1_node}{Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_eng_1_1_node_a8adf99ef92cc40ccf96442eed1f1407d}{parent}}
 \item 
-std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ $>$ {\bfseries children}
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ $>$ \mbox{\hyperlink{class_eng_1_1_node_a595aa4342bed14825742645b747fd622}{children}}
 \item 
-glm\+::mat4 {\bfseries local\+Matrix}
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_node_aca4efea05f8cbcf29913366ad6222eb7}{local\+Matrix}}
 \end{DoxyCompactItemize}
-\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_object}{Object}}}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
 \begin{DoxyCompactItemize}
 \item 
-unsigned int {\bfseries id}
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
 \item 
-std\+::string {\bfseries name}
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_light}{Eng\+::\+Light}}}
+\begin{DoxyCompactItemize}
+\item 
+static int {\bfseries light\+ID} = 0
 \end{DoxyCompactItemize}
 
 
@@ -91,37 +108,6 @@ Represents a light source that emits light in a specific direction.
 
 The {\ttfamily \doxylink{class_directional_light}{Directional\+Light}} simulates a distant light source, such as the sun, where all light rays are parallel. It inherits from the {\ttfamily \doxylink{class_light}{Light}} base class and includes additional properties and methods for managing the light\textquotesingle{}s direction. 
 
-\doxysubsection{Member Function Documentation}
-\Hypertarget{class_directional_light_a249c6001576b37ca22af078a44a01c29}\index{DirectionalLight@{DirectionalLight}!applyLighting@{applyLighting}}
-\index{applyLighting@{applyLighting}!DirectionalLight@{DirectionalLight}}
-\doxysubsubsection{\texorpdfstring{applyLighting()}{applyLighting()}}
-{\footnotesize\ttfamily \label{class_directional_light_a249c6001576b37ca22af078a44a01c29} 
-void Directional\+Light\+::apply\+Lighting (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
-
-
-
-Apply current Lighting. 
-
-
-
-Implements \mbox{\hyperlink{class_light}{Light}}.
-
-\Hypertarget{class_directional_light_a429267972f6e3255e5bd7d1e070a3aa3}\index{DirectionalLight@{DirectionalLight}!getDirection@{getDirection}}
-\index{getDirection@{getDirection}!DirectionalLight@{DirectionalLight}}
-\doxysubsubsection{\texorpdfstring{getDirection()}{getDirection()}}
-{\footnotesize\ttfamily \label{class_directional_light_a429267972f6e3255e5bd7d1e070a3aa3} 
-glm\+::vec3 Directional\+Light\+::get\+Direction (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
-
-
-
-Get current light direction. 
-
-\begin{DoxyReturn}{Returns}
-glm\+::vec3 direction 
-\end{DoxyReturn}
-
-
-The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-Directional\+Light.\+h\item 
-Directional\+Light.\+cpp\end{DoxyCompactItemize}
+Directional\+Light.\+h\end{DoxyCompactItemize}

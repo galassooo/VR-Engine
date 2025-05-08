@@ -1,0 +1,31 @@
+\doxysection{Eng\+::Key\+Info Struct Reference}
+\hypertarget{struct_eng_1_1_key_info}{}\label{struct_eng_1_1_key_info}\index{Eng::KeyInfo@{Eng::KeyInfo}}
+
+
+Stores information about a keyboard shortcut and its associated functionality.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_eng_1_1_key_info_a23cdc3d4ead08af880a1b51e0181e943}\label{struct_eng_1_1_key_info_a23cdc3d4ead08af880a1b51e0181e943} 
+char {\bfseries key}
+\begin{DoxyCompactList}\small\item\em The keyboard key that triggers the callback. \end{DoxyCompactList}\item 
+\Hypertarget{struct_eng_1_1_key_info_a184bbda3dde076700071175f33562f1f}\label{struct_eng_1_1_key_info_a184bbda3dde076700071175f33562f1f} 
+std\+::string {\bfseries desc}
+\begin{DoxyCompactList}\small\item\em Human-\/readable description of the key\textquotesingle{}s function. \end{DoxyCompactList}\item 
+\Hypertarget{struct_eng_1_1_key_info_a0f9b613302967c16b768fa47f09deac6}\label{struct_eng_1_1_key_info_a0f9b613302967c16b768fa47f09deac6} 
+std\+::function$<$ void(unsigned char, int, int)$>$ {\bfseries func}
+\begin{DoxyCompactList}\small\item\em Callback function executed when key is pressed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Stores information about a keyboard shortcut and its associated functionality. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\end{DoxyCompactItemize}

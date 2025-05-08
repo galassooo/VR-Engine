@@ -9,13 +9,48 @@ Represents a texture used in rendering, loaded from an image file and applied to
 
 {\ttfamily \#include $<$Texture.\+h$>$}
 
+Inheritance diagram for Texture\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_texture}
+\end{center}
+\end{figure}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_texture_a25ab3a58fa60ccafe3e3883727bc63fc}{Texture}} (const std\+::string \&file\+Path)
-\begin{DoxyCompactList}\small\item\em \doxylink{class_texture}{Texture} Constructor, takes file\+Path and loads the texture. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_texture_a8207bb63fc9dc1663bf53e2c19591ba7}{bind}} (unsigned int unit) const
-\begin{DoxyCompactList}\small\item\em Binding the texture to a specified texture unit in Open\+GL. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\Hypertarget{class_texture_a5ced1bf6be73c7d7bf707ec586ae91f5}\label{class_texture_a5ced1bf6be73c7d7bf707ec586ae91f5} 
+{\bfseries Texture} (const std\+::string \&file\+Path="{}"{})
+\item 
+\Hypertarget{class_texture_aa7c11bd1de04316ca1bff30f2ea9795e}\label{class_texture_aa7c11bd1de04316ca1bff30f2ea9795e} 
+bool {\bfseries load\+From\+File} (const std\+::string \&file\+Path)
+\item 
+void \mbox{\hyperlink{class_texture_a800d2fde67c26e55834c5b38e4f7d885}{render}} () override
+\item 
+\Hypertarget{class_texture_a2c2b502138a1a1786c4bf74016620885}\label{class_texture_a2c2b502138a1a1786c4bf74016620885} 
+int {\bfseries get\+Width} () const
+\item 
+\Hypertarget{class_texture_a23c3c1315267a5521d824982bb8d208c}\label{class_texture_a23c3c1315267a5521d824982bb8d208c} 
+int {\bfseries get\+Height} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -23,43 +58,19 @@ Represents a texture used in rendering, loaded from an image file and applied to
 
 The {\ttfamily \doxylink{class_texture}{Texture}} class provides functionality for loading a texture from a file, binding it to a specific texture unit, and managing its Open\+GL texture ID. 
 
-\doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{class_texture_a25ab3a58fa60ccafe3e3883727bc63fc}\index{Texture@{Texture}!Texture@{Texture}}
-\index{Texture@{Texture}!Texture@{Texture}}
-\doxysubsubsection{\texorpdfstring{Texture()}{Texture()}}
-{\footnotesize\ttfamily \label{class_texture_a25ab3a58fa60ccafe3e3883727bc63fc} 
-Texture\+::\+Texture (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{file\+Path}{}\end{DoxyParamCaption})}
-
-
-
-\doxylink{class_texture}{Texture} Constructor, takes file\+Path and loads the texture. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em Texture\textquotesingle{}s} & file\+Path \\
-\hline
-\end{DoxyParams}
-
-
 \doxysubsection{Member Function Documentation}
-\Hypertarget{class_texture_a8207bb63fc9dc1663bf53e2c19591ba7}\index{Texture@{Texture}!bind@{bind}}
-\index{bind@{bind}!Texture@{Texture}}
-\doxysubsubsection{\texorpdfstring{bind()}{bind()}}
-{\footnotesize\ttfamily \label{class_texture_a8207bb63fc9dc1663bf53e2c19591ba7} 
-void Texture\+::bind (\begin{DoxyParamCaption}\item[{unsigned int}]{unit}{}\end{DoxyParamCaption}) const}
+\Hypertarget{class_texture_a800d2fde67c26e55834c5b38e4f7d885}\index{Texture@{Texture}!render@{render}}
+\index{render@{render}!Texture@{Texture}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_texture_a800d2fde67c26e55834c5b38e4f7d885} 
+void Texture\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
-Binding the texture to a specified texture unit in Open\+GL. 
+Implements \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}.
 
 
-\begin{DoxyParams}{Parameters}
-{\em ussigned} & int for the unit in Open\+GL \\
-\hline
-\end{DoxyParams}
 
-
-The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-Texture.\+h\item 
-Texture.\+cpp\end{DoxyCompactItemize}
+Texture.\+h\end{DoxyCompactItemize}

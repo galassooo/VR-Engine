@@ -1,0 +1,77 @@
+\doxysection{Physics\+Manager.\+h}
+\hypertarget{_physics_manager_8h_source}{}\label{_physics_manager_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }ENG\_API\ PhysicsManager\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{static}\ PhysicsManager\&\ getInstance();}
+\DoxyCodeLine{00016\ \ \ \ \ PhysicsManager(\textcolor{keyword}{const}\ PhysicsManager\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00017\ \ \ \ \ PhysicsManager\&\ operator=(\textcolor{keyword}{const}\ PhysicsManager\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_physics_manager_1_1_debug_options}{DebugOptions}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_physics_manager_1_1_debug_options_a0274ed64513c6bb73e8f55aa4e2b1588}{drawWireframe}}\ =\ \textcolor{keyword}{true};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_physics_manager_1_1_debug_options_abd3ad296aab8ec6686a77ac20c7a1bd3}{drawContactPoints}}\ =\ \textcolor{keyword}{true};\ \ \ \ \ \ \ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_physics_manager_1_1_debug_options_a31a71b2f03a5c0582f5216f007fb4e9b}{drawConstraints}}\ =\ \textcolor{keyword}{true};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ glm::vec3\ \mbox{\hyperlink{struct_physics_manager_1_1_debug_options_a5f4529873c7ed77743694818e6984367}{wireframeColor}}\ =\ \{\ 0,1,0\ \};\ \ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ glm::vec3\ \mbox{\hyperlink{struct_physics_manager_1_1_debug_options_a833f91c66d8d72b3552bb6448ab59559}{contactPointColor}}\ =\ \{\ 1,0,0\ \};\ }
+\DoxyCodeLine{00028\ \ \ \ \ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_physics_manager_a3d7884be032b4dd19afd6ab9eb1b3b93}{initialize}}();}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_physics_manager_a07fb35b32db5bd7f78f0ea2fc2e72bc5}{cleanup}}();}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_physics_manager_a3194bb39c4b55f7c217e60ae8edcfcfa}{update}}(\textcolor{keywordtype}{float}\ deltaTime);}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00052\ \ \ \ \ std::shared\_ptr<PhysicsComponent>\ \mbox{\hyperlink{class_physics_manager_a28177da64ba056ded5cc8c23c1328695}{createComponent}}(std::shared\_ptr<Eng::Node>\ node);}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_physics_manager_a10da953119b4f4b297f529fbb40ac6e0}{removeComponent}}(std::shared\_ptr<Eng::Node>\ node);}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00066\ \ \ \ \ std::shared\_ptr<PhysicsComponent>\ \mbox{\hyperlink{class_physics_manager_a23dc3f050df010ae6560447a51b4256c}{getComponent}}(std::shared\_ptr<Eng::Node>\ node);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00074\ \ \ \ \ std::shared\_ptr<PhysicsComponent>\ \mbox{\hyperlink{class_physics_manager_a21017bd9a612b91a84f609cbf9a14cb7}{createChessBoardCollider}}(\textcolor{keyword}{const}\ glm::vec3\&\ min,\ \textcolor{keyword}{const}\ glm::vec3\&\ max);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_physics_manager_aa226260081a2225e3d376051e9b500ba}{setGravity}}(\textcolor{keyword}{const}\ glm::vec3\&\ gravity);}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00086\ \ \ \ \ glm::vec3\ \mbox{\hyperlink{class_physics_manager_ae9b1e3901ec906d45163425d02e9f118}{getGravity}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_physics_manager_a46ef40cefcd4b2a32dd7cbdc932ea39e}{setDebugMode}}(\textcolor{keywordtype}{bool}\ enabled);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_physics_manager_ae8b5fd2a1e4f1f376113b24a6f789e3b}{isDebugEnabled}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ debugEnabled;\ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_physics_manager_ad7b3720083cfbf8bfaffcad62fee7afb}{setDebugOptions}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_physics_manager_1_1_debug_options}{DebugOptions}}\&\ options);}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_physics_manager_1_1_debug_options}{DebugOptions}}\&\ \mbox{\hyperlink{class_physics_manager_a0a53a1f24d640a510c8d1fd9d07e3f8e}{getDebugOptions}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ debugOptions;\ \}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_physics_manager_a15484980c501ad72c1c8f6679c71f322}{debugDrawWorld}}();}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00125\ \ \ \ \ std::shared\_ptr<Eng::Node>\ \mbox{\hyperlink{class_physics_manager_a7af42bf702ec13d4f8a437fa93ea7b8e}{rayTest}}(\textcolor{keyword}{const}\ glm::vec3\&\ from,\ \textcolor{keyword}{const}\ glm::vec3\&\ to,}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ glm::vec3*\ hitPoint\ =\ \textcolor{keyword}{nullptr},}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ glm::vec3*\ hitNormal\ =\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00130\ \ \ \ \ PhysicsManager()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00131\ \ \ \ \ \string~PhysicsManager();}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{//\ Componenti\ Bullet\ Physics\ (opachi\ all'esterno)}}
+\DoxyCodeLine{00134\ \ \ \ \ btDefaultCollisionConfiguration*\ collisionConfiguration\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00135\ \ \ \ \ btCollisionDispatcher*\ dispatcher\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00136\ \ \ \ \ btBroadphaseInterface*\ overlappingPairCache\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00137\ \ \ \ \ btSequentialImpulseConstraintSolver*\ solver\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00138\ \ \ \ \ btDiscreteDynamicsWorld*\ dynamicsWorld\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{//\ Mappa\ i\ nodi\ ai\ componenti\ fisici}}
+\DoxyCodeLine{00141\ \ \ \ \ std::unordered\_map<std::shared\_ptr<Eng::Node>,\ std::shared\_ptr<PhysicsComponent>>\ components;}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{//\ Debug}}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{bool}\ debugEnabled\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00145\ \ \ \ \ \mbox{\hyperlink{struct_physics_manager_1_1_debug_options}{DebugOptions}}\ debugOptions;}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordtype}{void}*\ debugDrawer\ =\ \textcolor{keyword}{nullptr};\ \ \textcolor{comment}{//\ Opaco\ all'esterno}}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{//\ Registra\ un\ componente\ nella\ mappa}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordtype}{void}\ registerComponent(std::shared\_ptr<Eng::Node>\ node,\ std::shared\_ptr<PhysicsComponent>\ component);}
+\DoxyCodeLine{00150\ \};}
+
+\end{DoxyCode}

@@ -1,0 +1,75 @@
+\doxysection{Fbo Class Reference}
+\hypertarget{class_fbo}{}\label{class_fbo}\index{Fbo@{Fbo}}
+
+
+Frame buffer class to deal with Open\+GL FBOs.  
+
+
+
+
+{\ttfamily \#include $<$Frame\+Buffer\+Object.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_fbo_a9502fbad65b3a7a0ce175283262b0897}\label{class_fbo_a9502fbad65b3a7a0ce175283262b0897} 
+enum \+: unsigned int \{ {\bfseries BIND\+\_\+\+DEPTHBUFFER} = 0
+, {\bfseries BIND\+\_\+\+COLORTEXTURE}
+, {\bfseries BIND\+\_\+\+DEPTHTEXTURE}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_fbo_a0615b33386c3ba41f3e668ad5017ac78}\label{class_fbo_a0615b33386c3ba41f3e668ad5017ac78} 
+unsigned int {\bfseries get\+Texture} (unsigned int texture\+Number)
+\item 
+\Hypertarget{class_fbo_a44413e4e2ee59febab840ddafd99527d}\label{class_fbo_a44413e4e2ee59febab840ddafd99527d} 
+int {\bfseries get\+SizeX} ()
+\item 
+\Hypertarget{class_fbo_a69f919092301b6e72756f9cc08116110}\label{class_fbo_a69f919092301b6e72756f9cc08116110} 
+int {\bfseries get\+SizeY} ()
+\item 
+\Hypertarget{class_fbo_ab089f6563a35e336b66a2990fe3c1ba9}\label{class_fbo_ab089f6563a35e336b66a2990fe3c1ba9} 
+int {\bfseries get\+SizeZ} ()
+\item 
+\Hypertarget{class_fbo_a6fb77bcdaef262cf3583d2d613ced1df}\label{class_fbo_a6fb77bcdaef262cf3583d2d613ced1df} 
+unsigned int {\bfseries get\+Handle} ()
+\item 
+\Hypertarget{class_fbo_a6b63cfcc88471103105ca55bde657188}\label{class_fbo_a6b63cfcc88471103105ca55bde657188} 
+bool {\bfseries is\+Ok} ()
+\item 
+\Hypertarget{class_fbo_a3d5e71d1df6ec97066fe5dd489cc144e}\label{class_fbo_a3d5e71d1df6ec97066fe5dd489cc144e} 
+bool {\bfseries bind\+Texture} (unsigned int texture\+Number, unsigned int operation, unsigned int texture, int param1=0, int param2=0)
+\item 
+\Hypertarget{class_fbo_a98d81b9ce0d74889d47f375914ffefbe}\label{class_fbo_a98d81b9ce0d74889d47f375914ffefbe} 
+bool {\bfseries bind\+Render\+Buffer} (unsigned int render\+Buffer, unsigned int operation, int sizeX, int sizeY)
+\item 
+\Hypertarget{class_fbo_a9e1fd6bbe4819204982274a4b537d036}\label{class_fbo_a9e1fd6bbe4819204982274a4b537d036} 
+void {\bfseries set\+Depth\+Only} (bool value)
+\item 
+\Hypertarget{class_fbo_a0caa10729f4976c8db5da96f0bdf6bf1}\label{class_fbo_a0caa10729f4976c8db5da96f0bdf6bf1} 
+bool {\bfseries render} (void \texorpdfstring{$\ast$}{*}data=nullptr)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_fbo_a16adacc97a957c654ce980a400715e94}\label{class_fbo_a16adacc97a957c654ce980a400715e94} 
+static void {\bfseries disable} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_fbo_a90536c1e587e43c3c0df22284edae148}\label{class_fbo_a90536c1e587e43c3c0df22284edae148} 
+static const unsigned int {\bfseries MAX\+\_\+\+ATTACHMENTS} = 8
+\begin{DoxyCompactList}\small\item\em Maximum number of available render buffers or textures per FBO. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Frame buffer class to deal with Open\+GL FBOs. 
+
+Manages creation and configuration of Open\+GL frame buffer objects, including texture and render buffer attachments, binding operations, and rendering control. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Frame\+Buffer\+Object.\+h\end{DoxyCompactItemize}

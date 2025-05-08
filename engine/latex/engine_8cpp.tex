@@ -5,20 +5,41 @@
 Graphics engine main file.  
 
 
-{\ttfamily \#include "{}engine.\+h"{}}\newline
+{\ttfamily \#include "{}Engine.\+h"{}}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$chrono$>$}\newline
 {\ttfamily \#include $<$iostream$>$}\newline
 {\ttfamily \#include $<$source\+\_\+location$>$}\newline
+{\ttfamily \#include $<$utility$>$}\newline
+{\ttfamily \#include $<$GL/glew.\+h$>$}\newline
 {\ttfamily \#include $<$GL/freeglut.\+h$>$}\newline
+{\ttfamily \#include $<$Free\+Image.\+h$>$}\newline
+{\ttfamily \#include "{}ovr.\+h"{}}\newline
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{struct_eng_1_1_base_1_1_reserved}{Eng\+::\+Base\+::\+Reserved}}
-\begin{DoxyCompactList}\small\item\em \doxylink{class_eng_1_1_base}{Base} class reserved structure (using PIMPL/\+Bridge design pattern \href{https://en.wikipedia.org/wiki/Opaque_pointer}{\texttt{ https\+://en.\+wikipedia.\+org/wiki/\+Opaque\+\_\+pointer}}). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em PIMPL reserved data for \doxylink{class_eng_1_1_base}{Base}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \+\_\+\+\_\+stdcall \mbox{\hyperlink{engine_8cpp_afc494914022ebe8d18858ba473e5749f}{Debug\+Callback}} (GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar \texorpdfstring{$\ast$}{*}message, GLvoid \texorpdfstring{$\ast$}{*}user\+Param)
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Graphics engine main file. 
 
 \begin{DoxyAuthor}{Author}
-Achille Peternier (C) SUPSI \mbox{[}\href{mailto:achille.peternier@supsi.ch}{\texttt{ achille.\+peternier@supsi.\+ch}}\mbox{]} \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} change this to your group members 
+Kevin Alexander Quarenghi Escobar, Martina Galasso 
 \end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{engine_8cpp_afc494914022ebe8d18858ba473e5749f}\index{engine.cpp@{engine.cpp}!DebugCallback@{DebugCallback}}
+\index{DebugCallback@{DebugCallback}!engine.cpp@{engine.cpp}}
+\doxysubsubsection{\texorpdfstring{DebugCallback()}{DebugCallback()}}
+{\footnotesize\ttfamily \label{engine_8cpp_afc494914022ebe8d18858ba473e5749f} 
+void \+\_\+\+\_\+stdcall Debug\+Callback (\begin{DoxyParamCaption}\item[{GLenum}]{source}{, }\item[{GLenum}]{type}{, }\item[{GLuint}]{id}{, }\item[{GLenum}]{severity}{, }\item[{GLsizei}]{length}{, }\item[{const GLchar \texorpdfstring{$\ast$}{*}}]{message}{, }\item[{GLvoid \texorpdfstring{$\ast$}{*}}]{user\+Param}{}\end{DoxyParamCaption})}
+
+Debug message callback for Open\+GL. See \href{https://www.opengl.org/wiki/Debug_Output}{\texttt{ https\+://www.\+opengl.\+org/wiki/\+Debug\+\_\+\+Output}} 

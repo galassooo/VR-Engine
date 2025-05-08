@@ -1,0 +1,56 @@
+\doxysection{Callback\+Manager.\+h}
+\hypertarget{_callback_manager_8h_source}{}\label{_callback_manager_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_key_info}{KeyInfo}}\ \{}
+\DoxyCodeLine{00008\ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_key_info_a129a412e80d39b7257b677028c1acec0}{key}};\ }
+\DoxyCodeLine{00009\ \ \ \ std::string\ \mbox{\hyperlink{struct_key_info_a8098ad05d7e0a4be2ea76b50a1e2dfa7}{desc}};\ }
+\DoxyCodeLine{00010\ \ \ \ std::function<void(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char},\ \textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{struct_key_info_a29bd69bb91e70eee46a83db3c252e5b4}{func}};\ }
+\DoxyCodeLine{00011\ \};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }ENG\_API\ CallbackManager\ \{}
+\DoxyCodeLine{00025\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{class_callback_manager_a3ab25c8c727f692c4ac714290d0f8524}{DisplayFunc}}\ =\ std::function<void()>;}
+\DoxyCodeLine{00029\ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{class_callback_manager_a7329e6903ca8626041207420c703bbc3}{ReshapeFunc}}\ =\ std::function<void(\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>;}
+\DoxyCodeLine{00031\ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{class_callback_manager_ae7aa54b200809d16e4fe3c7cab3de757}{KeyboardFunc}}\ =\ std::function<void(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char},\ \textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>;}
+\DoxyCodeLine{00033\ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{class_callback_manager_a85c1624bdac83b1b56e686df62734ee9}{SpecialFunc}}\ =\ std::function<void(\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>;}
+\DoxyCodeLine{00035\ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{class_callback_manager_a104d04f731287f9289390d1549b798f8}{CloseFunc}}\ =\ std::function<void()>;}
+\DoxyCodeLine{00037\ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{class_callback_manager_a36aae85e3b9835030105a46d1d27ab56}{RenderCallBack}}\ =\ std::function<void()>;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \textcolor{keyword}{static}\ CallbackManager\ \&getInstance();}
+\DoxyCodeLine{00040\ \ \ \ \textcolor{keywordtype}{bool}\ initialize();}
+\DoxyCodeLine{00041\ \ \ \ CallbackManager(\textcolor{keyword}{const}\ CallbackManager\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00042\ \ \ \ CallbackManager\ \&operator=(\textcolor{keyword}{const}\ CallbackManager\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \textcolor{keywordtype}{void}\ setDisplayCallback(\mbox{\hyperlink{class_callback_manager_a3ab25c8c727f692c4ac714290d0f8524}{DisplayFunc}}\ func);}
+\DoxyCodeLine{00045\ \ \ \ \textcolor{keywordtype}{void}\ setReshapeCallback(\mbox{\hyperlink{class_callback_manager_a7329e6903ca8626041207420c703bbc3}{ReshapeFunc}}\ func);}
+\DoxyCodeLine{00046\ \ \ \ \textcolor{keywordtype}{void}\ registerKeyBinding(\textcolor{keywordtype}{char}\ key,\ \textcolor{keyword}{const}\ std::string\ \&description,\ \mbox{\hyperlink{class_callback_manager_ae7aa54b200809d16e4fe3c7cab3de757}{KeyboardFunc}}\ func);}
+\DoxyCodeLine{00047\ \ \ \ \textcolor{keywordtype}{void}\ setSpecialCallback(\mbox{\hyperlink{class_callback_manager_a85c1624bdac83b1b56e686df62734ee9}{SpecialFunc}}\ func);}
+\DoxyCodeLine{00048\ \ \ \ \textcolor{keywordtype}{void}\ setCloseCallback(\mbox{\hyperlink{class_callback_manager_a104d04f731287f9289390d1549b798f8}{CloseFunc}}\ func);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \textcolor{keywordtype}{void}\ registerRenderCallback(std::string\ \textcolor{keywordtype}{id},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_callback_manager_a36aae85e3b9835030105a46d1d27ab56}{RenderCallBack}}\ \&func);}
+\DoxyCodeLine{00051\ \ \ \ \textcolor{keywordtype}{void}\ deregisterCallback(\textcolor{keyword}{const}\ std::string\ \&\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00052\ \ \ \ \textcolor{keywordtype}{void}\ executeRenderCallbacks()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \textcolor{keywordtype}{bool}\ isHelpMenuVisible()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ showHelpMenu;\ \}}
+\DoxyCodeLine{00055\ \ \ \ \textcolor{keyword}{const}\ std::unordered\_map<char,\ KeyInfo>\ \&getKeyBindings()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ keyBindings;\ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00059\ \ \ \ CallbackManager()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ calculateFPS();}
+\DoxyCodeLine{00062\ \ \ \ \textcolor{keywordtype}{void}\ setDefaultCallbacks();}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00065\ \ \ \ DisplayFunc\ displayCallback;}
+\DoxyCodeLine{00067\ \ \ \ ReshapeFunc\ reshapeCallback;}
+\DoxyCodeLine{00069\ \ \ \ std::vector<KeyboardFunc>\ keyboardCallbacks;}
+\DoxyCodeLine{00071\ \ \ \ SpecialFunc\ specialCallback;}
+\DoxyCodeLine{00073\ \ \ \ CloseFunc\ closeCallback;}
+\DoxyCodeLine{00075\ \ \ \ \textcolor{keywordtype}{bool}\ showHelpMenu\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00077\ \ \ \ std::unordered\_map<char,\ KeyInfo>\ keyBindings;}
+\DoxyCodeLine{00079\ \ \ \ std::unordered\_map<std::string,\ RenderCallBack>\ optionalRenderCallbacks;}
+\DoxyCodeLine{00081\ \ \ \ \textcolor{keywordtype}{bool}\ initialized\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00082\ \};}
+
+\end{DoxyCode}

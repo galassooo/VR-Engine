@@ -1,0 +1,60 @@
+\doxysection{Builder Class Reference}
+\hypertarget{class_builder}{}\label{class_builder}\index{Builder@{Builder}}
+
+
+Singleton builder for assembling mesh data and creating \doxylink{class_mesh}{Mesh} objects.  
+
+
+
+
+{\ttfamily \#include $<$Builder.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_builder_a909924047e73bfa08398060c9eb66fb8}\label{class_builder_a909924047e73bfa08398060c9eb66fb8} 
+{\bfseries Builder} (const \mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \&)=delete
+\item 
+\Hypertarget{class_builder_a837bf61c6e9b29c9250b3b07d7ba1a93}\label{class_builder_a837bf61c6e9b29c9250b3b07d7ba1a93} 
+\mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \&)=delete
+\item 
+\Hypertarget{class_builder_a888b9141bc33da3cc39771b12748d396}\label{class_builder_a888b9141bc33da3cc39771b12748d396} 
+\mbox{\hyperlink{class_builder}{Builder}} \& {\bfseries add\+Vertex} (const \mbox{\hyperlink{class_eng_1_1_vertex}{Eng\+::\+Vertex}} \&vertex)
+\item 
+\Hypertarget{class_builder_a66ebf54c917ca58c5137da209161cc48}\label{class_builder_a66ebf54c917ca58c5137da209161cc48} 
+\mbox{\hyperlink{class_builder}{Builder}} \& {\bfseries add\+Vertices} (const std\+::vector$<$ \mbox{\hyperlink{class_eng_1_1_vertex}{Eng\+::\+Vertex}} $>$ \&verts)
+\item 
+\Hypertarget{class_builder_a79aafe019c0342479660ead4992d3745}\label{class_builder_a79aafe019c0342479660ead4992d3745} 
+\mbox{\hyperlink{class_builder}{Builder}} \& {\bfseries add\+Index} (unsigned int index)
+\item 
+\Hypertarget{class_builder_aad84fff25191af7f3aa05d609fb4329c}\label{class_builder_aad84fff25191af7f3aa05d609fb4329c} 
+\mbox{\hyperlink{class_builder}{Builder}} \& {\bfseries add\+Indices} (const std\+::vector$<$ unsigned int $>$ \&inds)
+\item 
+\Hypertarget{class_builder_a2dc6e68c15976d0e04cc664dc745640d}\label{class_builder_a2dc6e68c15976d0e04cc664dc745640d} 
+\mbox{\hyperlink{class_builder}{Builder}} \& {\bfseries set\+Material} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_material}{Eng\+::\+Material}} $>$ \&mat)
+\item 
+\Hypertarget{class_builder_ab600358e2b2813fcafbfad7dcce7d673}\label{class_builder_ab600358e2b2813fcafbfad7dcce7d673} 
+\mbox{\hyperlink{class_builder}{Builder}} \& {\bfseries set\+Name} (const std\+::string \&name)
+\item 
+\Hypertarget{class_builder_a59a24486ebfb7e3c0c50a061e88032b4}\label{class_builder_a59a24486ebfb7e3c0c50a061e88032b4} 
+\mbox{\hyperlink{class_builder}{Builder}} \& {\bfseries set\+Local\+Matrix} (const glm\+::mat4 \&matrix)
+\item 
+\Hypertarget{class_builder_aa9f05b6cd9abb5b760f4bb3295223ff3}\label{class_builder_aa9f05b6cd9abb5b760f4bb3295223ff3} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_mesh}{Eng\+::\+Mesh}} $>$ {\bfseries build} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_builder_affe16c3a397d468c413ded0a62f623a1}\label{class_builder_affe16c3a397d468c413ded0a62f623a1} 
+static \mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& {\bfseries get\+Instance} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Singleton builder for assembling mesh data and creating \doxylink{class_mesh}{Mesh} objects. 
+
+Accumulates vertex and index data, material, name, and transformation matrix through a fluent interface. After configuration, call build() to generate a \doxylink{class_mesh}{Mesh} and upload its data to the GPU. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Builder.\+h\end{DoxyCompactItemize}

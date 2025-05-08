@@ -1,0 +1,63 @@
+\doxysection{Bloom\+Effect.\+h}
+\hypertarget{_bloom_effect_8h_source}{}\label{_bloom_effect_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }ENG\_API\ BloomEffect\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_eng_1_1_post_processor}{Eng::PostProcessor}}\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ BloomEffect();}
+\DoxyCodeLine{00015\ \ \ \ \ \string~BloomEffect();}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_bloom_effect_a63cd6c93c1514b14469bbcc459d00fac}{init}}(\textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_bloom_effect_ae5820821ea5da94061880c75ef770019}{beginSceneCapture}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_bloom_effect_af04b40991221abdefe35f69f24194266}{endSceneCapture}}();}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_bloom_effect_ab4c8976e6b901a53d6b0716fa83b89a1}{isInitialized}}()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_bloom_effect_aedca3846e9a558eed81a60ac59e0ac3c}{processExternalTexture}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ inputTexture,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ outputTexture,\ \textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_bloom_effect_ae0b0334eee79544107c8ec4882b23b4c}{applyEffect}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ inputTexture,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ outputTexture,\ \textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_bloom_effect_ae629920b8e7e1366f3fe59f5f480400d}{setParameter}}(\textcolor{keyword}{const}\ std::string\&\ name,\ \textcolor{keywordtype}{float}\ value)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00072\ \ \ \ \ std::string\ \mbox{\hyperlink{class_bloom_effect_a2cf8f0f018672024e7dca39fd73ca073}{getName}}()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_bloom_effect_acbdea446618f29e1713b2d34ecc45218}{analyzeTextureHDRContent}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ textureID,\ \textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{bool}\ initialized\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{float}\ bloomThreshold\ =\ 0.1f;\ \ \textcolor{comment}{//\ Threshold\ to\ extract\ bright\ areas}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{float}\ bloomIntensity\ =\ 0.3f;\ \ \textcolor{comment}{//\ Intensity\ of\ the\ bloom\ effect}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{int}\ blurPasses\ =\ 3;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ of\ Gaussian\ blur\ passes}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00092\ \ \ \ \ std::shared\_ptr<Eng::Fbo>\ sceneFbo;}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ sceneColorTexture;}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ sceneBrightTexture;}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00097\ \ \ \ \ std::shared\_ptr<Eng::Fbo>\ blurFbo[2];}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ blurTextures[2];}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00101\ \ \ \ \ std::shared\_ptr<Eng::Program>\ brightFilterProgram;}
+\DoxyCodeLine{00102\ \ \ \ \ std::shared\_ptr<Eng::Program>\ blurProgram;}
+\DoxyCodeLine{00103\ \ \ \ \ std::shared\_ptr<Eng::Program>\ bloomFinalProgram;}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ quadVAO;}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ quadVBO;}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{bool}\ initFramebuffers(\textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{bool}\ initShaders();}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{void}\ renderQuad();}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{void}\ extractBrightAreas();}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{void}\ applyGaussianBlur();}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{void}\ combineResults();}
+\DoxyCodeLine{00142\ \};}
+
+\end{DoxyCode}

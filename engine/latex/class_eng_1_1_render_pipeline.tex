@@ -1,0 +1,56 @@
+\doxysection{Eng\+::Render\+Pipeline Class Reference}
+\hypertarget{class_eng_1_1_render_pipeline}{}\label{class_eng_1_1_render_pipeline}\index{Eng::RenderPipeline@{Eng::RenderPipeline}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_eng_1_1_render_pipeline_1_1_render_context}{Render\+Context}}
+\item 
+struct \mbox{\hyperlink{struct_eng_1_1_render_pipeline_1_1_status_cache}{Status\+Cache}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_eng_1_1_render_pipeline_a99c53c0677413b1cf8c06fd4b118c877}\label{class_eng_1_1_render_pipeline_a99c53c0677413b1cf8c06fd4b118c877} 
+{\bfseries Render\+Pipeline} ()
+\begin{DoxyCompactList}\small\item\em Constructs a new \doxylink{class_eng_1_1_render_pipeline}{Render\+Pipeline} object. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_render_pipeline_a85f1c5a107100d77ed8c9bfcd158f916}\label{class_eng_1_1_render_pipeline_a85f1c5a107100d77ed8c9bfcd158f916} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Render\+Pipeline} ()
+\begin{DoxyCompactList}\small\item\em Destructs the \doxylink{class_eng_1_1_render_pipeline}{Render\+Pipeline} object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_render_pipeline_a816147146848871cf46108a0f545cc09}{init}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the render pipeline by setting up shaders and shadow map. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_render_pipeline_a75e156a8a97c906a353fbb19ad704a69}{run\+On}} (\mbox{\hyperlink{class_eng_1_1_list}{Eng\+::\+List}} \texorpdfstring{$\ast$}{*}render\+List)
+\begin{DoxyCompactList}\small\item\em Runs the render pipeline on the provided render list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_render_pipeline_a816147146848871cf46108a0f545cc09}\index{Eng::RenderPipeline@{Eng::RenderPipeline}!init@{init}}
+\index{init@{init}!Eng::RenderPipeline@{Eng::RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_render_pipeline_a816147146848871cf46108a0f545cc09} 
+bool Render\+Pipeline\+::init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes the render pipeline by setting up shaders and shadow map. 
+
+This method loads the shaders, sets up the shadow map framebuffer object (FBO), and prepares the rendering context for the pipeline.
+
+\begin{DoxyReturn}{Returns}
+true if initialization is successful, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_render_pipeline_a75e156a8a97c906a353fbb19ad704a69}\index{Eng::RenderPipeline@{Eng::RenderPipeline}!runOn@{runOn}}
+\index{runOn@{runOn}!Eng::RenderPipeline@{Eng::RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{runOn()}{runOn()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_render_pipeline_a75e156a8a97c906a353fbb19ad704a69} 
+void Render\+Pipeline\+::run\+On (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_eng_1_1_list}{Eng\+::\+List}} \texorpdfstring{$\ast$}{*}}]{render\+List}{}\end{DoxyParamCaption})}
+
+
+
+Runs the render pipeline on the provided render list. 
+
+This method executes sequential rendering passes for the scene, including base color, lighting, and shadow passes. For each pass it sets up the render context and shader program. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Render\+Pipeline.\+cpp\end{DoxyCompactItemize}

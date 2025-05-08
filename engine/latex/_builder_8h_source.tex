@@ -1,0 +1,42 @@
+\doxysection{Builder.\+h}
+\hypertarget{_builder_8h_source}{}\label{_builder_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }ENG\_API\ Builder\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ singleton\ instance}}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_eng_1_1_builder}{Eng::Builder}}\&\ getInstance();}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{//Disable\ copy\ and\ assignemtn\ operators}}
+\DoxyCodeLine{00017\ \ \ \ \ Builder(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_eng_1_1_builder}{Eng::Builder}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{class_eng_1_1_builder}{Eng::Builder}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_eng_1_1_builder}{Eng::Builder}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{//\ Interface\ methods\ to\ accumulate\ mesh\ data,\ used\ in\ chaining\ }}
+\DoxyCodeLine{00021\ \ \ \ \ Builder\&\ addVertex(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_eng_1_1_vertex}{Eng::Vertex}}\&\ vertex);}
+\DoxyCodeLine{00022\ \ \ \ \ Builder\&\ addVertices(\textcolor{keyword}{const}\ std::vector<Eng::Vertex>\&\ verts);}
+\DoxyCodeLine{00023\ \ \ \ \ Builder\&\ addIndex(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ index);}
+\DoxyCodeLine{00024\ \ \ \ \ Builder\&\ addIndices(\textcolor{keyword}{const}\ std::vector<unsigned\ int>\&\ inds);}
+\DoxyCodeLine{00025\ \ \ \ \ Builder\&\ setMaterial(\textcolor{keyword}{const}\ std::shared\_ptr<Eng::Material>\&\ mat);}
+\DoxyCodeLine{00026\ \ \ \ \ Builder\&\ setName(\textcolor{keyword}{const}\ std::string\ \&name);}
+\DoxyCodeLine{00027\ \ \ \ \ Builder\&\ setLocalMatrix(\textcolor{keyword}{const}\ glm::mat4\ \&matrix);}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ Build\ a\ Mesh\ and\ upload\ its\ data\ to\ GPU}}
+\DoxyCodeLine{00030\ \ \ \ \ std::shared\_ptr<Eng::Mesh>\ build();}
+\DoxyCodeLine{00031\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{//\ Private\ constructor\ for\ singleton}}
+\DoxyCodeLine{00033\ \ \ \ \ Builder()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00034\ \ \ \ \ \string~Builder()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{//\ Accumulated\ data.}}
+\DoxyCodeLine{00037\ \ \ \ \ std::vector<Eng::Vertex>\ vertices;}
+\DoxyCodeLine{00038\ \ \ \ \ std::vector<unsigned\ int>\ indices;}
+\DoxyCodeLine{00039\ \ \ \ \ std::shared\_ptr<Eng::Material>\ material;}
+\DoxyCodeLine{00040\ \ \ \ \ std::string\ meshName;}
+\DoxyCodeLine{00041\ \ \ \ \ glm::mat4\ localMatrix\ =\ glm::mat4(1.0f);}
+\DoxyCodeLine{00042\ \ \ \ \ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ Free\ internal\ builder\ state\ so\ it\ can\ be\ reused}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ free();}
+\DoxyCodeLine{00045\ \};}
+
+\end{DoxyCode}

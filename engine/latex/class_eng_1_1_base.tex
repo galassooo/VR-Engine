@@ -2,7 +2,7 @@
 \hypertarget{class_eng_1_1_base}{}\label{class_eng_1_1_base}\index{Eng::Base@{Eng::Base}}
 
 
-\doxylink{class_eng_1_1_base}{Base} engine main class. This class is a singleton.  
+Core engine class implementing the singleton pattern.  
 
 
 
@@ -13,7 +13,7 @@
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{struct_eng_1_1_base_1_1_reserved}{Reserved}}
-\begin{DoxyCompactList}\small\item\em \doxylink{class_eng_1_1_base}{Base} class reserved structure (using PIMPL/\+Bridge design pattern \href{https://en.wikipedia.org/wiki/Opaque_pointer}{\texttt{ https\+://en.\+wikipedia.\+org/wiki/\+Opaque\+\_\+pointer}}). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em PIMPL reserved data for \doxylink{class_eng_1_1_base}{Base}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -23,48 +23,224 @@ struct \mbox{\hyperlink{struct_eng_1_1_base_1_1_reserved}{Reserved}}
 \Hypertarget{class_eng_1_1_base_ac4eb1f66179273abba59260a6b4c5cbd}\label{class_eng_1_1_base_ac4eb1f66179273abba59260a6b4c5cbd} 
 void {\bfseries operator=} (\mbox{\hyperlink{class_eng_1_1_base}{Base}} const \&)=delete
 \item 
+void \mbox{\hyperlink{class_eng_1_1_base_a914ead4a241338bbac104ce7186de2bb}{run}} ()
+\begin{DoxyCompactList}\small\item\em Runs the main rendering loop of the engine. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{class_eng_1_1_base_a90edbcc7768cba11d81687bdcf7c10f5}{init}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Initializes the graphics engine components. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{class_eng_1_1_base_afd7e1923deb411907695c0b27114f62a}{free}} ()
+\begin{DoxyCompactList}\small\item\em Releases and cleans up all engine components. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_base_a4684cbf08ccc9f08cd073977697b4103}\label{class_eng_1_1_base_a4684cbf08ccc9f08cd073977697b4103} 
+void {\bfseries render\+Scene} ()
+\begin{DoxyCompactList}\small\item\em Renders the entire scene, with optional stereoscopic or post-\/processing. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_base_a74772257b8f5857231d3de2a1480488d}{load\+Scene}} (const std\+::string \&file\+Name)
+\begin{DoxyCompactList}\small\item\em Loads a scene from a file. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ \mbox{\hyperlink{class_eng_1_1_base_abbe8d53f1f7994dd6a29bcc1a3f48d6f}{get\+Root\+Node}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the root node of the scene graph. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_base_aa8c86687b7d3aa69d7170b1441c0ef0f}{Set\+Active\+Camera}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_camera}{Camera}} $>$ camera)
+\begin{DoxyCompactList}\small\item\em Sets the active camera for the engine. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_camera}{Camera}} $>$ \mbox{\hyperlink{class_eng_1_1_base_ab7afa74aa12ee0176f880275602002d5}{get\+Active\+Camera}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the currently active camera. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_eng_1_1_base_a37830747b9addbe79a88e2a5a237f072}{get\+Window\+Aspect\+Ratio}} ()
+\begin{DoxyCompactList}\small\item\em Calculates the current window aspect ratio. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_base_a781e6bca1708c544c407ed3076d902d9}{setup\+Stereoscopic\+Rendering}} (int width, int height)
+\begin{DoxyCompactList}\small\item\em Configures stereoscopic rendering by creating and binding the required FBOs. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_base_a8ac518f05ed2c7a08083deb7a7a339a5}{render\+Stereoscopic}} ()
+\begin{DoxyCompactList}\small\item\em Renders the scene stereoscopically to both eyes (VR headset). \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_base_a215b54d47d9415c2e0f8222f90bdd444}\label{class_eng_1_1_base_a215b54d47d9415c2e0f8222f90bdd444} 
+void {\bfseries set\+Eye\+Distance} (float distance)
 \item 
-void \mbox{\hyperlink{class_eng_1_1_base_a4684cbf08ccc9f08cd073977697b4103}{render\+Scene}} ()
+\Hypertarget{class_eng_1_1_base_aeae72bd35c25c32cddd43913868f8fab}\label{class_eng_1_1_base_aeae72bd35c25c32cddd43913868f8fab} 
+float {\bfseries get\+Eye\+Distance} () const
 \item 
-void \mbox{\hyperlink{class_eng_1_1_base_aa8c86687b7d3aa69d7170b1441c0ef0f}{Set\+Active\+Camera}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_camera}{Camera}} $>$ camera)
+void \mbox{\hyperlink{class_eng_1_1_base_ac5a97e71d05a7f044da3fcf226a8c37e}{register\+Skybox}} (const std\+::vector$<$ std\+::string $>$ \&faces)
+\begin{DoxyCompactList}\small\item\em Creates and registers a skybox from 6 face textures. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_skybox}{Skybox}} $>$ \mbox{\hyperlink{class_eng_1_1_base_ac72f31a4cbb5dc8d5a2b4d955ce57552}{get\+Skybox}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the currently registered skybox. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Node}} $>$ \mbox{\hyperlink{class_eng_1_1_base_a179e44284ce35bc90b6a8822ef868202}{get\+Head\+Node}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves or lazily creates the head node in the scene graph. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_base_ae9c49b73a5ab49825602897aa14ddbc1}\label{class_eng_1_1_base_ae9c49b73a5ab49825602897aa14ddbc1} 
+void {\bfseries set\+Stereo\+Eye\+Height} (float height)
 \item 
-void \mbox{\hyperlink{class_eng_1_1_base_a7beb0ec5e2b8b2c892277fe8b968253f}{add\+Root\+Node}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ node)
+\Hypertarget{class_eng_1_1_base_a8979668f4206ece6a14e58b3fa518344}\label{class_eng_1_1_base_a8979668f4206ece6a14e58b3fa518344} 
+float {\bfseries get\+Stereo\+Eye\+Height} () const
 \item 
-void \mbox{\hyperlink{class_eng_1_1_base_a8b69c304794769870e607875faf8c5fd}{remove\+Root\+Node}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$ node)
-\end{DoxyCompactItemize}
+void \mbox{\hyperlink{class_eng_1_1_base_ae317011d81a11c5b10a58b389e45417a}{set\+Body\+Position}} (const glm\+::mat4 \&position)
+\begin{DoxyCompactList}\small\item\em Sets the initial body/world transform for stereoscopic rendering. \end{DoxyCompactList}\item 
+glm\+::mat4 \mbox{\hyperlink{class_eng_1_1_base_a6b141f48d7b690d53e255d56c833ad84}{get\+Body\+Position}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the initial body/world transform. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_base_adec1db510ba5fe10d88b160ee75c9772}{add\+Post\+Processor}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_post_processor}{Post\+Processor}} $>$ post\+Processor)
+\begin{DoxyCompactList}\small\item\em Adds a post-\/processor to the pipeline. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_base_ac1e7663805c44d396821ec04be570d4f}{remove\+Post\+Processor}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Removes a named post-\/processor from the pipeline. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_post_processor}{Post\+Processor}} $>$ \mbox{\hyperlink{class_eng_1_1_base_ad59862c374ca6a89ba18de39e385c39f}{get\+Post\+Processor}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Retrieves a named post-\/processor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_base_a9b3aae17bc7a5fe435a788b5523a1238}{set\+Post\+Processing\+Enabled}} (bool enabled)
+\begin{DoxyCompactList}\small\item\em Enables or disables post-\/processing in the pipeline. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_base_a125d9bc8caa221e29bb54bb6ab8a6dff}{is\+Post\+Processing\+Enabled}} () const
+\begin{DoxyCompactList}\small\item\em Queries whether post-\/processing is currently enabled. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_base_af18a36a5202451cfaf7fba3d7ff14557}\label{class_eng_1_1_base_af18a36a5202451cfaf7fba3d7ff14557} 
+bool {\bfseries initialize\+Post\+Processing\+Textures} (int width, int height)
+\item 
+\Hypertarget{class_eng_1_1_base_a9206880e8864e51e80d9f638e885f341}\label{class_eng_1_1_base_a9206880e8864e51e80d9f638e885f341} 
+void {\bfseries cleanup\+Textures} ()
+\begin{DoxyCompactList}\small\item\em Cleans up all textures and FBOs created for post-\/processing. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 static \mbox{\hyperlink{class_eng_1_1_base}{Base}} \& \mbox{\hyperlink{class_eng_1_1_base_a3c21bcd7bace09d5913ced6de5b15518}{get\+Instance}} ()
-\end{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_eng_1_1_base_a37a1bd8e2a713f00a05624d1c02a0be2}{eng\+Enable}} (unsigned int cap)
+\begin{DoxyCompactList}\small\item\em Enables a specified engine capability. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_eng_1_1_base_a4f36a876f5ea731d19f70cb3f9144a64}{eng\+Disable}} (unsigned int cap)
+\begin{DoxyCompactList}\small\item\em Disables a specified engine capability. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{class_eng_1_1_base_a7ef5e524072e1786c7690da3ae08909d}{eng\+Is\+Enabled}} (unsigned int cap)
+\begin{DoxyCompactList}\small\item\em Checks if a specified capability is enabled. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-\doxylink{class_eng_1_1_base}{Base} engine main class. This class is a singleton. 
+Core engine class implementing the singleton pattern. 
+
+The \doxylink{class_eng_1_1_base}{Base} class is the main entry point of the graphics engine and manages\+:
+\begin{DoxyItemize}
+\item Engine initialization and cleanup
+\item Scene graph management
+\item \doxylink{class_eng_1_1_camera}{Camera} system
+\item Rendering pipeline
+\item Window management
+\end{DoxyItemize}
+
+As a singleton, only one instance can exist at any time, accessed via \doxylink{class_eng_1_1_base_a3c21bcd7bace09d5913ced6de5b15518}{get\+Instance()}. 
 
 \doxysubsection{Member Function Documentation}
-\Hypertarget{class_eng_1_1_base_a7beb0ec5e2b8b2c892277fe8b968253f}\index{Eng::Base@{Eng::Base}!addRootNode@{addRootNode}}
-\index{addRootNode@{addRootNode}!Eng::Base@{Eng::Base}}
-\doxysubsubsection{\texorpdfstring{addRootNode()}{addRootNode()}}
-{\footnotesize\ttfamily \label{class_eng_1_1_base_a7beb0ec5e2b8b2c892277fe8b968253f} 
-void ENG\+\_\+\+API Eng\+::\+Base\+::add\+Root\+Node (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$}]{node}{}\end{DoxyParamCaption})}
+\Hypertarget{class_eng_1_1_base_adec1db510ba5fe10d88b160ee75c9772}\index{Eng::Base@{Eng::Base}!addPostProcessor@{addPostProcessor}}
+\index{addPostProcessor@{addPostProcessor}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{addPostProcessor()}{addPostProcessor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_adec1db510ba5fe10d88b160ee75c9772} 
+bool ENG\+\_\+\+API Eng\+::\+Base\+::add\+Post\+Processor (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_post_processor}{Post\+Processor}} $>$}]{post\+Processor}{}\end{DoxyParamCaption})}
 
-Add a root node 
+
+
+Adds a post-\/processor to the pipeline. 
+
+
 \begin{DoxyParams}{Parameters}
-{\em a} & share\+\_\+ptr$<$\+Node$>$ pointing to a root node \\
+{\em post\+Processor} & Shared pointer to a \doxylink{class_eng_1_1_post_processor}{Post\+Processor} instance. \\
 \hline
 \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successfully added; false on name collision. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_a4f36a876f5ea731d19f70cb3f9144a64}\index{Eng::Base@{Eng::Base}!engDisable@{engDisable}}
+\index{engDisable@{engDisable}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{engDisable()}{engDisable()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a4f36a876f5ea731d19f70cb3f9144a64} 
+void Eng\+::\+Base\+::eng\+Disable (\begin{DoxyParamCaption}\item[{unsigned int}]{cap}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Disables a specified engine capability. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cap} & The capability flag to disable \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_base_a37a1bd8e2a713f00a05624d1c02a0be2}\index{Eng::Base@{Eng::Base}!engEnable@{engEnable}}
+\index{engEnable@{engEnable}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{engEnable()}{engEnable()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a37a1bd8e2a713f00a05624d1c02a0be2} 
+void Eng\+::\+Base\+::eng\+Enable (\begin{DoxyParamCaption}\item[{unsigned int}]{cap}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Enables a specified engine capability. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cap} & The capability flag to enable \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_base_a7ef5e524072e1786c7690da3ae08909d}\index{Eng::Base@{Eng::Base}!engIsEnabled@{engIsEnabled}}
+\index{engIsEnabled@{engIsEnabled}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{engIsEnabled()}{engIsEnabled()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a7ef5e524072e1786c7690da3ae08909d} 
+bool Eng\+::\+Base\+::eng\+Is\+Enabled (\begin{DoxyParamCaption}\item[{unsigned int}]{cap}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Checks if a specified capability is enabled. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cap} & The capability flag to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if enabled, false otherwise 
+\end{DoxyReturn}
 \Hypertarget{class_eng_1_1_base_afd7e1923deb411907695c0b27114f62a}\index{Eng::Base@{Eng::Base}!free@{free}}
 \index{free@{free}!Eng::Base@{Eng::Base}}
 \doxysubsubsection{\texorpdfstring{free()}{free()}}
 {\footnotesize\ttfamily \label{class_eng_1_1_base_afd7e1923deb411907695c0b27114f62a} 
 bool ENG\+\_\+\+API Eng\+::\+Base\+::free (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
-Free internal components. \begin{DoxyReturn}{Returns}
-TF 
+
+
+Releases and cleans up all engine components. 
+
+This method performs the following cleanup steps\+:
+\begin{DoxyItemize}
+\item Verifies engine is initialized
+\item Releases Open\+GL resources
+\item Shuts down Free\+Image library
+\item Resets initialization flag
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+true if cleanup successful, false if engine was not initialized 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_ab7afa74aa12ee0176f880275602002d5}\index{Eng::Base@{Eng::Base}!getActiveCamera@{getActiveCamera}}
+\index{getActiveCamera@{getActiveCamera}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{getActiveCamera()}{getActiveCamera()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_ab7afa74aa12ee0176f880275602002d5} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_camera}{Eng\+::\+Camera}} $>$ ENG\+\_\+\+API Eng\+::\+Base\+::get\+Active\+Camera (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the currently active camera. 
+
+Returns the camera currently in use for rendering, if one has been set.
+
+\begin{DoxyReturn}{Returns}
+std\+::shared\+\_\+ptr$<$\+Eng\+::\+Camera$>$ A shared pointer to the active camera, or nullptr if no camera is set. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_a6b141f48d7b690d53e255d56c833ad84}\index{Eng::Base@{Eng::Base}!getBodyPosition@{getBodyPosition}}
+\index{getBodyPosition@{getBodyPosition}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{getBodyPosition()}{getBodyPosition()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a6b141f48d7b690d53e255d56c833ad84} 
+glm\+::mat4 ENG\+\_\+\+API Eng\+::\+Base\+::get\+Body\+Position (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the initial body/world transform. 
+
+\begin{DoxyReturn}{Returns}
+The 4×4 matrix last set by \doxylink{class_eng_1_1_base_ae317011d81a11c5b10a58b389e45417a}{set\+Body\+Position()}. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_a179e44284ce35bc90b6a8822ef868202}\index{Eng::Base@{Eng::Base}!getHeadNode@{getHeadNode}}
+\index{getHeadNode@{getHeadNode}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{getHeadNode()}{getHeadNode()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a179e44284ce35bc90b6a8822ef868202} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ Eng\+::\+Base\+::get\+Head\+Node (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves or lazily creates the head node in the scene graph. 
+
+The head node is used as the parent transform for VR/\+Leap-\/derived head motion.
+
+\begin{DoxyReturn}{Returns}
+Shared pointer to the head node. 
 \end{DoxyReturn}
 \Hypertarget{class_eng_1_1_base_a3c21bcd7bace09d5913ced6de5b15518}\index{Eng::Base@{Eng::Base}!getInstance@{getInstance}}
 \index{getInstance@{getInstance}!Eng::Base@{Eng::Base}}
@@ -75,39 +251,240 @@ TF
 Gets a reference to the (unique) singleton instance. \begin{DoxyReturn}{Returns}
 reference to singleton instance 
 \end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_ad59862c374ca6a89ba18de39e385c39f}\index{Eng::Base@{Eng::Base}!getPostProcessor@{getPostProcessor}}
+\index{getPostProcessor@{getPostProcessor}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{getPostProcessor()}{getPostProcessor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_ad59862c374ca6a89ba18de39e385c39f} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_post_processor}{Eng\+::\+Post\+Processor}} $>$ ENG\+\_\+\+API Eng\+::\+Base\+::get\+Post\+Processor (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves a named post-\/processor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Unique name of the post-\/processor. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Shared pointer to the \doxylink{class_eng_1_1_post_processor}{Post\+Processor}, or nullptr if not found. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_abbe8d53f1f7994dd6a29bcc1a3f48d6f}\index{Eng::Base@{Eng::Base}!getRootNode@{getRootNode}}
+\index{getRootNode@{getRootNode}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{getRootNode()}{getRootNode()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_abbe8d53f1f7994dd6a29bcc1a3f48d6f} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ Eng\+::\+Base\+::get\+Root\+Node (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the root node of the scene graph. 
+
+\begin{DoxyReturn}{Returns}
+std\+::shared\+\_\+ptr$<$\+Node$>$ The root node of the scene hierarchy 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_ac72f31a4cbb5dc8d5a2b4d955ce57552}\index{Eng::Base@{Eng::Base}!getSkybox@{getSkybox}}
+\index{getSkybox@{getSkybox}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{getSkybox()}{getSkybox()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_ac72f31a4cbb5dc8d5a2b4d955ce57552} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_skybox}{Eng\+::\+Skybox}} $>$ Eng\+::\+Base\+::get\+Skybox (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the currently registered skybox. 
+
+\begin{DoxyReturn}{Returns}
+Shared pointer to the \doxylink{class_eng_1_1_skybox}{Skybox}, or nullptr if none is registered. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_a37830747b9addbe79a88e2a5a237f072}\index{Eng::Base@{Eng::Base}!getWindowAspectRatio@{getWindowAspectRatio}}
+\index{getWindowAspectRatio@{getWindowAspectRatio}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{getWindowAspectRatio()}{getWindowAspectRatio()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a37830747b9addbe79a88e2a5a237f072} 
+float Eng\+::\+Base\+::get\+Window\+Aspect\+Ratio (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Calculates the current window aspect ratio. 
+
+Computes the ratio between window width and height. If height is zero, returns 1.\+0 to avoid division by zero.
+
+\begin{DoxyReturn}{Returns}
+float The window aspect ratio (width/height) 
+\end{DoxyReturn}
 \Hypertarget{class_eng_1_1_base_a90edbcc7768cba11d81687bdcf7c10f5}\index{Eng::Base@{Eng::Base}!init@{init}}
 \index{init@{init}!Eng::Base@{Eng::Base}}
 \doxysubsubsection{\texorpdfstring{init()}{init()}}
 {\footnotesize\ttfamily \label{class_eng_1_1_base_a90edbcc7768cba11d81687bdcf7c10f5} 
 bool ENG\+\_\+\+API Eng\+::\+Base\+::init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
-Init internal components. \begin{DoxyReturn}{Returns}
-TF 
-\end{DoxyReturn}
-\Hypertarget{class_eng_1_1_base_a8b69c304794769870e607875faf8c5fd}\index{Eng::Base@{Eng::Base}!removeRootNode@{removeRootNode}}
-\index{removeRootNode@{removeRootNode}!Eng::Base@{Eng::Base}}
-\doxysubsubsection{\texorpdfstring{removeRootNode()}{removeRootNode()}}
-{\footnotesize\ttfamily \label{class_eng_1_1_base_a8b69c304794769870e607875faf8c5fd} 
-void ENG\+\_\+\+API Eng\+::\+Base\+::remove\+Root\+Node (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_node}{Node}} $>$}]{node}{}\end{DoxyParamCaption})}
 
-Remove root node 
+
+Initializes the graphics engine components. 
+
+This method performs the following initialization steps\+:
+\begin{DoxyItemize}
+\item Checks if engine is already initialized
+\item Sets up Open\+GL context and configuration
+\item Initializes the callback manager for input handling
+\item Initializes Free\+Image library for texture loading
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+true if initialization successful, false if engine already initialized or if any initialization step fails
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Must be called before any other engine operations 
+\end{DoxyNote}
+\Hypertarget{class_eng_1_1_base_a125d9bc8caa221e29bb54bb6ab8a6dff}\index{Eng::Base@{Eng::Base}!isPostProcessingEnabled@{isPostProcessingEnabled}}
+\index{isPostProcessingEnabled@{isPostProcessingEnabled}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{isPostProcessingEnabled()}{isPostProcessingEnabled()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a125d9bc8caa221e29bb54bb6ab8a6dff} 
+bool ENG\+\_\+\+API Eng\+::\+Base\+::is\+Post\+Processing\+Enabled (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Queries whether post-\/processing is currently enabled. 
+
+\begin{DoxyReturn}{Returns}
+True if enabled, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_a74772257b8f5857231d3de2a1480488d}\index{Eng::Base@{Eng::Base}!loadScene@{loadScene}}
+\index{loadScene@{loadScene}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{loadScene()}{loadScene()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a74772257b8f5857231d3de2a1480488d} 
+void ENG\+\_\+\+API Eng\+::\+Base\+::load\+Scene (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{file\+Name}{}\end{DoxyParamCaption})}
+
+
+
+Loads a scene from a file. 
+
+Parses the specified scene file in {\ttfamily .ovo} format and builds the scene graph.
+
+
 \begin{DoxyParams}{Parameters}
-{\em shared\+\_\+ptr$<$\+Node$>$} & to the root node \\
+{\em file\+Name} & The name of the file containing the scene description. \\
 \hline
 \end{DoxyParams}
-\Hypertarget{class_eng_1_1_base_a4684cbf08ccc9f08cd073977697b4103}\index{Eng::Base@{Eng::Base}!renderScene@{renderScene}}
-\index{renderScene@{renderScene}!Eng::Base@{Eng::Base}}
-\doxysubsubsection{\texorpdfstring{renderScene()}{renderScene()}}
-{\footnotesize\ttfamily \label{class_eng_1_1_base_a4684cbf08ccc9f08cd073977697b4103} 
-void ENG\+\_\+\+API Eng\+::\+Base\+::render\+Scene (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+\Hypertarget{class_eng_1_1_base_ac5a97e71d05a7f044da3fcf226a8c37e}\index{Eng::Base@{Eng::Base}!registerSkybox@{registerSkybox}}
+\index{registerSkybox@{registerSkybox}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{registerSkybox()}{registerSkybox()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_ac5a97e71d05a7f044da3fcf226a8c37e} 
+void Eng\+::\+Base\+::register\+Skybox (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::string $>$ \&}]{faces}{}\end{DoxyParamCaption})}
 
-Render scene \Hypertarget{class_eng_1_1_base_aa8c86687b7d3aa69d7170b1441c0ef0f}\index{Eng::Base@{Eng::Base}!SetActiveCamera@{SetActiveCamera}}
+
+
+Creates and registers a skybox from 6 face textures. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em faces} & Filenames (in order) for the 6 cubemap faces. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_base_ac1e7663805c44d396821ec04be570d4f}\index{Eng::Base@{Eng::Base}!removePostProcessor@{removePostProcessor}}
+\index{removePostProcessor@{removePostProcessor}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{removePostProcessor()}{removePostProcessor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_ac1e7663805c44d396821ec04be570d4f} 
+bool ENG\+\_\+\+API Eng\+::\+Base\+::remove\+Post\+Processor (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{}\end{DoxyParamCaption})}
+
+
+
+Removes a named post-\/processor from the pipeline. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Unique name of the post-\/processor to remove. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if found \& removed; false if not present. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_base_a8ac518f05ed2c7a08083deb7a7a339a5}\index{Eng::Base@{Eng::Base}!renderStereoscopic@{renderStereoscopic}}
+\index{renderStereoscopic@{renderStereoscopic}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{renderStereoscopic()}{renderStereoscopic()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a8ac518f05ed2c7a08083deb7a7a339a5} 
+void Eng\+::\+Base\+::render\+Stereoscopic (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Renders the scene stereoscopically to both eyes (VR headset). 
+
+Updates VR tracking, computes per-\/eye view/projection, renders each eye’s FBO, and then either applies post-\/processing or submits directly to the HMD. Finally blits a mirror view to the desktop window. \Hypertarget{class_eng_1_1_base_a914ead4a241338bbac104ce7186de2bb}\index{Eng::Base@{Eng::Base}!run@{run}}
+\index{run@{run}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a914ead4a241338bbac104ce7186de2bb} 
+void ENG\+\_\+\+API Eng\+::\+Base\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Runs the main rendering loop of the engine. 
+
+Continuously renders the scene and processes events until an exit request is issued. \Hypertarget{class_eng_1_1_base_aa8c86687b7d3aa69d7170b1441c0ef0f}\index{Eng::Base@{Eng::Base}!SetActiveCamera@{SetActiveCamera}}
 \index{SetActiveCamera@{SetActiveCamera}!Eng::Base@{Eng::Base}}
 \doxysubsubsection{\texorpdfstring{SetActiveCamera()}{SetActiveCamera()}}
 {\footnotesize\ttfamily \label{class_eng_1_1_base_aa8c86687b7d3aa69d7170b1441c0ef0f} 
-void ENG\+\_\+\+API Eng\+::\+Base\+::\+Set\+Active\+Camera (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_camera}{Camera}} $>$}]{camera}{}\end{DoxyParamCaption})}
+void ENG\+\_\+\+API Eng\+::\+Base\+::\+Set\+Active\+Camera (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_camera}{Camera}} $>$}]{camera}{}\end{DoxyParamCaption})}
 
-Set active camera @parram shared\+\_\+ptr$<$\+Camera$>$ current camera 
+
+
+Sets the active camera for the engine. 
+
+The active camera determines the view and projection matrices for rendering.
+
+
+\begin{DoxyParams}{Parameters}
+{\em camera} & A shared pointer to the camera to be set as active. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_base_ae317011d81a11c5b10a58b389e45417a}\index{Eng::Base@{Eng::Base}!setBodyPosition@{setBodyPosition}}
+\index{setBodyPosition@{setBodyPosition}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{setBodyPosition()}{setBodyPosition()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_ae317011d81a11c5b10a58b389e45417a} 
+void ENG\+\_\+\+API Eng\+::\+Base\+::set\+Body\+Position (\begin{DoxyParamCaption}\item[{const glm\+::mat4 \&}]{position}{}\end{DoxyParamCaption})}
+
+
+
+Sets the initial body/world transform for stereoscopic rendering. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & 4×4 transform matrix of the user’s body in world space. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_base_a9b3aae17bc7a5fe435a788b5523a1238}\index{Eng::Base@{Eng::Base}!setPostProcessingEnabled@{setPostProcessingEnabled}}
+\index{setPostProcessingEnabled@{setPostProcessingEnabled}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{setPostProcessingEnabled()}{setPostProcessingEnabled()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a9b3aae17bc7a5fe435a788b5523a1238} 
+void ENG\+\_\+\+API Eng\+::\+Base\+::set\+Post\+Processing\+Enabled (\begin{DoxyParamCaption}\item[{bool}]{enabled}{}\end{DoxyParamCaption})}
+
+
+
+Enables or disables post-\/processing in the pipeline. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em enabled} & True to enable post-\/processing, false to bypass. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_base_a781e6bca1708c544c407ed3076d902d9}\index{Eng::Base@{Eng::Base}!setupStereoscopicRendering@{setupStereoscopicRendering}}
+\index{setupStereoscopicRendering@{setupStereoscopicRendering}!Eng::Base@{Eng::Base}}
+\doxysubsubsection{\texorpdfstring{setupStereoscopicRendering()}{setupStereoscopicRendering()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_base_a781e6bca1708c544c407ed3076d902d9} 
+bool ENG\+\_\+\+API Eng\+::\+Base\+::setup\+Stereoscopic\+Rendering (\begin{DoxyParamCaption}\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})}
+
+
+
+Configures stereoscopic rendering by creating and binding the required FBOs. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & Width of the FBOs. \\
+\hline
+{\em height} & Height of the FBOs. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if both left and right eye FBOs were set up successfully; false on error. 
+\end{DoxyReturn}
+
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 

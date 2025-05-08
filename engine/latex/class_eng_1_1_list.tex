@@ -1,0 +1,294 @@
+\doxysection{Eng\+::List Class Reference}
+\hypertarget{class_eng_1_1_list}{}\label{class_eng_1_1_list}\index{Eng::List@{Eng::List}}
+
+
+A render list that extends \doxylink{class_eng_1_1_object}{Object} to integrate with the scene graph.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+Inheritance diagram for Eng\+::List\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_eng_1_1_list}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_eng_1_1_list_1_1_culling_sphere}{Culling\+Sphere}}
+\begin{DoxyCompactList}\small\item\em Constructs a culling sphere helper struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_list_a64d878a92d11f7c63c70cbe4e7dd4176}{List}} ()
+\begin{DoxyCompactList}\small\item\em Constructs a new render \doxylink{class_eng_1_1_list}{List} with default settings. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_list_a70aecf37bd9d779a394e4d50377fbf5f}\label{class_eng_1_1_list_a70aecf37bd9d779a394e4d50377fbf5f} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+List} ()
+\begin{DoxyCompactList}\small\item\em Default destructor for \doxylink{class_eng_1_1_list}{List}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_list_ad0e7351eb5005ed878d25d230ece1534}{add\+Node}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ \&node, const glm\+::mat4 \&final\+Matrix)
+\begin{DoxyCompactList}\small\item\em Adds a node to the render list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_list_a819f0efb82263b15326e610b13623174}{render}} () override
+\begin{DoxyCompactList}\small\item\em Performs the full multi-\/pass rendering of this list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_list_a3fad6292bd5126eeb437317383338cea}{clear}} ()
+\begin{DoxyCompactList}\small\item\em Clears the render list. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_list_aaf651459010237f20ccdfc0bdce0f74c}{is\+Within\+Culling\+Sphere}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_mesh}{Eng\+::\+Mesh}} $>$ \&mesh)
+\begin{DoxyCompactList}\small\item\em Checks if a mesh is within the culling sphere. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_list_a652d767217922b4f1071d92704465ea5}{set\+Eye\+View\+Matrix}} (glm\+::mat4 \&view\+Matrix)
+\begin{DoxyCompactList}\small\item\em Set new eye view matrix in the render list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_list_a90420135cad20f81f8919c6108b1bfa4}{set\+Eye\+Projection\+Matrix}} (glm\+::mat4 \&eye\+Projection\+Matrix)
+\begin{DoxyCompactList}\small\item\em Set new eye projection matrix in the render list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_list_a661acc72c10cb21e4a50eac9728613d1}{set\+Global\+Light\+Color}} (const glm\+::vec3 \&global\+Color)
+\begin{DoxyCompactList}\small\item\em Sets the global light color for the render list. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_list_ad7cb5c6aac66fa10ebdfadc4f4719983}\label{class_eng_1_1_list_ad7cb5c6aac66fa10ebdfadc4f4719983} 
+void {\bfseries set\+Current\+FBO} (\mbox{\hyperlink{class_eng_1_1_fbo}{Eng\+::\+Fbo}} \texorpdfstring{$\ast$}{*}fbo)
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_list_element}{Eng\+::\+List\+Element}} $>$ $>$ \mbox{\hyperlink{class_eng_1_1_list_a97e726ce036d3f0cf812f84136ddb60c}{get\+Elements}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves all elements in the list. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_bounding_box}{Eng\+::\+Bounding\+Box}} $>$ \mbox{\hyperlink{class_eng_1_1_list_a3a31b39ee19f17116eed8dd8a48fc73d}{get\+Scene\+Bounding\+Box}} ()
+\begin{DoxyCompactList}\small\item\em Computes and returns the scene\textquotesingle{}s axis-\/aligned bounding box. \end{DoxyCompactList}\item 
+std\+::vector$<$ glm\+::vec3 $>$ \mbox{\hyperlink{class_eng_1_1_list_af087e684853766eedd21378050499166}{get\+Eye\+Frustum\+Corners}} ()
+\begin{DoxyCompactList}\small\item\em Computes the frustum corners based on the current view and projection matrices. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_list_iterator}{Eng\+::\+List\+Iterator}} \mbox{\hyperlink{class_eng_1_1_list_acad1e6145715e43cdcad6e786288fdf6}{get\+Layer\+Iterator}} (const \mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Eng\+::\+Render\+Layer}} \&layer)
+\begin{DoxyCompactList}\small\item\em Retrieves the iterator for a specific render layer. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_list_ac754ca0d0d4c4bc8189b23b7d8205f21}\label{class_eng_1_1_list_ac754ca0d0d4c4bc8189b23b7d8205f21} 
+glm\+::vec3 {\bfseries get\+Global\+Light\+Color} () const
+\item 
+\Hypertarget{class_eng_1_1_list_ae389837397d0ab37f453d24ec0ea5b5d}\label{class_eng_1_1_list_ae389837397d0ab37f453d24ec0ea5b5d} 
+glm\+::mat4 {\bfseries get\+Eye\+View\+Matrix} () const
+\item 
+\Hypertarget{class_eng_1_1_list_ad315bf5d89b0666401dabf07aab7f5a1}\label{class_eng_1_1_list_ad315bf5d89b0666401dabf07aab7f5a1} 
+glm\+::mat4 {\bfseries get\+Eye\+Projection\+Matrix} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A render list that extends \doxylink{class_eng_1_1_object}{Object} to integrate with the scene graph. 
+
+The \doxylink{class_eng_1_1_list}{List} class stores a collection of nodes in the correct rendering order\+: lights are pushed to the front, and other nodes are pushed to the back. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_list_a64d878a92d11f7c63c70cbe4e7dd4176}\index{Eng::List@{Eng::List}!List@{List}}
+\index{List@{List}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{List()}{List()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_a64d878a92d11f7c63c70cbe4e7dd4176} 
+List\+::\+List (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a new render \doxylink{class_eng_1_1_list}{List} with default settings. 
+
+Initializes the base \doxylink{class_eng_1_1_object}{Object}, creates a culling sphere, and sets the default list name. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_list_ad0e7351eb5005ed878d25d230ece1534}\index{Eng::List@{Eng::List}!addNode@{addNode}}
+\index{addNode@{addNode}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{addNode()}{addNode()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_ad0e7351eb5005ed878d25d230ece1534} 
+void List\+::add\+Node (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_node}{Eng\+::\+Node}} $>$ \&}]{node}{, }\item[{const glm\+::mat4 \&}]{final\+Matrix}{}\end{DoxyParamCaption})}
+
+
+
+Adds a node to the render list. 
+
+Nodes are categorized based on their type\+:
+\begin{DoxyItemize}
+\item \doxylink{class_eng_1_1_light}{Light} nodes are added to the front of the list.
+\item Other nodes are added to the back of the list.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & A shared pointer to the node being added. \\
+\hline
+{\em final\+Matrix} & The transformation matrix in world space for the node. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_list_a3fad6292bd5126eeb437317383338cea}\index{Eng::List@{Eng::List}!clear@{clear}}
+\index{clear@{clear}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_a3fad6292bd5126eeb437317383338cea} 
+void List\+::clear (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Clears the render list. 
+
+Removes all nodes from the list, resetting it for the next frame. \Hypertarget{class_eng_1_1_list_a97e726ce036d3f0cf812f84136ddb60c}\index{Eng::List@{Eng::List}!getElements@{getElements}}
+\index{getElements@{getElements}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{getElements()}{getElements()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_a97e726ce036d3f0cf812f84136ddb60c} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_list_element}{Eng\+::\+List\+Element}} $>$ $>$ List\+::get\+Elements (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves all elements in the list. 
+
+\begin{DoxyReturn}{Returns}
+A vector of shared pointers to the list elements in the list. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_list_af087e684853766eedd21378050499166}\index{Eng::List@{Eng::List}!getEyeFrustumCorners@{getEyeFrustumCorners}}
+\index{getEyeFrustumCorners@{getEyeFrustumCorners}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{getEyeFrustumCorners()}{getEyeFrustumCorners()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_af087e684853766eedd21378050499166} 
+std\+::vector$<$ glm\+::vec3 $>$ List\+::get\+Eye\+Frustum\+Corners (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Computes the frustum corners based on the current view and projection matrices. 
+
+The frustum corners are computed in world coordinates. If they are already computed, they are returned from the cache.
+
+
+\begin{DoxyParams}{Parameters}
+{\em projection\+Matrix} & The projection matrix. \\
+\hline
+{\em view\+Matrix} & The view matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A copy of the cached vector of 8 corners representing the frustum. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_list_acad1e6145715e43cdcad6e786288fdf6}\index{Eng::List@{Eng::List}!getLayerIterator@{getLayerIterator}}
+\index{getLayerIterator@{getLayerIterator}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{getLayerIterator()}{getLayerIterator()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_acad1e6145715e43cdcad6e786288fdf6} 
+\mbox{\hyperlink{class_eng_1_1_list_iterator}{Eng\+::\+List\+Iterator}} List\+::get\+Layer\+Iterator (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Eng\+::\+Render\+Layer}} \&}]{layer}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the iterator for a specific render layer. 
+
+This method returns an iterator for the specified render layer. If the iterator is not already cached, it creates a new one and caches it.
+
+
+\begin{DoxyParams}{Parameters}
+{\em layer} & The render layer for which to get the iterator. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A reference to the \doxylink{class_eng_1_1_list_iterator}{List\+Iterator} for the specified layer. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_list_a3a31b39ee19f17116eed8dd8a48fc73d}\index{Eng::List@{Eng::List}!getSceneBoundingBox@{getSceneBoundingBox}}
+\index{getSceneBoundingBox@{getSceneBoundingBox}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{getSceneBoundingBox()}{getSceneBoundingBox()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_a3a31b39ee19f17116eed8dd8a48fc73d} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_bounding_box}{Eng\+::\+Bounding\+Box}} $>$ List\+::get\+Scene\+Bounding\+Box (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Computes and returns the scene\textquotesingle{}s axis-\/aligned bounding box. 
+
+On first invocation, iterates over all mesh elements (excluding lights), updates a \doxylink{class_eng_1_1_bounding_box}{Bounding\+Box}, and logs corner coordinates.
+
+\begin{DoxyReturn}{Returns}
+Shared pointer to the scene\textquotesingle{}s \doxylink{class_eng_1_1_bounding_box}{Bounding\+Box}. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_list_aaf651459010237f20ccdfc0bdce0f74c}\index{Eng::List@{Eng::List}!isWithinCullingSphere@{isWithinCullingSphere}}
+\index{isWithinCullingSphere@{isWithinCullingSphere}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{isWithinCullingSphere()}{isWithinCullingSphere()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_aaf651459010237f20ccdfc0bdce0f74c} 
+bool List\+::is\+Within\+Culling\+Sphere (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_mesh}{Eng\+::\+Mesh}} $>$ \&}]{mesh}{}\end{DoxyParamCaption})}
+
+
+
+Checks if a mesh is within the culling sphere. 
+
+This method computes the distance between the mesh\textquotesingle{}s bounding sphere and the culling sphere. If the mesh is outside the culling sphere, it will not be rendered.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mesh} & A shared pointer to the mesh being checked. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the mesh is within the culling sphere, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_list_a819f0efb82263b15326e610b13623174}\index{Eng::List@{Eng::List}!render@{render}}
+\index{render@{render}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_a819f0efb82263b15326e610b13623174} 
+void List\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Performs the full multi-\/pass rendering of this list. 
+
+Renders opaque geometry, then for each light renders its pass including additive blending or shadow passes for directional lights. 
+
+Implements \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}.
+
+\Hypertarget{class_eng_1_1_list_a90420135cad20f81f8919c6108b1bfa4}\index{Eng::List@{Eng::List}!setEyeProjectionMatrix@{setEyeProjectionMatrix}}
+\index{setEyeProjectionMatrix@{setEyeProjectionMatrix}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{setEyeProjectionMatrix()}{setEyeProjectionMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_a90420135cad20f81f8919c6108b1bfa4} 
+void List\+::set\+Eye\+Projection\+Matrix (\begin{DoxyParamCaption}\item[{glm\+::mat4 \&}]{eye\+Projection\+Matrix}{}\end{DoxyParamCaption})}
+
+
+
+Set new eye projection matrix in the render list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em glm\+::mat4} & Eye projection matrix. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_list_a652d767217922b4f1071d92704465ea5}\index{Eng::List@{Eng::List}!setEyeViewMatrix@{setEyeViewMatrix}}
+\index{setEyeViewMatrix@{setEyeViewMatrix}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{setEyeViewMatrix()}{setEyeViewMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_a652d767217922b4f1071d92704465ea5} 
+void List\+::set\+Eye\+View\+Matrix (\begin{DoxyParamCaption}\item[{glm\+::mat4 \&}]{view\+Matrix}{}\end{DoxyParamCaption})}
+
+
+
+Set new eye view matrix in the render list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em glm\+::mat4} & Eye view matrix. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_list_a661acc72c10cb21e4a50eac9728613d1}\index{Eng::List@{Eng::List}!setGlobalLightColor@{setGlobalLightColor}}
+\index{setGlobalLightColor@{setGlobalLightColor}!Eng::List@{Eng::List}}
+\doxysubsubsection{\texorpdfstring{setGlobalLightColor()}{setGlobalLightColor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_list_a661acc72c10cb21e4a50eac9728613d1} 
+void List\+::set\+Global\+Light\+Color (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{global\+Color}{}\end{DoxyParamCaption})}
+
+
+
+Sets the global light color for the render list. 
+
+This method updates the global light color used in the rendering process.
+
+
+\begin{DoxyParams}{Parameters}
+{\em global\+Color} & The new global light color as a glm\+::vec3. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+List.\+cpp\end{DoxyCompactItemize}

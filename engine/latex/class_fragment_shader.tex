@@ -1,0 +1,82 @@
+\doxysection{Fragment\+Shader Class Reference}
+\hypertarget{class_fragment_shader}{}\label{class_fragment_shader}\index{FragmentShader@{FragmentShader}}
+
+
+Represents a GPU fragment shader, which processes rasterized fragments to determine their final colors.  
+
+
+
+
+{\ttfamily \#include $<$Fragment\+Shader.\+h$>$}
+
+Inheritance diagram for Fragment\+Shader\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_fragment_shader}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_fragment_shader_a75793fd073c50ed973357211f34585b5}{create}} () override
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_shader}{Eng\+::\+Shader}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_shader_ae6a64311923fdd19a3497a9c9f85c83c}{Shader}} ()
+\begin{DoxyCompactList}\small\item\em Constructs a new \doxylink{class_eng_1_1_shader}{Shader} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_shader_ab445f33ed661b960c3b563e4862aa3f6}{\texorpdfstring{$\sim$}{\string~}\+Shader}} ()
+\begin{DoxyCompactList}\small\item\em Destroys the \doxylink{class_eng_1_1_shader}{Shader} object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_shader_a8a0fef7622a13f33236c38a51732f962}{load}} (const char \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Loads and compiles a shader from source code in memory. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_a56a7d0e8585340795fa64a92ebe0c964}{render}} () override
+\begin{DoxyCompactList}\small\item\em Binds and uses this shader program. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_shader_a04e414e007c1efc17bcbfc8a18cfe54d}{get\+Gl\+Id}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the Open\+GL shader identifier. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes inherited from \mbox{\hyperlink{class_eng_1_1_shader}{Eng\+::\+Shader}}}
+\begin{DoxyCompactItemize}
+\item 
+static const unsigned int {\bfseries MAX\+\_\+\+LOGSIZE} = 4096
+\begin{DoxyCompactList}\small\item\em Max output size in char for a shader log. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a GPU fragment shader, which processes rasterized fragments to determine their final colors. 
+
+\doxylink{class_fragment_shader}{Fragment\+Shader} compiles and encapsulates fragment-\/stage GLSL code, used for per-\/pixel operations such as lighting, texturing, and color blending. Inherits base loading, compilation, and rendering interface from \doxylink{class_shader}{Shader}. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_fragment_shader_a75793fd073c50ed973357211f34585b5}\index{FragmentShader@{FragmentShader}!create@{create}}
+\index{create@{create}!FragmentShader@{FragmentShader}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \label{class_fragment_shader_a75793fd073c50ed973357211f34585b5} 
+unsigned int Fragment\+Shader\+::create (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_eng_1_1_shader}{Eng\+::\+Shader}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Fragment\+Shader.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,48 @@
+\doxysection{Render\+Pipeline.\+h}
+\hypertarget{_render_pipeline_8h_source}{}\label{_render_pipeline_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{keyword}{class\ }ENG\_API\ RenderPipeline\ \{}
+\DoxyCodeLine{00004\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00005\ \ \ \ \ RenderPipeline();}
+\DoxyCodeLine{00006\ \ \ \ \ \string~RenderPipeline();}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keywordtype}{bool}\ init();}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keywordtype}{void}\ runOn(\mbox{\hyperlink{class_eng_1_1_list}{Eng::List}}*\ renderList);}
+\DoxyCodeLine{00009\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{comment}{//\ Forward\ declarations}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{struct\ }RenderContext;}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{struct\ }StatusCache;}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{bool}\ setupShadowMap(\textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ renderPass(\textcolor{keyword}{const}\ std::shared\_ptr<RenderContext>\&\ context);}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ shadowPass(std::shared\_ptr\ <Eng::DirectionalLight>\&\ light,\ \mbox{\hyperlink{class_eng_1_1_list}{Eng::List}}*\ renderList);}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ std::shared\_ptr<Eng::Fbo>\ shadowMapFbo;}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ shadowMapTexture\ =\ 0;}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ glm::mat4\ lightSpaceMatrix\ =\ glm::mat4(1.0f);}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ std::shared\_ptr<Eng::VertexShader>\ basicVertexShader;}
+\DoxyCodeLine{00027\ \ \ \ \ std::shared\_ptr<Eng::VertexShader>\ shadowMapVertexShader;}
+\DoxyCodeLine{00028\ \ \ \ \ std::shared\_ptr<Eng::VertexShader>\ dirLightVertexShader;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ std::shared\_ptr<Eng::FragmentShader>\ basicFragmentShader;}
+\DoxyCodeLine{00031\ \ \ \ \ std::shared\_ptr<Eng::FragmentShader>\ directionalFragmentShader;}
+\DoxyCodeLine{00032\ \ \ \ \ std::shared\_ptr<Eng::FragmentShader>\ pointFragmentShader;}
+\DoxyCodeLine{00033\ \ \ \ \ std::shared\_ptr<Eng::FragmentShader>\ spotFragmentShader;}
+\DoxyCodeLine{00034\ \ \ \ \ std::shared\_ptr<Eng::FragmentShader>\ shadowMapFragmentShader;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ std::shared\_ptr<Eng::Program>\ baseColorProgram;}
+\DoxyCodeLine{00037\ \ \ \ \ std::shared\_ptr<Eng::Program>\ dirLightProgram;}
+\DoxyCodeLine{00038\ \ \ \ \ std::shared\_ptr<Eng::Program>\ pointLightProgram;}
+\DoxyCodeLine{00039\ \ \ \ \ std::shared\_ptr<Eng::Program>\ spotLightProgram;}
+\DoxyCodeLine{00040\ \ \ \ \ std::shared\_ptr<Eng::Program>\ shadowMapProgram;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ std::unique\_ptr<StatusCache>\ prevStatus;}
+\DoxyCodeLine{00043\ \};}
+
+\end{DoxyCode}

@@ -1,0 +1,126 @@
+\doxysection{Eng\+::Object Class Reference}
+\hypertarget{class_eng_1_1_object}{}\label{class_eng_1_1_object}\index{Eng::Object@{Eng::Object}}
+Inheritance diagram for Eng\+::Object\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=12.000000cm]{class_eng_1_1_object}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_eng_1_1_object_a4a01ddfadf81f7ad89455dfdd45b6a52}{render}} ()=0
+\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}\index{Eng::Object@{Eng::Object}!Object@{Object}}
+\index{Object@{Object}!Eng::Object@{Eng::Object}}
+\doxysubsubsection{\texorpdfstring{Object()}{Object()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4} 
+ENG\+\_\+\+API Object\+::\+Object (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. 
+
+Initializes the object with a unique ID. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}\index{Eng::Object@{Eng::Object}!getId@{getId}}
+\index{getId@{getId}!Eng::Object@{Eng::Object}}
+\doxysubsubsection{\texorpdfstring{getId()}{getId()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90} 
+int ENG\+\_\+\+API Object\+::get\+Id (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the unique ID of the object. 
+
+Each object in the scene graph has a unique identifier assigned at creation.
+
+\begin{DoxyReturn}{Returns}
+int The unique ID of the object. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}\index{Eng::Object@{Eng::Object}!getName@{getName}}
+\index{getName@{getName}!Eng::Object@{Eng::Object}}
+\doxysubsubsection{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927} 
+std\+::string ENG\+\_\+\+API Object\+::get\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the name of the current object. 
+
+The name can be used to identify the object in the scene graph.
+
+\begin{DoxyReturn}{Returns}
+std\+::string The name of the object. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_object_a4a01ddfadf81f7ad89455dfdd45b6a52}\index{Eng::Object@{Eng::Object}!render@{render}}
+\index{render@{render}!Eng::Object@{Eng::Object}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_object_a4a01ddfadf81f7ad89455dfdd45b6a52} 
+virtual void Eng\+::\+Object\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_eng_1_1_holographic_material_a9d3d7939cf106a4b1a1448dd2c34f959}{Eng\+::\+Holographic\+Material}}, \mbox{\hyperlink{class_eng_1_1_light_ad11747595250cede2c4c7948d1aa3d83}{Eng\+::\+Light}}, \mbox{\hyperlink{class_eng_1_1_list_a819f0efb82263b15326e610b13623174}{Eng\+::\+List}}, \mbox{\hyperlink{class_eng_1_1_material_ab2328e122f3a9ba58c209226926b7624}{Eng\+::\+Material}}, \mbox{\hyperlink{class_eng_1_1_mesh_a0e4c32b72cf08edd59bba250135352f2}{Eng\+::\+Mesh}}, \mbox{\hyperlink{class_eng_1_1_program_afe473b4b0ec24a48c2240dcb82634aa9}{Eng\+::\+Program}}, \mbox{\hyperlink{class_eng_1_1_shader_a56a7d0e8585340795fa64a92ebe0c964}{Eng\+::\+Shader}}, \mbox{\hyperlink{class_eng_1_1_texture_a800d2fde67c26e55834c5b38e4f7d885}{Eng\+::\+Texture}}, and \mbox{\hyperlink{class_holographic_material_a9d3d7939cf106a4b1a1448dd2c34f959}{Holographic\+Material}}.
+
+\Hypertarget{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}\index{Eng::Object@{Eng::Object}!setName@{setName}}
+\index{setName@{setName}!Eng::Object@{Eng::Object}}
+\doxysubsubsection{\texorpdfstring{setName()}{setName()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823} 
+void ENG\+\_\+\+API Object\+::set\+Name (\begin{DoxyParamCaption}\item[{std\+::string \&\&}]{new\+Name}{}\end{DoxyParamCaption})}
+
+
+
+Sets the name of the object. 
+
+Assigns a new name to the object for identification purposes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Name} & The new name of the object. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}\index{Eng::Object@{Eng::Object}!id@{id}}
+\index{id@{id}!Eng::Object@{Eng::Object}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily \label{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac} 
+unsigned int Eng\+::\+Object\+::id\hspace{0.3cm}{\ttfamily [protected]}}
+
+\begin{quote}
+object unique identifier \end{quote}
+\Hypertarget{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}\index{Eng::Object@{Eng::Object}!name@{name}}
+\index{name@{name}!Eng::Object@{Eng::Object}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \label{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28} 
+std\+::string Eng\+::\+Object\+::name\hspace{0.3cm}{\ttfamily [protected]}}
+
+\begin{quote}
+object name \end{quote}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Object.\+cpp\end{DoxyCompactItemize}

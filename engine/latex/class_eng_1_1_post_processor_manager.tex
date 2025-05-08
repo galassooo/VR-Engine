@@ -1,0 +1,204 @@
+\doxysection{Eng\+::Post\+Processor\+Manager Class Reference}
+\hypertarget{class_eng_1_1_post_processor_manager}{}\label{class_eng_1_1_post_processor_manager}\index{Eng::PostProcessorManager@{Eng::PostProcessorManager}}
+
+
+Manages a collection of post-\/processing effects.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_eng_1_1_post_processor_manager_a6822ce90bb09e79e5bfbce249c3c9a55}\label{class_eng_1_1_post_processor_manager_a6822ce90bb09e79e5bfbce249c3c9a55} 
+{\bfseries Post\+Processor\+Manager} (const \mbox{\hyperlink{class_eng_1_1_post_processor_manager}{Post\+Processor\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_eng_1_1_post_processor_manager_ae315eda687c4cbb210da3b1176a84d82}\label{class_eng_1_1_post_processor_manager_ae315eda687c4cbb210da3b1176a84d82} 
+\mbox{\hyperlink{class_eng_1_1_post_processor_manager}{Post\+Processor\+Manager}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_eng_1_1_post_processor_manager}{Post\+Processor\+Manager}} \&)=delete
+\item 
+bool \mbox{\hyperlink{class_eng_1_1_post_processor_manager_ab91eb889bd6fc6c264d903fa143c85b9}{initialize\+All}} (int width, int height)
+\begin{DoxyCompactList}\small\item\em Initializes all registered post-\/processors with the specified resolution. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_post_processor_manager_a624143af2af68ae4ec8c36c3b7c4b94c}{add\+Post\+Processor}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_post_processor}{Post\+Processor}} $>$ post\+Processor)
+\begin{DoxyCompactList}\small\item\em Adds a post-\/processor to the manager. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_post_processor_manager_a18b2fc0a6798bb77fbf32a8ba31607a7}{remove\+Post\+Processor}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Removes a post-\/processor from the manager by name. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_post_processor}{Post\+Processor}} $>$ \mbox{\hyperlink{class_eng_1_1_post_processor_manager_a3897368f1bbc36d159a3491069609d03}{get\+Post\+Processor}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Gets a post-\/processor by name. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_post_processor_manager_a261e13cdefb26322828ca1fbee831522}{apply\+Post\+Processing}} (unsigned int input\+Texture, unsigned int output\+Texture, int width, int height)
+\begin{DoxyCompactList}\small\item\em Applies all post-\/processors in sequence to the input texture. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_post_processor_manager_a6494081f0b44b04dff446f68012d9b17}{is\+Post\+Processing\+Enabled}} () const
+\begin{DoxyCompactList}\small\item\em Checks if post-\/processing is enabled. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_post_processor_manager_a5d62315995cada6b1dd38f3826894b90}{set\+Post\+Processing\+Enabled}} (bool enabled)
+\begin{DoxyCompactList}\small\item\em Enables or disables post-\/processing. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{class_eng_1_1_post_processor_manager_adfba6fc757328d81673749aafe687ca2}{get\+Post\+Processor\+Count}} () const
+\begin{DoxyCompactList}\small\item\em Gets the number of registered post-\/processors. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_eng_1_1_post_processor_manager}{Post\+Processor\+Manager}} \& \mbox{\hyperlink{class_eng_1_1_post_processor_manager_af0bf6aa947fa52ea51da0d43ed420fc2}{get\+Instance}} ()
+\begin{DoxyCompactList}\small\item\em Gets the singleton instance of the \doxylink{class_eng_1_1_post_processor_manager}{Post\+Processor\+Manager}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages a collection of post-\/processing effects. 
+
+This class serves as a central manager for all post-\/processing effects in the engine. It handles initialization, execution, and cleanup of post-\/processors. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_post_processor_manager_a624143af2af68ae4ec8c36c3b7c4b94c}\index{Eng::PostProcessorManager@{Eng::PostProcessorManager}!addPostProcessor@{addPostProcessor}}
+\index{addPostProcessor@{addPostProcessor}!Eng::PostProcessorManager@{Eng::PostProcessorManager}}
+\doxysubsubsection{\texorpdfstring{addPostProcessor()}{addPostProcessor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_post_processor_manager_a624143af2af68ae4ec8c36c3b7c4b94c} 
+bool Post\+Processor\+Manager\+::add\+Post\+Processor (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_post_processor}{Post\+Processor}} $>$}]{post\+Processor}{}\end{DoxyParamCaption})}
+
+
+
+Adds a post-\/processor to the manager. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em post\+Processor} & Shared pointer to the post-\/processor to add. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the post-\/processor was added successfully, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_post_processor_manager_a261e13cdefb26322828ca1fbee831522}\index{Eng::PostProcessorManager@{Eng::PostProcessorManager}!applyPostProcessing@{applyPostProcessing}}
+\index{applyPostProcessing@{applyPostProcessing}!Eng::PostProcessorManager@{Eng::PostProcessorManager}}
+\doxysubsubsection{\texorpdfstring{applyPostProcessing()}{applyPostProcessing()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_post_processor_manager_a261e13cdefb26322828ca1fbee831522} 
+void Post\+Processor\+Manager\+::apply\+Post\+Processing (\begin{DoxyParamCaption}\item[{unsigned int}]{input\+Texture}{, }\item[{unsigned int}]{output\+Texture}{, }\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})}
+
+
+
+Applies all post-\/processors in sequence to the input texture. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+Texture} & ID of the input texture. \\
+\hline
+{\em output\+Texture} & ID of the output texture. \\
+\hline
+{\em width} & Width of the textures. \\
+\hline
+{\em height} & Height of the textures. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_post_processor_manager_af0bf6aa947fa52ea51da0d43ed420fc2}\index{Eng::PostProcessorManager@{Eng::PostProcessorManager}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!Eng::PostProcessorManager@{Eng::PostProcessorManager}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_post_processor_manager_af0bf6aa947fa52ea51da0d43ed420fc2} 
+\mbox{\hyperlink{class_eng_1_1_post_processor_manager}{Eng\+::\+Post\+Processor\+Manager}} \& Post\+Processor\+Manager\+::get\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Gets the singleton instance of the \doxylink{class_eng_1_1_post_processor_manager}{Post\+Processor\+Manager}. 
+
+\begin{DoxyReturn}{Returns}
+Reference to the \doxylink{class_eng_1_1_post_processor_manager}{Post\+Processor\+Manager} instance. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_post_processor_manager_a3897368f1bbc36d159a3491069609d03}\index{Eng::PostProcessorManager@{Eng::PostProcessorManager}!getPostProcessor@{getPostProcessor}}
+\index{getPostProcessor@{getPostProcessor}!Eng::PostProcessorManager@{Eng::PostProcessorManager}}
+\doxysubsubsection{\texorpdfstring{getPostProcessor()}{getPostProcessor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_post_processor_manager_a3897368f1bbc36d159a3491069609d03} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_post_processor}{Eng\+::\+Post\+Processor}} $>$ Post\+Processor\+Manager\+::get\+Post\+Processor (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{}\end{DoxyParamCaption})}
+
+
+
+Gets a post-\/processor by name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name of the post-\/processor to retrieve. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Shared pointer to the post-\/processor, or nullptr if not found. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_post_processor_manager_adfba6fc757328d81673749aafe687ca2}\index{Eng::PostProcessorManager@{Eng::PostProcessorManager}!getPostProcessorCount@{getPostProcessorCount}}
+\index{getPostProcessorCount@{getPostProcessorCount}!Eng::PostProcessorManager@{Eng::PostProcessorManager}}
+\doxysubsubsection{\texorpdfstring{getPostProcessorCount()}{getPostProcessorCount()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_post_processor_manager_adfba6fc757328d81673749aafe687ca2} 
+size\+\_\+t Post\+Processor\+Manager\+::get\+Post\+Processor\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the number of registered post-\/processors. 
+
+\begin{DoxyReturn}{Returns}
+The number of post-\/processors. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_post_processor_manager_ab91eb889bd6fc6c264d903fa143c85b9}\index{Eng::PostProcessorManager@{Eng::PostProcessorManager}!initializeAll@{initializeAll}}
+\index{initializeAll@{initializeAll}!Eng::PostProcessorManager@{Eng::PostProcessorManager}}
+\doxysubsubsection{\texorpdfstring{initializeAll()}{initializeAll()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_post_processor_manager_ab91eb889bd6fc6c264d903fa143c85b9} 
+bool Post\+Processor\+Manager\+::initialize\+All (\begin{DoxyParamCaption}\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})}
+
+
+
+Initializes all registered post-\/processors with the specified resolution. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & Width of the render target. \\
+\hline
+{\em height} & Height of the render target. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if all post-\/processors were initialized successfully, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_post_processor_manager_a6494081f0b44b04dff446f68012d9b17}\index{Eng::PostProcessorManager@{Eng::PostProcessorManager}!isPostProcessingEnabled@{isPostProcessingEnabled}}
+\index{isPostProcessingEnabled@{isPostProcessingEnabled}!Eng::PostProcessorManager@{Eng::PostProcessorManager}}
+\doxysubsubsection{\texorpdfstring{isPostProcessingEnabled()}{isPostProcessingEnabled()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_post_processor_manager_a6494081f0b44b04dff446f68012d9b17} 
+bool Post\+Processor\+Manager\+::is\+Post\+Processing\+Enabled (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Checks if post-\/processing is enabled. 
+
+\begin{DoxyReturn}{Returns}
+True if post-\/processing is enabled, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_post_processor_manager_a18b2fc0a6798bb77fbf32a8ba31607a7}\index{Eng::PostProcessorManager@{Eng::PostProcessorManager}!removePostProcessor@{removePostProcessor}}
+\index{removePostProcessor@{removePostProcessor}!Eng::PostProcessorManager@{Eng::PostProcessorManager}}
+\doxysubsubsection{\texorpdfstring{removePostProcessor()}{removePostProcessor()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_post_processor_manager_a18b2fc0a6798bb77fbf32a8ba31607a7} 
+bool Post\+Processor\+Manager\+::remove\+Post\+Processor (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{}\end{DoxyParamCaption})}
+
+
+
+Removes a post-\/processor from the manager by name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name of the post-\/processor to remove. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the post-\/processor was removed successfully, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_post_processor_manager_a5d62315995cada6b1dd38f3826894b90}\index{Eng::PostProcessorManager@{Eng::PostProcessorManager}!setPostProcessingEnabled@{setPostProcessingEnabled}}
+\index{setPostProcessingEnabled@{setPostProcessingEnabled}!Eng::PostProcessorManager@{Eng::PostProcessorManager}}
+\doxysubsubsection{\texorpdfstring{setPostProcessingEnabled()}{setPostProcessingEnabled()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_post_processor_manager_a5d62315995cada6b1dd38f3826894b90} 
+void Post\+Processor\+Manager\+::set\+Post\+Processing\+Enabled (\begin{DoxyParamCaption}\item[{bool}]{enabled}{}\end{DoxyParamCaption})}
+
+
+
+Enables or disables post-\/processing. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em enabled} & True to enable post-\/processing, false to disable. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Post\+Processor\+Manager.\+cpp\end{DoxyCompactItemize}

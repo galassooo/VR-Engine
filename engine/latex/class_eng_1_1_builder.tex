@@ -1,0 +1,196 @@
+\doxysection{Eng\+::Builder Class Reference}
+\hypertarget{class_eng_1_1_builder}{}\label{class_eng_1_1_builder}\index{Eng::Builder@{Eng::Builder}}
+
+
+Singleton builder for assembling mesh data and creating \doxylink{class_eng_1_1_mesh}{Mesh} objects.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_eng_1_1_builder_a7b3872203ce888bd857669e9bac1d223}\label{class_eng_1_1_builder_a7b3872203ce888bd857669e9bac1d223} 
+{\bfseries Builder} (const \mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \&)=delete
+\item 
+\Hypertarget{class_eng_1_1_builder_a9143cdbd3f6bd30abbf737d6c1db5a5d}\label{class_eng_1_1_builder_a9143cdbd3f6bd30abbf737d6c1db5a5d} 
+\mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \&)=delete
+\item 
+\mbox{\hyperlink{class_eng_1_1_builder}{Builder}} \& \mbox{\hyperlink{class_eng_1_1_builder_a4ce7a07ea5c341536f61f41f426edf70}{add\+Vertex}} (const \mbox{\hyperlink{class_eng_1_1_vertex}{Eng\+::\+Vertex}} \&vertex)
+\begin{DoxyCompactList}\small\item\em Adds a single vertex to the builder. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_builder_af215809534bb437dcbc0b8554ec1aa6b}\label{class_eng_1_1_builder_af215809534bb437dcbc0b8554ec1aa6b} 
+\mbox{\hyperlink{class_eng_1_1_builder}{Builder}} \& {\bfseries add\+Vertices} (const std\+::vector$<$ \mbox{\hyperlink{class_eng_1_1_vertex}{Eng\+::\+Vertex}} $>$ \&verts)
+\item 
+\mbox{\hyperlink{class_eng_1_1_builder}{Builder}} \& \mbox{\hyperlink{class_eng_1_1_builder_ae86190eca8dc3fbbb0ce2b6dec4c0f94}{add\+Index}} (unsigned int index)
+\begin{DoxyCompactList}\small\item\em Adds a single index to the builder. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_builder}{Builder}} \& \mbox{\hyperlink{class_eng_1_1_builder_aac5c050e240358c08adf9728cc9f1d3c}{add\+Indices}} (const std\+::vector$<$ unsigned int $>$ \&inds)
+\begin{DoxyCompactList}\small\item\em Adds multiple indices to the builder. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_builder}{Builder}} \& \mbox{\hyperlink{class_eng_1_1_builder_a6789bb55c1bdb9ff8028ed70017c006f}{set\+Material}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_material}{Eng\+::\+Material}} $>$ \&mat)
+\begin{DoxyCompactList}\small\item\em Sets the material for the mesh being built. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_builder}{Builder}} \& \mbox{\hyperlink{class_eng_1_1_builder_a3c6e552b15a332f5fb9646215f6f2713}{set\+Name}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Assigns a name to the mesh being built. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_builder}{Builder}} \& \mbox{\hyperlink{class_eng_1_1_builder_ac0bffacd6dd65dfd1a099a20ec35922e}{set\+Local\+Matrix}} (const glm\+::mat4 \&matrix)
+\begin{DoxyCompactList}\small\item\em Sets the local transformation matrix for the mesh. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_mesh}{Eng\+::\+Mesh}} $>$ \mbox{\hyperlink{class_eng_1_1_builder_aa9f05b6cd9abb5b760f4bb3295223ff3}{build}} ()
+\begin{DoxyCompactList}\small\item\em Builds the \doxylink{class_eng_1_1_mesh}{Mesh} from accumulated data and uploads to GPU. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& \mbox{\hyperlink{class_eng_1_1_builder_a48fc705146051491d6f13f9c5bc490df}{get\+Instance}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the singleton instance of the \doxylink{class_eng_1_1_builder}{Builder}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Singleton builder for assembling mesh data and creating \doxylink{class_eng_1_1_mesh}{Mesh} objects. 
+
+Accumulates vertex and index data, material, name, and transformation matrix through a fluent interface. After configuration, call \doxylink{class_eng_1_1_builder_aa9f05b6cd9abb5b760f4bb3295223ff3}{build()} to generate a \doxylink{class_eng_1_1_mesh}{Mesh} and upload its data to the GPU. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_builder_ae86190eca8dc3fbbb0ce2b6dec4c0f94}\index{Eng::Builder@{Eng::Builder}!addIndex@{addIndex}}
+\index{addIndex@{addIndex}!Eng::Builder@{Eng::Builder}}
+\doxysubsubsection{\texorpdfstring{addIndex()}{addIndex()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_builder_ae86190eca8dc3fbbb0ce2b6dec4c0f94} 
+\mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& Builder\+::add\+Index (\begin{DoxyParamCaption}\item[{unsigned int}]{index}{}\end{DoxyParamCaption})}
+
+
+
+Adds a single index to the builder. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The index value to append. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to this \doxylink{class_eng_1_1_builder}{Builder} for chaining. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_builder_aac5c050e240358c08adf9728cc9f1d3c}\index{Eng::Builder@{Eng::Builder}!addIndices@{addIndices}}
+\index{addIndices@{addIndices}!Eng::Builder@{Eng::Builder}}
+\doxysubsubsection{\texorpdfstring{addIndices()}{addIndices()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_builder_aac5c050e240358c08adf9728cc9f1d3c} 
+\mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& Builder\+::add\+Indices (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ unsigned int $>$ \&}]{inds}{}\end{DoxyParamCaption})}
+
+
+
+Adds multiple indices to the builder. 
+
+Appends a list of index values to the internal index buffer.
+
+
+\begin{DoxyParams}{Parameters}
+{\em inds} & Vector of indices to append. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to this \doxylink{class_eng_1_1_builder}{Builder} for chaining. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_builder_a4ce7a07ea5c341536f61f41f426edf70}\index{Eng::Builder@{Eng::Builder}!addVertex@{addVertex}}
+\index{addVertex@{addVertex}!Eng::Builder@{Eng::Builder}}
+\doxysubsubsection{\texorpdfstring{addVertex()}{addVertex()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_builder_a4ce7a07ea5c341536f61f41f426edf70} 
+\mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& Builder\+::add\+Vertex (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_eng_1_1_vertex}{Eng\+::\+Vertex}} \&}]{vertex}{}\end{DoxyParamCaption})}
+
+
+
+Adds a single vertex to the builder. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vertex} & The vertex data to append. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to this \doxylink{class_eng_1_1_builder}{Builder} for chaining. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_builder_aa9f05b6cd9abb5b760f4bb3295223ff3}\index{Eng::Builder@{Eng::Builder}!build@{build}}
+\index{build@{build}!Eng::Builder@{Eng::Builder}}
+\doxysubsubsection{\texorpdfstring{build()}{build()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_builder_aa9f05b6cd9abb5b760f4bb3295223ff3} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_mesh}{Eng\+::\+Mesh}} $>$ Builder\+::build (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Builds the \doxylink{class_eng_1_1_mesh}{Mesh} from accumulated data and uploads to GPU. 
+
+Creates a new \doxylink{class_eng_1_1_mesh}{Mesh} instance, assigns vertices, indices, material, name, and local matrix, initializes GPU buffers, then resets the \doxylink{class_eng_1_1_builder}{Builder}\textquotesingle{}s state.
+
+\begin{DoxyReturn}{Returns}
+Shared pointer to the newly created \doxylink{class_eng_1_1_mesh}{Mesh}. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_builder_a48fc705146051491d6f13f9c5bc490df}\index{Eng::Builder@{Eng::Builder}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!Eng::Builder@{Eng::Builder}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_builder_a48fc705146051491d6f13f9c5bc490df} 
+\mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& Builder\+::get\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Retrieves the singleton instance of the \doxylink{class_eng_1_1_builder}{Builder}. 
+
+Ensures only one \doxylink{class_eng_1_1_builder}{Builder} exists during application runtime.
+
+\begin{DoxyReturn}{Returns}
+Reference to the unique \doxylink{class_eng_1_1_builder}{Builder} instance. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_builder_ac0bffacd6dd65dfd1a099a20ec35922e}\index{Eng::Builder@{Eng::Builder}!setLocalMatrix@{setLocalMatrix}}
+\index{setLocalMatrix@{setLocalMatrix}!Eng::Builder@{Eng::Builder}}
+\doxysubsubsection{\texorpdfstring{setLocalMatrix()}{setLocalMatrix()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_builder_ac0bffacd6dd65dfd1a099a20ec35922e} 
+\mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& Builder\+::set\+Local\+Matrix (\begin{DoxyParamCaption}\item[{const glm\+::mat4 \&}]{matrix}{}\end{DoxyParamCaption})}
+
+
+
+Sets the local transformation matrix for the mesh. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrix} & The 4x4 transformation matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to this \doxylink{class_eng_1_1_builder}{Builder} for chaining. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_builder_a6789bb55c1bdb9ff8028ed70017c006f}\index{Eng::Builder@{Eng::Builder}!setMaterial@{setMaterial}}
+\index{setMaterial@{setMaterial}!Eng::Builder@{Eng::Builder}}
+\doxysubsubsection{\texorpdfstring{setMaterial()}{setMaterial()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_builder_a6789bb55c1bdb9ff8028ed70017c006f} 
+\mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& Builder\+::set\+Material (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_material}{Eng\+::\+Material}} $>$ \&}]{mat}{}\end{DoxyParamCaption})}
+
+
+
+Sets the material for the mesh being built. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mat} & Shared pointer to the \doxylink{class_eng_1_1_material}{Material} to assign. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to this \doxylink{class_eng_1_1_builder}{Builder} for chaining. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_builder_a3c6e552b15a332f5fb9646215f6f2713}\index{Eng::Builder@{Eng::Builder}!setName@{setName}}
+\index{setName@{setName}!Eng::Builder@{Eng::Builder}}
+\doxysubsubsection{\texorpdfstring{setName()}{setName()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_builder_a3c6e552b15a332f5fb9646215f6f2713} 
+\mbox{\hyperlink{class_eng_1_1_builder}{Eng\+::\+Builder}} \& Builder\+::set\+Name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{}\end{DoxyParamCaption})}
+
+
+
+Assigns a name to the mesh being built. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name to set for the mesh. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to this \doxylink{class_eng_1_1_builder}{Builder} for chaining. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Builder.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,223 @@
+\doxysection{Eng\+::Callback\+Manager Class Reference}
+\hypertarget{class_eng_1_1_callback_manager}{}\label{class_eng_1_1_callback_manager}\index{Eng::CallbackManager@{Eng::CallbackManager}}
+
+
+Manages Free\+GLUT callbacks and keyboard bindings for the graphics engine.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_eng_1_1_callback_manager_aca2eb637c0eb2c8591eb8a0f0d3b405e}\label{class_eng_1_1_callback_manager_aca2eb637c0eb2c8591eb8a0f0d3b405e} 
+using {\bfseries Display\+Func} = std\+::function$<$void()$>$
+\begin{DoxyCompactList}\small\item\em Function type for display/render callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_callback_manager_a12197e3ff9d7ed54c8067716cd0f7b5c}\label{class_eng_1_1_callback_manager_a12197e3ff9d7ed54c8067716cd0f7b5c} 
+using {\bfseries Reshape\+Func} = std\+::function$<$void(int, int)$>$
+\begin{DoxyCompactList}\small\item\em Function type for window reshape callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_callback_manager_ad454554111f88cce3302e13c04c1e82c}\label{class_eng_1_1_callback_manager_ad454554111f88cce3302e13c04c1e82c} 
+using {\bfseries Keyboard\+Func} = std\+::function$<$void(unsigned char, int, int)$>$
+\begin{DoxyCompactList}\small\item\em Function type for keyboard input callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_callback_manager_ab2e145154b699c2a0dc4f08580a0f536}\label{class_eng_1_1_callback_manager_ab2e145154b699c2a0dc4f08580a0f536} 
+using {\bfseries Special\+Func} = std\+::function$<$void(int, int, int)$>$
+\begin{DoxyCompactList}\small\item\em Function type for special key callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_callback_manager_a71fc9e91305ac66066d24160ac04d9e5}\label{class_eng_1_1_callback_manager_a71fc9e91305ac66066d24160ac04d9e5} 
+using {\bfseries Close\+Func} = std\+::function$<$void()$>$
+\begin{DoxyCompactList}\small\item\em Function type for application cleanup callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_callback_manager_a8400b87a4441114f4e307e22dedc9e2d}\label{class_eng_1_1_callback_manager_a8400b87a4441114f4e307e22dedc9e2d} 
+using {\bfseries Render\+Call\+Back} = std\+::function$<$void()$>$
+\begin{DoxyCompactList}\small\item\em Function type for optional render callbacks. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_eng_1_1_callback_manager_ae48245dc7cfaae632e48f4449857f898}{initialize}} ()
+\begin{DoxyCompactList}\small\item\em Registers the current callbacks with Free\+GLUT. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_callback_manager_ae9762d0d799139be4cad62e46cfdc5d2}\label{class_eng_1_1_callback_manager_ae9762d0d799139be4cad62e46cfdc5d2} 
+{\bfseries Callback\+Manager} (const \mbox{\hyperlink{class_eng_1_1_callback_manager}{Callback\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_eng_1_1_callback_manager_a76ce2af26633a7e923036ef8f1c49bf6}\label{class_eng_1_1_callback_manager_a76ce2af26633a7e923036ef8f1c49bf6} 
+\mbox{\hyperlink{class_eng_1_1_callback_manager}{Callback\+Manager}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_eng_1_1_callback_manager}{Callback\+Manager}} \&)=delete
+\item 
+void \mbox{\hyperlink{class_eng_1_1_callback_manager_a137419fafe7ed8b485c87a3ef4518228}{set\+Display\+Callback}} (\mbox{\hyperlink{class_eng_1_1_callback_manager_aca2eb637c0eb2c8591eb8a0f0d3b405e}{Display\+Func}} func)
+\begin{DoxyCompactList}\small\item\em Sets a custom display callback. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_callback_manager_a04010e9a421e9b40128550a7c5f8174e}{set\+Reshape\+Callback}} (\mbox{\hyperlink{class_eng_1_1_callback_manager_a12197e3ff9d7ed54c8067716cd0f7b5c}{Reshape\+Func}} func)
+\begin{DoxyCompactList}\small\item\em Sets a custom reshape callback. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_callback_manager_a8942a71aebb1107189b364cbb0aa825c}\label{class_eng_1_1_callback_manager_a8942a71aebb1107189b364cbb0aa825c} 
+void {\bfseries register\+Key\+Binding} (char key, const std\+::string \&description, \mbox{\hyperlink{class_eng_1_1_callback_manager_ad454554111f88cce3302e13c04c1e82c}{Keyboard\+Func}} func)
+\begin{DoxyCompactList}\small\item\em Registers a key binding. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_callback_manager_aba95cf18db7c6ff2d192ed63dbde5516}{set\+Special\+Callback}} (\mbox{\hyperlink{class_eng_1_1_callback_manager_ab2e145154b699c2a0dc4f08580a0f536}{Special\+Func}} func)
+\begin{DoxyCompactList}\small\item\em Sets a custom special key callback. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_callback_manager_a2f95875098751a738aaac619b56bc9ab}{set\+Close\+Callback}} (\mbox{\hyperlink{class_eng_1_1_callback_manager_a71fc9e91305ac66066d24160ac04d9e5}{Close\+Func}} func)
+\begin{DoxyCompactList}\small\item\em Sets a custom close callback. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_callback_manager_ad81e366ec99c2ce87088419962fd4ff5}{register\+Render\+Callback}} (std\+::string id, const \mbox{\hyperlink{class_eng_1_1_callback_manager_a8400b87a4441114f4e307e22dedc9e2d}{Render\+Call\+Back}} \&func)
+\begin{DoxyCompactList}\small\item\em Registers a render callback with a unique identifier. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_callback_manager_a3d69bc6a61532c6e9b3770eba026789e}{deregister\+Callback}} (const std\+::string \&id)
+\begin{DoxyCompactList}\small\item\em Deregisters a render callback using its identifier. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_callback_manager_a53a13957965bbee5ba8cf5e2d1f455d2}{execute\+Render\+Callbacks}} () const
+\begin{DoxyCompactList}\small\item\em Executes all registered render callbacks. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_callback_manager_ad91512060bdb1e33c8193cd00a6cec97}\label{class_eng_1_1_callback_manager_ad91512060bdb1e33c8193cd00a6cec97} 
+bool {\bfseries is\+Help\+Menu\+Visible} () const
+\item 
+\Hypertarget{class_eng_1_1_callback_manager_ae780b35aaeb4507f7180d23340c1b7ec}\label{class_eng_1_1_callback_manager_ae780b35aaeb4507f7180d23340c1b7ec} 
+const std\+::unordered\+\_\+map$<$ char, \mbox{\hyperlink{struct_eng_1_1_key_info}{Key\+Info}} $>$ \& {\bfseries get\+Key\+Bindings} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_eng_1_1_callback_manager}{Callback\+Manager}} \& \mbox{\hyperlink{class_eng_1_1_callback_manager_a9a6745747437d5c8f95c88f3198e3f1d}{get\+Instance}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the singleton instance of the \doxylink{class_eng_1_1_callback_manager}{Callback\+Manager}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages Free\+GLUT callbacks and keyboard bindings for the graphics engine. 
+
+The \doxylink{class_eng_1_1_callback_manager}{Callback\+Manager} implements the Singleton pattern to provide centralized management of all input and rendering callbacks. It handles\+:
+\begin{DoxyItemize}
+\item Registration and execution of display, reshape, keyboard, and special key callbacks
+\item Management of custom render callbacks that can be dynamically added/removed
+\item Maintenance of a help menu system showing available keyboard shortcuts
+\item Coordination of core engine functionality like FPS display and coordinate axes 
+\end{DoxyItemize}
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_callback_manager_a3d69bc6a61532c6e9b3770eba026789e}\index{Eng::CallbackManager@{Eng::CallbackManager}!deregisterCallback@{deregisterCallback}}
+\index{deregisterCallback@{deregisterCallback}!Eng::CallbackManager@{Eng::CallbackManager}}
+\doxysubsubsection{\texorpdfstring{deregisterCallback()}{deregisterCallback()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_callback_manager_a3d69bc6a61532c6e9b3770eba026789e} 
+void Callback\+Manager\+::deregister\+Callback (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{id}{}\end{DoxyParamCaption})}
+
+
+
+Deregisters a render callback using its identifier. 
+
+Removes a previously registered render callback from the internal storage, preventing it from being executed during the rendering process.
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The unique string identifier of the callback to be deregistered. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_callback_manager_a53a13957965bbee5ba8cf5e2d1f455d2}\index{Eng::CallbackManager@{Eng::CallbackManager}!executeRenderCallbacks@{executeRenderCallbacks}}
+\index{executeRenderCallbacks@{executeRenderCallbacks}!Eng::CallbackManager@{Eng::CallbackManager}}
+\doxysubsubsection{\texorpdfstring{executeRenderCallbacks()}{executeRenderCallbacks()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_callback_manager_a53a13957965bbee5ba8cf5e2d1f455d2} 
+void Callback\+Manager\+::execute\+Render\+Callbacks (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Executes all registered render callbacks. 
+
+Iterates over all registered render callbacks and executes them in the order of registration. This method is typically called during the rendering loop to execute optional rendering logic. \Hypertarget{class_eng_1_1_callback_manager_a9a6745747437d5c8f95c88f3198e3f1d}\index{Eng::CallbackManager@{Eng::CallbackManager}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!Eng::CallbackManager@{Eng::CallbackManager}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_callback_manager_a9a6745747437d5c8f95c88f3198e3f1d} 
+\mbox{\hyperlink{class_eng_1_1_callback_manager}{Eng\+::\+Callback\+Manager}} \& Callback\+Manager\+::get\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Retrieves the singleton instance of the \doxylink{class_eng_1_1_callback_manager}{Callback\+Manager}. 
+
+\begin{DoxyReturn}{Returns}
+Reference to the \doxylink{class_eng_1_1_callback_manager}{Callback\+Manager} instance. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_callback_manager_ae48245dc7cfaae632e48f4449857f898}\index{Eng::CallbackManager@{Eng::CallbackManager}!initialize@{initialize}}
+\index{initialize@{initialize}!Eng::CallbackManager@{Eng::CallbackManager}}
+\doxysubsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_callback_manager_ae48245dc7cfaae632e48f4449857f898} 
+bool Callback\+Manager\+::initialize (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Registers the current callbacks with Free\+GLUT. 
+
+\begin{DoxyReturn}{Returns}
+Returns true if initialized correctly, false if already initualized or an error occurred. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_callback_manager_ad81e366ec99c2ce87088419962fd4ff5}\index{Eng::CallbackManager@{Eng::CallbackManager}!registerRenderCallback@{registerRenderCallback}}
+\index{registerRenderCallback@{registerRenderCallback}!Eng::CallbackManager@{Eng::CallbackManager}}
+\doxysubsubsection{\texorpdfstring{registerRenderCallback()}{registerRenderCallback()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_callback_manager_ad81e366ec99c2ce87088419962fd4ff5} 
+void Callback\+Manager\+::register\+Render\+Callback (\begin{DoxyParamCaption}\item[{std\+::string}]{id}{, }\item[{const \mbox{\hyperlink{class_eng_1_1_callback_manager_a8400b87a4441114f4e307e22dedc9e2d}{Render\+Call\+Back}} \&}]{callback}{}\end{DoxyParamCaption})}
+
+
+
+Registers a render callback with a unique identifier. 
+
+This method allows registering a rendering callback function associated with a specific identifier. The callback will be executed during the rendering process if registered.
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & A unique string identifier for the callback. \\
+\hline
+{\em callback} & The render callback function to be registered. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_callback_manager_a2f95875098751a738aaac619b56bc9ab}\index{Eng::CallbackManager@{Eng::CallbackManager}!setCloseCallback@{setCloseCallback}}
+\index{setCloseCallback@{setCloseCallback}!Eng::CallbackManager@{Eng::CallbackManager}}
+\doxysubsubsection{\texorpdfstring{setCloseCallback()}{setCloseCallback()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_callback_manager_a2f95875098751a738aaac619b56bc9ab} 
+void Callback\+Manager\+::set\+Close\+Callback (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_eng_1_1_callback_manager_a71fc9e91305ac66066d24160ac04d9e5}{Close\+Func}}}]{func}{}\end{DoxyParamCaption})}
+
+
+
+Sets a custom close callback. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em func} & The custom callback function for application cleanup. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_callback_manager_a137419fafe7ed8b485c87a3ef4518228}\index{Eng::CallbackManager@{Eng::CallbackManager}!setDisplayCallback@{setDisplayCallback}}
+\index{setDisplayCallback@{setDisplayCallback}!Eng::CallbackManager@{Eng::CallbackManager}}
+\doxysubsubsection{\texorpdfstring{setDisplayCallback()}{setDisplayCallback()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_callback_manager_a137419fafe7ed8b485c87a3ef4518228} 
+void Callback\+Manager\+::set\+Display\+Callback (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_eng_1_1_callback_manager_aca2eb637c0eb2c8591eb8a0f0d3b405e}{Display\+Func}}}]{func}{}\end{DoxyParamCaption})}
+
+
+
+Sets a custom display callback. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em func} & The custom callback function for rendering the scene. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_callback_manager_a04010e9a421e9b40128550a7c5f8174e}\index{Eng::CallbackManager@{Eng::CallbackManager}!setReshapeCallback@{setReshapeCallback}}
+\index{setReshapeCallback@{setReshapeCallback}!Eng::CallbackManager@{Eng::CallbackManager}}
+\doxysubsubsection{\texorpdfstring{setReshapeCallback()}{setReshapeCallback()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_callback_manager_a04010e9a421e9b40128550a7c5f8174e} 
+void Callback\+Manager\+::set\+Reshape\+Callback (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_eng_1_1_callback_manager_a12197e3ff9d7ed54c8067716cd0f7b5c}{Reshape\+Func}}}]{func}{}\end{DoxyParamCaption})}
+
+
+
+Sets a custom reshape callback. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em func} & The custom callback function for handling window resizing. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_callback_manager_aba95cf18db7c6ff2d192ed63dbde5516}\index{Eng::CallbackManager@{Eng::CallbackManager}!setSpecialCallback@{setSpecialCallback}}
+\index{setSpecialCallback@{setSpecialCallback}!Eng::CallbackManager@{Eng::CallbackManager}}
+\doxysubsubsection{\texorpdfstring{setSpecialCallback()}{setSpecialCallback()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_callback_manager_aba95cf18db7c6ff2d192ed63dbde5516} 
+void Callback\+Manager\+::set\+Special\+Callback (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_eng_1_1_callback_manager_ab2e145154b699c2a0dc4f08580a0f536}{Special\+Func}}}]{func}{}\end{DoxyParamCaption})}
+
+
+
+Sets a custom special key callback. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em func} & The custom callback function for special key input. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Callback\+Manager.\+cpp\end{DoxyCompactItemize}

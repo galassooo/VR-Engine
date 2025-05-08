@@ -2,23 +2,78 @@
 \hypertarget{_list_8h_source}{}\label{_list_8h_source}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
-\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00002\ }
 \DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <memory>}}
-\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Node.h"{}}}
-\DoxyCodeLine{00005\ }
-\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_list}{List}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_object}{Object}}\ \{}
-\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{class_list_a64d878a92d11f7c63c70cbe4e7dd4176}{List}}();}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }ENG\_API\ List\ final\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_eng_1_1_object}{Eng::Object}}\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ List();}
+\DoxyCodeLine{00015\ \ \ \ \ \string~List();}
 \DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_list_a24a3265d516e8f44e3e79926bdee881b}{addNode}}(\textcolor{keyword}{const}\ std::shared\_ptr<Object>\&\ node);}
-\DoxyCodeLine{00018\ }
-\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_list_a3fad6292bd5126eeb437317383338cea}{clear}}();}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ addNode(\textcolor{keyword}{const}\ std::shared\_ptr<Eng::Node>\&\ node,\ \textcolor{keyword}{const}\ glm::mat4\&\ finalMatrix);}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ render()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ clear();}
 \DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_list_a819f0efb82263b15326e610b13623174}{render}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{bool}\ isWithinCullingSphere(\textcolor{keyword}{const}\ std::shared\_ptr<Eng::Mesh>\&\ mesh);}
 \DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00024\ \ \ \ \ std::vector<std::shared\_ptr<Object>>\ nodes;\ \textcolor{comment}{//-\/>\ Sorted\ list\ of\ renderable\ nodes}}
-\DoxyCodeLine{00025\ \};}
-\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ setEyeViewMatrix(glm::mat4\&\ viewMatrix);}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ setEyeProjectionMatrix(glm::mat4\&\ eyeProjectionMatrix);}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ setGlobalLightColor(\textcolor{keyword}{const}\ glm::vec3\&\ globalColor);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ setCurrentFBO(\mbox{\hyperlink{class_eng_1_1_fbo}{Eng::Fbo}}*\ fbo)\ \{\ currentFBO\ =\ std::shared\_ptr<Eng::Fbo>(fbo,\ [](\mbox{\hyperlink{class_eng_1_1_fbo}{Eng::Fbo}}*)\ \{\});\ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ std::vector<std::shared\_ptr<Eng::ListElement>>\ getElements()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ std::shared\_ptr<Eng::BoundingBox>\ getSceneBoundingBox();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ std::vector<glm::vec3>\ getEyeFrustumCorners();}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{class_eng_1_1_list_iterator}{Eng::ListIterator}}\ getLayerIterator(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Eng::RenderLayer}}\&\ layer);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ glm::vec3\ getGlobalLightColor()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ globalLightColor;\ \}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ glm::mat4\ getEyeViewMatrix()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ eyeViewMatrix;\ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ glm::mat4\ getEyeProjectionMatrix()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ eyeProjectionMatrix;\ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{//\ Forward\ declarations}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{struct\ }CullingSphere;}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00054\ \ \ \ \ std::vector<std::shared\_ptr<Eng::ListElement>>\ elements;}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ MAX\_LIGHTS\ =\ 8;}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ Externally\ set\ private\ values\ }}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ glm::mat4\ eyeViewMatrix;}
+\DoxyCodeLine{00061\ \ \ \ \ glm::mat4\ eyeProjectionMatrix;}
+\DoxyCodeLine{00062\ \ \ \ \ glm::vec3\ globalLightColor\ =\ glm::vec3(0.0f,\ 0.0f,\ 0.0f);}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ std::shared\_ptr<Eng::Fbo>\ currentFBO\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ Computed\ private\ values}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{int}\ lightsCount\ =\ 0;}
+\DoxyCodeLine{00069\ \ \ \ \ std::shared\_ptr<Eng::BoundingBox>\ sceneBoundingBox\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{//\ \ Cached\ values}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ std::unique\_ptr<CullingSphere>\ cullingSphereCached\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00074\ \ \ \ \ std::unique\_ptr<std::vector<glm::vec3>>\ frustumCornersCached\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00075\ \ \ \ \ std::shared\_ptr<Eng::ListIterator>\ lightsIteratorCached\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00076\ \ \ \ \ std::shared\_ptr<Eng::ListIterator>\ opaqueIteratorCached\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00077\ \ \ \ \ std::shared\_ptr<Eng::ListIterator>\ transparentIteratorCached\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{//\ Private\ Methods}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ std::shared\_ptr<std::vector<std::shared\_ptr<Eng::ListElement>>>\ getElements(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Eng::RenderLayer}}\&\ layer);}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ computeCullingSphere();}
+\DoxyCodeLine{00083\ \ \ \ \ std::vector<glm::vec3>\ computeFrustumCorners(glm::mat4\ projectionMatrix,\ glm::mat4\ viewMatrix);}
+\DoxyCodeLine{00084\ \};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ }
 
 \end{DoxyCode}

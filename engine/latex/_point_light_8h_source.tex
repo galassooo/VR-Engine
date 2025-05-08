@@ -3,16 +3,15 @@
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
 \DoxyCodeLine{00002\ }
-\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Light.h"{}}}
-\DoxyCodeLine{00004\ }
-\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_point_light}{PointLight}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_light}{Light}}\ \{}
-\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{class_point_light_aab8d7df7f6ad4b3facc14929888dd72f}{PointLight}}(\textcolor{keyword}{const}\ glm::vec3\&\ color,\ \textcolor{keywordtype}{float}\ intensity,\ \textcolor{keywordtype}{float}\ attenuation);}
-\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_point_light_acb7e46a753230cec1057d49665544b18}{applyLighting}}()\ \textcolor{keyword}{const\ override};}
-\DoxyCodeLine{00017\ \ \ \ \ glm::vec3\ \mbox{\hyperlink{class_point_light_a97e7cd105999943abde2b9ecd695e9ce}{getPosition}}()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00018\ }
-\DoxyCodeLine{00019\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{float}\ attenuation;}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }ENG\_API\ PointLight\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_eng_1_1_light}{Eng::Light}}\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ PointLight(\textcolor{keyword}{const}\ glm::vec3\ \&\mbox{\hyperlink{class_eng_1_1_light_ab24685c1d412233dc95bf9bdd6e52e29}{color}},\ \textcolor{keywordtype}{float}\ attenuation);}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ glm::vec3\ getPosition()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00018\ \ \ \ \textcolor{keywordtype}{void}\ configureLight(\textcolor{keyword}{const}\ glm::mat4\ \&viewMatrix)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00020\ \ \ \ \textcolor{keywordtype}{float}\ attenuation;}
 \DoxyCodeLine{00021\ \};}
 
 \end{DoxyCode}

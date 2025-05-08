@@ -1,0 +1,156 @@
+\doxysection{Eng\+::Bounding\+Box Class Reference}
+\hypertarget{class_eng_1_1_bounding_box}{}\label{class_eng_1_1_bounding_box}\index{Eng::BoundingBox@{Eng::BoundingBox}}
+
+
+Axis-\/aligned bounding box for 3D objects.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_bounding_box_a334ff93f54ea3be11df2aa4c382a2263}{Bounding\+Box}} (const glm\+::vec3 \&min, const glm\+::vec3 \&max)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_eng_1_1_bounding_box}{Bounding\+Box} with given minimum and maximum corners. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_bounding_box_af4f60d6f55ede07160d5d84f06897e3e}{update}} (const glm\+::vec3 \&point)
+\begin{DoxyCompactList}\small\item\em Updates the bounding box to include the specified point. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_bounding_box_a876e7647cb376be09cef85a12749fa84}{get\+Center}} () const
+\begin{DoxyCompactList}\small\item\em Computes the center point of the bounding box. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_bounding_box_aff6939c98064ad4182a56c48191b996a}{get\+Size}} () const
+\begin{DoxyCompactList}\small\item\em Computes the size (extent) of the bounding box along each axis. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_bounding_box_ab621478913cb05ab3b7ca223e1921642}{get\+Min}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the minimum corner of the bounding box. \end{DoxyCompactList}\item 
+glm\+::vec3 \mbox{\hyperlink{class_eng_1_1_bounding_box_a5bef045ebde5b773a1f320ceff20cc72}{get\+Max}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the maximum corner of the bounding box. \end{DoxyCompactList}\item 
+std\+::vector$<$ glm\+::vec3 $>$ \mbox{\hyperlink{class_eng_1_1_bounding_box_a5ffc85a842a1813e6aeb44635ae82f7f}{get\+Vertices}} ()
+\begin{DoxyCompactList}\small\item\em Computes and returns all eight corner vertices of the bounding box. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_bounding_box_a6a98cfd89ff80d72e536ddbe44febfd1}{reset}} ()
+\begin{DoxyCompactList}\small\item\em Resets the bounding box to an empty state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Axis-\/aligned bounding box for 3D objects. 
+
+Maintains minimum and maximum corner points, and provides methods to update bounds, compute center, size, and retrieve corner vertices. Automatically expands to include new points. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_bounding_box_a334ff93f54ea3be11df2aa4c382a2263}\index{Eng::BoundingBox@{Eng::BoundingBox}!BoundingBox@{BoundingBox}}
+\index{BoundingBox@{BoundingBox}!Eng::BoundingBox@{Eng::BoundingBox}}
+\doxysubsubsection{\texorpdfstring{BoundingBox()}{BoundingBox()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bounding_box_a334ff93f54ea3be11df2aa4c382a2263} 
+Bounding\+Box\+::\+Bounding\+Box (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{min}{, }\item[{const glm\+::vec3 \&}]{max}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_eng_1_1_bounding_box}{Bounding\+Box} with given minimum and maximum corners. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em min} & Initial minimum corner of the bounding box. \\
+\hline
+{\em max} & Initial maximum corner of the bounding box. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_bounding_box_a876e7647cb376be09cef85a12749fa84}\index{Eng::BoundingBox@{Eng::BoundingBox}!getCenter@{getCenter}}
+\index{getCenter@{getCenter}!Eng::BoundingBox@{Eng::BoundingBox}}
+\doxysubsubsection{\texorpdfstring{getCenter()}{getCenter()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bounding_box_a876e7647cb376be09cef85a12749fa84} 
+glm\+::vec3 Bounding\+Box\+::get\+Center (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Computes the center point of the bounding box. 
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec3 Coordinates of the bounding box center. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_bounding_box_a5bef045ebde5b773a1f320ceff20cc72}\index{Eng::BoundingBox@{Eng::BoundingBox}!getMax@{getMax}}
+\index{getMax@{getMax}!Eng::BoundingBox@{Eng::BoundingBox}}
+\doxysubsubsection{\texorpdfstring{getMax()}{getMax()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bounding_box_a5bef045ebde5b773a1f320ceff20cc72} 
+glm\+::vec3 Bounding\+Box\+::get\+Max (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the maximum corner of the bounding box. 
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec3 The current maximum corner coordinates. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_bounding_box_ab621478913cb05ab3b7ca223e1921642}\index{Eng::BoundingBox@{Eng::BoundingBox}!getMin@{getMin}}
+\index{getMin@{getMin}!Eng::BoundingBox@{Eng::BoundingBox}}
+\doxysubsubsection{\texorpdfstring{getMin()}{getMin()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bounding_box_ab621478913cb05ab3b7ca223e1921642} 
+glm\+::vec3 Bounding\+Box\+::get\+Min (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Retrieves the minimum corner of the bounding box. 
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec3 The current minimum corner coordinates. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_bounding_box_aff6939c98064ad4182a56c48191b996a}\index{Eng::BoundingBox@{Eng::BoundingBox}!getSize@{getSize}}
+\index{getSize@{getSize}!Eng::BoundingBox@{Eng::BoundingBox}}
+\doxysubsubsection{\texorpdfstring{getSize()}{getSize()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bounding_box_aff6939c98064ad4182a56c48191b996a} 
+glm\+::vec3 Bounding\+Box\+::get\+Size (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Computes the size (extent) of the bounding box along each axis. 
+
+\begin{DoxyReturn}{Returns}
+glm\+::vec3 Difference between max and min corners. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_bounding_box_a5ffc85a842a1813e6aeb44635ae82f7f}\index{Eng::BoundingBox@{Eng::BoundingBox}!getVertices@{getVertices}}
+\index{getVertices@{getVertices}!Eng::BoundingBox@{Eng::BoundingBox}}
+\doxysubsubsection{\texorpdfstring{getVertices()}{getVertices()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bounding_box_a5ffc85a842a1813e6aeb44635ae82f7f} 
+std\+::vector$<$ glm\+::vec3 $>$ Bounding\+Box\+::get\+Vertices (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Computes and returns all eight corner vertices of the bounding box. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$glm\+::vec3$>$ \doxylink{class_eng_1_1_list}{List} of eight corner positions. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_bounding_box_a6a98cfd89ff80d72e536ddbe44febfd1}\index{Eng::BoundingBox@{Eng::BoundingBox}!reset@{reset}}
+\index{reset@{reset}!Eng::BoundingBox@{Eng::BoundingBox}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bounding_box_a6a98cfd89ff80d72e536ddbe44febfd1} 
+void Bounding\+Box\+::reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Resets the bounding box to an empty state. 
+
+Sets min to large positive values and max to large negative values, making the box invalid until updated with points. \Hypertarget{class_eng_1_1_bounding_box_af4f60d6f55ede07160d5d84f06897e3e}\index{Eng::BoundingBox@{Eng::BoundingBox}!update@{update}}
+\index{update@{update}!Eng::BoundingBox@{Eng::BoundingBox}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bounding_box_af4f60d6f55ede07160d5d84f06897e3e} 
+void Bounding\+Box\+::update (\begin{DoxyParamCaption}\item[{const glm\+::vec3 \&}]{point}{}\end{DoxyParamCaption})}
+
+
+
+Updates the bounding box to include the specified point. 
+
+Expands the min and max corners as needed to encompass the new point.
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & 3D point to include in the bounding box. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Bounding\+Box.\+cpp\end{DoxyCompactItemize}

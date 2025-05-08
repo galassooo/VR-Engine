@@ -9,19 +9,44 @@ Represents the material properties of a 3D object, including color, shininess, a
 
 {\ttfamily \#include $<$Material.\+h$>$}
 
+Inheritance diagram for Material\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_material}
+\end{center}
+\end{figure}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{class_material_a8d4edf9a76f6f92230b68fdf652bac4a}\label{class_material_a8d4edf9a76f6f92230b68fdf652bac4a} 
-{\bfseries Material} (const glm\+::vec3 \&color, float shininess)
+\Hypertarget{class_material_ab06d6998936d612cc010fb68ac6707f8}\label{class_material_ab06d6998936d612cc010fb68ac6707f8} 
+{\bfseries Material} (const glm\+::vec3 \&albedo, float alpha, float shininess, const glm\+::vec3 emission)
 \item 
-\Hypertarget{class_material_aab8fd35ae9d69c0e88976a8210576a72}\label{class_material_aab8fd35ae9d69c0e88976a8210576a72} 
-void {\bfseries apply} () const
-\begin{DoxyCompactList}\small\item\em Send material data to shader. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_material_aeee8a41d4ccd2454f356749d73f02ca4}{set\+Diffuse\+Texture}} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_texture}{Texture}} $>$ \&texture)
-\begin{DoxyCompactList}\small\item\em Set Materual Diffuse\+Texture. \end{DoxyCompactList}\item 
-std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_texture}{Texture}} $>$ \mbox{\hyperlink{class_material_aa4d0cea4bb2610d6a3b60859c98255e7}{get\+Diffuse\+Texture}} () const
-\begin{DoxyCompactList}\small\item\em Get current materual texture. \end{DoxyCompactList}\end{DoxyCompactItemize}
+virtual void \mbox{\hyperlink{class_material_acc39a640bb9149682fe82a507d7023e5}{render}} () override
+\item 
+\Hypertarget{class_material_a2e50a6b9a9e33c2cda31b64fd7143dd1}\label{class_material_a2e50a6b9a9e33c2cda31b64fd7143dd1} 
+void {\bfseries set\+Diffuse\+Texture} (const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_texture}{Eng\+::\+Texture}} $>$ \&texture)
+\item 
+\Hypertarget{class_material_a9890b5bff35e6713026595aff1dbd544}\label{class_material_a9890b5bff35e6713026595aff1dbd544} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_eng_1_1_texture}{Eng\+::\+Texture}} $>$ {\bfseries get\+Diffuse\+Texture} () const
+\item 
+\Hypertarget{class_material_a2d9a88027c8270bdb517f5720ce5b411}\label{class_material_a2d9a88027c8270bdb517f5720ce5b411} 
+glm\+::vec3 {\bfseries get\+Albedo} () const
+\item 
+\Hypertarget{class_material_a85d93ae12ca34b523b6913ed259581bb}\label{class_material_a85d93ae12ca34b523b6913ed259581bb} 
+float {\bfseries get\+Alpha} () const
+\item 
+\Hypertarget{class_material_a637e561d0cb973e3a16164be2a140237}\label{class_material_a637e561d0cb973e3a16164be2a140237} 
+void {\bfseries set\+Alpha} (const float new\+Alpha)
+\item 
+\Hypertarget{class_material_a54102823ca7d4573021d7a17ef35079f}\label{class_material_a54102823ca7d4573021d7a17ef35079f} 
+glm\+::vec4 {\bfseries get\+Albedo\+With\+Alpha} () const
+\item 
+\Hypertarget{class_material_a5f811653808d852240ea21c44b94b88a}\label{class_material_a5f811653808d852240ea21c44b94b88a} 
+glm\+::vec3 {\bfseries get\+Emission} () const
+\item 
+\Hypertarget{class_material_ad1d61007fb84b063ae6ea2b82f49deba}\label{class_material_ad1d61007fb84b063ae6ea2b82f49deba} 
+void {\bfseries set\+Emission} (glm\+::vec3 emission\+New)
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -30,37 +55,18 @@ Represents the material properties of a 3D object, including color, shininess, a
 The {\ttfamily \doxylink{class_material}{Material}} class encapsulates visual properties used in rendering, such as color, shininess for specular highlights, and an optional diffuse texture. 
 
 \doxysubsection{Member Function Documentation}
-\Hypertarget{class_material_aa4d0cea4bb2610d6a3b60859c98255e7}\index{Material@{Material}!getDiffuseTexture@{getDiffuseTexture}}
-\index{getDiffuseTexture@{getDiffuseTexture}!Material@{Material}}
-\doxysubsubsection{\texorpdfstring{getDiffuseTexture()}{getDiffuseTexture()}}
-{\footnotesize\ttfamily \label{class_material_aa4d0cea4bb2610d6a3b60859c98255e7} 
-std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_texture}{Texture}} $>$ Material\+::get\+Diffuse\+Texture (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+\Hypertarget{class_material_acc39a640bb9149682fe82a507d7023e5}\index{Material@{Material}!render@{render}}
+\index{render@{render}!Material@{Material}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_material_acc39a640bb9149682fe82a507d7023e5} 
+virtual void Material\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
-Get current materual texture. 
-
-\begin{DoxyReturn}{Returns}
-texture shared ptr 
-\end{DoxyReturn}
-\Hypertarget{class_material_aeee8a41d4ccd2454f356749d73f02ca4}\index{Material@{Material}!setDiffuseTexture@{setDiffuseTexture}}
-\index{setDiffuseTexture@{setDiffuseTexture}!Material@{Material}}
-\doxysubsubsection{\texorpdfstring{setDiffuseTexture()}{setDiffuseTexture()}}
-{\footnotesize\ttfamily \label{class_material_aeee8a41d4ccd2454f356749d73f02ca4} 
-void Material\+::set\+Diffuse\+Texture (\begin{DoxyParamCaption}\item[{const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_texture}{Texture}} $>$ \&}]{texture}{}\end{DoxyParamCaption})}
+Implements \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}.
 
 
 
-Set Materual Diffuse\+Texture. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em texture} & shared\+\_\+ptr \\
-\hline
-\end{DoxyParams}
-
-
-The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-Material.\+h\item 
-Material.\+cpp\end{DoxyCompactItemize}
+Material.\+h\end{DoxyCompactItemize}

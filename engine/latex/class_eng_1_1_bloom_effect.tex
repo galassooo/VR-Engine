@@ -1,0 +1,206 @@
+\doxysection{Eng\+::Bloom\+Effect Class Reference}
+\hypertarget{class_eng_1_1_bloom_effect}{}\label{class_eng_1_1_bloom_effect}\index{Eng::BloomEffect@{Eng::BloomEffect}}
+
+
+Implements a post-\/processing bloom effect to simulate glow around bright areas.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+Inheritance diagram for Eng\+::Bloom\+Effect\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_eng_1_1_bloom_effect}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_eng_1_1_bloom_effect_a63cd6c93c1514b14469bbcc459d00fac}{init}} (int width, int height) override
+\begin{DoxyCompactList}\small\item\em Initializes the bloom effect with the specified dimensions. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_bloom_effect_ae5820821ea5da94061880c75ef770019}\label{class_eng_1_1_bloom_effect_ae5820821ea5da94061880c75ef770019} 
+void {\bfseries begin\+Scene\+Capture} ()
+\begin{DoxyCompactList}\small\item\em Starts rendering the scene to the internal bloom framebuffer. \end{DoxyCompactList}\item 
+\Hypertarget{class_eng_1_1_bloom_effect_af04b40991221abdefe35f69f24194266}\label{class_eng_1_1_bloom_effect_af04b40991221abdefe35f69f24194266} 
+void {\bfseries end\+Scene\+Capture} ()
+\begin{DoxyCompactList}\small\item\em Finalizes the bloom processing and renders the result to the screen. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_bloom_effect_ab4c8976e6b901a53d6b0716fa83b89a1}{is\+Initialized}} () const override
+\begin{DoxyCompactList}\small\item\em Checks if the bloom effect has been initialized. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_bloom_effect_aedca3846e9a558eed81a60ac59e0ac3c}{process\+External\+Texture}} (unsigned int input\+Texture, unsigned int output\+Texture, int width, int height)
+\begin{DoxyCompactList}\small\item\em Processes an external input texture and outputs the bloom result to another texture. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_bloom_effect_ae0b0334eee79544107c8ec4882b23b4c}{apply\+Effect}} (unsigned int input\+Texture, unsigned int output\+Texture, int width, int height) override
+\begin{DoxyCompactList}\small\item\em Applies bloom to an input texture and renders the result to an output texture With error handling and fallback to direct copy if bloom fails. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_bloom_effect_ae629920b8e7e1366f3fe59f5f480400d}{set\+Parameter}} (const std\+::string \&name, float value) override
+\begin{DoxyCompactList}\small\item\em Sets a parameter for the bloom effect. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_bloom_effect_a2cf8f0f018672024e7dca39fd73ca073}{get\+Name}} () const override
+\begin{DoxyCompactList}\small\item\em Gets the name of this post-\/processor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_bloom_effect_acbdea446618f29e1713b2d34ecc45218}{analyze\+Texture\+HDRContent}} (unsigned int texture\+ID, int width, int height)
+\begin{DoxyCompactList}\small\item\em Analyzes the HDR content of a texture for debugging and diagnostics. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implements a post-\/processing bloom effect to simulate glow around bright areas. 
+
+This class handles the main steps of the bloom effect\+:
+\begin{DoxyEnumerate}
+\item Extracts bright areas from the scene
+\item Applies a Gaussian blur to these areas
+\item Combines the blurred brightness with the original scene 
+\end{DoxyEnumerate}
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_bloom_effect_acbdea446618f29e1713b2d34ecc45218}\index{Eng::BloomEffect@{Eng::BloomEffect}!analyzeTextureHDRContent@{analyzeTextureHDRContent}}
+\index{analyzeTextureHDRContent@{analyzeTextureHDRContent}!Eng::BloomEffect@{Eng::BloomEffect}}
+\doxysubsubsection{\texorpdfstring{analyzeTextureHDRContent()}{analyzeTextureHDRContent()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bloom_effect_acbdea446618f29e1713b2d34ecc45218} 
+void Bloom\+Effect\+::analyze\+Texture\+HDRContent (\begin{DoxyParamCaption}\item[{unsigned int}]{texture\+ID}{, }\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})}
+
+
+
+Analyzes the HDR content of a texture for debugging and diagnostics. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em texture\+ID} & Open\+GL texture ID to analyze \\
+\hline
+{\em width} & Width of the texture \\
+\hline
+{\em height} & Height of the texture \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_eng_1_1_bloom_effect_ae0b0334eee79544107c8ec4882b23b4c}\index{Eng::BloomEffect@{Eng::BloomEffect}!applyEffect@{applyEffect}}
+\index{applyEffect@{applyEffect}!Eng::BloomEffect@{Eng::BloomEffect}}
+\doxysubsubsection{\texorpdfstring{applyEffect()}{applyEffect()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bloom_effect_ae0b0334eee79544107c8ec4882b23b4c} 
+void Bloom\+Effect\+::apply\+Effect (\begin{DoxyParamCaption}\item[{unsigned int}]{input\+Texture}{, }\item[{unsigned int}]{output\+Texture}{, }\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Applies bloom to an input texture and renders the result to an output texture With error handling and fallback to direct copy if bloom fails. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+Texture} & Open\+GL texture ID containing the input image \\
+\hline
+{\em output\+Texture} & Open\+GL texture ID where the result will be written \\
+\hline
+{\em width} & Width of the textures \\
+\hline
+{\em height} & Height of the textures \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_eng_1_1_post_processor_ace868ee126d9f599f3391b365179faee}{Eng\+::\+Post\+Processor}}.
+
+\Hypertarget{class_eng_1_1_bloom_effect_a2cf8f0f018672024e7dca39fd73ca073}\index{Eng::BloomEffect@{Eng::BloomEffect}!getName@{getName}}
+\index{getName@{getName}!Eng::BloomEffect@{Eng::BloomEffect}}
+\doxysubsubsection{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bloom_effect_a2cf8f0f018672024e7dca39fd73ca073} 
+std\+::string Bloom\+Effect\+::get\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets the name of this post-\/processor. 
+
+\begin{DoxyReturn}{Returns}
+The name "{}\+Bloom\+Effect"{} 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_eng_1_1_post_processor_ab37e81b3e3b2d672e4dbe6355d554674}{Eng\+::\+Post\+Processor}}.
+
+\Hypertarget{class_eng_1_1_bloom_effect_a63cd6c93c1514b14469bbcc459d00fac}\index{Eng::BloomEffect@{Eng::BloomEffect}!init@{init}}
+\index{init@{init}!Eng::BloomEffect@{Eng::BloomEffect}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bloom_effect_a63cd6c93c1514b14469bbcc459d00fac} 
+bool Bloom\+Effect\+::init (\begin{DoxyParamCaption}\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Initializes the bloom effect with the specified dimensions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & Width of the effect\textquotesingle{}s render target \\
+\hline
+{\em height} & Height of the effect\textquotesingle{}s render target \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if initialization was successful, false otherwise 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_eng_1_1_post_processor_a60882dd21ea9c8f6ba8fbe48b4f79da0}{Eng\+::\+Post\+Processor}}.
+
+\Hypertarget{class_eng_1_1_bloom_effect_ab4c8976e6b901a53d6b0716fa83b89a1}\index{Eng::BloomEffect@{Eng::BloomEffect}!isInitialized@{isInitialized}}
+\index{isInitialized@{isInitialized}!Eng::BloomEffect@{Eng::BloomEffect}}
+\doxysubsubsection{\texorpdfstring{isInitialized()}{isInitialized()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bloom_effect_ab4c8976e6b901a53d6b0716fa83b89a1} 
+bool Bloom\+Effect\+::is\+Initialized (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Checks if the bloom effect has been initialized. 
+
+\begin{DoxyReturn}{Returns}
+true if the effect is initialized, false otherwise 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_eng_1_1_post_processor_af1080bc9018f3dcdb95d354c79294a76}{Eng\+::\+Post\+Processor}}.
+
+\Hypertarget{class_eng_1_1_bloom_effect_aedca3846e9a558eed81a60ac59e0ac3c}\index{Eng::BloomEffect@{Eng::BloomEffect}!processExternalTexture@{processExternalTexture}}
+\index{processExternalTexture@{processExternalTexture}!Eng::BloomEffect@{Eng::BloomEffect}}
+\doxysubsubsection{\texorpdfstring{processExternalTexture()}{processExternalTexture()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bloom_effect_aedca3846e9a558eed81a60ac59e0ac3c} 
+bool Bloom\+Effect\+::process\+External\+Texture (\begin{DoxyParamCaption}\item[{unsigned int}]{input\+Texture}{, }\item[{unsigned int}]{output\+Texture}{, }\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})}
+
+
+
+Processes an external input texture and outputs the bloom result to another texture. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+Texture} & Open\+GL texture ID containing the input image \\
+\hline
+{\em output\+Texture} & Open\+GL texture ID where the result will be written \\
+\hline
+{\em width} & Width of the textures \\
+\hline
+{\em height} & Height of the textures \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if processing was successful, false otherwise 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_bloom_effect_ae629920b8e7e1366f3fe59f5f480400d}\index{Eng::BloomEffect@{Eng::BloomEffect}!setParameter@{setParameter}}
+\index{setParameter@{setParameter}!Eng::BloomEffect@{Eng::BloomEffect}}
+\doxysubsubsection{\texorpdfstring{setParameter()}{setParameter()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_bloom_effect_ae629920b8e7e1366f3fe59f5f480400d} 
+void Bloom\+Effect\+::set\+Parameter (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{float}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Sets a parameter for the bloom effect. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Parameter name (e.\+g., "{}intensity"{}, "{}threshold"{}, "{}passes"{}) \\
+\hline
+{\em value} & Parameter value as a float \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_eng_1_1_post_processor_a0a14ade3c8e63191fc5e1c074d5ad1d9}{Eng\+::\+Post\+Processor}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Bloom\+Effect.\+cpp\end{DoxyCompactItemize}

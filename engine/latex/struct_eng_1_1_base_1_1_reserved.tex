@@ -2,33 +2,42 @@
 \hypertarget{struct_eng_1_1_base_1_1_reserved}{}\label{struct_eng_1_1_base_1_1_reserved}\index{Eng::Base::Reserved@{Eng::Base::Reserved}}
 
 
-\doxylink{class_eng_1_1_base}{Base} class reserved structure (using PIMPL/\+Bridge design pattern \href{https://en.wikipedia.org/wiki/Opaque_pointer}{\texttt{ https\+://en.\+wikipedia.\+org/wiki/\+Opaque\+\_\+pointer}}).  
+PIMPL reserved data for \doxylink{class_eng_1_1_base}{Base}.  
 
 
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{struct_eng_1_1_base_1_1_reserved_a23a63ad2e2bb27c78351c21dd08e6ae1}{Reserved}} ()
-\end{DoxyCompactItemize}
+\Hypertarget{struct_eng_1_1_base_1_1_reserved_a23a63ad2e2bb27c78351c21dd08e6ae1}\label{struct_eng_1_1_base_1_1_reserved_a23a63ad2e2bb27c78351c21dd08e6ae1} 
+{\bfseries Reserved} ()
+\begin{DoxyCompactList}\small\item\em Constructs \doxylink{struct_eng_1_1_base_1_1_reserved}{Reserved} with default flags. \end{DoxyCompactList}\item 
+\Hypertarget{struct_eng_1_1_base_1_1_reserved_ac2dae714e906b79f0e215a1d597c28a2}\label{struct_eng_1_1_base_1_1_reserved_ac2dae714e906b79f0e215a1d597c28a2} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Reserved} ()
+\begin{DoxyCompactList}\small\item\em Destructs \doxylink{struct_eng_1_1_base_1_1_reserved}{Reserved}, freeing Open\+VR. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{struct_eng_1_1_base_1_1_reserved_a0c566c4c75e7ee7d668436f942dc9ec8}\label{struct_eng_1_1_base_1_1_reserved_a0c566c4c75e7ee7d668436f942dc9ec8} 
 bool {\bfseries init\+Flag}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Engine initialized flag. \end{DoxyCompactList}\item 
+\Hypertarget{struct_eng_1_1_base_1_1_reserved_a11b82cb4dc2d8f89ab9e9837cd3a66d5}\label{struct_eng_1_1_base_1_1_reserved_a11b82cb4dc2d8f89ab9e9837cd3a66d5} 
+bool {\bfseries ovr\+Ready}
+\begin{DoxyCompactList}\small\item\em Open\+VR initialized flag. \end{DoxyCompactList}\item 
+\Hypertarget{struct_eng_1_1_base_1_1_reserved_a1de0efa0d5cd71006617df89487940b8}\label{struct_eng_1_1_base_1_1_reserved_a1de0efa0d5cd71006617df89487940b8} 
+\mbox{\hyperlink{class_ov_v_r}{Ov\+VR}} \texorpdfstring{$\ast$}{*} {\bfseries ovr}
+\begin{DoxyCompactList}\small\item\em Open\+VR interface pointer. \end{DoxyCompactList}\item 
+\Hypertarget{struct_eng_1_1_base_1_1_reserved_a31a4ad06c83199a5349116cdfbb76cce}\label{struct_eng_1_1_base_1_1_reserved_a31a4ad06c83199a5349116cdfbb76cce} 
+int {\bfseries fbo\+SizeX}
+\begin{DoxyCompactList}\small\item\em VR framebuffer width. \end{DoxyCompactList}\item 
+\Hypertarget{struct_eng_1_1_base_1_1_reserved_a58f2ceec50561212601c7525ab42cb8f}\label{struct_eng_1_1_base_1_1_reserved_a58f2ceec50561212601c7525ab42cb8f} 
+int {\bfseries fbo\+SizeY}
+\begin{DoxyCompactList}\small\item\em VR framebuffer height. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-\doxylink{class_eng_1_1_base}{Base} class reserved structure (using PIMPL/\+Bridge design pattern \href{https://en.wikipedia.org/wiki/Opaque_pointer}{\texttt{ https\+://en.\+wikipedia.\+org/wiki/\+Opaque\+\_\+pointer}}). 
+PIMPL reserved data for \doxylink{class_eng_1_1_base}{Base}. 
 
-\doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{struct_eng_1_1_base_1_1_reserved_a23a63ad2e2bb27c78351c21dd08e6ae1}\index{Eng::Base::Reserved@{Eng::Base::Reserved}!Reserved@{Reserved}}
-\index{Reserved@{Reserved}!Eng::Base::Reserved@{Eng::Base::Reserved}}
-\doxysubsubsection{\texorpdfstring{Reserved()}{Reserved()}}
-{\footnotesize\ttfamily \label{struct_eng_1_1_base_1_1_reserved_a23a63ad2e2bb27c78351c21dd08e6ae1} 
-Eng\+::\+Base\+::\+Reserved\+::\+Reserved (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-Constructor. 
+Holds initialization flags, Open\+VR interface, and FBO sizes. 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

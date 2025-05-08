@@ -1,0 +1,48 @@
+\doxysection{Bounding\+Box Class Reference}
+\hypertarget{class_bounding_box}{}\label{class_bounding_box}\index{BoundingBox@{BoundingBox}}
+
+
+Axis-\/aligned bounding box for 3D objects.  
+
+
+
+
+{\ttfamily \#include $<$Bounding\+Box.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_bounding_box_a334ff93f54ea3be11df2aa4c382a2263}\label{class_bounding_box_a334ff93f54ea3be11df2aa4c382a2263} 
+{\bfseries Bounding\+Box} (const glm\+::vec3 \&min, const glm\+::vec3 \&max)
+\item 
+\Hypertarget{class_bounding_box_af4f60d6f55ede07160d5d84f06897e3e}\label{class_bounding_box_af4f60d6f55ede07160d5d84f06897e3e} 
+void {\bfseries update} (const glm\+::vec3 \&point)
+\item 
+\Hypertarget{class_bounding_box_a876e7647cb376be09cef85a12749fa84}\label{class_bounding_box_a876e7647cb376be09cef85a12749fa84} 
+glm\+::vec3 {\bfseries get\+Center} () const
+\item 
+\Hypertarget{class_bounding_box_aff6939c98064ad4182a56c48191b996a}\label{class_bounding_box_aff6939c98064ad4182a56c48191b996a} 
+glm\+::vec3 {\bfseries get\+Size} () const
+\item 
+\Hypertarget{class_bounding_box_ab621478913cb05ab3b7ca223e1921642}\label{class_bounding_box_ab621478913cb05ab3b7ca223e1921642} 
+glm\+::vec3 {\bfseries get\+Min} () const
+\item 
+\Hypertarget{class_bounding_box_a5bef045ebde5b773a1f320ceff20cc72}\label{class_bounding_box_a5bef045ebde5b773a1f320ceff20cc72} 
+glm\+::vec3 {\bfseries get\+Max} () const
+\item 
+\Hypertarget{class_bounding_box_a5ffc85a842a1813e6aeb44635ae82f7f}\label{class_bounding_box_a5ffc85a842a1813e6aeb44635ae82f7f} 
+std\+::vector$<$ glm\+::vec3 $>$ {\bfseries get\+Vertices} ()
+\item 
+\Hypertarget{class_bounding_box_a6a98cfd89ff80d72e536ddbe44febfd1}\label{class_bounding_box_a6a98cfd89ff80d72e536ddbe44febfd1} 
+void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Axis-\/aligned bounding box for 3D objects. 
+
+Maintains minimum and maximum corner points, and provides methods to update bounds, compute center, size, and retrieve corner vertices. Automatically expands to include new points. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Bounding\+Box.\+h\end{DoxyCompactItemize}

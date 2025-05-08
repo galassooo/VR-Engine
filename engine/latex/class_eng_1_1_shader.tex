@@ -1,0 +1,154 @@
+\doxysection{Eng\+::Shader Class Reference}
+\hypertarget{class_eng_1_1_shader}{}\label{class_eng_1_1_shader}\index{Eng::Shader@{Eng::Shader}}
+
+
+Abstract base class representing a GPU shader.  
+
+
+
+
+{\ttfamily \#include $<$engine.\+h$>$}
+
+Inheritance diagram for Eng\+::Shader\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.200000cm]{class_eng_1_1_shader}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_shader_ae6a64311923fdd19a3497a9c9f85c83c}{Shader}} ()
+\begin{DoxyCompactList}\small\item\em Constructs a new \doxylink{class_eng_1_1_shader}{Shader} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_eng_1_1_shader_ab445f33ed661b960c3b563e4862aa3f6}{\texorpdfstring{$\sim$}{\string~}\+Shader}} ()
+\begin{DoxyCompactList}\small\item\em Destroys the \doxylink{class_eng_1_1_shader}{Shader} object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_eng_1_1_shader_a8a0fef7622a13f33236c38a51732f962}{load}} (const char \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Loads and compiles a shader from source code in memory. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_shader_a56a7d0e8585340795fa64a92ebe0c964}{render}} () override
+\begin{DoxyCompactList}\small\item\em Binds and uses this shader program. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_shader_a04e414e007c1efc17bcbfc8a18cfe54d}{get\+Gl\+Id}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the Open\+GL shader identifier. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_eng_1_1_object_ae595d0b7ff8ad88e79842f0616cf04d4}{Object}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor for the \doxylink{class_eng_1_1_object}{Object} class. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_eng_1_1_object_a0650d72029e199a9590f26ad6a92fc90}{get\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the unique ID of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_ae2283357236741d02d6f3d8bc5306927}{get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the name of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_eng_1_1_object_aad37217d953cc5985b740d20ea12f823}{set\+Name}} (std\+::string \&\&new\+Name)
+\begin{DoxyCompactList}\small\item\em Sets the name of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_eng_1_1_shader_acd56d95295a6bcee6e274a3e31226ca1}\label{class_eng_1_1_shader_acd56d95295a6bcee6e274a3e31226ca1} 
+static const unsigned int {\bfseries MAX\+\_\+\+LOGSIZE} = 4096
+\begin{DoxyCompactList}\small\item\em Max output size in char for a shader log. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual unsigned int \mbox{\hyperlink{class_eng_1_1_shader_a47d750938955572f6262ab9151068ae5}{create}} ()=0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned int \mbox{\hyperlink{class_eng_1_1_object_a74c38cf81209160008aaf9d04235b9ac}{id}}
+\item 
+std\+::string \mbox{\hyperlink{class_eng_1_1_object_a8a16efa83bc60805bb7e0cda25becc28}{name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract base class representing a GPU shader. 
+
+\doxylink{class_eng_1_1_shader}{Shader} provides a common interface for creating, loading, and rendering GPU shader programs. Derived classes must implement the create() method to generate the underlying Open\+GL shader object. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_eng_1_1_shader_ae6a64311923fdd19a3497a9c9f85c83c}\index{Eng::Shader@{Eng::Shader}!Shader@{Shader}}
+\index{Shader@{Shader}!Eng::Shader@{Eng::Shader}}
+\doxysubsubsection{\texorpdfstring{Shader()}{Shader()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_ae6a64311923fdd19a3497a9c9f85c83c} 
+ENG\+\_\+\+API Shader\+::\+Shader (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a new \doxylink{class_eng_1_1_shader}{Shader} object. 
+
+Initializes the internal shader ID to 0. \Hypertarget{class_eng_1_1_shader_ab445f33ed661b960c3b563e4862aa3f6}\index{Eng::Shader@{Eng::Shader}!````~Shader@{\texorpdfstring{$\sim$}{\string~}Shader}}
+\index{````~Shader@{\texorpdfstring{$\sim$}{\string~}Shader}!Eng::Shader@{Eng::Shader}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Shader()}{\string~Shader()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_ab445f33ed661b960c3b563e4862aa3f6} 
+ENG\+\_\+\+API Shader\+::\texorpdfstring{$\sim$}{\string~}\+Shader (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Destroys the \doxylink{class_eng_1_1_shader}{Shader} object. 
+
+Deletes the underlying Open\+GL shader if it has been created. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_eng_1_1_shader_a47d750938955572f6262ab9151068ae5}\index{Eng::Shader@{Eng::Shader}!create@{create}}
+\index{create@{create}!Eng::Shader@{Eng::Shader}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_a47d750938955572f6262ab9151068ae5} 
+virtual unsigned int Eng\+::\+Shader\+::create (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_eng_1_1_fragment_shader_a9410370a2d312ab6ee0f4d79e405c875}{Eng\+::\+Fragment\+Shader}}.
+
+\Hypertarget{class_eng_1_1_shader_a04e414e007c1efc17bcbfc8a18cfe54d}\index{Eng::Shader@{Eng::Shader}!getGlId@{getGlId}}
+\index{getGlId@{getGlId}!Eng::Shader@{Eng::Shader}}
+\doxysubsubsection{\texorpdfstring{getGlId()}{getGlId()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_a04e414e007c1efc17bcbfc8a18cfe54d} 
+unsigned int ENG\+\_\+\+API Shader\+::get\+Gl\+Id (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the Open\+GL shader identifier. 
+
+\begin{DoxyReturn}{Returns}
+GLuint representing the shader object ID, or 0 if not created. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_shader_a8a0fef7622a13f33236c38a51732f962}\index{Eng::Shader@{Eng::Shader}!load@{load}}
+\index{load@{load}!Eng::Shader@{Eng::Shader}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_a8a0fef7622a13f33236c38a51732f962} 
+bool ENG\+\_\+\+API Shader\+::load (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{data}{}\end{DoxyParamCaption})}
+
+
+
+Loads and compiles a shader from source code in memory. 
+
+This method checks the input data, destroys any existing shader, creates a new shader object via create(), uploads the source, compiles it, and logs any errors up to MAX\+\_\+\+LOGSIZE.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Pointer to a null-\/terminated string containing the GLSL source code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if compilation succeeded; false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_eng_1_1_shader_a56a7d0e8585340795fa64a92ebe0c964}\index{Eng::Shader@{Eng::Shader}!render@{render}}
+\index{render@{render}!Eng::Shader@{Eng::Shader}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_eng_1_1_shader_a56a7d0e8585340795fa64a92ebe0c964} 
+void ENG\+\_\+\+API Shader\+::render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Binds and uses this shader program. 
+
+Derived classes or external systems should ensure appropriate program linking before calling this method. 
+
+Implements \mbox{\hyperlink{class_eng_1_1_object}{Eng\+::\+Object}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{engine_8h}{engine.\+h}}\item 
+Shader.\+cpp\end{DoxyCompactItemize}

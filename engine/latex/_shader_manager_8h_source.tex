@@ -1,0 +1,150 @@
+\doxysection{Shader\+Manager.\+h}
+\hypertarget{_shader_manager_8h_source}{}\label{_shader_manager_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }ENG\_API\ ShaderManager\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{static}\ ShaderManager\&\ getInstance();}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{bool}\ initialize();}
+\DoxyCodeLine{00016\ \ \ \ \ ShaderManager(\textcolor{keyword}{const}\ ShaderManager\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00017\ \ \ \ \ ShaderManager\&\ operator=(\textcolor{keyword}{const}\ ShaderManager\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{//\ LOCATIONS\ and\ UNITS}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ POSITION\_LOCATION\ =\ 0;\ \ \ \ \ \textcolor{comment}{//Location\ bound\ to\ position\ coordinates\ in\ the\ Vertex\ Shader}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ NORMAL\_LOCATION\ =\ 1;\ \ \ \ \ \ \ \textcolor{comment}{//Location\ bound\ to\ normal\ coordinates\ in\ the\ Vertex\ Shader}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ TEX\_COORD\_LOCATION\ =\ 2;\ \ \ \ \textcolor{comment}{//Location\ bound\ to\ texture\ coordinates\ in\ the\ Vertex\ Shader}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ DIFFUSE\_TEXTURE\_UNIT\ =\ 0;\ \ \textcolor{comment}{//Texture\ Unit\ bound\ to\ the\ diffuse\ texture\ sampler\ in\ the\ Fragment\ Shader}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ SHADOW\_MAP\_UNIT\ =\ 1;\ \ \ \ \ \ \ \textcolor{comment}{//Texture\ Unit\ bound\ to\ the\ shadow\ map\ sampler\ in\ the\ Fragment\ Shader}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ VARIABLE\ NAMES}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_PROJECTION\_MATRIX\ =\ \textcolor{stringliteral}{"{}projection"{}};\ \ \ \ \ \ \textcolor{comment}{//Projection\ matrix\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_MODEL\_MATRIX\ =\ \textcolor{stringliteral}{"{}model"{}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Model\ matrix\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_VIEW\_MATRIX\ =\ \textcolor{stringliteral}{"{}view"{}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//View\ matrix\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_MODELVIEW\_MATRIX\ =\ \textcolor{stringliteral}{"{}modelview"{}};\ \ \ \ \ \ \ \ \textcolor{comment}{//ModelView\ matrix\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_NORMAL\_MATRIX\ =\ \textcolor{stringliteral}{"{}normalMatrix"{}};\ \ \ \ \ \ \ \ \textcolor{comment}{//Normal\ matrix\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_LIGHTSPACE\_MATRIX\ =\ \textcolor{stringliteral}{"{}lightspaceMatrix"{}};\textcolor{comment}{//Light\ Space\ matrix\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_MATERIAL\_EMISSION\ =\ \textcolor{stringliteral}{"{}matEmission"{}};\ \ \ \ \ \textcolor{comment}{//Material\ emission\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_MATERIAL\_AMBIENT\ =\ \textcolor{stringliteral}{"{}matAmbient"{}};\ \ \ \ \ \ \ \textcolor{comment}{//Material\ ambient\ contribution\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_MATERIAL\_DIFFUSE\ =\ \textcolor{stringliteral}{"{}matDiffuse"{}};\ \ \ \ \ \ \ \textcolor{comment}{//Material\ diffuse\ contribution\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_MATERIAL\_SPECULAR\ =\ \textcolor{stringliteral}{"{}matSpecular"{}};\ \ \ \ \ \textcolor{comment}{//Material\ specular\ contribution\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_MATERIAL\_SHININESS\ =\ \textcolor{stringliteral}{"{}matShininess"{}};\ \ \ \textcolor{comment}{//Material\ shininess\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_USE\_TEXTURE\_DIFFUSE\ =\ \textcolor{stringliteral}{"{}useTexture"{}};\ \ \ \ \textcolor{comment}{//Diffuse\ texture\ use\ flag\ (bool)\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//static\ constexpr\ const\ char*\ UNIFORM\_TEXTURE\_DIFFUSE\ =\ "{}texSampler"{};\ \ \ \ \ \ //(Unused)Diffuse\ texture\ sampler\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_LIGHT\_POSITION\ =\ \textcolor{stringliteral}{"{}lightPos"{}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Light\ position\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_LIGHT\_DIRECTION\ =\ \textcolor{stringliteral}{"{}lightDir"{}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Light\ direction\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_LIGHT\_CUTOFF\_ANGLE\ =\ \textcolor{stringliteral}{"{}lightCutoff"{}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Spot\ Light\ cutoff\ angle\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_LIGHT\_FALLOFF\ =\ \textcolor{stringliteral}{"{}lightFalloff"{}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Spot\ Light\ falloff\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_LIGHT\_AMBIENT\ =\ \textcolor{stringliteral}{"{}lightAmbient"{}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Light\ ambient\ contribution\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_LIGHT\_DIFFUSE\ =\ \textcolor{stringliteral}{"{}lightDiffuse"{}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Light\ diffuse\ contribution\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_LIGHT\_SPECULAR\ =\ \textcolor{stringliteral}{"{}lightSpecular"{}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Light\ specular\ contribution\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_LIGHT\_CASTS\_SHADOWS\ =\ \textcolor{stringliteral}{"{}useShadowMap"{}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Light\ shadow\ cast\ flag\ (bool)\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_ATTENUATION\_CONSTANT\ =\ \textcolor{stringliteral}{"{}constAttenuatuion"{}};\ \ \ \ \ \ \ \ \textcolor{comment}{//Light\ attenuation\ constant\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_ATTENUATION\_LINEAR\ =\ \textcolor{stringliteral}{"{}linearAttenuation"{}};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Light\ attenuation\ linear\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_ATTENUATION\_QUADRATIC\ =\ \textcolor{stringliteral}{"{}quadraticAttenuation"{}};\ \ \ \ \textcolor{comment}{//Light\ attenuation\ quadratic\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{//static\ constexpr\ const\ char*\ UNIFORM\_TEXTURE\_SHADOWS\ =\ "{}shadowMap"{};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //(Unused)Shadow\ map\ texture\ sampler\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_GLOBAL\_LIGHT\_COLOR\ =\ \textcolor{stringliteral}{"{}globalLightColor"{}};\ \ \ \ \ \ \ \textcolor{comment}{//Global\ light\ color\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ UNIFORM\_EYE\_FRONT\ =\ \textcolor{stringliteral}{"{}eyeFront"{}};\ \ \ \ \textcolor{comment}{//Camera\ front\ vector\ -\/\ Uniform\ name}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{bool}\ loadProgram(std::shared\_ptr<Eng::Program>\&\ program);}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ setProjectionMatrix(\textcolor{keyword}{const}\ glm::mat4\&\ matrix);}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ setModelViewMatrix(\textcolor{keyword}{const}\ glm::mat4\&\ matrix);}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ setModelMatrix(\textcolor{keyword}{const}\ glm::mat4\&\ matrix);}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ setViewMatrix(\textcolor{keyword}{const}\ glm::mat4\&\ matrix);}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ setNormalMatrix(\textcolor{keyword}{const}\ glm::mat3\&\ matrix);}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ setLightSpaceMatrix(\textcolor{keyword}{const}\ glm::mat4\&\ matrix);}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ setMaterialEmission(\textcolor{keyword}{const}\ glm::vec3\&\ emission);}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ setMaterialAmbient(\textcolor{keyword}{const}\ glm::vec3\&\ ambient);}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ setMaterialDiffuse(\textcolor{keyword}{const}\ glm::vec3\&\ diffuse);}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ setMaterialSpecular(\textcolor{keyword}{const}\ glm::vec3\&\ spec);}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ setMaterialShininess(\textcolor{keywordtype}{float}\ shininess);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ setLightPosition(\textcolor{keyword}{const}\ glm::vec3\&\ pos);}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ setLightDirection(\textcolor{keyword}{const}\ glm::vec3\&\ pos);}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ setLightCutoffAngle(\textcolor{keywordtype}{float}\ angle);}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ setLightFalloff(\textcolor{keywordtype}{float}\ falloff);}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ setLightAmbient(\textcolor{keyword}{const}\ glm::vec3\&\ amb);}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ setLightDiffuse(\textcolor{keyword}{const}\ glm::vec3\&\ diff);}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ setLightSpecular(\textcolor{keyword}{const}\ glm::vec3\&\ spec);}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ setLightCastsShadows(\textcolor{keywordtype}{bool}\ castsShadows);}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ setLightAttenuation(\textcolor{keywordtype}{float}\ constant,\ \textcolor{keywordtype}{float}\ linear,\ \textcolor{keywordtype}{float}\ quadratic);}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ setUseTexture(\textcolor{keywordtype}{bool}\ use);}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{//void\ setTextureSampler(int\ textureUnit);\ unused:\ texture\ unit\ is\ defined\ during\ texture\ binding}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ setGlobalLightColor(\textcolor{keyword}{const}\ glm::vec3\&\ color);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{void}\ setEyeFront(\textcolor{keyword}{const}\ glm::vec3\&\ front);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{const}\ glm::mat4\&\ getCachedProjectionMatrix()\textcolor{keyword}{\ \ const\ }\{\ \textcolor{keywordflow}{return}\ cachedProjection;\ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{const}\ glm::mat4\&\ getCachedModelViewMatrix()\textcolor{keyword}{\ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ cachedModelView;\ \}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{const}\ glm::mat3\&\ getCachedNormalMatrix()\textcolor{keyword}{\ \ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ cachedNormal;\ \}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{const}\ glm::mat4\&\ getCachedLightSpaceMatrix()\textcolor{keyword}{\ \ const\ }\{\ \textcolor{keywordflow}{return}\ cachedLightSpace;\ \}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{const}\ glm::vec3\&\ getCachedEyeFront()\textcolor{keyword}{\ \ \ \ \ \ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ cachedEyeFront;\ \}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{const}\ glm::vec3\&\ getCachedGlobalLightColor()\textcolor{keyword}{\ \ const\ }\{\ \textcolor{keywordflow}{return}\ cachedGlobalLight;\ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ preprocessShaderCode(\textcolor{keyword}{const}\ std::string\&\ source);}
+\DoxyCodeLine{00102\ \ \ \ \ std::shared\_ptr<Eng::Program>\ getCurrentProgram()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ currentProgram;\ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00106\ \ \ \ \ ShaderManager()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{bool}\ initialized\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{bool}\ setDefaultShaders();}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::string>\ buildShaderSymbolMap();}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ std::shared\_ptr<Eng::Program>\ defaultProgram;}
+\DoxyCodeLine{00114\ \ \ \ \ std::shared\_ptr<Eng::Program>\ currentProgram;}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{//int\ texSamplerLoc;\ not\ necessary,\ texture\ sampler\ location\ is\ set\ engine\ side\ when\ binding\ the\ texture}}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{int}\ useTextureLoc;}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{int}\ projectionLocation;}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{int}\ modelViewLocation;}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{int}\ modelLocation;}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{int}\ viewLocation;}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{int}\ normalMatrixLocation;}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{int}\ lightSpaceMatrixLocation;}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{int}\ matEmissionLoc;}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{int}\ matAmbientLoc;}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{int}\ matDiffuseLoc;}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{int}\ matSpecularLoc;}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{int}\ matShininessLoc;}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{int}\ lightPosLoc;}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{int}\ lightDirLoc;}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{int}\ lightCutoffAngleLoc;}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordtype}{int}\ lightFalloffLoc;}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{int}\ lightAmbientLoc;}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{int}\ lightDiffuseLoc;}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{int}\ lightSpecularLoc;}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{int}\ lightCastsShadowsLoc;}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{int}\ attenuationConstantLoc;}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{int}\ attenuationLinearLoc;}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keywordtype}{int}\ attenuationQuadraticLoc;}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{int}\ globalLightColorLoc;}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordtype}{int}\ eyeFrontLoc;}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{//\ cache\ degli\ ultimi\ valori\ inviati\ agli\ uniform\ comuni}}
+\DoxyCodeLine{00149\ \ \ \ \ glm::mat4\ cachedProjection\ =\ glm::mat4(1.0f);}
+\DoxyCodeLine{00150\ \ \ \ \ glm::mat4\ cachedModelView\ =\ glm::mat4(1.0f);}
+\DoxyCodeLine{00151\ \ \ \ \ glm::mat3\ cachedNormal\ =\ glm::mat3(1.0f);}
+\DoxyCodeLine{00152\ \ \ \ \ glm::mat4\ cachedLightSpace\ =\ glm::mat4(1.0f);}
+\DoxyCodeLine{00153\ \ \ \ \ glm::vec3\ cachedEyeFront\ =\ glm::vec3(0.0f);}
+\DoxyCodeLine{00154\ \ \ \ \ glm::vec3\ cachedGlobalLight\ =\ glm::vec3(1.0f);}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \};}
+
+\end{DoxyCode}

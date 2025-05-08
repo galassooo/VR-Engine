@@ -1,0 +1,167 @@
+\doxysection{Eng Namespace Reference}
+\hypertarget{namespace_eng}{}\label{namespace_eng}\index{Eng@{Eng}}
+
+
+Main namespace containing all engine components.  
+
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_eng_1_1_base}{Base}}
+\begin{DoxyCompactList}\small\item\em Core engine class implementing the singleton pattern. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_bloom_effect}{Bloom\+Effect}}
+\begin{DoxyCompactList}\small\item\em Implements a post-\/processing bloom effect to simulate glow around bright areas. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_bounding_box}{Bounding\+Box}}
+\begin{DoxyCompactList}\small\item\em Axis-\/aligned bounding box for 3D objects. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_builder}{Builder}}
+\begin{DoxyCompactList}\small\item\em Singleton builder for assembling mesh data and creating \doxylink{class_eng_1_1_mesh}{Mesh} objects. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_callback_manager}{Callback\+Manager}}
+\begin{DoxyCompactList}\small\item\em Manages Free\+GLUT callbacks and keyboard bindings for the graphics engine. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_camera}{Camera}}
+\begin{DoxyCompactList}\small\item\em Represents a camera in the scene graph, responsible for providing view and projection matrices. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_directional_light}{Directional\+Light}}
+\begin{DoxyCompactList}\small\item\em Represents a light source that emits light in a specific direction. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_fbo}{Fbo}}
+\begin{DoxyCompactList}\small\item\em Frame buffer class to deal with Open\+GL FBOs. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_fragment_shader}{Fragment\+Shader}}
+\begin{DoxyCompactList}\small\item\em Represents a GPU fragment shader, which processes rasterized fragments to determine their final colors. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_holographic_material}{Holographic\+Material}}
+\begin{DoxyCompactList}\small\item\em Represents a material with a holographic effect. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_eng_1_1_key_info}{Key\+Info}}
+\begin{DoxyCompactList}\small\item\em Stores information about a keyboard shortcut and its associated functionality. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_light}{Light}}
+\begin{DoxyCompactList}\small\item\em Represents a base class for lights in the scene graph. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_list}{List}}
+\begin{DoxyCompactList}\small\item\em A render list that extends \doxylink{class_eng_1_1_object}{Object} to integrate with the scene graph. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_list_element}{List\+Element}}
+\begin{DoxyCompactList}\small\item\em Represents an element in the render list. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_list_iterator}{List\+Iterator}}
+\item 
+class \mbox{\hyperlink{class_eng_1_1_material}{Material}}
+\begin{DoxyCompactList}\small\item\em Represents the material properties of a 3D object, including color, shininess, and optional textures. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_mesh}{Mesh}}
+\begin{DoxyCompactList}\small\item\em Represents a 3D mesh with vertices, indices, and material data. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_node}{Node}}
+\begin{DoxyCompactList}\small\item\em Represents a node in the scene graph with hierarchical transformations. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_object}{Object}}
+\item 
+class \mbox{\hyperlink{class_eng_1_1_orthographic_camera}{Orthographic\+Camera}}
+\begin{DoxyCompactList}\small\item\em Represents a camera using an orthographic projection. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_ovo_reader}{Ovo\+Reader}}
+\begin{DoxyCompactList}\small\item\em A class responsible for parsing and loading 3D scene data from OVO format files. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_perspective_camera}{Perspective\+Camera}}
+\begin{DoxyCompactList}\small\item\em Represents a camera using a perspective projection. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_point_light}{Point\+Light}}
+\begin{DoxyCompactList}\small\item\em Represents a light source that emits light in all directions from a single point. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_post_processor}{Post\+Processor}}
+\begin{DoxyCompactList}\small\item\em Abstract base class for post-\/processing effects. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_post_processor_manager}{Post\+Processor\+Manager}}
+\begin{DoxyCompactList}\small\item\em Manages a collection of post-\/processing effects. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_program}{Program}}
+\begin{DoxyCompactList}\small\item\em Links and manages a set of shaders into a GPU program for rendering. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_render_pipeline}{Render\+Pipeline}}
+\item 
+class \mbox{\hyperlink{class_eng_1_1_shader}{Shader}}
+\begin{DoxyCompactList}\small\item\em Abstract base class representing a GPU shader. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_shader_manager}{Shader\+Manager}}
+\begin{DoxyCompactList}\small\item\em Manages Shaders to be built into the GPU \doxylink{class_eng_1_1_program}{Program} for the graphics engine. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_skybox}{Skybox}}
+\begin{DoxyCompactList}\small\item\em Renders a cubemap background and provides ambient scene color. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_spot_light}{Spot\+Light}}
+\begin{DoxyCompactList}\small\item\em Represents a light source that emits light in a specific direction with a cone-\/shaped area of effect. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_texture}{Texture}}
+\begin{DoxyCompactList}\small\item\em Represents a texture used in rendering, loaded from an image file and applied to a 3D object. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_eng_1_1_vertex}{Vertex}}
+\item 
+class \mbox{\hyperlink{class_eng_1_1_vertex_shader}{Vertex\+Shader}}
+\begin{DoxyCompactList}\small\item\em A type of shader that affects vertices position in 3D space. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Render\+Layer}} \{ \mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3cae1f238e1860b16d1139607d92f612098}{Lights}} = 0
+, \mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3cafaa90538de35640e4b1e31ccf35b6eb5}{Opaque}} = 1
+, \mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3ca3d971943089a3388c01fb297a32d9ba7}{Transparent}} = 2
+ \}
+\begin{DoxyCompactList}\small\item\em Defines the rendering order for objects in the scene. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespace_eng_aa3c173bf97d525ec6dee31d3fa1646c0}\label{namespace_eng_aa3c173bf97d525ec6dee31d3fa1646c0} 
+void {\bfseries test\+Orthographic\+Camera} ()
+\item 
+\Hypertarget{namespace_eng_aaeb7daa1fada1006dc521b3c45903165}\label{namespace_eng_aaeb7daa1fada1006dc521b3c45903165} 
+void {\bfseries test\+Perspective\+Camera} ()
+\item 
+\Hypertarget{namespace_eng_ad88cd3d3cf625fd8d3a5b3515240f819}\label{namespace_eng_ad88cd3d3cf625fd8d3a5b3515240f819} 
+void {\bfseries test\+Directional\+Light} ()
+\item 
+\Hypertarget{namespace_eng_a65a787863d83bf64efaedd1a02251fc3}\label{namespace_eng_a65a787863d83bf64efaedd1a02251fc3} 
+void {\bfseries test\+Point\+Light} ()
+\item 
+\Hypertarget{namespace_eng_a79aad82109a1339e1a0e521c504ce665}\label{namespace_eng_a79aad82109a1339e1a0e521c504ce665} 
+void {\bfseries test\+Spot\+Light} ()
+\item 
+\Hypertarget{namespace_eng_a8517cc90df699883ab586bdb38b16bca}\label{namespace_eng_a8517cc90df699883ab586bdb38b16bca} 
+void {\bfseries test\+Node\+Hierarchy} ()
+\item 
+\Hypertarget{namespace_eng_a7efe1acff129c280e4e1db4bb6d7343f}\label{namespace_eng_a7efe1acff129c280e4e1db4bb6d7343f} 
+void {\bfseries test\+Node\+Transformations} ()
+\item 
+\Hypertarget{namespace_eng_a042f3b4a53f09bcd3bd32f530afccae6}\label{namespace_eng_a042f3b4a53f09bcd3bd32f530afccae6} 
+void {\bfseries test\+List\+Node\+Management} ()
+\item 
+\Hypertarget{namespace_eng_ac8e95ca1689db5ced263c15eff883722}\label{namespace_eng_ac8e95ca1689db5ced263c15eff883722} 
+void {\bfseries test\+List\+Element} ()
+\item 
+\Hypertarget{namespace_eng_a71ece67dfc22424e24171aaf37871912}\label{namespace_eng_a71ece67dfc22424e24171aaf37871912} 
+void {\bfseries test\+List\+Ordering} ()
+\item 
+\Hypertarget{namespace_eng_a16087b7be6232f9fb24195c0af459949}\label{namespace_eng_a16087b7be6232f9fb24195c0af459949} 
+void {\bfseries test\+Mesh\+Vertices\+And\+Indices} ()
+\item 
+\Hypertarget{namespace_eng_a7a9bf3582c9a2ba332833fe28c2451dd}\label{namespace_eng_a7a9bf3582c9a2ba332833fe28c2451dd} 
+void {\bfseries test\+Mesh\+Material} ()
+\item 
+\Hypertarget{namespace_eng_ab391a0221400abe1ef2c37d24465f460}\label{namespace_eng_ab391a0221400abe1ef2c37d24465f460} 
+void {\bfseries test\+Callback\+Manager\+Initialization} ()
+\item 
+\Hypertarget{namespace_eng_a79f939ec1925ac74df522e0f81abc2dc}\label{namespace_eng_a79f939ec1925ac74df522e0f81abc2dc} 
+void {\bfseries test\+Key\+Binding\+Registration} ()
+\item 
+\Hypertarget{namespace_eng_af930f3704af8a4cf560b33554e2daa83}\label{namespace_eng_af930f3704af8a4cf560b33554e2daa83} 
+void {\bfseries test\+Default\+Key\+Bindings} ()
+\item 
+\Hypertarget{namespace_eng_a179746383d57847931d7abd84129da61}\label{namespace_eng_a179746383d57847931d7abd84129da61} 
+void {\bfseries test\+Callback\+Execution\+Order} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main namespace containing all engine components. 
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}\index{Eng@{Eng}!RenderLayer@{RenderLayer}}
+\index{RenderLayer@{RenderLayer}!Eng@{Eng}}
+\doxysubsubsection{\texorpdfstring{RenderLayer}{RenderLayer}}
+{\footnotesize\ttfamily \label{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c} 
+enum class \mbox{\hyperlink{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3c}{Eng\+::\+Render\+Layer}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Defines the rendering order for objects in the scene. 
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Lights@{Lights}!Eng@{Eng}}\index{Eng@{Eng}!Lights@{Lights}}}\Hypertarget{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3cae1f238e1860b16d1139607d92f612098}\label{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3cae1f238e1860b16d1139607d92f612098} 
+Lights&Lights are rendered first. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Opaque@{Opaque}!Eng@{Eng}}\index{Eng@{Eng}!Opaque@{Opaque}}}\Hypertarget{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3cafaa90538de35640e4b1e31ccf35b6eb5}\label{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3cafaa90538de35640e4b1e31ccf35b6eb5} 
+Opaque&Opaque objects are rendered after lights. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Transparent@{Transparent}!Eng@{Eng}}\index{Eng@{Eng}!Transparent@{Transparent}}}\Hypertarget{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3ca3d971943089a3388c01fb297a32d9ba7}\label{namespace_eng_aef9539984e6b84cf22d15da7c6f51a3ca3d971943089a3388c01fb297a32d9ba7} 
+Transparent&Transparent objects are rendered last. \\
+\hline
+
+\end{DoxyEnumFields}

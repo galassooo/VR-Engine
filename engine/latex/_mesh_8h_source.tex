@@ -3,27 +3,57 @@
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
 \DoxyCodeLine{00002\ }
-\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Node.h"{}}}
-\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Material.h"{}}}
-\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}Texture.h"{}}}
-\DoxyCodeLine{00006\ }
-\DoxyCodeLine{00007\ }
-\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_mesh}{Mesh}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_node}{Node}}\ \{}
-\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{class_mesh_a2af137f1571af89172b9c102302c416b}{Mesh}}();}
-\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_mesh_a5efe4da1a4c0971cfb037bd70304c303}{\string~Mesh}}();}
-\DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_af2b8eaba6c487e084d0cc662e2be8574}{setVertices}}(\textcolor{keyword}{const}\ std::vector<glm::vec3>\&\ vertices);}
-\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_a3c8a507c933246c63e3b555a77769ca6}{setIndices}}(\textcolor{keyword}{const}\ std::vector<unsigned\ int>\&\ indices);}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_a0e4c32b72cf08edd59bba250135352f2}{render}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }ENG\_API\ Mesh\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_eng_1_1_node}{Eng::Node}}\ \{}
+\DoxyCodeLine{00008\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ \ \ \ Mesh();}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \string~Mesh()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \textcolor{keywordtype}{void}\ setVertices(\textcolor{keyword}{const}\ std::vector<Eng::Vertex>\ \&vertices);}
+\DoxyCodeLine{00014\ \ \ \ \textcolor{keywordtype}{void}\ setIndices(\textcolor{keyword}{const}\ std::vector<unsigned\ int>\ \&indices);}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ std::vector<Eng::Vertex>\ \&getVertices();}
+\DoxyCodeLine{00017\ \ \ \ std::vector<unsigned\ int>\ \&getIndices();}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \textcolor{keywordtype}{void}\ setMaterial(\textcolor{keyword}{const}\ std::shared\_ptr<Eng::Material>\ \&material);}
+\DoxyCodeLine{00020\ \ \ \ std::shared\_ptr<Eng::Material>\ getMaterial()\ \textcolor{keyword}{const};}
 \DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mesh_aa6451d5335058257ced6226eedf10a74}{setMaterial}}(\textcolor{keyword}{const}\ std::shared\_ptr<Material>\&\ material);}
+\DoxyCodeLine{00022\ \ \ \ \textcolor{keywordtype}{void}\ render()\ \textcolor{keyword}{override};}
 \DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00025\ \ \ \ \ std::vector<glm::vec3>\ vertices;\ \ \ \ \textcolor{comment}{//-\/>\ Vector\ of\ vertex\ positions.}}
-\DoxyCodeLine{00026\ \ \ \ \ std::vector<unsigned\ int>\ indices;\ \ \textcolor{comment}{//-\/>\ Vector\ of\ indices\ defining\ the\ mesh\ faces.}}
-\DoxyCodeLine{00027\ \ \ \ \ std::shared\_ptr<Material>\ material;\ \textcolor{comment}{//-\/>\ The\ material\ applied\ to\ the\ mesh.}}
-\DoxyCodeLine{00028\ \};}
+\DoxyCodeLine{00024\ \ \ \ \textcolor{comment}{//\ method\ to\ initialize\ GPU\ buffers}}
+\DoxyCodeLine{00025\ \ \ \ \textcolor{keywordtype}{void}\ initBuffers();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \textcolor{comment}{//\ Virtual\ Environment}}
+\DoxyCodeLine{00028\ \ \ \ \textcolor{keywordtype}{void}\ setBoundingSphereCenter(\textcolor{keyword}{const}\ glm::vec3\&\ center);}
+\DoxyCodeLine{00029\ \ \ \ glm::vec3\ getBoundingSphereCenter()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \textcolor{keywordtype}{void}\ setBoundingSphereRadius(\textcolor{keywordtype}{float}\ radius);}
+\DoxyCodeLine{00032\ \ \ \ \textcolor{keywordtype}{float}\ getBoundingSphereRadius()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \textcolor{keywordtype}{void}\ setBoundingBox(\textcolor{keyword}{const}\ glm::vec3\&\ min,\ \textcolor{keyword}{const}\ glm::vec3\&\ max);}
+\DoxyCodeLine{00035\ \ \ \ glm::vec3\ getBoundingBoxMin()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ \ \ \ glm::vec3\ getBoundingBoxMax()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00039\ \ \ \ \textcolor{keywordtype}{void}\ renderNormals()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ \ \ \ std::vector<Eng::Vertex>\ vertices;}
+\DoxyCodeLine{00043\ \ \ \ std::vector<unsigned\ int>\ indices;}
+\DoxyCodeLine{00045\ \ \ \ std::shared\_ptr<Eng::Material>\ material;}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \textcolor{comment}{//\ Hold\ GPU\ resource\ IDs}}
+\DoxyCodeLine{00048\ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ vao\ =\ 0;}
+\DoxyCodeLine{00049\ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ posVBO\ =\ 0;}
+\DoxyCodeLine{00050\ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ normVBO\ =\ 0;}
+\DoxyCodeLine{00051\ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ texVBO\ =\ 0;}
+\DoxyCodeLine{00052\ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ebo\ =\ 0;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \textcolor{keywordtype}{bool}\ buffersInitialized\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \textcolor{comment}{//\ Virtual\ Environment}}
+\DoxyCodeLine{00057\ \ \ \ glm::vec3\ boundingSphereCenter\ =\ glm::vec3(0.0f);}
+\DoxyCodeLine{00058\ \ \ \ \textcolor{keywordtype}{float}\ boundingSphereRadius\ =\ 0.0f;}
+\DoxyCodeLine{00059\ \ \ \ glm::vec3\ boundingBoxMin\ =\ glm::vec3(0.0f);}
+\DoxyCodeLine{00060\ \ \ \ glm::vec3\ boundingBoxMax\ =\ glm::vec3(0.0f);}
+\DoxyCodeLine{00061\ \};}
 
 \end{DoxyCode}

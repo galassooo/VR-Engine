@@ -1,0 +1,63 @@
+\doxysection{Frame\+Buffer\+Object.\+h}
+\hypertarget{_frame_buffer_object_8h_source}{}\label{_frame_buffer_object_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }ENG\_API\ Fbo}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \textcolor{comment}{//\ Constants:}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_fbo_a90536c1e587e43c3c0df22284edae148}{MAX\_ATTACHMENTS}}\ =\ 8;\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{//\ Enumerations:}}
+\DoxyCodeLine{00020\ \ \ \ \ enum\ :\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ }
+\DoxyCodeLine{00021\ \ \ \ \ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ BIND\_DEPTHBUFFER\ =\ 0,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ BIND\_COLORTEXTURE,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ BIND\_DEPTHTEXTURE,}
+\DoxyCodeLine{00025\ \ \ \ \ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//\ Const/dest:\ \ \ }}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{class_fbo}{Fbo}}();}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{class_fbo}{\string~Fbo}}();}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ Get/set:\ \ \ }}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ getTexture(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ textureNumber);}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ getSizeX()\ \{\ \textcolor{keywordflow}{return}\ sizeX;\ \}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ getSizeY()\ \{\ \textcolor{keywordflow}{return}\ sizeY;\ \}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ getSizeZ()\ \{\ \textcolor{keywordflow}{return}\ sizeZ;\ \}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ getHandle()\ \{\ \textcolor{keywordflow}{return}\ glId;\ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ Management:}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{bool}\ isOk();}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{bool}\ bindTexture(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ textureNumber,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ operation,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ texture,\ \textcolor{keywordtype}{int}\ param1\ =\ 0,\ \textcolor{keywordtype}{int}\ param2\ =\ 0);}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{bool}\ bindRenderBuffer(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ renderBuffer,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ operation,\ \textcolor{keywordtype}{int}\ sizeX,\ \textcolor{keywordtype}{int}\ sizeY);}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ setDepthOnly(\textcolor{keywordtype}{bool}\ value);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ Rendering:\ \ \ \ \ }}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{bool}\ render(\textcolor{keywordtype}{void}*\ data\ =\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ disable();}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Generic\ data:}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{int}\ sizeX,\ sizeY,\ sizeZ;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ texture[MAX\_ATTACHMENTS];\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{int}\ drawBuffer[MAX\_ATTACHMENTS];\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{bool}\ depthOnly\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//\ OGL\ stuff:}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ glId;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ glRenderBufferId[MAX\_ATTACHMENTS];\ \ \ \ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{//\ MRT\ cache:\ \ \ }}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{int}\ nrOfMrts;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}*\ mrt;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{//\ Cache:}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{bool}\ updateMrtCache();}
+\DoxyCodeLine{00066\ \};}
+
+\end{DoxyCode}

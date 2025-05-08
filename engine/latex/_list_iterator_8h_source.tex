@@ -1,0 +1,18 @@
+\doxysection{List\+Iterator.\+h}
+\hypertarget{_list_iterator_8h_source}{}\label{_list_iterator_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{keyword}{class\ }ENG\_API\ ListIterator\ \{}
+\DoxyCodeLine{00004\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00005\ \ \ \ \ ListIterator(\textcolor{keyword}{const}\ std::vector<std::shared\_ptr<Eng::ListElement>>\&\ elements);}
+\DoxyCodeLine{00006\ \ \ \ \ \string~ListIterator()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keywordtype}{void}\ reset();}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keywordtype}{bool}\ hasNext()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00009\ \ \ \ \ std::shared\_ptr<Eng::ListElement>\ next();}
+\DoxyCodeLine{00010\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00011\ \ \ \ \ std::vector<std::shared\_ptr<Eng::ListElement>>\ elements;}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{int}\ currentIndex;}
+\DoxyCodeLine{00013\ \};}
+
+\end{DoxyCode}
