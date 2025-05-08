@@ -1,4 +1,4 @@
-#include "engine.h"
+#include "Engine.h"
 
 #include "FreeImage.h"
 #include <GL/glew.h>

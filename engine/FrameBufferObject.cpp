@@ -1,4 +1,4 @@
-#include "engine.h"
+#include "Engine.h"
 // Glew (include it before GL.h):
 #include <GL/glew.h>
 

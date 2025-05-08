@@ -1,4 +1,4 @@
-#include "engine.h"
+#include "Engine.h"
 #include <GL/glew.h>
 
 Eng::PostProcessorManager& Eng::PostProcessorManager::getInstance() {
