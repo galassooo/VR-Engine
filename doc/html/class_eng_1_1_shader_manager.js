@@ -1,0 +1,28 @@
+var class_eng_1_1_shader_manager =
+[
+    [ "initialize", "class_eng_1_1_shader_manager.html#a4086bb20bc95809c98562472a6729409", null ],
+    [ "loadProgram", "class_eng_1_1_shader_manager.html#aca2c13a6a1eacaba4f363e2d9a58f499", null ],
+    [ "setEyeFront", "class_eng_1_1_shader_manager.html#a93992ee2abec3bf98c44f3e8519144ce", null ],
+    [ "setGlobalLightColor", "class_eng_1_1_shader_manager.html#afb5bb60f67769f459bdb08eacbcd444e", null ],
+    [ "setLightAmbient", "class_eng_1_1_shader_manager.html#ab2ecda23abea2ed405ef8c60ae972f65", null ],
+    [ "setLightAttenuation", "class_eng_1_1_shader_manager.html#a2435719a2f6b125c25d8e3019477e8f9", null ],
+    [ "setLightCastsShadows", "class_eng_1_1_shader_manager.html#a727a918e2eab3bdf12bb9ffd71dacf65", null ],
+    [ "setLightCutoffAngle", "class_eng_1_1_shader_manager.html#a1ad740a4924281670cd381599b1da1e8", null ],
+    [ "setLightDiffuse", "class_eng_1_1_shader_manager.html#a2bcc3e9a730671f931b6304da11b36e9", null ],
+    [ "setLightDirection", "class_eng_1_1_shader_manager.html#a6b9635f37cee9862889f6d8665637d7a", null ],
+    [ "setLightFalloff", "class_eng_1_1_shader_manager.html#a1096fb4e0086ca8e0400aa703f9d6af3", null ],
+    [ "setLightPosition", "class_eng_1_1_shader_manager.html#aa634ea95eec15701316614516daeac82", null ],
+    [ "setLightSpaceMatrix", "class_eng_1_1_shader_manager.html#ab80e9b4d2cea46d1566bb5fd0b524bf3", null ],
+    [ "setLightSpecular", "class_eng_1_1_shader_manager.html#a8389ed25db7d539089239b52b7932fe2", null ],
+    [ "setMaterialAmbient", "class_eng_1_1_shader_manager.html#ab454e83044a2550cb3964ac7178ce9b6", null ],
+    [ "setMaterialDiffuse", "class_eng_1_1_shader_manager.html#a62c8ba48338623b0ddcb2db0b196e82c", null ],
+    [ "setMaterialEmission", "class_eng_1_1_shader_manager.html#ab1297363d7b427489f90c0d7e544803b", null ],
+    [ "setMaterialShininess", "class_eng_1_1_shader_manager.html#af2b5b1a6b30ce1afce3b3aaf93221d5f", null ],
+    [ "setMaterialSpecular", "class_eng_1_1_shader_manager.html#a0bdbf77d51ea9c22aa1bce9dd55bb39a", null ],
+    [ "setModelMatrix", "class_eng_1_1_shader_manager.html#ad7cbabf4f1f9ea2c329ec0c768093af5", null ],
+    [ "setModelViewMatrix", "class_eng_1_1_shader_manager.html#a3f1f97c1a92d14b2a3e87f8beb2c666d", null ],
+    [ "setNormalMatrix", "class_eng_1_1_shader_manager.html#a04561cd1d5e0f34624babc05ef3accea", null ],
+    [ "setProjectionMatrix", "class_eng_1_1_shader_manager.html#a738720bd52c363d8a6ea879ffbba5947", null ],
+    [ "setUseTexture", "class_eng_1_1_shader_manager.html#af40b77ad9ca462ae7672d89245505dc1", null ],
+    [ "setViewMatrix", "class_eng_1_1_shader_manager.html#aeb90b303d60c9299e1c18964de15f26c", null ]
+];
