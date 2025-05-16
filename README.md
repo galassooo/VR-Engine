@@ -156,6 +156,7 @@ public:
 
 - Kevin Alexander Quarenghi Escobar
 - Martina Galasso
+- Lorenzo Forestieri
 
 ## License
 
